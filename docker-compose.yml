@@ -49,8 +49,10 @@ services:
     mem_limit: 256m
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD:?run scripts/gen_env.py first}
-    # 密码经环境变量传入而不是写在命令行里；maxmemory 留出进程自身开销，低于 mem_limit
-    command: ["sh", "-c", "exec redis-server --requirepass \"$$REDIS_PASSWORD\" --appendonly yes --maxmemory 192mb --maxmemory-policy noeviction"]
+    # 密码经环境变量传入而不是写进 compose 命令行；必须经 docker-entrypoint.sh 且首参为 redis-server，
+    # 官方入口脚本才会 --loadmodule 自带的 redisearch/rejson/redistimeseries/redisbloom（ADR-007，S0 实测）。
+    # maxmemory 留出进程自身开销，低于 mem_limit
+    command: ["sh", "-c", "exec docker-entrypoint.sh redis-server --requirepass \"$$REDIS_PASSWORD\" --appendonly yes --maxmemory 192mb --maxmemory-policy noeviction"]
     ports:
       - "${REDIS_PORT:-6380}:6379"
     volumes:
