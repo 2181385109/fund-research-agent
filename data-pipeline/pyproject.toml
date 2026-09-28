@@ -7,12 +7,21 @@ license = "MIT"
 dependencies = [
     "pydantic>=2.8",
     "pydantic-settings>=2.4",
+    # AkShare 固定版本（PLAN §2.1 实测基于此版本；接口变动风险见 PLAN §6）
+    "akshare==1.18.97",
+    "pandas>=2.2",
+    "pyyaml>=6",
+    "httpx>=0.27",
+    "pdfplumber>=0.11",
+    "pypdf>=5",
+    "pymysql>=1.1",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest>=8.3",
     "ruff>=0.6",
+    "reportlab>=4",
 ]
 
 [build-system]

@@ -1,0 +1,243 @@
+# 基金池（PLAN §4.1）。由 `python -m fund_pipeline.universe screen` 筛出候选，再人工取舍。
+# 冻结后（frozen: true）修改须经统筹与用户批准，并写 CHANGELOG（CLAUDE.md §6）。
+# 规模 = fund_overview_em 的「净资产规模」（全部份额合计，截至 scale_date）；
+# manager_changed_2y = 2024-09-30～2026-09-30 之间有「解聘/离任」类基金经理变更公告（只增聘不算），
+#   依据是公告 PDF 里的「基金经理变更类型」字段（B1 核对，见 reports/universe/ 与 DECISIONS ADR-030）。
+version: v1
+frozen: false
+confirmed_by_user_on: null
+screen_report: reports/universe/20260928T181640Z
+as_of_screen: 2026-09-30
+
+funds:
+  # ------------------------------------------------------------ 医药医疗 · 主动（7）
+  - code: "003095"
+    name: 中欧医疗健康混合
+    share_classes: [{code: "003095", share_class: A}, {code: "003096", share_class: C}]
+    theme: 医药医疗
+    style: active
+    company: 中欧基金
+    established: 2016-09-29
+    scale_yi: "127.36"
+    scale_date: 2026-06-30
+    manager_changed_2y: false
+    reason: 医药主动基金中规模最大（127 亿），知名度高；2025-07 增聘赵磊（非换人），可作「双经理」问答样本
+  - code: "006113"
+    name: 汇添富创新医药混合
+    share_classes: [{code: "006113", share_class: A}, {code: "024344", share_class: C}]
+    theme: 医药医疗
+    style: active
+    company: 汇添富基金
+    established: 2018-08-08
+    scale_yi: "89.62"
+    scale_date: 2026-06-30
+    manager_changed_2y: true
+    reason: 创新药方向代表；2025-04 增聘张韡、2025-05 解聘郑磊，完整的换经理样本
+  - code: "001717"
+    name: 工银前沿医疗股票
+    share_classes: [{code: "001717", share_class: A}, {code: "010685", share_class: C}]
+    theme: 医药医疗
+    style: active
+    company: 工银瑞信基金
+    established: 2016-02-03
+    scale_yi: "71.09"
+    scale_date: 2026-06-30
+    manager_changed_2y: false
+    reason: 股票型（仓位下限高于混合型），规模 71 亿，与混合型形成合同条款对比
+  - code: "004851"
+    name: 广发医疗保健股票
+    share_classes: [{code: "004851", share_class: A}, {code: "009163", share_class: C}]
+    theme: 医药医疗
+    style: active
+    company: 广发基金
+    established: 2017-08-10
+    scale_yi: "35.24"
+    scale_date: 2026-06-30
+    manager_changed_2y: false
+    reason: 股票型医疗基金，经理任职稳定，规模 35 亿
+  - code: "110023"
+    name: 易方达医疗保健行业混合
+    share_classes: [{code: "110023", share_class: A}, {code: "019020", share_class: C}]
+    theme: 医药医疗
+    style: active
+    company: 易方达基金
+    established: 2011-01-28
+    scale_yi: "31.19"
+    scale_date: 2026-06-30
+    manager_changed_2y: false
+    reason: 成立最早（2011 年）的候选之一，净值历史长，适合长区间收益计算；C 类 2023 年才增设，可考「C 类何时设立」
+  - code: "007718"
+    name: 中银创新医疗混合
+    share_classes: [{code: "007718", share_class: A}, {code: "010500", share_class: C}]
+    theme: 医药医疗
+    style: active
+    company: 中银基金
+    established: 2019-11-13
+    scale_yi: "6.99"
+    scale_date: 2026-06-30
+    manager_changed_2y: true
+    reason: 中小规模样本（7 亿）；2026-03 增聘李文广后解聘郑宁，换人发生在 2026Q1，可考跨报告期对比
+  - code: "000452"
+    name: 南方医药保健混合
+    share_classes: [{code: "000452", share_class: A}, {code: "014933", share_class: C}]
+    theme: 医药医疗
+    style: active
+    company: 南方基金
+    established: 2014-01-23
+    scale_yi: "17.25"
+    scale_date: 2026-06-30
+    manager_changed_2y: true
+    reason: 2025-10 蔡强接替王峥娇，换经理样本；成立于 2014 年，净值历史长
+  # ------------------------------------------------------------ 医药医疗 · 指数（3）
+  - code: "001550"
+    name: 天弘中证医药100
+    share_classes: [{code: "001550", share_class: A}, {code: "001551", share_class: C}]
+    theme: 医药医疗
+    style: index
+    company: 天弘基金
+    established: 2015-06-30
+    scale_yi: "6.41"
+    scale_date: 2026-06-30
+    tracking_index: 中证医药100指数
+    manager_changed_2y: false
+    reason: 医药类里唯一一只既非 ETF/联接、也非 LOF 的被动指数基金
+  - code: "160219"
+    name: 国泰国证医药卫生行业指数
+    share_classes: [{code: "160219", share_class: A}, {code: "010144", share_class: C}]
+    theme: 医药医疗
+    style: index
+    company: 国泰基金
+    established: 2013-08-29
+    scale_yi: "5.85"
+    scale_date: 2026-06-30
+    tracking_index: 国证医药卫生行业指数
+    manager_changed_2y: false
+    reason: 全称带「(LOF)」，场内上市但可场外申赎；医药类非 ETF/联接的指数基金只有 3 只，需要用户确认是否接受 LOF
+  - code: "161035"
+    name: 富国中证医药主题指数增强
+    share_classes: [{code: "161035", share_class: A}, {code: "005626", share_class: C}]
+    theme: 医药医疗
+    style: index
+    company: 富国基金
+    established: 2016-11-11
+    scale_yi: "2.66"
+    scale_date: 2026-06-30
+    tracking_index: 中证医药主题指数
+    manager_changed_2y: false
+    reason: 指数增强型（与纯被动对比跟踪误差条款）；同样是 LOF，规模 2.66 亿接近 2 亿门槛
+  # ------------------------------------------------------------ 科技 · 主动（6）
+  - code: "002692"
+    name: 富国创新科技混合
+    share_classes: [{code: "002692", share_class: A}, {code: "011120", share_class: C}]
+    theme: 科技
+    style: active
+    company: 富国基金
+    established: 2016-06-16
+    scale_yi: "151.56"
+    scale_date: 2026-06-30
+    manager_changed_2y: true
+    reason: 科技类规模最大（152 亿）；2025-07 罗擎接替李元博
+  - code: "001513"
+    name: 易方达信息产业混合
+    share_classes: [{code: "001513", share_class: A}, {code: "019018", share_class: C}]
+    theme: 科技
+    style: active
+    company: 易方达基金
+    established: 2016-09-27
+    scale_yi: "130.24"
+    scale_date: 2026-06-30
+    manager_changed_2y: false
+    reason: TMT 综合方向（信息产业），规模 130 亿，经理稳定
+  - code: "013840"
+    name: 银华集成电路混合
+    share_classes: [{code: "013840", share_class: A}, {code: "013841", share_class: C}]
+    theme: 科技
+    style: active
+    company: 银华基金
+    established: 2021-12-08
+    scale_yi: "79.09"
+    scale_date: 2026-06-30
+    manager_changed_2y: false
+    reason: 半导体/集成电路主动基金代表，规模 79 亿，可与芯片指数基金对比持仓
+  - code: "008919"
+    name: 永赢科技驱动混合
+    share_classes: [{code: "008919", share_class: A}, {code: "008920", share_class: C}]
+    theme: 科技
+    style: active
+    company: 永赢基金
+    established: 2020-02-18
+    scale_yi: "45.97"
+    scale_date: 2026-06-30
+    manager_changed_2y: true
+    reason: 2025-08 解聘高楠（李文宾留任），「双经理变单经理」样本
+  - code: "040025"
+    name: 华安科技动力混合
+    share_classes: [{code: "040025", share_class: A}, {code: "014975", share_class: C}]
+    theme: 科技
+    style: active
+    company: 华安基金
+    established: 2011-12-20
+    scale_yi: "32.67"
+    scale_date: 2026-06-30
+    manager_changed_2y: true
+    reason: 成立于 2011 年，净值历史长；2025-04 栾超接替李欣
+  - code: "012650"
+    name: 博时半导体主题混合
+    share_classes: [{code: "012650", share_class: A}, {code: "012651", share_class: C}]
+    theme: 科技
+    style: active
+    company: 博时基金
+    established: 2021-07-20
+    scale_yi: "13.91"
+    scale_date: 2026-06-30
+    manager_changed_2y: true
+    reason: 2026-07 吴渭接替肖瑞瑾，换人发生在 2026Q2 之后，可考「最新季报中的经理是谁」这类时效题
+  # ------------------------------------------------------------ 科技 · 指数（4）
+  - code: "014193"
+    name: 汇添富中证芯片产业指数增强发起式
+    share_classes: [{code: "014193", share_class: A}, {code: "014194", share_class: C}]
+    theme: 科技
+    style: index
+    company: 汇添富基金
+    established: 2021-12-02
+    scale_yi: "23.51"
+    scale_date: 2026-06-30
+    tracking_index: 中证芯片产业指数
+    manager_changed_2y: false
+    reason: 芯片指数增强，科技指数类规模最大（23.5 亿）
+  - code: "008326"
+    name: 东财中证通信技术主题指数
+    share_classes: [{code: "008326", share_class: A}, {code: "008327", share_class: C}]
+    theme: 科技
+    style: index
+    company: 东财基金
+    established: 2020-01-20
+    scale_yi: "16.77"
+    scale_date: 2026-06-30
+    tracking_index: 中证通信技术主题指数
+    manager_changed_2y: false
+    reason: 通信子行业的纯被动指数基金，覆盖 PLAN 列出的「通信」方向
+  - code: "002236"
+    name: 大成中证360互联网+大数据100指数
+    share_classes: [{code: "002236", share_class: A}, {code: "003359", share_class: C}]
+    theme: 科技
+    style: index
+    company: 大成基金
+    established: 2016-02-03
+    scale_yi: "6.09"
+    scale_date: 2026-06-30
+    tracking_index: 中证360互联网+大数据100指数
+    manager_changed_2y: false
+    reason: 计算机/互联网方向的指数基金，成立于 2016 年，净值历史长
+  - code: "011832"
+    name: 西部利得中证人工智能主题指数增强
+    share_classes: [{code: "011832", share_class: A}, {code: "011833", share_class: C}]
+    theme: 科技
+    style: index
+    company: 西部利得基金
+    established: 2021-06-08
+    scale_yi: "2.06"
+    scale_date: 2026-06-30
+    tracking_index: 中证人工智能主题指数
+    manager_changed_2y: true
+    reason: 两年内 3 次增聘+解聘（2024-11、2025-01、2026-01），经理变动最频繁的样本；规模 2.06 亿贴近门槛（备选：嘉实中证半导体指增 014854，13 亿）

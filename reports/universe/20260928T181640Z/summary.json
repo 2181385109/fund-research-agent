@@ -1,0 +1,54 @@
+{
+  "created_utc": "20260928T181640Z",
+  "git_commit": "661e803c3e7d121993025decb6b83448606d7499",
+  "git_dirty": true,
+  "command": "python -m fund_pipeline.universe screen --as-of 2026-09-30 --cache-tag 2026-09-29",
+  "params": {
+    "as_of": "2026-09-30",
+    "cache_tag": "2026-09-29"
+  },
+  "manifest_sha256": null,
+  "akshare_version": "1.18.97",
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.3",
+    "processor": "AMD64 Family 25 Model 116 Stepping 1, AuthenticAMD"
+  },
+  "stats": {
+    "fund_name_em_rows": 27954,
+    "equity_type_rows": 15049,
+    "after_name_exclusion_rows": 9632,
+    "ambiguous_theme_rows": 12,
+    "themed_rows": 906,
+    "fund_groups": 474,
+    "rejected_by_reason": {
+      "规模<2亿": 159,
+      "成立不足2年": 119,
+      "成立日缺失": 3
+    },
+    "passed_groups": 193,
+    "passed_by_theme_style": {
+      "医药医疗/active": 73,
+      "医药医疗/index": 3,
+      "科技/active": 104,
+      "科技/index": 13
+    },
+    "akshare_requests": 42,
+    "cache_hits": 626
+  },
+  "rules": {
+    "equity_types": [
+      "指数型-股票",
+      "混合型-偏股",
+      "混合型-灵活",
+      "股票型"
+    ],
+    "exclude_name_regex": "ETF|联接|LOF|持有|定开|定期开放|封闭|滚动|QDII|港股通|香港|沪港深|全球|海外",
+    "theme_regex": {
+      "医药医疗": "医药|医疗|健康|生物|创新药|生命科学|医学|卫生|中药|医保",
+      "科技": "半导体|芯片|集成电路|电子|计算机|通信|信息|科技|人工智能|互联网|软件|数字经济|云计算|TMT|5G"
+    },
+    "min_scale_yi": "2",
+    "min_years": 2
+  }
+}
