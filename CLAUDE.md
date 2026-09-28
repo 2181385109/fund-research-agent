@@ -14,7 +14,21 @@
    - 需要用户操作（填密钥、改 `.wslconfig`、确认基金池、人工抽检或标注）
    - 除 push 到本仓库之外的任何对外动作
 5. 小的实现细节自己决定，然后登记到 `docs/DECISIONS.md`（ADR 格式：背景 / 决定 / 备选 / 后果）。
-6. 阶段收尾：跑全部测试 → 更新 PROGRESS.md（模板见 §11）→ 运行安全扫描 → commit → push → 确认 CI 全绿 → 报告，然后停下。
+6. 阶段收尾：跑全部测试 → 更新 PROGRESS.md（模板见 §11）→ 运行安全扫描 → commit → push → 确认 CI 全绿。
+7. **分批连续模式（自 2026-09-29 起）**：统筹不再逐阶段审查。工作按 PLAN §7 的批次进行，每个批次开一个新对话。批次内一个阶段收尾后直接做下一阶段，不需要等待；整个批次做完后，写好 `docs/HANDOFF.md`（见第 8 条）再停下。
+   如果上下文已经很长（大约超过 400k），而当前批次还没做完：先把手头的阶段推进到一个能提交的干净点，写好 HANDOFF，然后停下，并告诉用户新对话从哪里接着做。
+   批次内只在以下两种情况中途停下：
+   - **用户关卡**：S1 基金池确认、S3 评测集抽检、S8 人工盲标。直接向用户说明要做什么，用户回复后继续。
+   - **阻塞**：第 4 条列出的情况。先写进 PROGRESS「给统筹的问题」，再用一段话告诉用户卡在哪里、有哪些选项。
+   PROGRESS 保持精简：验收证据尽量用文件路径指向 `reports/` 下的原文，不要把大段输出贴进 PROGRESS。
+8. **`docs/HANDOFF.md`**：交接文件，每批结束时整篇重写，不超过 150 行，写给下一个对话看。内容包括：
+   - 当前进度：已完成哪些阶段，最后一个 commit 和 CI 状态；
+   - 下一步从哪个阶段、哪一步开始；
+   - 如何拉起环境（命令）；
+   - 已经踩过、换个对话还会再踩的坑；
+   - 已冻结的产物及其 sha256（基金池、快照、评测集）；
+   - 还在等用户处理的事。
+   已经写进 CLAUDE.md、PLAN 或 DECISIONS 的内容不要重复，写一个指针即可。
 
 ## 2. 红线（违反任何一条，该阶段作废）
 
@@ -96,7 +110,8 @@ fund-research-agent/
 
 ## 5. 配置与密钥
 - 所有可变配置走环境变量；`.env.example` 与代码实际读取的变量一一对应，并带注释。
-- LLM：`LLM_BASE_URL`、`LLM_API_KEY`、`LLM_MODEL`、`JUDGE_MODEL`。模型：`EMBEDDING_MODEL`、`RERANKER_PROVIDER`、`RERANKER_MODEL`、`HF_ENDPOINT`、`MODEL_CACHE_DIR`。数据：`DATA_AS_OF`、`NAV_API_BASE_URL`。
+- LLM：`LLM_BASE_URL`、`LLM_API_KEY`、`LLM_MODEL`（默认 deepseek-flash）、`LLM_THINKING`（默认 disabled；开启思考模式时，多轮 tool call 必须回传推理内容）、`JUDGE_MODEL`（默认 deepseek-v4-pro，与被测模型刻意不同）。
+- 数据库账号：`fund_reader`（fund_data 只读，Agent 和 Text2SQL 用）、`fund_loader`（仅 fund_data 的读写和建表权限，只给 data-pipeline 导入用），应用账号只能访问 fra_app。任何代码都不许用 root。模型：`EMBEDDING_MODEL`、`RERANKER_PROVIDER`、`RERANKER_MODEL`、`HF_ENDPOINT`、`MODEL_CACHE_DIR`。数据：`DATA_AS_OF`、`NAV_API_BASE_URL`。
 - push 前运行 `scripts/security_scan.py`：检查 key 模式、本机绝对路径、`.env`、PDF 文件和 `data/raw`、`data/snapshots` 下的文件。
 
 ## 6. 数据规范

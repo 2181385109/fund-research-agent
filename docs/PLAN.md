@@ -111,7 +111,7 @@ MySQL 3307 · Redis 6380 · ES 9201 · Milvus 19530（管理端口 9091）· Kaf
 
 | 服务 | mem_limit |
 |---|---|
-| mysql 512m · redis 256m · elasticsearch 1536m（堆 1g）· milvus 2g · kafka 1g（堆 512m，S11 起） | infra ≈ 5.3g |
+| mysql 512m · redis 256m · elasticsearch 1792m（堆 1g，`-XX:MaxDirectMemorySize=256m`；S0 实测空载即占 1536m 上限的 95%，已调整）· milvus 2g · kafka 1g（堆 512m，S11 起） | infra ≈ 5.5g |
 | ai-service 2560m · mcp-tools 256m · backend 768m（-Xmx512m）· frontend 64m | app ≈ 3.6g |
 | **合计上限 ≈ 8.9g** | 实际占用在 S0 和 S7 用 `docker stats` 实测 |
 
@@ -363,6 +363,21 @@ MySQL 3307 · Redis 6380 · ES 9201 · Milvus 19530（管理端口 9091）· Kaf
 - **验收**：每项都有前后数字和原始数据；有质量回归结果；CI 全绿；tag 已推送
 
 ---
+
+## 7. 执行批次（每批开一个新执行者对话，目标上下文 ≤ 400–500k）
+
+| 批次 | 阶段 | 批内用户关卡 |
+|---|---|---|
+| B1 | S1 基金池与数据采集 + S2 文档入库 | 确认基金池 |
+| B2 | S3 评测集 + S4 混合检索与检索评测 | 抽检评测集 |
+| B3 | S5 MCP 工具 + Agent + SSE | — |
+| B4 | S6 Java 后端 + S7 前端与一键启动 | — |
+| B5 | S8 回答评测 + 第一期收尾（tag v0.1-phase1） | 盲标、确认费用 |
+| B6 | S9 gRPC + S10 Redis | — |
+| B7 | S11 Kafka 季报批量入库 | — |
+| B8 | S12 压测基线 + S13 优化（tag v0.2-phase2） | — |
+
+某个批次没做完时，新对话读 HANDOFF.md，从中断处接着做，批次划分不变。
 
 ## 6. 风险与预案
 
