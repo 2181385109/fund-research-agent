@@ -1,0 +1,6 @@
+$ python scripts/security_scan.py
+security_scan mode=tracked env_secrets_checked=7 findings=0 → PASS
+exit=0
+$ python scripts/security_scan.py --history
+security_scan mode=history env_secrets_checked=7 findings=0 → PASS
+exit=0

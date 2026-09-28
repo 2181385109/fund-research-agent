@@ -7,6 +7,7 @@
 | 类别 | 产生者 | 阶段 |
 |---|---|---|
 | `smoke/` | `scripts/llm_smoke.py` | S0 起 |
+| `infra/` | 验收时采集的 infra 证据原文（compose ps、docker stats、_analyze、权限、health） | S0 起 |
 | `data_quality/` | `python -m fund_pipeline.quality` | S1 |
 | `retrieval/` | 检索评测 runner | S4 |
 | `answer_eval/` | 回答评测 | S8 |

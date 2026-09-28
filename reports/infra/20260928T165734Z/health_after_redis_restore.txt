@@ -1,0 +1,31 @@
+$ docker compose start redis
+ Container fra-redis Starting 
+ Container fra-redis Started 
+NAME        IMAGE          COMMAND                  SERVICE   CREATED         STATUS                   PORTS
+fra-redis   redis:8.10.2   "docker-entrypoint.s…"   redis     7 minutes ago   Up 6 seconds (healthy)   0.0.0.0:6380->6379/tcp, [::]:6380->6379/tcp
+$ curl -s -i http://127.0.0.1:8081/api/health
+HTTP/1.1 503 
+X-Request-Id: ef2883ada8fe4e86948989a3c8ce2041
+Content-Type: application/json
+Connection: close
+
+{"code":50300,"message":"依赖服务不可用","data":{"status":"DOWN","components":{"mysql":{"status":"UP","latencyMs":1},"redis":{"status":"DOWN","latencyMs":2007,"error":"QueryTimeoutException: Redis command timed out"}}},"requestId":"ef2883ada8fe4e86948989a3c8ce2041"}
+
+$ curl -s -i http://127.0.0.1:8001/health
+HTTP/1.1 200 OK
+content-type: application/json
+
+{"status":"UP","components":{"milvus":{"status":"UP","latency_ms":16,"error":null},"elasticsearch":{"status":"UP","latency_ms":16,"error":null},"redis":{"status":"UP","latency_ms":8,"error":null}}}
+
+# redis 恢复后 backend 仍 503：Lettuce 按退避重连，backend.log 中的重连记录：
+2026-09-29T00:52:04.814+08:00 ConnectionWatchdog: Reconnecting, last destination was /127.0.0.1:6380
+2026-09-29T00:52:04.822+08:00 ConnectionWatchdog: Cannot reconnect to [127.0.0.1/<unresolved>:6380]: Connection closed prematurely
+2026-09-29T00:52:13.819+08:00 ConnectionWatchdog: Reconnecting, last destination was 127.0.0.1/<unresolved>:6380
+2026-09-29T00:52:13.822+08:00 ConnectionWatchdog: Cannot reconnect to [127.0.0.1/<unresolved>:6380]: Connection refused: getsockopt: /127.0.0.1:6380
+2026-09-29T00:52:22.114+08:00 ConnectionWatchdog: Reconnecting, last destination was 127.0.0.1/<unresolved>:6380
+2026-09-29T00:52:22.116+08:00 ConnectionWatchdog: Cannot reconnect to [127.0.0.1/<unresolved>:6380]: Connection refused: getsockopt: /127.0.0.1:6380
+2026-09-29T00:52:38.516+08:00 ConnectionWatchdog: Reconnecting, last destination was 127.0.0.1/<unresolved>:6380
+2026-09-29T00:52:38.524+08:00 ReconnectionHandler: Reconnected to 127.0.0.1/<unresolved>:6380
+
+# 之后每 5s 轮询 backend health，00:52:50 首次成功后退出（循环条件是响应含 HTTP200；原终端输出被 cut -c1-200 截断在 "HTTP" 处，下行末尾的 200 据退出条件补记）：
+00:52:50 {"code":0,"message":"ok","data":{"status":"UP","components":{"mysql":{"status":"UP","latencyMs":1},"redis":{"status":"UP","latencyMs":1}}},"requestId":"7a85eccd26104717ae2783acf92bc017"} HTTP200

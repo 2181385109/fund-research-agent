@@ -1,0 +1,23 @@
+$ date
+2026-09-29 00:57:34 +0800
+$ docker compose ps
+NAME                IMAGE                          COMMAND                  SERVICE         CREATED          STATUS                    PORTS
+fra-elasticsearch   fra/elasticsearch-ik:8.19.22   "/bin/tini -- /usr/l…"   elasticsearch   13 minutes ago   Up 13 minutes (healthy)   9300/tcp, 0.0.0.0:9201->9200/tcp, [::]:9201->9200/tcp
+fra-milvus          milvusdb/milvus:v2.5.27        "/tini -- milvus run…"   milvus          7 minutes ago    Up 7 minutes (healthy)    0.0.0.0:9091->9091/tcp, [::]:9091->9091/tcp, 0.0.0.0:19530->19530/tcp, [::]:19530->19530/tcp
+fra-mysql           mysql:8.4.11                   "docker-entrypoint.s…"   mysql           9 minutes ago    Up 9 minutes (healthy)    33060/tcp, 0.0.0.0:3307->3306/tcp, [::]:3307->3306/tcp
+fra-redis           redis:8.10.2                   "docker-entrypoint.s…"   redis           12 minutes ago   Up 5 minutes (healthy)    0.0.0.0:6380->6379/tcp, [::]:6380->6379/tcp
+$ docker stats --no-stream
+CONTAINER ID   NAME                  CPU %     MEM USAGE / LIMIT     MEM %     NET I/O           BLOCK I/O        PIDS
+4ce5254ddaad   fra-milvus            3.92%     330.9MiB / 2GiB       16.16%    8.44kB / 8.22kB   226MB / 3.7MB    47
+c4835e8d3d2b   fra-mysql             0.50%     224.8MiB / 512MiB     43.91%    111kB / 149kB     87.4MB / 287MB   47
+ffbb02f64f5e   fra-redis             0.14%     6.359MiB / 256MiB     2.48%     4.97kB / 7.73kB   4.1kB / 4.1kB    6
+439bb899104d   fra-elasticsearch     4.01%     1.423GiB / 1.5GiB     94.89%    12.8kB / 14.9kB   4.1kB / 1.29MB   136
+8d6568ea620a   ticketqa-rabbitmq     0.15%     177.1MiB / 9.711GiB   1.78%     30.2kB / 27.2kB   65.3MB / 209kB   56
+dab4fcbc50ae   ticketqa-redis        0.26%     10.68MiB / 9.711GiB   0.11%     80.8kB / 40.4kB   31MB / 8.19kB    6
+3a3ea2182c8c   ticketqa-wiremock     0.07%     169.7MiB / 9.711GiB   1.71%     2.31kB / 126B     131MB / 1.39MB   40
+75e94d85ce99   ticketqa-mysql        0.47%     442MiB / 9.711GiB     4.45%     393kB / 359kB     234MB / 17.3MB   58
+1bd59405624f   ticketqa-prometheus   0.00%     44.4MiB / 9.711GiB    0.45%     25.3kB / 29.4kB   140MB / 983kB    18
+$ free -h
+               total        used        free      shared  buff/cache   available
+Mem:           9.7Gi       3.3Gi       141Mi        39Mi       6.5Gi       6.4Gi
+Swap:          4.0Gi       164Ki       4.0Gi

@@ -1,0 +1,154 @@
+�FO*g\��P0R WSL0NAT !j_
+N�v WSL N/ec localhost �Nt0
+$ curl -s localhost:9201 (version)
+    "number" : "8.19.22",
+    "lucene_version" : "9.12.2",
+$ GET _cat/plugins
+name         component   version
+439bb899104d analysis-ik 8.19.22
+$ POST _analyze analyzer=ik_max_word text=基金管理人的管理费率
+{
+  "tokens" : [
+    {
+      "token" : "基金",
+      "start_offset" : 0,
+      "end_offset" : 2,
+      "type" : "CN_WORD",
+      "position" : 0
+    },
+    {
+      "token" : "管理人",
+      "start_offset" : 2,
+      "end_offset" : 5,
+      "type" : "CN_WORD",
+      "position" : 1
+    },
+    {
+      "token" : "管理",
+      "start_offset" : 2,
+      "end_offset" : 4,
+      "type" : "CN_WORD",
+      "position" : 2
+    },
+    {
+      "token" : "人",
+      "start_offset" : 4,
+      "end_offset" : 5,
+      "type" : "CN_CHAR",
+      "position" : 3
+    },
+    {
+      "token" : "的",
+      "start_offset" : 5,
+      "end_offset" : 6,
+      "type" : "CN_CHAR",
+      "position" : 4
+    },
+    {
+      "token" : "管理费",
+      "start_offset" : 6,
+      "end_offset" : 9,
+      "type" : "CN_WORD",
+      "position" : 5
+    },
+    {
+      "token" : "管理",
+      "start_offset" : 6,
+      "end_offset" : 8,
+      "type" : "CN_WORD",
+      "position" : 6
+    },
+    {
+      "token" : "费率",
+      "start_offset" : 8,
+      "end_offset" : 10,
+      "type" : "CN_WORD",
+      "position" : 7
+    }
+  ]
+}
+$ POST _analyze analyzer=ik_smart text=基金管理人的管理费率
+{
+  "tokens" : [
+    {
+      "token" : "基金",
+      "start_offset" : 0,
+      "end_offset" : 2,
+      "type" : "CN_WORD",
+      "position" : 0
+    },
+    {
+      "token" : "管理人",
+      "start_offset" : 2,
+      "end_offset" : 5,
+      "type" : "CN_WORD",
+      "position" : 1
+    },
+    {
+      "token" : "的",
+      "start_offset" : 5,
+      "end_offset" : 6,
+      "type" : "CN_CHAR",
+      "position" : 2
+    },
+    {
+      "token" : "管理",
+      "start_offset" : 6,
+      "end_offset" : 8,
+      "type" : "CN_WORD",
+      "position" : 3
+    },
+    {
+      "token" : "费率",
+      "start_offset" : 8,
+      "end_offset" : 10,
+      "type" : "CN_WORD",
+      "position" : 4
+    }
+  ]
+}
+$ docker exec fra-redis redis-cli MODULE LIST
+name
+vectorset
+ver
+1
+path
+
+args
+
+name
+search
+ver
+81001
+path
+/usr/local/lib/redis/modules//redisearch.so
+args
+
+name
+bf
+ver
+81001
+path
+/usr/local/lib/redis/modules//redisbloom.so
+args
+
+name
+timeseries
+ver
+81001
+path
+/usr/local/lib/redis/modules//redistimeseries.so
+args
+
+name
+ReJSON
+ver
+81000
+path
+/usr/local/lib/redis/modules//rejson.so
+args
+
+$ docker exec fra-redis redis-cli FT._LIST
+
+$ redis-cli INFO server | redis_version
+redis_version:8.10.2

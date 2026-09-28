@@ -1,0 +1,101 @@
+{
+  "kind": "infra_s0",
+  "sampled_at": "2026-09-29T00:57:34+08:00",
+  "git_commit": "9c1a2b363e49aff21d64a80fd325102a42f63d07",
+  "git_dirty": true,
+  "dataset_sha256": null,
+  "manifest_sha256": null,
+  "data_as_of": null,
+  "model_ids": null,
+  "params": {
+    "images": {
+      "mysql": "mysql:8.4.11",
+      "redis": "redis:8.10.2",
+      "elasticsearch": "fra/elasticsearch-ik:8.19.22 (elasticsearch:8.19.22 + analysis-ik 8.19.22)",
+      "milvus": "milvusdb/milvus:v2.5.27"
+    },
+    "budget_mib_plan_s3": {
+      "fra-mysql": 512,
+      "fra-redis": 256,
+      "fra-elasticsearch": 1536,
+      "fra-milvus": 2048
+    },
+    "wslconfig": {
+      "memory": "10GB",
+      "swap": "4GB"
+    }
+  },
+  "machine": {
+    "host": "Windows-11-10.0.26200-SP0",
+    "wsl_distro": "Ubuntu-24.04",
+    "wsl_mem_total": "9.7Gi",
+    "wsl_swap_total": "4.0Gi"
+  },
+  "command": "wsl.exe -d Ubuntu-24.04 -u root -- bash -c 'cd <仓库根目录的 WSL 路径>; docker compose ps; docker stats --no-stream; free -h'",
+  "fra_containers": {
+    "fra-milvus": {
+      "mem_usage_mib": 330.9,
+      "mem_limit_mib": 2048.0,
+      "mem_pct": 16.16
+    },
+    "fra-mysql": {
+      "mem_usage_mib": 224.8,
+      "mem_limit_mib": 512.0,
+      "mem_pct": 43.91
+    },
+    "fra-redis": {
+      "mem_usage_mib": 6.4,
+      "mem_limit_mib": 256.0,
+      "mem_pct": 2.48
+    },
+    "fra-elasticsearch": {
+      "mem_usage_mib": 1457.2,
+      "mem_limit_mib": 1536.0,
+      "mem_pct": 94.89
+    }
+  },
+  "fra_total_mem_mib": 2019.3,
+  "fra_budget_total_mib": 4352,
+  "ticketqa_containers": {
+    "ticketqa-rabbitmq": {
+      "mem_usage_mib": 177.1,
+      "mem_limit_mib": 9944.1,
+      "mem_pct": 1.78
+    },
+    "ticketqa-redis": {
+      "mem_usage_mib": 10.7,
+      "mem_limit_mib": 9944.1,
+      "mem_pct": 0.11
+    },
+    "ticketqa-wiremock": {
+      "mem_usage_mib": 169.7,
+      "mem_limit_mib": 9944.1,
+      "mem_pct": 1.71
+    },
+    "ticketqa-mysql": {
+      "mem_usage_mib": 442.0,
+      "mem_limit_mib": 9944.1,
+      "mem_pct": 4.45
+    },
+    "ticketqa-prometheus": {
+      "mem_usage_mib": 44.4,
+      "mem_limit_mib": 9944.1,
+      "mem_pct": 0.45
+    }
+  },
+  "ticketqa_total_mem_mib": 843.9,
+  "notes": [
+    "n=1 次 docker stats 快照，采样时 backend/ai-service 未运行、infra 空载（无数据）。",
+    "fra-elasticsearch 的 cgroup memory.stat 另测：anon=1443MiB、file=0，JVM heap_max=1024MiB（AlwaysPreTouch 整块常驻）、non_heap=197MiB、oom_kill=0。"
+  ],
+  "evidence_files": [
+    "compose_ps_and_docker_stats.txt",
+    "es_ik_and_redis_modules.txt",
+    "health_after_redis_restore.txt",
+    "health_up_and_redis_down.txt",
+    "mysql_privileges.txt",
+    "security_scan.txt",
+    "step0_check_ignore.txt",
+    "step0_wsl.txt"
+  ]
+}

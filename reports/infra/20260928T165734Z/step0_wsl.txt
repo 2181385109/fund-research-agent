@@ -1,0 +1,7 @@
+$ wsl -l -v
+  NAME            STATE           VERSION
+* Ubuntu-24.04    Running         2
+$ wsl -d Ubuntu-24.04 -u root -- free -h
+               total        used        free      shared  buff/cache   available
+Mem:           9.7Gi       1.5Gi       6.8Gi        22Mi       1.6Gi       8.3Gi
+Swap:          4.0Gi          0B       4.0Gi

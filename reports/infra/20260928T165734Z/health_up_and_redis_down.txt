@@ -1,0 +1,47 @@
+# 2026-09-29 00:52:04 +0800
+$ curl -s -i http://127.0.0.1:8081/api/health
+HTTP/1.1 200 
+X-Request-Id: e317d32686e048dca1b0cf209cba15e9
+Content-Type: application/json
+
+{"code":0,"message":"ok","data":{"status":"UP","components":{"mysql":{"status":"UP","latencyMs":1},"redis":{"status":"UP","latencyMs":0}}},"requestId":"e317d32686e048dca1b0cf209cba15e9"}
+
+$ curl -s -i http://127.0.0.1:8001/health
+HTTP/1.1 200 OK
+content-type: application/json
+
+{"status":"UP","components":{"milvus":{"status":"UP","latency_ms":15,"error":null},"elasticsearch":{"status":"UP","latency_ms":15,"error":null},"redis":{"status":"UP","latency_ms":8,"error":null}}}
+
+$ docker compose stop redis
+ Container fra-redis Stopping 
+ Container fra-redis Stopped 
+$ curl -s -i http://127.0.0.1:8081/api/health
+HTTP/1.1 503 
+X-Request-Id: 4f143c0d1b3940f5adc8935b9cc50df6
+Content-Type: application/json
+Connection: close
+
+{"code":50300,"message":"依赖服务不可用","data":{"status":"DOWN","components":{"mysql":{"status":"UP","latencyMs":1},"redis":{"status":"DOWN","latencyMs":2012,"error":"QueryTimeoutException: Redis command timed out"}}},"requestId":"4f143c0d1b3940f5adc8935b9cc50df6"}
+
+$ curl -s -i http://127.0.0.1:8001/health
+HTTP/1.1 503 Service Unavailable
+content-type: application/json
+
+{"status":"DOWN","components":{"milvus":{"status":"UP","latency_ms":49,"error":null},"elasticsearch":{"status":"UP","latency_ms":8,"error":null},"redis":{"status":"DOWN","latency_ms":2014,"error":"timeout after 2.0s"}}}
+
+$ docker compose start redis
+bash: -c: line 2: syntax error near unexpected token `2'
+bash: -c: line 2: `2'
+$ curl -s -i http://127.0.0.1:8081/api/health
+HTTP/1.1 503 
+X-Request-Id: 54427ef8b8fa493ea9a916396c275619
+Content-Type: application/json
+Connection: close
+
+{"code":50300,"message":"依赖服务不可用","data":{"status":"DOWN","components":{"mysql":{"status":"UP","latencyMs":1},"redis":{"status":"DOWN","latencyMs":2003,"error":"QueryTimeoutException: Redis command timed out"}}},"requestId":"54427ef8b8fa493ea9a916396c275619"}
+
+$ curl -s -i http://127.0.0.1:8001/health
+HTTP/1.1 503 Service Unavailable
+content-type: application/json
+
+{"status":"DOWN","components":{"milvus":{"status":"UP","latency_ms":53,"error":null},"elasticsearch":{"status":"UP","latency_ms":7,"error":null},"redis":{"status":"DOWN","latency_ms":2011,"error":"timeout after 2.0s"}}}

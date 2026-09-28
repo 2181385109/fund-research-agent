@@ -1,0 +1,53 @@
+�FO*g\��P0R WSL0NAT !j_
+N�v WSL N/ec localhost �Nt0
+$ [root] CREATE TABLE fund_data._s0_privilege_probe ... ; INSERT 1 row
+$ [fund_reader] SHOW GRANTS
++----------------------------------------------------+
+| Grants for fund_reader@%                           |
++----------------------------------------------------+
+| GRANT USAGE ON *.* TO `fund_reader`@`%`            |
+| GRANT SELECT ON `fund_data`.* TO `fund_reader`@`%` |
++----------------------------------------------------+
+$ [fund_reader] SELECT * FROM fund_data._s0_privilege_probe
++----+-------+
+| id | note  |
++----+-------+
+|  1 | probe |
++----+-------+
+$ [fund_reader] INSERT INTO fund_data._s0_privilege_probe VALUES (2, "x")
+ERROR 1142 (42000) at line 1: INSERT command denied to user 'fund_reader'@'127.0.0.1' for table '_s0_privilege_probe'
+exit=1
+$ [fund_reader] UPDATE fund_data._s0_privilege_probe SET note="x"
+ERROR 1142 (42000) at line 1: UPDATE command denied to user 'fund_reader'@'127.0.0.1' for table '_s0_privilege_probe'
+exit=1
+$ [fund_reader] DELETE FROM fund_data._s0_privilege_probe
+ERROR 1142 (42000) at line 1: DELETE command denied to user 'fund_reader'@'127.0.0.1' for table '_s0_privilege_probe'
+exit=1
+$ [fund_reader] CREATE TABLE fund_data.t (id INT)
+ERROR 1142 (42000) at line 1: CREATE command denied to user 'fund_reader'@'127.0.0.1' for table 't'
+exit=1
+$ [fund_reader] SELECT COUNT(*) FROM fra_app.flyway_schema_history (other db)
+ERROR 1142 (42000) at line 1: SELECT command denied to user 'fund_reader'@'127.0.0.1' for table 'flyway_schema_history'
+exit=1
+$ [fra_app] SHOW GRANTS
++------------------------------------------------------+
+| Grants for fra_app@%                                 |
++------------------------------------------------------+
+| GRANT USAGE ON *.* TO `fra_app`@`%`                  |
+| GRANT ALL PRIVILEGES ON `fra_app`.* TO `fra_app`@`%` |
++------------------------------------------------------+
+$ [fra_app] SELECT * FROM fund_data._s0_privilege_probe
+ERROR 1142 (42000) at line 1: SELECT command denied to user 'fra_app'@'127.0.0.1' for table '_s0_privilege_probe'
+exit=1
+$ [root] DROP TABLE fund_data._s0_privilege_probe; SHOW TABLES FROM fund_data
+$ [root] SHOW DATABASES
++--------------------+
+| Database           |
++--------------------+
+| fra_app            |
+| fund_data          |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
