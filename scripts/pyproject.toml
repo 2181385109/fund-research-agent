@@ -1,0 +1,19 @@
+# scripts/ 不是可安装的包；本文件只放 ruff 与 pytest 配置。
+# 依赖：security_scan.py / gen_env.py 只用标准库；llm_smoke.py 需要 httpx。
+# 本地可用 ai-service/.venv 运行；CI 安装 httpx pytest ruff。
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers"
+markers = [
+    "integration: 需要 docker compose 起的 infra",
+    "slow: 需要下载或加载本地模型",
+    "live: 调用真实 LLM 或访问外网",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
