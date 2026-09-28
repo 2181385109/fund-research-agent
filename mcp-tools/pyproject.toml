@@ -1,0 +1,39 @@
+[project]
+name = "fund-mcp-tools"
+version = "0.0.1"
+description = "fund-research-agent MCP 工具服务：基金库只读 SQL、收益计算、最新净值（S5 实现；S0 仅骨架）"
+requires-python = ">=3.12,<3.13"
+license = "MIT"
+dependencies = [
+    "pydantic>=2.8",
+    "pydantic-settings>=2.4",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3",
+    "ruff>=0.6",
+]
+
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fund_mcp_tools"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers"
+markers = [
+    "integration: 需要 docker compose 起的 infra",
+    "slow: 需要下载或加载本地模型",
+    "live: 调用真实 LLM 或访问外网",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
