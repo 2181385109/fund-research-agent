@@ -1,5 +1,6 @@
 package com.fundagent.backend.health;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ public record HealthReport(Status status, Map<String, Component> components) {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public record Component(Status status, long latencyMs, String error) {}
 
+    @JsonIgnore
     public boolean isUp() {
         return status == Status.UP;
     }

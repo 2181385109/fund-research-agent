@@ -62,6 +62,7 @@ class HealthControllerTest {
                 .andExpect(header().exists(RequestIdFilter.HEADER))
                 .andExpect(jsonPath("$.code").value(0))
                 .andExpect(jsonPath("$.data.status").value("UP"))
+                .andExpect(jsonPath("$.data.up").doesNotExist())
                 .andExpect(jsonPath("$.data.components.mysql.status").value("UP"))
                 .andExpect(jsonPath("$.data.components.redis.status").value("UP"))
                 .andExpect(jsonPath("$.data.components.redis.latencyMs").isNumber());
