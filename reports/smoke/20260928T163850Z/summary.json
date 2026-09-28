@@ -1,0 +1,77 @@
+{
+  "kind": "llm_smoke",
+  "started_at_utc": "20260928T163850Z",
+  "params": {
+    "base_url": "https://api.deepseek.com",
+    "requested_model": "deepseek-flash",
+    "thinking": "disabled",
+    "timeout_s": 60.0,
+    "temperature": 0,
+    "stream_prompt": "用一句话介绍什么是公募基金的管理费。",
+    "tool_prompt": "110022 最新净值是多少",
+    "tool": "get_latest_nav",
+    "retries": 0
+  },
+  "git_commit": "6a01852c6f63581f7eaeebce072b575f04f6e12b",
+  "git_dirty": false,
+  "dataset_sha256": null,
+  "manifest_sha256": null,
+  "data_as_of": null,
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.3",
+    "cpu_count": 16,
+    "httpx": "0.28.1"
+  },
+  "command": "python.exe scripts/llm_smoke.py",
+  "available_models": [
+    "deepseek-flash",
+    "deepseek-v4-pro"
+  ],
+  "stream": {
+    "response_models": [
+      "deepseek-flash"
+    ],
+    "usage": {
+      "prompt_tokens": 14,
+      "completion_tokens": 42,
+      "total_tokens": 56,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 14
+    },
+    "first_chunk_ms": 229.2,
+    "first_token_ms": 751.8,
+    "total_ms": 1102.8,
+    "content": "公募基金的管理费是基金公司按基金资产净值的一定比例（通常为年费率）每日计提、从基金资产中扣除，用于支付其管理基金资产所提供专业服务报酬的费用。"
+  },
+  "tool_call": {
+    "response_model": "deepseek-flash",
+    "usage": {
+      "prompt_tokens": 297,
+      "completion_tokens": 42,
+      "total_tokens": 339,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      },
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 297
+    },
+    "total_ms": 1702.8,
+    "finish_reason": "tool_calls",
+    "tool_name": "get_latest_nav",
+    "tool_arguments": {
+      "share_code": "110022"
+    }
+  },
+  "status": "PASS",
+  "model_ids": {
+    "requested": "deepseek-flash",
+    "response_stream": [
+      "deepseek-flash"
+    ],
+    "response_tool_call": "deepseek-flash"
+  }
+}
