@@ -1,0 +1,128 @@
+# fund-research-agent 本地编排。默认只起 infra（mysql / redis / elasticsearch / milvus）；
+# 应用服务（backend、ai-service、mcp-tools、frontend）在 S7 以 profile "app" 加入，Kafka 在 S11 加入。
+# 在 WSL2 里的 Docker Engine 上运行，启动命令见 docs/SETUP.md。
+# 端口、密码全部来自 .env（由 scripts/gen_env.py 生成）；mem_limit 按 PLAN §3。
+
+name: ${COMPOSE_PROJECT_NAME:-fra}
+
+services:
+  mysql:
+    image: mysql:8.4.11
+    container_name: fra-mysql
+    restart: unless-stopped
+    mem_limit: 512m
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?run scripts/gen_env.py first}
+      MYSQL_APP_DB: ${MYSQL_APP_DB:-fra_app}
+      MYSQL_APP_USER: ${MYSQL_APP_USER:-fra_app}
+      MYSQL_APP_PASSWORD: ${MYSQL_APP_PASSWORD:?}
+      FUND_DATA_DB: ${FUND_DATA_DB:-fund_data}
+      FUND_READER_USER: ${FUND_READER_USER:-fund_reader}
+      FUND_READER_PASSWORD: ${FUND_READER_PASSWORD:?}
+      TZ: Asia/Shanghai
+    # 配置用命令行参数而不是挂 conf.d：/mnt/d 下的文件权限是 777，MySQL 会忽略 world-writable 的配置文件（ADR-013）
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_0900_ai_ci
+      - --default-time-zone=+08:00
+      - --innodb-buffer-pool-size=128M
+      - --max-connections=100
+      - --performance-schema=OFF
+      - --skip-name-resolve
+    ports:
+      - "${MYSQL_PORT:-3307}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./deploy/mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      # 初始化阶段临时服务器是 skip-networking，TCP ping 不通，因此不会过早报 healthy
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+
+  redis:
+    image: redis:8.10.2
+    container_name: fra-redis
+    restart: unless-stopped
+    mem_limit: 256m
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?run scripts/gen_env.py first}
+    # 密码经环境变量传入而不是写在命令行里；maxmemory 留出进程自身开销，低于 mem_limit
+    command: ["sh", "-c", "exec redis-server --requirepass \"$$REDIS_PASSWORD\" --appendonly yes --maxmemory 192mb --maxmemory-policy noeviction"]
+    ports:
+      - "${REDIS_PORT:-6380}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$$REDIS_PASSWORD\" --no-auth-warning ping | grep -q PONG"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+  elasticsearch:
+    build:
+      context: ./deploy/elasticsearch
+      args:
+        ES_VERSION: "8.19.22"
+    image: fra/elasticsearch-ik:8.19.22
+    container_name: fra-elasticsearch
+    restart: unless-stopped
+    mem_limit: 1536m
+    environment:
+      discovery.type: single-node
+      # 本地开发关闭安全认证（ADR-006）：只绑本机、无敏感数据；生产环境必须开启
+      xpack.security.enabled: "false"
+      # 不用机器学习功能，关掉可省去 ML 本地进程的内存
+      xpack.ml.enabled: "false"
+      # 笔记本磁盘余量小时避免索引被置为只读
+      cluster.routing.allocation.disk.threshold_enabled: "false"
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+      TZ: Asia/Shanghai
+    ports:
+      - "${ES_PORT:-9201}:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs 'http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=5s' >/dev/null"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
+  milvus:
+    image: milvusdb/milvus:v2.5.27
+    container_name: fra-milvus
+    restart: unless-stopped
+    mem_limit: 2g
+    # 单容器 standalone：内嵌 etcd + 本地存储，参数取自官方 scripts/standalone_embed.sh（ADR-004）
+    command: ["milvus", "run", "standalone"]
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      ETCD_USE_EMBED: "true"
+      ETCD_DATA_DIR: /var/lib/milvus/etcd
+      ETCD_CONFIG_PATH: /milvus/configs/embedEtcd.yaml
+      COMMON_STORAGETYPE: local
+      TZ: Asia/Shanghai
+    ports:
+      - "${MILVUS_PORT:-19530}:19530"
+      - "${MILVUS_METRICS_PORT:-9091}:9091"
+    volumes:
+      - milvus_data:/var/lib/milvus
+      - ./deploy/milvus/embedEtcd.yaml:/milvus/configs/embedEtcd.yaml:ro
+      - ./deploy/milvus/user.yaml:/milvus/configs/user.yaml:ro
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs http://localhost:9091/healthz >/dev/null"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+      start_period: 90s
+
+volumes:
+  mysql_data:
+  redis_data:
+  es_data:
+  milvus_data:

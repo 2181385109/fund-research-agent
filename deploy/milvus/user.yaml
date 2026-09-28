@@ -1,0 +1,2 @@
+# 覆盖 Milvus 默认 milvus.yaml 的配置（官方 standalone_embed 方式挂载到 /milvus/configs/user.yaml）。
+# S0 暂无覆盖项。
