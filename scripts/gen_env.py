@@ -51,13 +51,68 @@ def render(example_text: str, llm_key: str | None) -> tuple[str, list[str]]:
     return "\n".join(out) + "\n", filled
 
 
+def _var_names(text: str) -> set[str]:
+    return {
+        line.strip().partition("=")[0]
+        for line in text.splitlines()
+        if "=" in line and not line.strip().startswith("#")
+    }
+
+
+def add_missing(example_text: str, env_text: str) -> tuple[str, list[str]]:
+    """把 .env.example 中有、现有 .env 中没有的变量（连同其注释）追加到末尾；已有的值不动。
+
+    返回 (新 .env 文本, 追加的变量名列表)。LLM_API_KEY 缺失时只追加空值。
+    """
+    rendered, _ = render(example_text, None)
+    existing = _var_names(env_text)
+    block: list[str] = []
+    added: list[str] = []
+    comments: list[str] = []
+    for line in rendered.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            comments = []
+        elif stripped.startswith("#"):
+            comments.append(line)
+        else:
+            name = stripped.partition("=")[0]
+            if name not in existing:
+                block.extend([*comments, line])
+                added.append(name)
+            comments = []
+    if not added:
+        return env_text, []
+    base = env_text if env_text.endswith("\n") or not env_text else env_text + "\n"
+    header = "\n# " + "-" * 40 + " 由 gen_env.py --add-missing 追加\n"
+    return base + header + "\n".join(block) + "\n", added
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--llm-key-file", type=Path, help="存放 DeepSeek API key 的文本文件")
     parser.add_argument("--example", type=Path, default=ROOT / ".env.example")
     parser.add_argument("--out", type=Path, default=ROOT / ".env")
     parser.add_argument("--force", action="store_true", help="覆盖已存在的 .env")
+    parser.add_argument(
+        "--add-missing",
+        action="store_true",
+        help="只把 .env.example 新增的变量追加到已有 .env（新 [secret] 变量随机生成），已有值不动",
+    )
     args = parser.parse_args(argv)
+
+    if args.add_missing:
+        if not args.out.exists():
+            print(f"{args.out.name} 不存在，先不带 --add-missing 生成", file=sys.stderr)
+            return 1
+        text, added = add_missing(
+            args.example.read_text(encoding="utf-8"), args.out.read_text(encoding="utf-8")
+        )
+        if added:
+            with args.out.open("w", encoding="utf-8", newline="\n") as f:
+                f.write(text)
+        print(f"{args.out.name} 追加的变量：{', '.join(added) or '（无）'}")
+        return 0
 
     if args.out.exists() and not args.force:
         print(f"{args.out.name} 已存在，未覆盖（需要时加 --force）", file=sys.stderr)

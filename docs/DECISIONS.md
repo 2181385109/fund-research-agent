@@ -121,3 +121,23 @@
 ## ADR-022 Java 未实现包用 `package-info.java` 占位（S0）
 - **背景**：S0 要求未实现模块放占位说明所属阶段。
 - **决定**：Python 子目录与顶层目录放 `README.md`；Java 包（auth、kb、document、conversation、chat、ratelimit、ingestbatch、aiclient）用带 Javadoc 的 `package-info.java`，因为 `src/main/java` 下的 README 不会被 Maven 处理，也不符合 Java 惯例。
+
+---
+
+## ADR-023 fund_data 导入账号 `fund_loader`（B1，统筹决定 S0 问题 2）
+- **背景**：S1 的 `fund_pipeline.load` 要在 fund_data 建表并导入；S0 时 fund_data 只有 root 和只读的 `fund_reader`。
+- **决定**：新增 `fund_loader`，权限为 `fund_data.*` 上的 SELECT、INSERT、UPDATE、DELETE、CREATE、DROP、ALTER、INDEX、REFERENCES，无其他库权限；只给 data-pipeline 导入用，任何代码都不用 root（CLAUDE.md §5）。建号脚本 `deploy/mysql/init/02-fund-loader.sh`（幂等：CREATE IF NOT EXISTS + ALTER USER 同步密码），新数据卷自动执行，已有数据卷按 SETUP §3.1 手动执行一次。密码变量 `FUND_LOADER_PASSWORD` 由 `gen_env.py --add-missing` 追加到已有 `.env`（新增的选项，已有值不动，有单测）。
+- **备选**：直接用 root（统筹否决）；给 `fra_app` 账号加 fund_data 权限（混淆业务库与数据库边界）。
+- **后果**：B1 实测（`reports/infra/20260928T174514Z/s0_followup.txt`）：`fund_loader` 在 fund_data 上建表 / 插入 / 查询 / 删表成功；查 `fra_app` 报 ERROR 1142，建其他库报 ERROR 1044；`fund_reader` 权限不变。
+
+## ADR-024 ES 内存：mem_limit 1792m + `-XX:MaxDirectMemorySize=256m`（B1，统筹决定 S0 问题 1）
+- **背景**：S0 实测 mem_limit 1536m 下 ES 空载常驻 1457MiB（94.9%），堆 1g 启动即预占；ES 默认 direct 上限为堆的一半（512MiB），写入或检索负载下可能被 OOM kill。
+- **决定**：`mem_limit: 1792m`，`ES_JAVA_OPTS=-Xms1g -Xmx1g -XX:MaxDirectMemorySize=256m`；PLAN §3 已由统筹同步（infra ≈ 5.5g）。
+- **备选**：只调 direct 上限不加内存；维持现状观察。
+- **后果**：重建容器后实测 1.426GiB / 1.75GiB（81.5%），heap_max 1073741824，direct 已用约 4MiB（同一证据文件）。S2 全量入库时再看 `docker stats`。
+
+## ADR-025 `LLM_THINKING=disabled`、`JUDGE_MODEL=deepseek-v4-pro` 维持（B1，统筹决定 S0 问题 3）
+- **决定**：维持 ADR-018，统筹已写入 CLAUDE.md §5 的变量清单。无代码改动。
+
+## ADR-026 WSL Docker 镜像加速顺序不改、不重启 Docker（B1，统筹决定 S0 问题 4）
+- **决定**：`/etc/docker/daemon.json` 保持原样，不 `systemctl restart docker`（会连带重启 ticket-qa 的容器）。新镜像拉取慢时继续按 SETUP §4.1 的办法（Windows 侧下载 + `docker load`）。

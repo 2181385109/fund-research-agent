@@ -53,6 +53,15 @@ python scripts/gen_env.py --llm-key-file "D:\个人\api(Deepseek).txt"
 - 从 `.env.example` 生成 `.env`：标了 `[secret]` 的变量随机生成 24 位字母数字串，`LLM_API_KEY` 从 key 文件读取；脚本只打印变量名，不打印值。
 - `.env` 已存在时默认拒绝覆盖（`--force` 才覆盖，**会换掉所有密码**，已初始化的 MySQL 数据卷里的旧密码不会随之改变，需要 `docker compose down -v` 重建）。
 - 验证没被跟踪：`git check-ignore -v .env` 应输出 `.gitignore:2:.env	.env`。
+- `.env.example` 以后新增变量时，用 `python scripts/gen_env.py --add-missing` 只追加缺少的变量（新的 `[secret]` 变量随机生成），已有值不动。
+
+### 3.1 已有 MySQL 数据卷时补建 `fund_loader`（S1 起，ADR-023）
+
+`deploy/mysql/init/02-fund-loader.sh` 只在数据卷为空时自动执行。S0 就建好数据卷的环境，先 `gen_env.py --add-missing`，再重建 mysql 容器让它拿到新环境变量，然后手动执行一次（幂等）：
+
+```bash
+wsl.exe -d Ubuntu-24.04 -u root -- bash -c 'cd /mnt/d/xiangmu/fund-research-agent && docker compose up -d mysql && sleep 20 && docker exec fra-mysql bash /docker-entrypoint-initdb.d/02-fund-loader.sh'
+```
 
 ## 4. 启动 infra（经 wsl）
 

@@ -19,6 +19,8 @@ services:
       FUND_DATA_DB: ${FUND_DATA_DB:-fund_data}
       FUND_READER_USER: ${FUND_READER_USER:-fund_reader}
       FUND_READER_PASSWORD: ${FUND_READER_PASSWORD:?}
+      FUND_LOADER_USER: ${FUND_LOADER_USER:-fund_loader}
+      FUND_LOADER_PASSWORD: ${FUND_LOADER_PASSWORD:?run scripts/gen_env.py --add-missing}
       TZ: Asia/Shanghai
     # 配置用命令行参数而不是挂 conf.d：/mnt/d 下的文件权限是 777，MySQL 会忽略 world-writable 的配置文件（ADR-016）
     command:
@@ -72,7 +74,8 @@ services:
     image: fra/elasticsearch-ik:8.19.22
     container_name: fra-elasticsearch
     restart: unless-stopped
-    mem_limit: 1536m
+    # 1792m + 堆 1g + direct 上限 256m：S0 实测 1536m 下空载即占 95%（ADR-024）
+    mem_limit: 1792m
     environment:
       discovery.type: single-node
       # 本地开发关闭安全认证（ADR-006）：WSL2 NAT 下只经本机 localhost 转发可达、无敏感数据；生产环境必须开启
@@ -81,7 +84,7 @@ services:
       xpack.ml.enabled: "false"
       # 笔记本磁盘余量小时避免索引被置为只读
       cluster.routing.allocation.disk.threshold_enabled: "false"
-      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g -XX:MaxDirectMemorySize=256m"
       TZ: Asia/Shanghai
     ports:
       - "${ES_PORT:-9201}:9200"

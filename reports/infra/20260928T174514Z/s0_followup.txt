@@ -1,0 +1,28 @@
+# S0 遗留决定落实（ADR-023 fund_loader、ADR-024 ES 内存）采集于 20260928T174514Z
+$ docker inspect -f {{.HostConfig.Memory}} fra-elasticsearch
+1879048192
+$ docker inspect ES_JAVA_OPTS
+ES_JAVA_OPTS=-Xms1g -Xmx1g -XX:MaxDirectMemorySize=256m
+$ GET _nodes/stats/jvm (heap_max, direct buffer pool)
+{"nodes":{"DwZlTYemQNW5ngNX-Zt0yA":{"jvm":{"mem":{"heap_max_in_bytes":1073741824},"buffer_pools":{"direct":{"count":9,"used_in_bytes":4194321,"total_capacity_in_bytes":4194315}}}}}}
+$ docker stats --no-stream
+NAME                MEM USAGE / LIMIT    MEM %
+fra-elasticsearch   1.426GiB / 1.75GiB   81.48%
+fra-mysql           198.3MiB / 512MiB    38.74%
+fra-milvus          329.7MiB / 2GiB      16.10%
+fra-redis           6.746MiB / 256MiB    2.64%
+$ [fund_loader] SHOW GRANTS
+Grants for fund_loader@%
+GRANT USAGE ON *.* TO `fund_loader`@`%`
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, REFERENCES, INDEX, ALTER ON `fund_data`.* TO `fund_loader`@`%`
+$ [fund_loader] CREATE/INSERT/SELECT/DROP 探针表 fund_data._b1_loader_probe
+id
+1
+$ [fund_loader] SELECT fra_app.flyway_schema_history（应被拒）
+ERROR 1142 (42000) at line 1: SELECT command denied to user 'fund_loader'@'127.0.0.1' for table 'flyway_schema_history'
+$ [fund_loader] CREATE DATABASE other_db（应被拒）
+ERROR 1044 (42000) at line 1: Access denied for user 'fund_loader'@'%' to database 'other_db'
+$ [fund_reader] SHOW GRANTS（不变）
+Grants for fund_reader@%
+GRANT USAGE ON *.* TO `fund_reader`@`%`
+GRANT SELECT ON `fund_data`.* TO `fund_reader`@`%`
