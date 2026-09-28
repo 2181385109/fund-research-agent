@@ -1,0 +1,47 @@
+# ---- 密钥 ----
+.env
+.env.*
+!.env.example
+
+# ---- 数据（版权/来源条款：原始 PDF 与抓取快照不入库，见 PLAN §2.1）----
+data/raw/
+data/snapshots/
+*.pdf
+
+# ---- 模型缓存 ----
+.cache/
+models/
+
+# ---- Python ----
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+build/
+dist/
+
+# ---- Java ----
+backend/target/
+*.class
+*.log
+hs_err_pid*
+
+# ---- 前端 ----
+node_modules/
+frontend/dist/
+
+# ---- 报告：summary.json / report.md 入库，大体积原始数据不入库（CLAUDE.md §3）----
+reports/**/raw/
+reports/**/*.parquet
+
+# ---- IDE / OS ----
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
