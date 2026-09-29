@@ -13,7 +13,8 @@ from pathlib import Path
 
 from fund_ai.embedding.base import Embedder
 from fund_ai.ingest.chunking import Chunk, ChunkParams, DocMeta, chunk_document
-from fund_ai.ingest.parsers.pdf import ParsedDoc, parse_pdf
+from fund_ai.ingest.parsers.pdf import ParsedDoc
+from fund_ai.ingest.parsers.text import parse_document
 from fund_ai.stores.base import ChunkStore
 
 
@@ -41,7 +42,7 @@ class IngestPipeline:
         embedder: Embedder,
         stores: list[ChunkStore],
         params: ChunkParams | None = None,
-        parser: Callable[[Path], ParsedDoc] = parse_pdf,
+        parser: Callable[[Path], ParsedDoc] = parse_document,
     ) -> None:
         self.embedder = embedder
         self.stores = stores
@@ -72,7 +73,7 @@ class IngestPipeline:
         for s in self.stores:
             s.delete_doc(meta.doc_id)
         for s in self.stores:
-            s.write(chunks, vecs, vecs_ctx)
+            s.write(chunks, vecs, vecs_ctx, extra=meta.store_fields or None)
         t["write"] = (time.perf_counter() - t0) * 1000
 
         counts = {s.name: s.count(meta.doc_id) for s in self.stores}

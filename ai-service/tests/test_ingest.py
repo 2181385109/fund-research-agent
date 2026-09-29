@@ -127,8 +127,8 @@ def test_pipeline_idempotent_and_delete(report: Path) -> None:
 
 
 class LossyStore(InMemoryStore):
-    def write(self, chunks, vectors, vectors_ctx) -> None:
-        super().write(chunks[:-1], vectors[:-1], vectors_ctx[:-1])
+    def write(self, chunks, vectors, vectors_ctx, extra=None) -> None:
+        super().write(chunks[:-1], vectors[:-1], vectors_ctx[:-1], extra)
 
 
 def test_pipeline_detects_inconsistent_store(report: Path) -> None:

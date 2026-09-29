@@ -284,3 +284,20 @@
 - **文档 MCP 挂载**：`FastMCP.streamable_http_app()` 挂在 FastAPI 根路径最后（其余路由先匹配，剩下的 `/mcp` 交给它），session manager 在 FastAPI lifespan 里运行。Host 头白名单 `MCP_ALLOWED_HOSTS`（MCP SDK 的 DNS rebinding 防护，默认只放回环）；S7 容器互连时要加 `ai-service:*`。Agent 用 HTTP 回环调用自己的 `/mcp`（与 PLAN §1 的「MCP Client」一致，也让文档检索工具能被外部 MCP 客户端直接使用）。
 - **历史消息**：请求可带最近几轮 `history`；其中助手回答里的 `[n]` 去掉，避免被当成本次请求的出处。
 - **备选**：Agent 用 `create_react_agent` 预置图（少写代码，但循环上限、SQL 重试、出处登记都要靠钩子，不如显式 StateGraph 清楚）；答案事后整体校验 `[n]`（用户已经看到了无效编号）。
+
+## ADR-043 私有知识库提问：检索范围只由服务端注入（S6，B6，统筹决定）
+- **背景**：S6 验收 3 要求「上传私有 PDF → READY → 对私有库提问，回答引用这份私有文档」，但 S5 的 `search_fund_documents` 没有 kb 维度（HANDOFF B5 §2）。
+- **决定（统筹 2026-09-29 的四条，原样执行）**：
+  1. chat 增加检索范围，**只能由服务端注入**：Java 按当前用户算出允许访问的 kb 集合（公共库 + 该用户自己的私有库），放进发给 ai-service 的请求（`kb_scope`）；ai-service 把它放进 Agent 的 `RunContext`，`search_fund_documents` 在服务端强制过滤。范围**不是 LLM 可填的工具参数，也不出现在工具 schema 里**。
+  2. 私有文档单独一套 Milvus 集合 + ES 索引 `user_chunks`（带 `kb_id`、`owner_id` 字段）；公共 `fund_chunks` 不改、不重新入库，S4 评测结果保持有效。范围里有私有库时，公共与私有两边的检索结果合并后再重排。
+  3. 越权测试：用户 A 在 chat 请求里手动带上用户 B 的 kb_id，必须被拒或被剔除，B 的文档内容不出现在检索结果里。Java 层和 ai-service 层各测一次。
+  4. S6 验收 3 按原文：私有 PDF 入库到 READY 之后，对私有库提问，回答里引用这份私有文档。
+- **执行细节（本 ADR 补充，均在上述四条之内）**：
+  - **范围怎么从 Agent 传到检索工具**：文档 MCP 仍是一个独立的 MCP 服务（外部 MCP 客户端可直接用），所以范围走**带签名的 HTTP 头** `X-Fund-Kb-Scope`（`base64(json).hmac_sha256`，含 `exp`，60 s 有效），由 `McpToolBackend` 在每次调用 `search_fund_documents` 时按 `RunContext.scope` 签发，文档 MCP 的工具函数通过 MCP `Context`（隐藏参数，不进工具 schema）取到请求头并校验。LLM 只能决定 `query/fund_codes/doc_types/top_n`；它即使在 tool call 里写了 `kb_ids`、`owner_id` 之类的额外参数，也不会被采用（测试覆盖）。没有该头（外部 MCP 客户端、`/v1/retrieve`、评测）= **只查公共库**（默认拒绝私有）；签名或有效期不对 = 工具报错，**不回退成公共库**。密钥 `KB_SCOPE_SECRET`，未配置时进程启动时随机生成（单 worker 部署；多 worker 必须配置同一个值）。
+  - **双重条件**：私有检索的过滤条件是 `kb_id in (范围内的私有 kb) AND owner_id == 请求里的用户`。即使上游误传了别人的 kb_id，owner 不匹配也查不到。
+  - **默认范围**：chat 请求没有 `kbIds` = 公共库 + 该用户全部私有库；带了 `kbIds` 则必须都在「允许集合」里，**任何一个不在就整个请求拒绝（HTTP 403，不调用 ai-service）**，不做静默剔除，也不区分「不存在」和「是别人的」，避免探测他人知识库 id。只选私有库时 `include_public=false`。
+  - **合并后重排**：公共与私有两边各自完成召回与 RRF，各取前 `rerank_candidates` 条**合并成一个候选池**再送交叉编码器重排；不带重排的模式按各自的分数合并（BM25 分数在两个索引之间不可严格比较，局限登记在 LIMITATIONS）。没有 `kb_scope` 时代码路径与 S4 完全一致，S4 已用掉的 test 评测不受影响；上线前后对同一批公共查询的检索结果做了对比，证据见 PROGRESS。
+  - **入库**：`POST /v1/documents/ingest` 增加 `kb_id`、`owner_id`（有 `kb_id` 走私有流水线写 `user_chunks`）、`callback`（异步：立即返回 202，入库后带共享密钥回调 Java；回调地址不由请求给出，固定为配置项，防 SSRF）；私有块额外存 `doc_title`（用户文件名），因为公共块的文档名是靠 `doc_type + report_period` 重建的。ai-service 增加 `.md/.txt` 解析（PLAN S6 允许上传 PDF/MD/TXT）。
+  - **Java 鉴权不用 Spring Security**：BCrypt 用 `spring-security-crypto`，JWT 用 jjwt，由 `HandlerInterceptor` 校验并把 userId 放进请求属性（无角色、无复杂权限，PLAN §0「不做多租户与复杂权限」；不引入整套 Security 过滤链，`@WebMvcTest` 也更简单）。
+- **备选**：把 `kb_ids` 做成工具参数并靠 prompt 约束（LLM 可被注入绕过，否决）；私有块写进公共 `fund_chunks`（要改 schema、重入库并使 S4 结论失效，否决）；范围放进 MCP `_meta`（langchain-mcp-adapters 0.3.2 没有按调用传 `_meta` 的入口，头 + contextvar 更直接）。
+- **后果**：公共 MCP 工具签名未变；ai-service 多一个 Milvus 集合和一个 ES 索引；`search_fund_documents` 的结果里私有片段 `fund_code/fund_name` 为空、`doc_title` 是文件名、`kb_id` 有值。

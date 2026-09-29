@@ -6,6 +6,7 @@
 # ---- 数据（版权/来源条款：原始 PDF 与抓取快照不入库，见 PLAN §2.1）----
 data/raw/
 data/snapshots/
+data/uploads/
 *.pdf
 
 # ---- 模型缓存 ----

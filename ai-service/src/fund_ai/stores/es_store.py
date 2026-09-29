@@ -34,13 +34,17 @@ MAPPINGS: dict[str, Any] = {
 class EsChunkStore:
     name = "elasticsearch"
 
-    def __init__(self, url: str, index: str, client: Any = None) -> None:
+    def __init__(
+        self, url: str, index: str, client: Any = None, extra_fields: list[str] | None = None
+    ) -> None:
         if client is None:
             from elasticsearch import Elasticsearch
 
             client = Elasticsearch(url, request_timeout=60)
         self.es = client
         self.index = index
+        # 额外的 keyword 字段：私有库用（kb_id / owner_id / doc_title），公共库为空
+        self.extra_fields = list(extra_fields or [])
 
     def ensure(self) -> None:
         if self.es.indices.exists(index=self.index):
@@ -48,7 +52,12 @@ class EsChunkStore:
         self.es.indices.create(
             index=self.index,
             settings={"number_of_shards": 1, "number_of_replicas": 0},
-            mappings=MAPPINGS,
+            mappings={
+                "properties": {
+                    **MAPPINGS["properties"],
+                    **{f: {"type": "keyword", "ignore_above": 512} for f in self.extra_fields},
+                }
+            },
         )
 
     def delete_doc(self, doc_id: str) -> None:
@@ -57,14 +66,27 @@ class EsChunkStore:
         )
 
     def write(
-        self, chunks: list[Chunk], vectors: list[list[float]], vectors_ctx: list[list[float]]
+        self,
+        chunks: list[Chunk],
+        vectors: list[list[float]],
+        vectors_ctx: list[list[float]],
+        extra: dict[str, str] | None = None,
     ) -> None:
         from elasticsearch import helpers
 
         if not chunks:
             return
+        if set(extra or {}) != set(self.extra_fields):
+            raise ValueError(
+                f"额外字段 {sorted(extra or {})} 与索引定义 {sorted(self.extra_fields)} 不一致"
+            )
         actions = [
-            {"_op_type": "index", "_index": self.index, "_id": c.chunk_id, "_source": c.to_dict()}
+            {
+                "_op_type": "index",
+                "_index": self.index,
+                "_id": c.chunk_id,
+                "_source": {**c.to_dict(), **(extra or {})},
+            }
             for c in chunks
         ]
         ok, errors = helpers.bulk(self.es, actions, refresh="wait_for", raise_on_error=False)

@@ -84,9 +84,9 @@ async def test_docs_mcp_caps_top_n():
         svc = _svc()
         real = svc.retrieve
 
-        def spy(q, cfg=None, fund_codes=None, doc_types=None):
+        def spy(q, cfg=None, fund_codes=None, doc_types=None, scope=None):
             seen["top_n"] = cfg.top_n
-            return real(q, cfg, fund_codes, doc_types)
+            return real(q, cfg, fund_codes, doc_types, scope)
 
         svc.retrieve = spy
         return svc

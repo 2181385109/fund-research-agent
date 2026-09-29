@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
-from collections.abc import AsyncIterator, Callable, Sequence
+import asyncio
+import secrets
+from collections.abc import AsyncIterator, Awaitable, Callable, Sequence
 from contextlib import AsyncExitStack, asynccontextmanager
+from typing import Any
 
 import httpx
 from fastapi import FastAPI
@@ -11,6 +14,7 @@ from fastapi import FastAPI
 from fund_ai import __version__
 from fund_ai.agent.factory import build_agent_runner
 from fund_ai.agent.runner import AgentRunner
+from fund_ai.api.callback import send_callback
 from fund_ai.api.chat import router as chat_router
 from fund_ai.api.documents import router as documents_router
 from fund_ai.api.health import HealthChecker, build_checkers, build_redis_client
@@ -21,9 +25,11 @@ from fund_ai.embedding.factory import build_embedder
 from fund_ai.ingest.chunking import ChunkParams
 from fund_ai.ingest.pipeline import IngestPipeline
 from fund_ai.mcp_server.server import create_docs_mcp
+from fund_ai.retrieval.scope import ScopeCodec
 from fund_ai.retrieval.service import RetrievalService
 from fund_ai.stores.es_store import EsChunkStore
 from fund_ai.stores.milvus_store import MilvusChunkStore
+from fund_ai.stores.private import private_stores
 
 
 def build_pipeline(settings: Settings) -> IngestPipeline:
@@ -40,6 +46,20 @@ def build_pipeline(settings: Settings) -> IngestPipeline:
         settings.chunk_min_chars,
     )
     pipeline = IngestPipeline(embedder, stores, params)
+    pipeline.ensure()
+    return pipeline
+
+
+def build_user_pipeline(settings: Settings) -> IngestPipeline:
+    """私有库（user_chunks）入库流水线，首次入库私有文档时才构造。"""
+    embedder = build_embedder(settings)
+    params = ChunkParams(
+        settings.chunk_size,
+        settings.chunk_overlap,
+        settings.table_max_chars,
+        settings.chunk_min_chars,
+    )
+    pipeline = IngestPipeline(embedder, private_stores(settings, embedder.dim), params)
     pipeline.ensure()
     return pipeline
 
@@ -63,11 +83,18 @@ def create_app(
     pipeline_factory: Callable[[], IngestPipeline] | None = None,
     retrieval_factory: Callable[[], RetrievalService] | None = None,
     agent_factory: Callable[[], AgentRunner] | None = None,
+    user_pipeline_factory: Callable[[], IngestPipeline] | None = None,
+    callback_sender: Callable[[dict], Awaitable[Any]] | None = None,
+    scope_codec: ScopeCodec | None = None,
 ) -> FastAPI:
     """``checkers`` / ``pipeline_factory`` 为 None 时按配置构造真实依赖；测试时传入 fake。"""
     settings = settings or get_settings()
+    # 检索范围令牌的签名 / 校验（ADR-043）：Agent 签、文档 MCP 验。密钥未配置时进程内随机生成（单 worker）
+    codec = scope_codec or ScopeCodec(
+        settings.kb_scope_secret.get_secret_value() or secrets.token_hex(32)
+    )
     # 文档检索 MCP：挂在 /mcp；它的 session manager 要在应用生命周期里运行
-    docs_mcp = create_docs_mcp(lambda: _retrieval(app), settings.mcp_allowed_hosts)
+    docs_mcp = create_docs_mcp(lambda: _retrieval(app), settings.mcp_allowed_hosts, codec)
     docs_mcp_app = docs_mcp.streamable_http_app()
 
     @asynccontextmanager
@@ -99,7 +126,15 @@ def create_app(
     app.state.retrieval = None
     app.state.retrieval_factory = retrieval_factory or (lambda: _build_retrieval(settings))
     app.state.agent_runner = None
-    app.state.agent_factory = agent_factory or (lambda: build_agent_runner(settings))
+    app.state.agent_factory = agent_factory or (lambda: build_agent_runner(settings, codec))
+    app.state.user_pipeline = None
+    app.state.user_pipeline_factory = user_pipeline_factory or (
+        lambda: build_user_pipeline(settings)
+    )
+    app.state.ingest_lock = asyncio.Lock()
+    app.state.callback_sender = callback_sender or (
+        lambda payload: send_callback(settings, payload)
+    )
     # 放在最后：其余路由先匹配，剩下的（/mcp）交给 MCP 应用
     app.mount("/", docs_mcp_app)
     return app

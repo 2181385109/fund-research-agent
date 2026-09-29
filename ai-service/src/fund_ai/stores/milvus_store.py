@@ -23,7 +23,14 @@ def _escape(v: str) -> str:
 class MilvusChunkStore:
     name = "milvus"
 
-    def __init__(self, uri: str, collection: str, dim: int, client: Any = None) -> None:
+    def __init__(
+        self,
+        uri: str,
+        collection: str,
+        dim: int,
+        client: Any = None,
+        extra_fields: dict[str, int] | None = None,
+    ) -> None:
         if client is None:
             from pymilvus import MilvusClient
 
@@ -31,6 +38,8 @@ class MilvusChunkStore:
         self.client = client
         self.collection = collection
         self.dim = dim
+        # 额外的 VARCHAR 标量字段 {名: 最大长度}：私有库用（kb_id / owner_id / doc_title），公共库为空
+        self.extra_fields = extra_fields or {}
 
     def ensure(self) -> None:
         from pymilvus import DataType, MilvusClient
@@ -50,6 +59,8 @@ class MilvusChunkStore:
             ("section_path", SECTION_MAX),
         ]:
             schema.add_field(name, DataType.VARCHAR, max_length=n)
+        for name, n in self.extra_fields.items():
+            schema.add_field(name, DataType.VARCHAR, max_length=n)
         schema.add_field("page_start", DataType.INT32)
         schema.add_field("page_end", DataType.INT32)
         schema.add_field("is_table", DataType.BOOL)
@@ -66,8 +77,9 @@ class MilvusChunkStore:
                 metric_type="IP",
                 params={"M": 16, "efConstruction": 200},
             )
-        for f in ("doc_id", "fund_code", "doc_type"):
-            idx.add_index(field_name=f, index_type="INVERTED")
+        for f in ("doc_id", "fund_code", "doc_type", *self.extra_fields):
+            if f != "doc_title":
+                idx.add_index(field_name=f, index_type="INVERTED")
         c.create_collection(self.collection, schema=schema, index_params=idx)
         c.load_collection(self.collection)
 
@@ -75,14 +87,23 @@ class MilvusChunkStore:
         self.client.delete(self.collection, filter=f'doc_id == "{_escape(doc_id)}"')
 
     def write(
-        self, chunks: list[Chunk], vectors: list[list[float]], vectors_ctx: list[list[float]]
+        self,
+        chunks: list[Chunk],
+        vectors: list[list[float]],
+        vectors_ctx: list[list[float]],
+        extra: dict[str, str] | None = None,
     ) -> None:
         if not chunks:
             return
+        if set(extra or {}) != set(self.extra_fields):
+            raise ValueError(
+                f"额外字段 {sorted(extra or {})} 与集合定义 {sorted(self.extra_fields)} 不一致"
+            )
         rows = []
         for c, v, vc in zip(chunks, vectors, vectors_ctx, strict=True):
             d = c.to_dict()
             d.pop("text_ctx")
+            d.update(extra or {})
             d["section_path"] = d["section_path"][: SECTION_MAX // 3]
             d["embedding"] = v
             d["embedding_ctx"] = vc

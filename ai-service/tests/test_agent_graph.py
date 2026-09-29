@@ -474,7 +474,7 @@ async def test_cancellation_propagates_and_stops_the_run():
     gate = asyncio.Event()
 
     class Slow(FakeToolBackend):
-        async def call(self, name: str, args: dict[str, Any]) -> ToolOutcome:
+        async def call(self, name: str, args: dict[str, Any], scope: Any = None) -> ToolOutcome:
             gate.set()
             await asyncio.sleep(30)
             return ToolOutcome(True, "{}", {})

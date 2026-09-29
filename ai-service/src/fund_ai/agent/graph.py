@@ -37,6 +37,7 @@ from fund_ai.agent.citations import CitationRegistry, CitationStreamFilter, regi
 from fund_ai.agent.llm import LlmRecord
 from fund_ai.agent.prompts import FORCE_FINAL_NOTICE
 from fund_ai.agent.tools import ToolBackend, ToolOutcome
+from fund_ai.retrieval.scope import KbScope
 
 log = logging.getLogger("fund_ai.agent.graph")
 
@@ -115,6 +116,9 @@ class RunContext:
     max_steps: int
     sql_retries: int
     holdback_chars: int = 160
+    scope: KbScope | None = (
+        None  # 服务端注入的检索范围（ADR-043），只传给文档检索工具，LLM 看不到也改不了
+    )
     registry: CitationRegistry = field(default_factory=CitationRegistry)
     rounds: int = 0
     sql_failures: int = 0
@@ -273,7 +277,7 @@ async def _execute(ctx: RunContext, name: str, args: dict[str, Any]) -> ToolOutc
             "请不要再调用它，如实告诉用户数据库中查不到该数据。",
             kind="tool_error",
         )
-    out = await ctx.backend.call(name, args)
+    out = await ctx.backend.call(name, args, ctx.scope)
     if name == SQL_TOOL:
         if out.ok:
             ctx.sql_failures = 0

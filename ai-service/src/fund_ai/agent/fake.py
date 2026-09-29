@@ -141,12 +141,14 @@ class FakeToolBackend:
             for n in handlers
         ]
         self.calls: list[tuple[str, dict[str, Any]]] = []
+        self.scopes: list[Any] = []  # 与 calls 一一对应：每次调用收到的检索范围
 
     async def specs(self) -> list[dict[str, Any]]:
         return self._specs
 
-    async def call(self, name: str, args: dict[str, Any]) -> ToolOutcome:
+    async def call(self, name: str, args: dict[str, Any], scope: Any = None) -> ToolOutcome:
         self.calls.append((name, args))
+        self.scopes.append(scope)
         h = self.handlers.get(name)
         if h is None:
             return ToolOutcome(False, f"没有名为 {name} 的工具", kind="tool_error")

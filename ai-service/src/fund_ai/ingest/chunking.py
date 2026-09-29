@@ -15,7 +15,7 @@
 from __future__ import annotations
 
 import re
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from typing import Literal
 
 from fund_ai.ingest.parsers.pdf import ParsedDoc
@@ -103,6 +103,8 @@ class DocMeta:
     doc_type: str
     report_period: str
     doc_title: str  # 上下文头里的文档名，如「2026年第2季度报告」
+    # 只写进存储、不参与切块的额外字段（私有库的 kb_id / owner_id / doc_title，ADR-043）；公共库为空
+    store_fields: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass

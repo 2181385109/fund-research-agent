@@ -102,9 +102,12 @@ def _register_documents(reg: CitationRegistry, data: dict[str, Any]) -> tuple[st
             if r["page_start"] == r["page_end"]
             else f"第{r['page_start']}–{r['page_end']}页"
         )
+        private = bool(r.get("kb_id"))
+        extra = {"kb_id": r["kb_id"]} if private else {}
         sid = reg.add(
             "document",
             {
+                **extra,
                 "fund_code": r["fund_code"],
                 "fund_name": r["fund_name"],
                 "doc_id": r["doc_id"],
@@ -120,7 +123,10 @@ def _register_documents(reg: CitationRegistry, data: dict[str, Any]) -> tuple[st
         )
         if sid not in ids:
             ids.append(sid)
-        head = f"[{sid}] {r['fund_name']}（{r['fund_code']}）｜{r['doc_title']}｜{pages}"
+        if private:  # 用户上传的文档：没有基金，文档名是文件名
+            head = f"[{sid}] 用户文档《{r['doc_title']}》｜{pages}"
+        else:
+            head = f"[{sid}] {r['fund_name']}（{r['fund_code']}）｜{r['doc_title']}｜{pages}"
         if r["section"]:
             head += f"｜{r['section']}"
         blocks.append(f"{head}\n{r['text']}")

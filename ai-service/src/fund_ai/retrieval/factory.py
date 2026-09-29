@@ -9,6 +9,7 @@ from fund_ai.rerank.factory import build_reranker
 from fund_ai.retrieval.entity import FundEntityRecognizer, load_entries_from_db
 from fund_ai.retrieval.searchers import EsKeywordSearcher, MilvusVectorSearcher
 from fund_ai.retrieval.service import RetrievalConfig, RetrievalService
+from fund_ai.stores.private import private_stores
 
 
 def build_recognizer(settings: Settings) -> FundEntityRecognizer:
@@ -40,6 +41,10 @@ def build_retrieval_service(settings: Settings) -> RetrievalService:
     milvus = MilvusClient(uri=settings.milvus_uri)
     milvus.load_collection(settings.milvus_collection)
     es = Elasticsearch(settings.es_url, request_timeout=60)
+    for store in private_stores(
+        settings, embedder.dim
+    ):  # 全新环境里还没有私有集合 / 索引：先建好（幂等）
+        store.ensure()
     return RetrievalService(
         embedder,
         MilvusVectorSearcher(milvus, settings.milvus_collection),
@@ -47,4 +52,6 @@ def build_retrieval_service(settings: Settings) -> RetrievalService:
         build_reranker(settings),
         build_recognizer(settings),
         RetrievalConfig.from_settings(settings),
+        private_vector=MilvusVectorSearcher(milvus, settings.milvus_user_collection, private=True),
+        private_keyword=EsKeywordSearcher(es, settings.es_user_index, private=True),
     )

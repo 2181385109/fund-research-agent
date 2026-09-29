@@ -16,9 +16,14 @@ class ChunkStore(Protocol):
     def delete_doc(self, doc_id: str) -> None: ...
 
     def write(
-        self, chunks: list[Chunk], vectors: list[list[float]], vectors_ctx: list[list[float]]
+        self,
+        chunks: list[Chunk],
+        vectors: list[list[float]],
+        vectors_ctx: list[list[float]],
+        extra: dict[str, str] | None = None,
     ) -> None:
-        """写入切块。``vectors`` 是正文的向量，``vectors_ctx`` 是带上下文头文本的向量；ES 忽略两者。"""
+        """写入切块。``vectors`` 是正文的向量，``vectors_ctx`` 是带上下文头文本的向量；ES 忽略两者。
+        ``extra`` 是每一行都要附加的字段（私有库的 kb_id / owner_id / doc_title），公共库为 None。"""
 
     def count(self, doc_id: str | None = None) -> int: ...
 
@@ -40,10 +45,14 @@ class InMemoryStore:
         self.rows = {k: v for k, v in self.rows.items() if v["doc_id"] != doc_id}
 
     def write(
-        self, chunks: list[Chunk], vectors: list[list[float]], vectors_ctx: list[list[float]]
+        self,
+        chunks: list[Chunk],
+        vectors: list[list[float]],
+        vectors_ctx: list[list[float]],
+        extra: dict[str, str] | None = None,
     ) -> None:
         for i, c in enumerate(chunks):
-            row = c.to_dict()
+            row = {**c.to_dict(), **(extra or {})}
             if vectors:
                 row["embedding"] = vectors[i]
                 row["embedding_ctx"] = vectors_ctx[i]

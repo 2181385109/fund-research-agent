@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+from contextvars import ContextVar
 from typing import Any
 
 import httpx
@@ -20,8 +21,18 @@ from langchain_mcp_adapters.client import MultiServerMCPClient
 
 from fund_ai.agent.tools import ToolOutcome, parse_json_object
 from fund_ai.config import Settings
+from fund_ai.retrieval.scope import SCOPE_HEADER, KbScope, ScopeCodec
 
 log = logging.getLogger("fund_ai.agent.mcp_client")
+
+DOCS_SERVER = "fund_docs"
+DOCS_TOOL = "search_fund_documents"
+# LLM 即使在 tool call 里写了这些参数也一律丢弃：检索范围只能由服务端注入（ADR-043）
+RESERVED_ARGS = frozenset(
+    {"kb_id", "kb_ids", "owner_id", "scope", "kb_scope", "include_public", "private_kb_ids"}
+)
+# 当前这次工具调用要带给文档 MCP 的已签名范围令牌（每次调用新建 MCP 会话，httpx 钩子从这里取）
+_scope_token: ContextVar[str | None] = ContextVar("kb_scope_token", default=None)
 
 
 def _httpx_factory(
@@ -52,28 +63,54 @@ def _text_of(content: Any) -> str:
     return "\n".join(parts)
 
 
+async def _inject_scope(request: httpx.Request) -> None:
+    token = _scope_token.get()
+    if token:
+        request.headers[SCOPE_HEADER] = token
+
+
+def _docs_httpx_factory(
+    headers: dict[str, str] | None = None,
+    timeout: httpx.Timeout | None = None,
+    auth: httpx.Auth | None = None,
+) -> httpx.AsyncClient:
+    """只给文档 MCP 用：每个请求带上当前调用的检索范围令牌（其他 MCP 服务收不到）。"""
+    client = _httpx_factory(headers, timeout, auth)
+    client.event_hooks["request"].append(_inject_scope)
+    return client
+
+
 class McpToolBackend:
-    def __init__(self, connections: dict[str, str], timeout_s: float = 30.0) -> None:
+    def __init__(
+        self,
+        connections: dict[str, str],
+        timeout_s: float = 30.0,
+        scope_codec: ScopeCodec | None = None,
+    ) -> None:
         self._client = MultiServerMCPClient(
             {
                 name: {
                     "transport": "streamable_http",
                     "url": url,
-                    "httpx_client_factory": _httpx_factory,
+                    "httpx_client_factory": (
+                        _docs_httpx_factory if name == DOCS_SERVER else _httpx_factory
+                    ),
                 }
                 for name, url in connections.items()
             },
             handle_tool_errors=False,
         )
+        self._codec = scope_codec
         self._timeout_s = timeout_s
         self._tools: dict[str, BaseTool] | None = None
         self._lock = asyncio.Lock()
 
     @classmethod
-    def from_settings(cls, s: Settings) -> McpToolBackend:
+    def from_settings(cls, s: Settings, scope_codec: ScopeCodec | None = None) -> McpToolBackend:
         return cls(
-            {"fund_tools": s.mcp_tools_url, "fund_docs": s.mcp_docs_url},
+            {"fund_tools": s.mcp_tools_url, DOCS_SERVER: s.mcp_docs_url},
             timeout_s=s.mcp_call_timeout_seconds,
+            scope_codec=scope_codec,
         )
 
     async def _load(self) -> dict[str, BaseTool]:
@@ -87,7 +124,9 @@ class McpToolBackend:
     async def specs(self) -> list[dict[str, Any]]:
         return [convert_to_openai_tool(t) for t in (await self._load()).values()]
 
-    async def call(self, name: str, args: dict[str, Any]) -> ToolOutcome:
+    async def call(
+        self, name: str, args: dict[str, Any], scope: KbScope | None = None
+    ) -> ToolOutcome:
         try:
             tools = await self._load()
         except Exception as e:  # noqa: BLE001 - 服务不可达：告诉 LLM 工具暂时不可用，而不是让整个请求失败
@@ -100,6 +139,17 @@ class McpToolBackend:
             return ToolOutcome(
                 False, f"没有名为 {name} 的工具，可用工具：{sorted(tools)}", kind="tool_error"
             )
+        reserved = RESERVED_ARGS & set(args)
+        if reserved:
+            log.warning("tool=%s 丢弃 LLM 给的保留参数 %s", name, sorted(reserved))
+            args = {k: v for k, v in args.items() if k not in reserved}
+        token = None
+        if name == DOCS_TOOL and scope is not None:
+            if self._codec is None:
+                return ToolOutcome(
+                    False, "服务端没有配置检索范围签名，无法检索", kind="unavailable"
+                )
+            token = _scope_token.set(self._codec.encode(scope))
         try:
             content = await asyncio.wait_for(tool.ainvoke(args), timeout=self._timeout_s)
         except ToolException as e:
@@ -113,5 +163,8 @@ class McpToolBackend:
             return ToolOutcome(
                 False, f"工具 {name} 暂时不可用（{type(e).__name__}）", kind="unavailable"
             )
+        finally:
+            if token is not None:
+                _scope_token.reset(token)
         text = _text_of(content)
         return ToolOutcome(True, text, parse_json_object(text))

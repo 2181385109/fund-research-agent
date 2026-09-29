@@ -8,16 +8,18 @@ from __future__ import annotations
 
 import json
 import logging
+import time
 import uuid
 from collections.abc import AsyncIterator
 from typing import Any, Literal
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from fund_ai.agent.compliance import DISCLAIMER
 from fund_ai.agent.runner import MAX_QUESTION_CHARS, AgentRunner
+from fund_ai.retrieval.scope import KbScope
 
 log = logging.getLogger("fund_ai.api.chat")
 router = APIRouter(prefix="/v1", tags=["chat"])
@@ -28,10 +30,23 @@ class HistoryItem(BaseModel):
     content: str = Field(max_length=20000)
 
 
+class KbScopeIn(BaseModel):
+    """检索范围（ADR-043）：由 backend 按当前用户算出后注入，不是给终端用户 / LLM 的入口。"""
+
+    include_public: bool = True
+    owner_id: str = Field(default="", max_length=64)
+    private_kb_ids: list[str] = Field(default_factory=list, max_length=50)
+
+    def to_scope(self) -> KbScope:
+        return KbScope(self.include_public, self.owner_id, tuple(self.private_kb_ids))
+
+
 class ChatRequest(BaseModel):
     question: str = Field(min_length=1, max_length=MAX_QUESTION_CHARS)
     history: list[HistoryItem] = Field(default_factory=list, max_length=40)
     request_id: str | None = Field(default=None, max_length=64)
+    # 缺省 = 只查公共库（默认拒绝私有）
+    kb_scope: KbScopeIn | None = None
 
 
 def sse(event: str, data: dict[str, Any]) -> str:
@@ -56,6 +71,10 @@ def _runner(request: Request) -> AgentRunner:
 @router.post("/chat/stream")
 async def chat_stream(req: ChatRequest, request: Request) -> StreamingResponse:
     rid = req.request_id or uuid.uuid4().hex[:16]
+    try:
+        scope = req.kb_scope.to_scope() if req.kb_scope else None
+    except ValueError as e:
+        raise HTTPException(status_code=422, detail=str(e)) from e
     headers = {"Cache-Control": "no-cache", "X-Accel-Buffering": "no", "Connection": "keep-alive"}
     try:
         runner = _runner(request)
@@ -69,7 +88,20 @@ async def chat_stream(req: ChatRequest, request: Request) -> StreamingResponse:
 
     async def gen() -> AsyncIterator[str]:
         history = [h.model_dump() for h in req.history]
-        async for ev in runner.run(req.question, history, request_id=rid):
-            yield sse(ev["event"], ev["data"])
+        t0 = time.perf_counter()
+        finished = False
+        try:
+            async for ev in runner.run(req.question, history, request_id=rid, scope=scope):
+                yield sse(ev["event"], ev["data"])
+            finished = True
+        finally:
+            if (
+                not finished
+            ):  # 客户端断开：Starlette 取消了这个生成器，取消随后传给 LangGraph / LLM / MCP
+                log.info(
+                    "chat_stream_cancelled request=%s elapsed_ms=%.0f",
+                    rid,
+                    (time.perf_counter() - t0) * 1000,
+                )
 
     return StreamingResponse(gen(), media_type="text/event-stream", headers=headers)

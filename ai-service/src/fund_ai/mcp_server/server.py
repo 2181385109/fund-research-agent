@@ -2,6 +2,10 @@
 
 放在 ai-service 进程内是因为检索依赖已加载的向量模型和重排器（PLAN §1）。检索用 ``config.py`` 里的默认配置
 （hybrid_rerank、实体过滤关，ADR-038）；基金过滤只由调用方（Agent）通过 ``fund_codes`` 显式给出。
+
+**检索范围（ADR-043）不是工具参数**：Agent 每次调用时把签名过的范围放在 HTTP 头 ``X-Fund-Kb-Scope`` 里，
+工具函数通过 MCP ``Context``（隐藏参数，不进工具 schema）取到并校验；没有该头 = 只查公共库，
+签名或有效期不对 = 工具报错（不回退成公共库）。LLM 在 tool call 里多写的 ``kb_ids`` 之类参数不会被采用。
 工具函数是 async，阻塞的检索放到线程里，不占事件循环。
 """
 
@@ -13,12 +17,13 @@ from collections.abc import Callable
 from typing import Annotated
 
 import anyio.to_thread
-from mcp.server.fastmcp import FastMCP
+from mcp.server.fastmcp import Context, FastMCP
 from mcp.server.fastmcp.exceptions import ToolError
 from mcp.server.transport_security import TransportSecuritySettings
 from pydantic import Field
 
 from fund_ai.ingest.chunking import doc_title_for
+from fund_ai.retrieval.scope import SCOPE_HEADER, KbScope, ScopeCodec, ScopeError
 from fund_ai.retrieval.searchers import Hit
 from fund_ai.retrieval.service import RetrievalService
 
@@ -36,12 +41,12 @@ _INSTRUCTIONS = (
 def hit_to_result(rank: int, h: Hit) -> dict:
     """一个命中切块 → 工具返回的一条片段（rank 是本次调用内的序号，从 1 开始）。"""
     section = h.section_path.split(" > ")[-1] if h.section_path else ""
-    return {
+    out = {
         "ref": rank,
         "fund_code": h.fund_code,
         "fund_name": h.fund_name,
         "doc_type": h.doc_type,
-        "doc_title": doc_title_for(h.doc_type, h.report_period),
+        "doc_title": h.doc_title or doc_title_for(h.doc_type, h.report_period),
         "report_period": h.report_period,
         "page_start": h.page_start,
         "page_end": h.page_end,
@@ -51,11 +56,27 @@ def hit_to_result(rank: int, h: Hit) -> dict:
         "chunk_id": h.chunk_id,
         "text": h.text,
     }
+    if h.kb_id:  # 私有库的片段（公共库片段的输出与 S5 一致）
+        out["kb_id"] = h.kb_id
+    return out
+
+
+def scope_from_context(ctx: Context, codec: ScopeCodec | None) -> KbScope:
+    """从本次 MCP 请求的 HTTP 头取检索范围；缺省 = 只查公共库；令牌无效 = 抛 ToolError。"""
+    request = ctx.request_context.request
+    token = request.headers.get(SCOPE_HEADER) if request is not None else None
+    if not token or codec is None:
+        return KbScope.public_only()
+    try:
+        return codec.decode(token)
+    except ScopeError as e:
+        raise ToolError(f"检索范围无效：{e}") from e
 
 
 def create_docs_mcp(
     get_service: Callable[[], RetrievalService],
     allowed_hosts: list[str] | None = None,
+    scope_codec: ScopeCodec | None = None,
 ) -> FastMCP:
     """``get_service`` 在第一次调用工具时才被调用（加载模型、连接 Milvus / ES / fund_data）。"""
     security = TransportSecuritySettings(
@@ -80,6 +101,7 @@ def create_docs_mcp(
             ),
         ] = None,
         top_n: Annotated[int, Field(description=f"返回片段数，1–{MAX_TOP_N}", ge=1)] = 5,
+        ctx: Context | None = None,
     ) -> dict:
         """在基金披露文件（招募说明书、基金合同、年报、季报）中检索与问题最相关的原文片段。
         适合费率条款、投资范围与策略、基金经理与管理人介绍、业绩与市场评述、风险提示、合同条款等
@@ -92,12 +114,13 @@ def create_docs_mcp(
         if bad:
             raise ToolError(f"未知的文档类型 {bad}，可选 {list(DOC_TYPES)}")
         n = min(top_n, MAX_TOP_N)
+        scope = scope_from_context(ctx, scope_codec) if ctx is not None else KbScope.public_only()
         t0 = time.perf_counter()
 
         def work() -> dict:
             svc = get_service()
             cfg = svc.defaults.with_overrides(top_n=n)
-            res = svc.retrieve(q, cfg, fund_codes or None, doc_types or None)
+            res = svc.retrieve(q, cfg, fund_codes or None, doc_types or None, scope)
             return {
                 "query": q,
                 "count": len(res.hits),
@@ -106,6 +129,10 @@ def create_docs_mcp(
                     "mode": res.config.mode,
                     "filter_fund_codes": res.filter_fund_codes,
                     "doc_types": doc_types or [],
+                    "scope": {
+                        "include_public": scope.include_public,
+                        "private_kb_ids": list(scope.private_kb_ids),
+                    },
                     "timings_ms": res.timings_ms,
                     "models": res.models,
                 },

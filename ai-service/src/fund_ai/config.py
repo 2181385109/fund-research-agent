@@ -48,6 +48,17 @@ class Settings(BaseSettings):
     agent_preamble_holdback_chars: int = 160
     data_as_of: str = ""  # DATA_AS_OF，写进 system prompt；空则不写
 
+    # 私有知识库（S6，ADR-043）：用户上传文档单独一套集合 / 索引，公共 fund_chunks 不动
+    milvus_user_collection: str = "user_chunks"
+    es_user_index: str = "user_chunks"
+    # 文档 MCP 校验检索范围令牌的 HMAC 密钥；留空 = 每次启动随机生成（只适合单 worker，多 worker 必须配同一个值）
+    kb_scope_secret: SecretStr = SecretStr("")
+    # 异步入库完成后回调 backend：地址固定来自配置（不接受请求里给的 URL，防 SSRF），带共享密钥
+    backend_base_url: str = "http://127.0.0.1:8081"
+    internal_callback_secret: SecretStr = SecretStr("")
+    callback_timeout_seconds: float = 5.0
+    callback_retries: int = 3
+
     # 本地模型（S2 起）
     embedding_provider: str = "bge"  # bge | fake（fake 只用于测试和 CI）
     embedding_model: str = "BAAI/bge-small-zh-v1.5"

@@ -8,13 +8,14 @@ from fund_ai.agent.prompts import build_system_prompt
 from fund_ai.agent.runner import AgentRunner
 from fund_ai.agent.universe import load_universe
 from fund_ai.config import Settings
+from fund_ai.retrieval.scope import ScopeCodec
 
 
-def build_agent_runner(settings: Settings) -> AgentRunner:
+def build_agent_runner(settings: Settings, codec: ScopeCodec) -> AgentRunner:
     universe = load_universe(settings)
     return AgentRunner(
         llm=build_chat_model(settings),
-        backend=McpToolBackend.from_settings(settings),
+        backend=McpToolBackend.from_settings(settings, codec),
         system_prompt=build_system_prompt(
             universe.text, universe.n_funds, settings.data_as_of, universe.tables
         ),

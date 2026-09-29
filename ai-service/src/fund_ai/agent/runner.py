@@ -19,7 +19,9 @@ from langchain_core.messages import AIMessage, AnyMessage, HumanMessage
 
 from fund_ai.agent.compliance import DISCLAIMER, guard_answer
 from fund_ai.agent.graph import RunContext, build_graph, recursion_limit
+from fund_ai.agent.prompts import scope_note
 from fund_ai.agent.tools import ToolBackend
+from fund_ai.retrieval.scope import KbScope
 
 log = logging.getLogger("fund_ai.agent.runner")
 
@@ -64,6 +66,7 @@ class AgentRunner:
         question: str,
         history: list[dict[str, str]] | None = None,
         request_id: str | None = None,
+        scope: KbScope | None = None,
     ) -> AsyncIterator[dict[str, Any]]:
         rid = request_id or uuid.uuid4().hex[:16]
         t_start = time.perf_counter()
@@ -77,7 +80,8 @@ class AgentRunner:
             specs = await self.backend.specs()
             ctx = RunContext(
                 request_id=rid,
-                system_prompt=self.system_prompt,
+                system_prompt=self.system_prompt + scope_note(scope),
+                scope=scope,
                 backend=self.backend,
                 llm_tools=self.llm.bind_tools(specs),
                 llm_plain=self.llm,

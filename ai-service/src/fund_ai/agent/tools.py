@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from typing import Any, Protocol
+from typing import TYPE_CHECKING, Any, Protocol
+
+if TYPE_CHECKING:
+    from fund_ai.retrieval.scope import KbScope
 
 
 @dataclass
@@ -26,7 +29,11 @@ class ToolBackend(Protocol):
         """OpenAI function-calling 格式的工具定义列表。"""
         ...
 
-    async def call(self, name: str, args: dict[str, Any]) -> ToolOutcome: ...
+    async def call(
+        self, name: str, args: dict[str, Any], scope: KbScope | None = None
+    ) -> ToolOutcome:
+        """``scope`` 是服务端注入的检索范围（ADR-043），只有文档检索工具会用到；不属于 LLM 给的 ``args``。"""
+        ...
 
 
 def parse_json_object(text: str) -> dict[str, Any] | None:
