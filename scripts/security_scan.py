@@ -52,6 +52,12 @@ LOCAL_PATH_EXEMPT: dict[str, str] = {
     "docs/prompts/": "统筹写给执行者的提示词存档，执行者只读、不改写",
     "scripts/security_scan.py": "规则定义本身",
     "scripts/tests/": "扫描器单测里的违规样例",
+    # 下面两个测试文件的历史提交里有过「Windows 路径」样例（路径穿越 / 文件名净化的测试输入，不是本机路径）；
+    # 那两次提交已经推送，不改写历史，所以按文件豁免（现在的版本已经不含这些样例）
+    "ai-service/tests/test_private_kb.py": "私有入库测试：目录之外的路径样例，历史提交里用过 Windows 系统路径",
+    "backend/src/test/java/com/fundagent/backend/document/UploadValidatorTest.java": (
+        "文件名净化测试：Windows 风格路径样例（历史提交）"
+    ),
 }
 
 # .env 中这些后缀的变量视为密钥，检查其实际值是否泄漏进仓库内容
