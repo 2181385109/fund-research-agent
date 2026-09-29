@@ -1,6 +1,6 @@
 """两次检索评测 run 之间的配对 bootstrap（次要消融用）：
 
-    python scripts/ablation_bootstrap.py <run_a 目录> <run_b 目录> --mode hybrid_rerank --out <输出目录>
+    python scripts/ablation_bootstrap.py <run_a> <run_b> --mode hybrid_rerank --out <输出目录>
 
 a、b 是 ``python -m fund_ai.eval.retrieval`` 产生的结果目录（含 per_query.jsonl）；只比较两边都有的
 题目，按题目 id 配对，差 = b − a。用的是 ai-service 的 ``paired_bootstrap``（同一随机种子）。
@@ -69,7 +69,8 @@ def main() -> None:
         "",
         f"- 模式 {args.mode}；a = {args.run_a.name}，b = {args.run_b.name}；差 = b − a；"
         f"配对题数 n = {len(ids)}，其中 ndcg@10 不同的 {n_diff} 题",
-        f"- 复现：`python scripts/ablation_bootstrap.py {args.run_a} {args.run_b} --mode {args.mode}`",
+        "- 复现：`python scripts/ablation_bootstrap.py "
+        f"{args.run_a} {args.run_b} --mode {args.mode}`",
         "",
         "| 指标 | a | b | 差 | 95% CI | P(差≤0) |",
         "|---|---|---|---|---|---|",
@@ -79,7 +80,13 @@ def main() -> None:
             f"| {m} | {r['mean_a']:.4f} | {r['mean_b']:.4f} | {r['mean_diff']:+.4f} "
             f"| [{r['ci95'][0]:+.4f}, {r['ci95'][1]:+.4f}] | {r['p_diff_le_0']:.3f} |"
         )
-    lines += ["", "按 topic（ndcg@10）：", "", "| topic | n | a | b | 差 | 95% CI |", "|---|---|---|---|---|---|"]
+    lines += [
+        "",
+        "按 topic（ndcg@10）：",
+        "",
+        "| topic | n | a | b | 差 | 95% CI |",
+        "|---|---|---|---|---|---|",
+    ]
     for t, r in res["by_topic"].items():
         lines.append(
             f"| {t} | {r['n']} | {r['mean_a']:.3f} | {r['mean_b']:.3f} | {r['mean_diff']:+.3f} "
