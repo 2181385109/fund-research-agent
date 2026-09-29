@@ -441,7 +441,7 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 **统筹答复（B4 开工时转达）**：1. 实体过滤保持「关」，不因 test 上 +0.022（CI 含 0）改配置，S5 `search_fund_documents` 的 `fund_codes` 由 Agent 显式传入、与该开关独立 → ADR-038。2. 持仓表格入库方式不改，持仓题主路径是 `run_fund_sql` 查 `holdings_top10`，检索在持仓题上偏弱作为已知局限；「纯 RRF 混合检索不如单独 BM25」也如实记录 → ADR-039。两条都已写入 `docs/LIMITATIONS.md`「检索（S4）」一节。
 
 ## S5 前半 mcp-tools 的四个工具 — 2026-09-29（B4）
-- commit 范围：`ae73c31`（ADR-038/039 与 LIMITATIONS）..本节所在提交，代码在 `8e54002`；CI：见 `docs/HANDOFF.md`
+- commit 范围：`ae73c31`（ADR-038/039 与 LIMITATIONS）..`9afbf58`，代码主体 `8e54002`、守卫修复 `891a1de`；CI：https://github.com/2181385109/fund-research-agent/actions/runs/36553767558 （✅ 6 个 job 全部 success）。`891a1de` 的 CI（run 36553623209）曾因 `scripts/mcp_client_check.py` 未通过 `ruff format --check` 失败一次，`9afbf58` 修复
 - 范围：PLAN §7 的 B4 = S5 交付第 1 项（mcp-tools），对应验收 1、2、6 和验收 4 中 mcp-tools 的部分。文档 MCP、LangGraph、出处、风险提示、SSE、live 冒烟（验收 3、5、4 的另一半）留给 B5。
 
 ### 完成项
@@ -456,7 +456,7 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 2. 收益计算单测：手算用例（一次分红、起止日为非交易日、含费 / 不含费），与参考脚本结果逐位一致 — ✅ — 手算用例：`tests/test_returns.py` 22 条（自造序列：一次分红复权得 +10.00% 而不是 −1%、周六 / 周日起止日取前一交易日且周六那条净值被忽略、节假日、同日窗口、百分比申购费档 / 固定费用档 / 无费档份额、除息日无交易日时写入 notes、各类参数错误）。逐位比对（真实链路：MySQL → `DbReturnData` → `calc_fund_return`，参考端读快照 CSV）：`reports/mcp_tools/20260929T100447Z/{summary.json,report.md}`，命令 `cd eval && python ../scripts/verify_returns_vs_reference.py`。结果：40 个份额、用例 4192 条（不含费 1522、含费 2670），两边都判为无法计算（起点早于首个净值日）250 条，**参与比较 3942 条，`==` 比较全部相同（起止日、区间收益、年化、最大回撤、区间内分红次数各 3942/3942，含费净收益 2465/2465），不一致 0 处**；数据集 `agent_tasks_v1` 的 calc_return 题 9/9 与 gold_params（8 位小数）一致。
 4. （mcp-tools 部分）用独立 MCP 客户端列出并调用工具 — ✅（另一半文档 MCP 属于 B5）— `reports/mcp_tools/20260929T100658Z_client_check/client_check.md`：官方 SDK 的 streamable HTTP 客户端，`list_tools` 得 4 个工具，共调用 10 次（正常 6 次、预期被拒绝或参数错误 4 次），与预期不符 0 次；`get_latest_nav` 这次是真实调用东方财富接口（`stale=false`，`nav_date=2026-09-28`，`fetched_at` 有值）。
 6. `get_latest_nav` 的故障回退有测试（mock 超时）— ✅ — `tests/test_nav_client.py` 20 条：`httpx.ConnectTimeout` → `stale=true`、回退快照日期、共 3 次请求（首次 + 重试 2 次）；HTTP 5xx / 非 JSON / 空数据 / 错误码 / 净值无法解析都回退；重试后成功；缓存 599 秒内命中、超过 10 分钟重新请求；回退结果不缓存（接口恢复后立即拿到实时数据）；份额不在基金池直接报错且不请求外部接口。全程用 `httpx.MockTransport`，不访问外网。
-7. CI 全绿 — 见 `docs/HANDOFF.md`（push 后确认）。
+7. CI 全绿 — ✅ — run 36553767558（上面的链接），6 个 job：backend、python×4（ai-service / mcp-tools / data-pipeline / eval）、scripts + security scan；安全扫描 tracked 与 `--history` 两种模式本机均 PASS（findings=0）。
 
 ### 实测数字
 | 指标 | 值 | n / 分母 | 结果文件 |
