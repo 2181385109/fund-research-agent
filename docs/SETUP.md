@@ -167,6 +167,22 @@ push 前的安全扫描：
 python scripts/security_scan.py && python scripts/security_scan.py --history
 ```
 
+### 6.2 backend 联调与 Testcontainers（S6）
+
+backend 自动读取仓库根目录的 `.env`（`JWT_SECRET`、`INTERNAL_CALLBACK_SECRET`、`MYSQL_APP_PASSWORD`、`AI_SERVICE_BASE_URL` 等）。联调前 infra、mcp-tools（8101）、ai-service（8001）要先起来；端到端冒烟见 `scripts/e2e_smoke.sh` 顶部注释。
+用户上传的文件落在 `UPLOAD_DIR`（缺省 `../data/uploads`，即在 `backend/` 目录下启动时的仓库 `data/uploads`），**必须在 ai-service 的 `DATA_DIR`（缺省仓库 `data/`）之下**，且两个进程看到的是同一个路径（容器化时用共享卷）。
+
+`mvn verify` 里的集成测试（`BackendIntegrationTest`）用 Testcontainers 起 `mysql:8.4.11`，需要 Windows 上的 JVM 能连到 Docker。本机 Docker 在 WSL 里、没有 Docker Desktop，做法是在 WSL 里临时起一个 TCP→unix socket 的转发（**只监听 WSL 回环，不改 dockerd 配置**，用完杀掉）：
+
+```bash
+# 转发脚本是 scripts/docker_tcp_proxy.py；后台运行
+MSYS_NO_PATHCONV=1 wsl.exe -d Ubuntu-24.04 -u root -- python3 /mnt/d/xiangmu/fund-research-agent/scripts/docker_tcp_proxy.py &
+export DOCKER_HOST=tcp://127.0.0.1:2375 TESTCONTAINERS_RYUK_DISABLED=true   # Ryuk 镜像本机没有
+cd backend && mvn -B verify
+```
+
+CI 的 ubuntu runner 自带 Docker，不需要这两个变量。
+
 ## 7. 排障
 
 | 现象 | 原因 / 处理 |

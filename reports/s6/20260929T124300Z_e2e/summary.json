@@ -1,0 +1,24 @@
+{
+ "git_commit": "28ebf328099ea4b6e5b7ec59fd743dbfd279cf52",
+ "git_dirty_tracked_files": false,
+ "data_manifest_sha256": "b5df59cb954c170e44071fb38603f57eff401863656912e410a96a721d49e127",
+ "data_as_of": "2026-09-28",
+ "machine": {
+  "os": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.3"
+ },
+ "what": "scripts/e2e_smoke.sh 端到端冒烟（真实 LLM、真实 Milvus/ES/MySQL，backend 与 ai-service 为本机进程）",
+ "checks_passed": 18,
+ "checks_failed": 0,
+ "result": "E2E RESULT: PASS",
+ "llm": {
+  "request_model": "deepseek-flash",
+  "note": "响应模型名见各 done 事件的 response_models"
+ },
+ "command": "PY=ai-service/.venv/Scripts/python AI_LOG=<ai-service 日志> BACKEND_LOG=<backend 日志> OUT_DIR=reports/s6/20260929T124300Z_e2e bash scripts/e2e_smoke.sh",
+ "notes": [
+  "私有文档是自造的虚构备忘录 PDF（1 页，入库 1 个切块），只证明链路，不证明私有库检索质量",
+  "断开取消：curl 约 4 秒后断开，ai-service 在请求开始后 7313 ms 记录 chat_stream_cancelled（延迟≈心跳间隔内，见 LIMITATIONS）",
+  "原始 PDF 与 curl 配置文件未入库；服务日志只摘录了相关行（cancel_*.txt）"
+ ]
+}

@@ -1,0 +1,33 @@
+{
+ "git_commit": "28ebf328099ea4b6e5b7ec59fd743dbfd279cf52",
+ "git_dirty_tracked_files": false,
+ "data_manifest_sha256": "b5df59cb954c170e44071fb38603f57eff401863656912e410a96a721d49e127",
+ "data_as_of": "2026-09-28",
+ "machine": {
+  "os": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.3"
+ },
+ "what": "给检索加私有库支持（ADR-043）前后，同一批固定查询对公共库 /v1/retrieve 的命中逐条比较",
+ "queries": 8,
+ "hits_compared": 80,
+ "result": "IDENTICAL（chunk_id 与 4 位小数的重排分数逐条一致）",
+ "files": {
+  "before_change.json": "5059f67ae59812cf1e9bd212b426ebf9a2dc196b3c364a60ce16ffd5a32b38bb",
+  "after_change.json": "5059f67ae59812cf1e9bd212b426ebf9a2dc196b3c364a60ce16ffd5a32b38bb",
+  "after_change_final_code.json": "ddfa25eccf1f253fb4479733fca5ec409c89cf3638d671619c6b5f21fd0c4dfb"
+ },
+ "notes": [
+  "before_change.json / after_change.json 由改动时临时脚本抓取，原文件用系统默认编码 GBK 写出，已无损转成 UTF-8；查询与字段同 scripts/public_retrieval_regression.py",
+  "after_change_final_code.json 是用最终代码（含 S6 全部改动）、scripts/public_retrieval_regression.py 重新抓取的；compare.txt 是它与 before_change.json 的比较输出",
+  "8 条查询是手写的，不来自评测集"
+ ],
+ "commands": [
+  "python scripts/public_retrieval_regression.py capture <out.json>",
+  "python scripts/public_retrieval_regression.py compare before_change.json after_change_final_code.json"
+ ],
+ "params": {
+  "mode": "hybrid_rerank（服务默认）",
+  "top_n": 10,
+  "scope": "无（公共库）"
+ }
+}

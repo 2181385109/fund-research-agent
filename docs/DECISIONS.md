@@ -301,3 +301,18 @@
   - **Java 鉴权不用 Spring Security**：BCrypt 用 `spring-security-crypto`，JWT 用 jjwt，由 `HandlerInterceptor` 校验并把 userId 放进请求属性（无角色、无复杂权限，PLAN §0「不做多租户与复杂权限」；不引入整套 Security 过滤链，`@WebMvcTest` 也更简单）。
 - **备选**：把 `kb_ids` 做成工具参数并靠 prompt 约束（LLM 可被注入绕过，否决）；私有块写进公共 `fund_chunks`（要改 schema、重入库并使 S4 结论失效，否决）；范围放进 MCP `_meta`（langchain-mcp-adapters 0.3.2 没有按调用传 `_meta` 的入口，头 + contextvar 更直接）。
 - **后果**：公共 MCP 工具签名未变；ai-service 多一个 Milvus 集合和一个 ES 索引；`search_fund_documents` 的结果里私有片段 `fund_code/fund_name` 为空、`doc_title` 是文件名、`kb_id` 有值。
+
+## ADR-044 Java 后端的实现取舍（S6，B6）
+- **背景**：S6 要 auth / kb / document / conversation / chat 与 `AiServiceClient`；ADR-043 已定私有库的检索范围方案，这里记 Java 侧的实现选择。
+- **持久化与状态机**：MyBatis-Plus 的 `BaseMapper` + 少量注解 SQL。文档状态迁移是**条件更新**（`UPDATE … SET status=to WHERE id=? AND status=from`，返回行数），所以重复回调、迟到的回调、与超时清理并发都不会把终态改回去；`DocumentStatus` 枚举只放行 PENDING→PROCESSING/FAILED、PROCESSING→READY/FAILED。公共库是 Flyway V2 里插入的一行（`id=1, kb_type=PUBLIC, owner_id=NULL`），私有库 id 从 100 起。
+- **入库是异步的**：上传接口 202 返回 PENDING；线程池里 PENDING→PROCESSING 后 `POST /v1/documents/ingest`（`callback=true`，ai-service 立即 202），ai-service 入库完成后带共享密钥回调 `/internal/documents/callback`。回调丢了 / ai-service 重启了怎么办：定时任务把超过 `UPLOAD_STALE_AFTER`（15 分钟）仍停在 PENDING/PROCESSING 的文档置为 FAILED（按数据库时钟算，避免应用与库时区不一致）。备选：同步等入库返回（大文档要几十秒，占住 HTTP 线程，且 backend 重启会丢状态）。
+- **对话流：`SseEmitter` + JDK `HttpClient`（`BodyHandlers.ofInputStream()`，强制 HTTP/1.1，不走系统代理）**。备选 WebClient / OkHttp：要引入 reactive 依赖或新依赖，而这里只需要「读一条 SSE 流、顺序回调」；JDK 客户端足够，取消 = `future.cancel(true)` + 关闭响应流，连接随之断开（测试里用 JDK `HttpServer` 验证上游真的看到断开）。每路对话占一个读取线程（上限 64，满了返回 503）。
+- **发现客户端断开**：Tomcat 只有写失败才知道连接没了，而 LLM 思考期间没有事件可写，所以 backend 每 `CHAT_HEARTBEAT`（默认 5 s）写一行 SSE 注释 `: ping`——心跳写失败 / 事件写失败 / `SseEmitter` 的 onCompletion·onTimeout·onError 任一触发即取消上游。代价：取消最晚延迟一个心跳间隔（e2e 实测约 3.3 s，见 LIMITATIONS）。
+- **协议不变量在 Java 侧也成立**：上游中途失败或提前断开时，backend 补发 `error → disclaimer(固定文案) → done(status=error)`；`ChatService.DISCLAIMER` 与 ai-service 的 `compliance.DISCLAIMER` 是同一句（两边各有测试）。被取消的回答以 `CANCELLED` 保存已生成的部分；失败 / 被取消的回答及其提问不进入后续上下文（`recentHistory` 只取「提问 + 成功回答」成对的轮次）。
+- **权限判定集中在 `KbService`**：`resolveScope` 算出范围；请求里任何一个 kb 不在「公共库 + 自己的私有库」里 → 整个请求 403，且**先于**保存提问 / 调用 ai-service；不存在与「是别人的」返回同一个 403 与同一句话。别人的会话 / 文档一律 404。
+- **错误响应强制 `application/json`**：SSE 接口 `produces=text/event-stream`，客户端也会带 `Accept: text/event-stream`，不预设 Content-Type 时 Spring 找不到能写 `ApiResponse` 的转换器，403 会变成 500（集成测试发现，`GlobalExceptionHandler.build` 已修，WebMvcTest 里有回归用例）。
+- **拦截器不注册成 Bean**：`@WebMvcTest` 会自动装入所有 `HandlerInterceptor` / `WebMvcConfigurer` Bean，鉴权用 `@Bean WebMvcConfigurer` 方法在 `WebConfig` 里创建，控制器切片测试不必关心鉴权，鉴权单独用 `WebConfigSecurityTest` 测。
+- **上传**：校验魔数（PDF 必须 `%PDF-` 开头；md/txt 必须是不含 NUL 的合法 UTF-8）而不是信任 Content-Type；文件名去路径 / 控制字符；同库内 sha256 去重（409），上次失败的允许重传；落盘 `{UPLOAD_DIR}/{用户}/{库}/{sha256}.{ext}`（先写临时文件再原子改名）；`UPLOAD_DIR` 必须在 ai-service 的 `DATA_DIR` 之下，ai-service 按绝对路径读取（`resolve_allowed` 拒绝目录之外的路径）。
+- **覆盖率规则**：JaCoCo `PACKAGE` 规则 + `includes=com.fundagent.backend.*.service`，即**每个 service 包各自**行覆盖率 ≥ 70%（比「合起来 70%」严）；`mvn verify` 里 `check` 目标强制。
+- **集成测试**：Testcontainers `mysql:8.4.11`（与 compose 同版本）+ 整个 HTTP 栈（`@SpringBootTest` RANDOM_PORT），ai-service 用 JDK `HttpServer` 扮演；故意把 Redis 指向不通的端口，证明业务流程不依赖它。CI 的 ubuntu runner 自带 Docker；本机 Docker 在 WSL 里，用临时 TCP 代理暴露给 Windows（见 SETUP §6.2）。
+- **后果**：backend 新增依赖 jjwt、spring-security-crypto（仅 BCrypt）、Testcontainers（test）、JaCoCo 插件；JWT 无吊销 / 刷新；`/internal/**` 只靠共享密钥。

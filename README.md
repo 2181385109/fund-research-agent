@@ -45,7 +45,8 @@
 |---|---|---|
 | S0–S4 | 脚手架 → 数据采集 → 文档入库 → 评测集 v1 → 混合检索 + 重排 + 检索评测 | ✅ 完成（2026-09-29），证据见 PROGRESS |
 | S5 | MCP 工具 + LangGraph Agent + SSE | ✅ 完成（2026-09-29）：mcp-tools 四个工具（[说明](mcp-tools/README.md)）、文档 MCP `/mcp`、`POST /v1/chat/stream`（协议见 [docs/API.md](docs/API.md)），证据见 PROGRESS |
-| S6–S8 | Java 后端 → 前端 → 回答评测 | 未开始 |
+| S6 | Java 主后端 | ✅ 完成（2026-09-29）：auth / kb / document / conversation / chat（SSE 代理，断开取消上游）、私有知识库检索范围由服务端注入（ADR-043）；接口见 [docs/API.md](docs/API.md)，证据见 PROGRESS |
+| S7–S8 | 前端 → 回答评测 | 未开始 |
 | S9–S13 | 第二期：gRPC → Redis → Kafka → 压测 → 优化 | 未开始 |
 
 详细计划见 [docs/PLAN.md](docs/PLAN.md)，逐阶段进度与验收证据见 [docs/PROGRESS.md](docs/PROGRESS.md)。
