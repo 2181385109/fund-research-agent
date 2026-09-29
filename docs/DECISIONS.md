@@ -249,3 +249,14 @@
 - **同时如实记录**：「纯 RRF 混合检索不如单独 BM25」——test 上 hybrid（RRF）nDCG@10 0.3633，低于 bm25 的 0.3854（n=72；两者的差没有做配对 CI，只是点估计的观察）。原因解释（弱向量路拖累等权 RRF）是从分模式数字读出的，未做单独消融验证。这不影响最终配置：最终配置 hybrid_rerank（0.5321）在重排之后大幅领先。
 - **备选**：合并表格碎片 + 加标题行（需要重新入库与 test 重评，不在 B3/B4 授权内；若以后要做，走 PLAN S13 的质量回归规则并经用户同意）。
 - **后果**：S5 的 Agent prompt 与工具描述需要让持仓类问题优先走 SQL（B5 落实）；S8 回答评测中持仓题的工具选择准确率与 SQL 正确率会被单独关注。写入 `docs/LIMITATIONS.md` 的 S4 一节。
+
+## ADR-040 mcp-tools 的实现选型（S5 前半，B4）
+- **MCP SDK 固定在 1.x**：`mcp>=1.9,<2`（实装 1.30.0）。`pip install mcp` 默认装到 2.x，它把 `FastMCP` 改名为 `MCPServer` 并改了 API；PLAN 写的是 FastMCP，而 B5 要用的客户端 `langchain-mcp-adapters` 是否兼容 2.x 没有验证，先固定在 1.x 避免不确定性；B5 的 ai-service 也用同一大版本。
+- **SQL 守卫执行「重新生成的 SQL」**：`sqlglot.parse(read="mysql")` 后从语法树 `.sql(comments=False)` 生成要执行的语句，不执行用户原文。这样注释（包括 MySQL 的 `/*! */` 可执行注释）不可能夹带内容。另外拒绝：多语句、非 SELECT 根节点、DML/DDL/SHOW/SET 等节点、INTO / FOR UPDATE、会话变量（`@x`、`@@x`）、非 `fund_data` 库的表、黑名单函数（LOAD_FILE、SLEEP、BENCHMARK、GET_LOCK，以及泄露账号 / 库版本的 USER、DATABASE、VERSION 等）。行数上限用 AST 改写 LIMIT：没写或超过上限的改成 `LIMIT 201`（多取 1 行判断是否截断，返回时切回 200 行并标 `truncated`），用户自己写的更小的 LIMIT 保持不变、不算截断。不用「外面套一层子查询」的做法——多表 join 时重复列名会让 MySQL 报错。
+- **数据库侧的保险**：`fund_reader` 只有 SELECT 权限；每个连接建立后 `SET SESSION TRANSACTION READ ONLY` 与 `MAX_EXECUTION_TIME=5000`，并设置客户端读超时兜底。每次查询开短连接，不做连接池（调用量小）。集成测试（`-m integration`）证明绕过守卫直接发 INSERT / DELETE / UPDATE / DROP / CREATE 都被数据库拒绝，慢查询被服务端超时中断。
+- **`calc_fund_return` 与参考实现逐位一致**：纯 Python 浮点，运算顺序与 `eval/reference/gold.py` 相同（从序列起点累乘复权因子，再取窗口两端之比）；两边都不用 Decimal，因为逐位比对的对象是同一套 IEEE 双精度运算。数据经 `ReturnData` 协议注入（生产读 MySQL，单测用内存序列）。除息日没有对应交易日净值时不静默丢弃，写进 `notes` 报告（当前快照中 14 条分红全部对得上）。
+- **工具返回 `display` 字段**：`return` / `max_drawdown` 等保持小数原值（CLAUDE.md §4 金融数值约定），另附已换算好的百分数字符串，减少 LLM 把 0.0386 当成 0.0386% 的风险。Decimal 列在 `run_fund_sql` 里以字符串返回，不丢精度。
+- **`get_fund_db_schema` 的字段说明来自库里的 COMMENT**，字段写成一行文字而不是嵌套 JSON（完整 JSON 约 26 KB，压缩后约 8.6 KB），避免每次调用占掉大量 Agent 上下文。
+- **`get_latest_nav`**：份额不在基金池内直接报错（不去请求外部接口）；回退结果不缓存，接口恢复后下一次调用立即拿到实时数据；User-Agent 如实填写项目名。
+- **工具错误用 MCP 的 `isError` 回传**（FastMCP 会加前缀 `Error executing tool <name>:`），不用 200 + 错误字段，Agent 侧的重试逻辑（B5）可统一处理。
+- **备选**：用 2.x 的 `MCPServer`（与 B5 客户端不兼容风险）；用正则做 SQL 守卫（容易被注释和大小写绕过）。

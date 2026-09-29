@@ -17,3 +17,7 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.pycodestyle]
+# 中文按双宽计：formatter 仍按 100 排版，E501 放宽到 120（同各 Python 包）
+max-line-length = 120

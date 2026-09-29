@@ -1,17 +1,24 @@
 [project]
 name = "fund-mcp-tools"
 version = "0.0.1"
-description = "fund-research-agent MCP 工具服务：基金库只读 SQL、收益计算、最新净值（S5 实现；S0 仅骨架）"
+description = "fund-research-agent MCP 工具服务：基金库只读 SQL、收益计算、最新净值（S5）"
 requires-python = ">=3.12,<3.13"
 license = "MIT"
 dependencies = [
     "pydantic>=2.8",
     "pydantic-settings>=2.4",
+    # 官方 MCP SDK：固定在 1.x（FastMCP、streamable HTTP）。2.x 把 FastMCP 改名为 MCPServer 并改了 API，
+    # B5 的 Agent 客户端 langchain-mcp-adapters 与 2.x 的兼容性未验证，见 ADR-040。
+    "mcp>=1.9,<2",
+    "sqlglot>=25",
+    "pymysql>=1.1",
+    "httpx>=0.27",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pytest>=8.3",
+    "pytest-asyncio>=0.24",
     "ruff>=0.6",
 ]
 
@@ -25,6 +32,7 @@ packages = ["src/fund_mcp_tools"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "--strict-markers"
+asyncio_mode = "auto"
 markers = [
     "integration: 需要 docker compose 起的 infra",
     "slow: 需要下载或加载本地模型",
@@ -37,3 +45,7 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.pycodestyle]
+# 中文按双宽计：formatter 仍按 100 排版，E501 放宽到 120（同 data-pipeline、ai-service、eval）
+max-line-length = 120
