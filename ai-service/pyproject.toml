@@ -15,6 +15,12 @@ dependencies = [
     "pymilvus>=2.5,<2.6",
     "elasticsearch>=8.15,<9",
     "pymysql>=1.1",  # S4：实体词典从 fund_data 读（fund_reader 只读）
+    # S5 Agent。mcp 固定 1.x（ADR-040）；langchain-mcp-adapters 0.3.2 要求 mcp>=1.24,<2，
+    # 已验证能同时连上 ai-service /mcp 和 mcp-tools（ADR-041）
+    "mcp>=1.24,<2",
+    "langchain-mcp-adapters==0.3.2",
+    "langgraph>=1.2,<2",
+    "langchain-openai>=1.6,<2",
 ]
 
 [project.optional-dependencies]

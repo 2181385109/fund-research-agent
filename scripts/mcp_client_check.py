@@ -2,7 +2,7 @@
 
 S5 验收 4 用。走真实的 streamable HTTP（官方 mcp SDK 的客户端，不经任何 fund_mcp_tools 代码）：
     python scripts/mcp_client_check.py --url http://127.0.0.1:8101/mcp
-文档检索 MCP（ai-service，B5）起来后再加一个 `--url http://127.0.0.1:8001/mcp`。
+文档检索 MCP（ai-service，S5 后半）：再加一个 `--url http://127.0.0.1:8001/mcp`。
 
 需要 `mcp` 包（mcp-tools 的 venv 里有）；本机访问 127.0.0.1 时设置 NO_PROXY=127.0.0.1,localhost。
 """
@@ -73,7 +73,19 @@ CALLS: dict[str, list[tuple[str, dict, bool]]] = {
             "文档检索",
             {"query": "中欧医疗健康混合A 管理费率是多少", "fund_codes": ["003095"], "top_n": 3},
             False,
-        )
+        ),
+        (
+            "文档检索：限定文档类型 + 多基金",
+            {
+                "query": "基金经理对后市的展望",
+                "fund_codes": ["003095", "001513"],
+                "doc_types": ["annual_report"],
+                "top_n": 3,
+            },
+            False,
+        ),
+        ("参数错误：未知文档类型", {"query": "管理费", "doc_types": ["news"]}, True),
+        ("参数错误：空查询", {"query": "  "}, True),
     ],
 }
 

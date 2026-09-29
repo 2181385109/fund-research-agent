@@ -36,6 +36,18 @@ class Settings(BaseSettings):
     llm_thinking: str = "disabled"
     llm_timeout_seconds: float = 60.0
 
+    # Agent（S5）：两个 MCP 服务的地址；文档检索 MCP 挂在本进程的 /mcp，Agent 经 HTTP 回环调用
+    mcp_tools_url: str = "http://127.0.0.1:8101/mcp"
+    mcp_docs_url: str = "http://127.0.0.1:8001/mcp"
+    mcp_call_timeout_seconds: float = 30.0
+    # 文档 MCP 允许的 Host 头（MCP SDK 的 DNS rebinding 防护）；容器互连时加上服务名，如 ai-service:*
+    mcp_allowed_hosts: list[str] = ["127.0.0.1:*", "localhost:*", "[::1]:*"]
+    agent_max_steps: int = 6  # 工具调用轮数上限（PLAN S5），超出后强制无工具地作答
+    agent_sql_retries: int = 2  # run_fund_sql 报错后最多重试次数
+    # 每轮先扣留这么多字符的文本，用来吞掉「调用工具前的开场白」（graph._TurnGate）；0 = 不扣留
+    agent_preamble_holdback_chars: int = 160
+    data_as_of: str = ""  # DATA_AS_OF，写进 system prompt；空则不写
+
     # 本地模型（S2 起）
     embedding_provider: str = "bge"  # bge | fake（fake 只用于测试和 CI）
     embedding_model: str = "BAAI/bge-small-zh-v1.5"
