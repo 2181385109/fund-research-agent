@@ -12,10 +12,12 @@ from fund_ai import __version__
 from fund_ai.api.documents import router as documents_router
 from fund_ai.api.health import HealthChecker, build_checkers, build_redis_client
 from fund_ai.api.health import router as health_router
+from fund_ai.api.retrieve import router as retrieve_router
 from fund_ai.config import Settings, get_settings
 from fund_ai.embedding.factory import build_embedder
 from fund_ai.ingest.chunking import ChunkParams
 from fund_ai.ingest.pipeline import IngestPipeline
+from fund_ai.retrieval.service import RetrievalService
 from fund_ai.stores.es_store import EsChunkStore
 from fund_ai.stores.milvus_store import MilvusChunkStore
 
@@ -33,10 +35,17 @@ def build_pipeline(settings: Settings) -> IngestPipeline:
     return pipeline
 
 
+def _build_retrieval(settings: Settings) -> RetrievalService:
+    from fund_ai.retrieval.factory import build_retrieval_service
+
+    return build_retrieval_service(settings)
+
+
 def create_app(
     settings: Settings | None = None,
     checkers: Sequence[HealthChecker] | None = None,
     pipeline_factory: Callable[[], IngestPipeline] | None = None,
+    retrieval_factory: Callable[[], RetrievalService] | None = None,
 ) -> FastAPI:
     """``checkers`` / ``pipeline_factory`` 为 None 时按配置构造真实依赖；测试时传入 fake。"""
     settings = settings or get_settings()
@@ -62,9 +71,12 @@ def create_app(
     app = FastAPI(title="fund-research-agent ai-service", version=__version__, lifespan=lifespan)
     app.include_router(health_router)
     app.include_router(documents_router)
+    app.include_router(retrieve_router)
     app.state.pipeline = None
     app.state.pipeline_factory = pipeline_factory or (lambda: build_pipeline(settings))
     app.state.ingest_roots = [settings.data_dir]
+    app.state.retrieval = None
+    app.state.retrieval_factory = retrieval_factory or (lambda: _build_retrieval(settings))
     return app
 
 

@@ -51,6 +51,30 @@ class Settings(BaseSettings):
     table_max_chars: int = 3000  # 表格块上限，超过按行拆分并重复表头
     data_dir: Path = REPO_ROOT / "data"
 
+    # 重排（S4）：cross_encoder（本地 BAAI/bge-reranker-base）| noop（不重排，测试 / CI）
+    reranker_provider: str = "cross_encoder"
+    reranker_model: str = "BAAI/bge-reranker-base"
+    reranker_max_length: int = 512
+    reranker_batch_size: int = 16
+
+    # 检索（S4）：默认值为 dev 集调参后的最终配置（docs/tuning_log.md）
+    retrieval_mode: str = "hybrid_rerank"  # vector | bm25 | hybrid | vector_rerank | hybrid_rerank
+    retrieval_vector_k: int = 50  # 向量路召回数
+    retrieval_bm25_k: int = 50  # BM25 路召回数
+    retrieval_rrf_k: int = 60  # RRF 常数（PLAN 固定 60）
+    retrieval_rerank_candidates: int = 20  # 送入重排的候选数
+    retrieval_top_n: int = 10
+    retrieval_entity_filter: bool = True  # 识别出基金时按 fund_code 过滤；识别不到不过滤
+    retrieval_use_ctx: bool = True  # 用带上下文头的向量字段 / BM25 字段
+    retrieval_query_instruction: bool = False  # 查询侧 BGE 指令前缀
+
+    # fund_data 只读账号（S4 实体词典从 funds / share_classes 读）
+    mysql_host: str = "127.0.0.1"
+    mysql_port: int = 3307
+    fund_data_db: str = "fund_data"
+    fund_reader_user: str = "fund_reader"
+    fund_reader_password: SecretStr = SecretStr("")
+
     @property
     def model_cache_path(self) -> Path:
         p = self.model_cache_dir

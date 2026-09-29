@@ -14,6 +14,7 @@ dependencies = [
     "pdfplumber>=0.11",
     "pymilvus>=2.5,<2.6",
     "elasticsearch>=8.15,<9",
+    "pymysql>=1.1",  # S4：实体词典从 fund_data 读（fund_reader 只读）
 ]
 
 [project.optional-dependencies]
