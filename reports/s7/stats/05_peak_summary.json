@@ -1,0 +1,23 @@
+{
+  "samples": 24,
+  "complete_samples": 24,
+  "container_sum_mib": {"min": 3806, "max": 3928},
+  "max_sample_containers_mib": {
+    "fra-frontend": 17,
+    "fra-ai-service": 1212,
+    "fra-backend": 391,
+    "fra-mcp-tools": 78,
+    "fra-redis": 18,
+    "fra-elasticsearch": 1566,
+    "fra-milvus": 415,
+    "fra-mysql": 232
+  },
+  "wsl_free_used_mib": {"min": 4299, "max": 4470},
+  "wsl_limit_mib": 10240,
+  "wsl_free_total_mib": 9943,
+  "threshold_85pct_of_10240_mib": 8704,
+  "threshold_85pct_of_free_total_mib": 8452,
+  "container_sum_max_pct_of_10240": 38.4,
+  "free_used_max_pct_of_10240": 43.7,
+  "note": "24 次采样，约 1 秒一次；期间跑了一次完整对话（reports/s7/sse_nginx_second_run.json），ai-service 已加载嵌入与重排两个模型；ticket-qa 的容器已停。由 04_peak_samples.txt 汇总，汇总脚本为一次性内联 Python（逐行解析 docker stats 的 MemUsage，换算成 MiB 后求和）。"
+}

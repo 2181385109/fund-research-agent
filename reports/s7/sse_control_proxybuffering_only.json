@@ -1,0 +1,32 @@
+{
+  "total_ms": 11282,
+  "chunks": 409,
+  "events": 264,
+  "token_events": 250,
+  "first_byte_ms": 65,
+  "first_token_ms": 10389,
+  "last_token_ms": 11268,
+  "done_ms": 11269,
+  "token_spread_ms": 878,
+  "ping_ms": [
+    5182,
+    10315
+  ],
+  "first_byte_over_total": 0.006,
+  "chunk_ms_head": [
+    65,
+    2334,
+    2361,
+    2361,
+    2361
+  ],
+  "chunk_ms_tail": [
+    11269,
+    11269,
+    11269
+  ],
+  "base": "http://127.0.0.1:8090",
+  "http_status": 200,
+  "content_type": "text/event-stream",
+  "question": "中银创新医疗混合C（010500）的销售服务费率是多少？请同时对比数据库里的记录和招募说明书里的约定，并给出它 2025-12-31 到 2026-06-30 的区间收益率。"
+}

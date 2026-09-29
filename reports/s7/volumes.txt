@@ -1,0 +1,6 @@
+fra_es_data
+fra_milvus_data
+fra_model_cache
+fra_mysql_data
+fra_redis_data
+fra_uploads

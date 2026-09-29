@@ -1,0 +1,45 @@
+{
+  "created_utc": "20260929T135342Z",
+  "git_commit": "7f297148b648d7dbf17606b76321ff7001ea2067",
+  "git_dirty": true,
+  "command": "python -m fund_pipeline.load --as-of 2026-09-28",
+  "params": {
+    "as_of": "2026-09-28"
+  },
+  "manifest_sha256": "b5df59cb954c170e44071fb38603f57eff401863656912e410a96a721d49e127",
+  "akshare_version": "1.18.97",
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.3",
+    "processor": "AMD64 Family 25 Model 116 Stepping 1, AuthenticAMD"
+  },
+  "loaded_rows_from_csv": {
+    "funds": 20,
+    "share_classes": 40,
+    "fees": 40,
+    "purchase_fee_tiers": 92,
+    "redemption_fee_tiers": 137,
+    "nav_daily": 72836,
+    "dividends": 14,
+    "managers": 24,
+    "fund_manager_tenures": 34,
+    "holdings_top10": 1200,
+    "fund_scale": 40,
+    "period_returns": 360
+  },
+  "fund_reader_select_count": {
+    "funds": 20,
+    "share_classes": 40,
+    "fees": 40,
+    "purchase_fee_tiers": 92,
+    "redemption_fee_tiers": 137,
+    "nav_daily": 72836,
+    "dividends": 14,
+    "managers": 24,
+    "fund_manager_tenures": 34,
+    "holdings_top10": 1200,
+    "fund_scale": 40,
+    "period_returns": 360
+  },
+  "mismatch": {}
+}

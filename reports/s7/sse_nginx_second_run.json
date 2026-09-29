@@ -1,0 +1,32 @@
+{
+  "total_ms": 10902,
+  "chunks": 275,
+  "events": 172,
+  "token_events": 164,
+  "first_byte_ms": 63,
+  "first_token_ms": 10813,
+  "last_token_ms": 10884,
+  "done_ms": 10885,
+  "token_spread_ms": 71,
+  "ping_ms": [
+    4923,
+    9841
+  ],
+  "first_byte_over_total": 0.006,
+  "chunk_ms_head": [
+    63,
+    1499,
+    1499,
+    1559,
+    1559
+  ],
+  "chunk_ms_tail": [
+    10885,
+    10885,
+    10885
+  ],
+  "base": "http://127.0.0.1:8088",
+  "http_status": 200,
+  "content_type": "text/event-stream",
+  "question": "003095 从 2025-12-31 到 2026-06-30 的收益率是多少？请说明数据来源。"
+}

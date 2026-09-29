@@ -316,3 +316,19 @@
 - **覆盖率规则**：JaCoCo `PACKAGE` 规则 + `includes=com.fundagent.backend.*.service`，即**每个 service 包各自**行覆盖率 ≥ 70%（比「合起来 70%」严）；`mvn verify` 里 `check` 目标强制。
 - **集成测试**：Testcontainers `mysql:8.4.11`（与 compose 同版本）+ 整个 HTTP 栈（`@SpringBootTest` RANDOM_PORT），ai-service 用 JDK `HttpServer` 扮演；故意把 Redis 指向不通的端口，证明业务流程不依赖它。CI 的 ubuntu runner 自带 Docker；本机 Docker 在 WSL 里，用临时 TCP 代理暴露给 Windows（见 SETUP §6.2）。
 - **后果**：backend 新增依赖 jjwt、spring-security-crypto（仅 BCrypt）、Testcontainers（test）、JaCoCo 插件；JWT 无吊销 / 刷新；`/internal/**` 只靠共享密钥。
+
+## ADR-045 前端与容器化的取舍（S7，B7）
+- **背景**：S7 要 Vue3 前端（登录、知识库与文档、对话页）、四个 Dockerfile 和 compose 的 `app` profile；统筹与用户对前端的补充要求：**显示私有库 / 公共库的检索范围、展示四类出处、风险提示固定显示且不能折叠隐藏**。
+- **前端栈**：Vue3 + Vite 6 + TS + vue-router，不引入 Pinia 和 UI 库（全局状态只有登录态和知识库列表两个 `reactive` 模块）；Markdown 用 `marked` + `DOMPurify` 清洗后再把 `[n]` 换成角标（回答是 LLM 生成的、可能被提示注入影响，不能直接 `v-html`）；测试用 vitest + @vue/test-utils。**SSE 用 fetch + ReadableStream，自写解析器**（`src/api/sse.ts`）：不能用 EventSource（要 `Authorization` 头且是 POST）；先看 HTTP 状态码再读流（流开始前的错误是 JSON），忽略 `: ping` 心跳，块边界可在任意位置（单测把样本在每个字节位置切开，结果都一致，含 CRLF 与多字节字符被切断）。
+- **风险提示两层，都没有关闭 / 折叠入口**：① 每条回答下显示服务端下发的 `disclaimer` 原文（历史消息取消息里的 `disclaimer` 字段），回答结束后仍没有（例如流开始之前就失败）时回退到固定文案，不留空；② 对话页底部 `DisclaimerBar` 常驻。组件测试断言两者都不含任何按钮 / `details` 类控件，且 ok / error / cancelled / failed 四种结局下每条回答都有风险提示。前端的固定文案是服务端文案的一份拷贝（`src/lib/constants.ts`），服务端改文案时要同步（记入 LIMITATIONS）。
+- **检索范围**：`ScopePicker` 列出公共库与自己的私有库（带「公共库 / 私有库」标签），选中的 id 作为 `kbIds` **显式**发送（默认全选；用户取消的勾选记在 localStorage，上次访问之后新建的库默认勾选；一个都不选时禁止发送）；每条提问下面显示「检索范围：公共库 + 私有库「…」」（历史消息取 `kbIds`，库已被删时显示「已删除的库 #id」）；文档类出处另标「公共库 / 私有库」。这只是**申请**，授权由 backend 判定（ADR-043）。
+- **出处**：四类 `kind` 各有图标和类型标签；折叠态一行摘要（文档 = 基金 / 文档 / 页码，数据库 = 表 + 行数，计算 = 起止净值日，接口 = 净值日期 + 「非最新」标记），展开看页码与片段 / 数据表、数据源、快照日期与 SQL / 计算入参 / 抓取时间。正文里的 `[n]` 是角标，点击展开并滚动到对应出处；**流式过程中 citations 事件还没到，角标类型按 `tool_end` 的工具名与 `citation_ids` 推断**，所以角标一出现就有对应图标。
+- **构建上下文与镜像**：四个 Dockerfile 都在 `deploy/<服务>/`，构建上下文是仓库根，`.dockerignore` 排除 `data/`、`.cache`、`.venv`、`node_modules` 等（披露 PDF 与快照绝不进镜像）。backend 镜像构建时 `-DskipTests`（测试在 CI 的 `mvn verify`）；ai-service 先装 CPU 版 torch（`download.pytorch.org/whl/cpu`），再按 `pyproject.toml` 抽出的依赖清单安装，源码改动不会使依赖层缓存失效；代码放 `/app/ai-service` 并可编辑安装，使 `REPO_ROOT` 解析为 `/app`，与本机开发的目录布局一致（入库 CLI 按 MANIFEST 里的 `data/raw/...` 相对路径找 PDF、把报告写到 `reports/`）。
+- **共享上传目录**：命名卷 `uploads` 挂在两个容器的同一路径 `/app/data/uploads`（backend 可写、ai-service 只读），另把宿主机 `./data` 只读挂到 ai-service 的 `/app/data`。两个镜像用同一个非 root uid（10001）并在镜像里预建该目录，命名卷首次创建时继承属主，两边才都能读写。
+- **compose 变量**：不用 `env_file: .env`（会把 MySQL root 密码等全部发给每个容器），每个服务列出自己用得到的变量；容器互连用服务名与容器端口（`MYSQL_HOST=mysql`、`MYSQL_PORT=3306` 覆盖 `.env` 里给宿主机用的 127.0.0.1:3307），`MCP_ALLOWED_HOSTS` 加 `ai-service:*`（Agent 调自己的 `/mcp`）。应用变量一律 `${X:-}`，不用 `${X:?}`：compose 会对整个文件做插值，否则只起 infra 时也会因缺应用变量报错。
+- **nginx**：`nginx-unprivileged`（非 root，监听 8080）；`/api/conversations/*/chat` 单独一个 location：`proxy_buffering off`、`proxy_http_version 1.1`、`proxy_read_timeout 300s`、`gzip off`；上游用变量 + Docker DNS（`resolver 127.0.0.11`），backend 重建换 IP 不会连到旧地址、backend 未起时 nginx 也能启动；`/internal/` 返回 404（回调只在容器网络内）。
+- **模型缓存**：命名卷 `model_cache` 挂 `/models`；首次用 `python -m fund_ai.models_cli` 预下载（走与线上相同的加载路径：编码一条文本、给一对文本打分，所以下载的正好是运行时要用的文件并顺带验证能加载）。
+- **健康检查**：backend 的运行镜像没有 curl / wget，用 bash 的 `/dev/tcp` 发 HTTP 请求并要求状态行是 200；其余服务用 Python `urllib` / `wget --spider`。
+- **备选**：EventSource（不能带头也不能 POST，否决）；`env_file`（见上，否决）；把 `data/` 复制进 ai-service 镜像（违反「PDF 与快照不入仓库 / 镜像」的版权约定，否决）；用 Docker 卷而不是 bind 挂 `data/`（要先把数据拷进卷，多一步且本机 `data/` 就是数据源，否决）。
+- **后果**：前端新增 npm 依赖（vue、vue-router、marked、dompurify；开发期 vite、vitest、jsdom、@vue/test-utils）；vitest 3 的 `npm audit` 有 2 条 moderate（`@vitest/mocker` 的 mock 重定向路径穿越，只影响开发期的 vitest，不进构建产物；升级到 5.x 需要 Vite 7，本批不动）。
+

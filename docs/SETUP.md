@@ -183,6 +183,17 @@ cd backend && mvn -B verify
 
 CI 的 ubuntu runner 自带 Docker，不需要这两个变量。
 
+### 6.3 全栈容器化（S7，profile `app`）
+
+一键启动全部服务的步骤（含首次下载模型、导入快照、入库）见 [README「一键启动全栈」](../README.md)。要点：
+
+- **端口冲突**：compose 的 `app` profile 会发布 8001（ai-service）、8081（backend）、8101（mcp-tools）、8088（前端）。本机开发时用 `python -m uvicorn` / `java -jar` 起的 ai-service、backend、mcp-tools 要**先停掉**再 `up`，否则端口被占。反过来要回到本机开发模式时，`docker compose --profile app stop backend ai-service mcp-tools frontend`（infra 不用停）。
+- **内存**：全栈内存上限合计约 8.9GB（PLAN §3），WSL 上限 10GB；先停掉 ticket-qa 的容器（`docker stop`，不要 `rm`；验收完用 `docker start` 恢复）。
+- **共享上传目录**：backend 写、ai-service 读，两个容器里都是 `/app/data/uploads`，是同一个命名卷 `uploads`；宿主机 `./data` 只读挂到 ai-service 的 `/app/data`（MANIFEST、披露 PDF、快照）。
+- **模型缓存**：命名卷 `model_cache`（`/models`）。`down -v` 会清掉它，之后要重做「下载模型」一步；只想清数据不清模型时，用 `docker volume rm fra_mysql_data fra_es_data fra_milvus_data fra_redis_data fra_uploads`。
+- **重建单个镜像**：`docker compose --profile app up -d --build <服务>`（ai-service 的依赖层按 `pyproject.toml` 缓存，只改源码时构建很快）。
+- 查看日志：`docker compose --profile app logs -f --tail 100 ai-service`（`.env` 里的密钥不会出现在日志里）。
+
 ## 7. 排障
 
 | 现象 | 原因 / 处理 |

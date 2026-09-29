@@ -1,0 +1,9 @@
+NAME                STATUS
+fra-ai-service      Up 37 minutes (healthy)
+fra-backend         Up 37 minutes (healthy)
+fra-elasticsearch   Up 37 minutes (healthy)
+fra-frontend        Up 11 seconds (healthy)
+fra-mcp-tools       Up 37 minutes (healthy)
+fra-milvus          Up 37 minutes (healthy)
+fra-mysql           Up 37 minutes (healthy)
+fra-redis           Up 37 minutes (healthy)

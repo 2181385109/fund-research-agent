@@ -1,0 +1,241 @@
+@ 1790691954
+fra-frontend 16.98MiB / 64MiB
+fra-ai-service 1.184GiB / 2.5GiB
+fra-backend 390.7MiB / 768MiB
+fra-mcp-tools 77.59MiB / 256MiB
+fra-redis 18.47MiB / 256MiB
+fra-elasticsearch 1.529GiB / 1.75GiB
+fra-milvus 415.1MiB / 2GiB
+fra-mysql 231.5MiB / 512MiB
+free_used_mb 4470
+@ 1790691957
+fra-frontend 22.47MiB / 64MiB
+fra-ai-service 1.186GiB / 2.5GiB
+fra-backend 390.1MiB / 768MiB
+fra-mcp-tools 78.58MiB / 256MiB
+fra-redis 18.2MiB / 256MiB
+fra-elasticsearch 1.529GiB / 1.75GiB
+fra-milvus 366.1MiB / 2GiB
+fra-mysql 232MiB / 512MiB
+free_used_mb 4428
+@ 1790691960
+fra-frontend 18.02MiB / 64MiB
+fra-ai-service 1.185GiB / 2.5GiB
+fra-backend 389.4MiB / 768MiB
+fra-mcp-tools 78.09MiB / 256MiB
+fra-redis 18.45MiB / 256MiB
+fra-elasticsearch 1.529GiB / 1.75GiB
+fra-milvus 368.1MiB / 2GiB
+fra-mysql 232MiB / 512MiB
+free_used_mb 4405
+@ 1790691964
+fra-frontend 17.47MiB / 64MiB
+fra-ai-service 1.185GiB / 2.5GiB
+fra-backend 389.6MiB / 768MiB
+fra-mcp-tools 78.3MiB / 256MiB
+fra-redis 18.7MiB / 256MiB
+fra-elasticsearch 1.529GiB / 1.75GiB
+fra-milvus 371.2MiB / 2GiB
+fra-mysql 232.3MiB / 512MiB
+free_used_mb 4419
+@ 1790691967
+fra-frontend 17.65MiB / 64MiB
+fra-ai-service 1.185GiB / 2.5GiB
+fra-backend 390.4MiB / 768MiB
+fra-mcp-tools 77.88MiB / 256MiB
+fra-redis 18.49MiB / 256MiB
+fra-elasticsearch 1.529GiB / 1.75GiB
+fra-milvus 374.5MiB / 2GiB
+fra-mysql 233.3MiB / 512MiB
+free_used_mb 4408
+@ 1790691970
+fra-frontend 17.63MiB / 64MiB
+fra-ai-service 1.184GiB / 2.5GiB
+fra-backend 390MiB / 768MiB
+fra-mcp-tools 77.64MiB / 256MiB
+fra-redis 19.3MiB / 256MiB
+fra-elasticsearch 1.53GiB / 1.75GiB
+fra-milvus 334.9MiB / 2GiB
+fra-mysql 232.4MiB / 512MiB
+free_used_mb 4360
+@ 1790691973
+fra-frontend 17.61MiB / 64MiB
+fra-ai-service 1.185GiB / 2.5GiB
+fra-backend 390.5MiB / 768MiB
+fra-mcp-tools 77.38MiB / 256MiB
+fra-redis 19.45MiB / 256MiB
+fra-elasticsearch 1.529GiB / 1.75GiB
+fra-milvus 338.9MiB / 2GiB
+fra-mysql 232.1MiB / 512MiB
+free_used_mb 4367
+@ 1790691976
+fra-frontend 17.18MiB / 64MiB
+fra-ai-service 1.185GiB / 2.5GiB
+fra-backend 390.5MiB / 768MiB
+fra-mcp-tools 77.38MiB / 256MiB
+fra-redis 18.72MiB / 256MiB
+fra-elasticsearch 1.529GiB / 1.75GiB
+fra-milvus 341.2MiB / 2GiB
+fra-mysql 231.7MiB / 512MiB
+free_used_mb 4360
+@ 1790691980
+fra-frontend 16.93MiB / 64MiB
+fra-ai-service 1.185GiB / 2.5GiB
+fra-backend 390.5MiB / 768MiB
+fra-mcp-tools 78.17MiB / 256MiB
+fra-redis 18.65MiB / 256MiB
+fra-elasticsearch 1.529GiB / 1.75GiB
+fra-milvus 290.2MiB / 2GiB
+fra-mysql 232.9MiB / 512MiB
+free_used_mb 4299
+@ 1790691983
+fra-frontend 16.87MiB / 64MiB
+fra-ai-service 1.185GiB / 2.5GiB
+fra-backend 390MiB / 768MiB
+fra-mcp-tools 77.92MiB / 256MiB
+fra-redis 18.58MiB / 256MiB
+fra-elasticsearch 1.53GiB / 1.75GiB
+fra-milvus 294.7MiB / 2GiB
+fra-mysql 232.9MiB / 512MiB
+free_used_mb 4309
+@ 1790691986
+fra-frontend 16.84MiB / 64MiB
+fra-ai-service 1.184GiB / 2.5GiB
+fra-backend 390.4MiB / 768MiB
+fra-mcp-tools 77.77MiB / 256MiB
+fra-redis 18.3MiB / 256MiB
+fra-elasticsearch 1.529GiB / 1.75GiB
+fra-milvus 298MiB / 2GiB
+fra-mysql 232.6MiB / 512MiB
+free_used_mb 4322
+@ 1790691990
+fra-frontend 18.09MiB / 64MiB
+fra-ai-service 1.185GiB / 2.5GiB
+fra-backend 390.4MiB / 768MiB
+fra-mcp-tools 77.73MiB / 256MiB
+fra-redis 19.11MiB / 256MiB
+fra-elasticsearch 1.529GiB / 1.75GiB
+fra-milvus 302.2MiB / 2GiB
+fra-mysql 232.5MiB / 512MiB
+free_used_mb 4343
+@ 1790691993
+fra-frontend 17.69MiB / 64MiB
+fra-ai-service 1.185GiB / 2.5GiB
+fra-backend 390.3MiB / 768MiB
+fra-mcp-tools 77.73MiB / 256MiB
+fra-redis 19.02MiB / 256MiB
+fra-elasticsearch 1.529GiB / 1.75GiB
+fra-milvus 306.2MiB / 2GiB
+fra-mysql 232.4MiB / 512MiB
+free_used_mb 4335
+@ 1790691996
+fra-frontend 17.27MiB / 64MiB
+fra-ai-service 1.185GiB / 2.5GiB
+fra-backend 390.2MiB / 768MiB
+fra-mcp-tools 78.46MiB / 256MiB
+fra-redis 19.02MiB / 256MiB
+fra-elasticsearch 1.529GiB / 1.75GiB
+fra-milvus 310.2MiB / 2GiB
+fra-mysql 232.1MiB / 512MiB
+free_used_mb 4336
+@ 1790691999
+fra-frontend 16.98MiB / 64MiB
+fra-ai-service 1.185GiB / 2.5GiB
+fra-backend 390.7MiB / 768MiB
+fra-mcp-tools 77.93MiB / 256MiB
+fra-redis 19.12MiB / 256MiB
+fra-elasticsearch 1.53GiB / 1.75GiB
+fra-milvus 313.6MiB / 2GiB
+fra-mysql 232.7MiB / 512MiB
+free_used_mb 4350
+@ 1790692002
+fra-frontend 16.98MiB / 64MiB
+fra-ai-service 1.189GiB / 2.5GiB
+fra-backend 390.4MiB / 768MiB
+fra-mcp-tools 77.91MiB / 256MiB
+fra-redis 19.02MiB / 256MiB
+fra-elasticsearch 1.53GiB / 1.75GiB
+fra-milvus 318MiB / 2GiB
+fra-mysql 232.9MiB / 512MiB
+free_used_mb 4341
+@ 1790692005
+fra-frontend 17.9MiB / 64MiB
+fra-ai-service 1.185GiB / 2.5GiB
+fra-backend 390.1MiB / 768MiB
+fra-mcp-tools 77.66MiB / 256MiB
+fra-redis 18.61MiB / 256MiB
+fra-elasticsearch 1.53GiB / 1.75GiB
+fra-milvus 321.8MiB / 2GiB
+fra-mysql 232.8MiB / 512MiB
+free_used_mb 4341
+@ 1790692008
+fra-frontend 17.86MiB / 64MiB
+fra-ai-service 1.185GiB / 2.5GiB
+fra-backend 389.7MiB / 768MiB
+fra-mcp-tools 78.49MiB / 256MiB
+fra-redis 18.42MiB / 256MiB
+fra-elasticsearch 1.53GiB / 1.75GiB
+fra-milvus 321.6MiB / 2GiB
+fra-mysql 233.3MiB / 512MiB
+free_used_mb 4351
+@ 1790692012
+fra-frontend 17.43MiB / 64MiB
+fra-ai-service 1.185GiB / 2.5GiB
+fra-backend 389.5MiB / 768MiB
+fra-mcp-tools 78.27MiB / 256MiB
+fra-redis 19.36MiB / 256MiB
+fra-elasticsearch 1.529GiB / 1.75GiB
+fra-milvus 322.1MiB / 2GiB
+fra-mysql 232.5MiB / 512MiB
+free_used_mb 4348
+@ 1790692015
+fra-frontend 17.39MiB / 64MiB
+fra-ai-service 1.185GiB / 2.5GiB
+fra-backend 391.3MiB / 768MiB
+fra-mcp-tools 77.82MiB / 256MiB
+fra-redis 18.55MiB / 256MiB
+fra-elasticsearch 1.53GiB / 1.75GiB
+fra-milvus 321.9MiB / 2GiB
+fra-mysql 232.5MiB / 512MiB
+free_used_mb 4342
+@ 1790692018
+fra-frontend 17.39MiB / 64MiB
+fra-ai-service 1.185GiB / 2.5GiB
+fra-backend 390.6MiB / 768MiB
+fra-mcp-tools 77.6MiB / 256MiB
+fra-redis 18.8MiB / 256MiB
+fra-elasticsearch 1.529GiB / 1.75GiB
+fra-milvus 321.3MiB / 2GiB
+fra-mysql 232.8MiB / 512MiB
+free_used_mb 4334
+@ 1790692021
+fra-frontend 18.09MiB / 64MiB
+fra-ai-service 1.185GiB / 2.5GiB
+fra-backend 389.9MiB / 768MiB
+fra-mcp-tools 77.36MiB / 256MiB
+fra-redis 19.42MiB / 256MiB
+fra-elasticsearch 1.529GiB / 1.75GiB
+fra-milvus 321.6MiB / 2GiB
+fra-mysql 231.9MiB / 512MiB
+free_used_mb 4334
+@ 1790692025
+fra-frontend 18.09MiB / 64MiB
+fra-ai-service 1.185GiB / 2.5GiB
+fra-backend 389.2MiB / 768MiB
+fra-mcp-tools 79.27MiB / 256MiB
+fra-redis 18.65MiB / 256MiB
+fra-elasticsearch 1.529GiB / 1.75GiB
+fra-milvus 321.8MiB / 2GiB
+fra-mysql 232.1MiB / 512MiB
+free_used_mb 4349
+@ 1790692028
+fra-frontend 17.84MiB / 64MiB
+fra-ai-service 1.184GiB / 2.5GiB
+fra-backend 389MiB / 768MiB
+fra-mcp-tools 78.8MiB / 256MiB
+fra-redis 18.49MiB / 256MiB
+fra-elasticsearch 1.529GiB / 1.75GiB
+fra-milvus 321.8MiB / 2GiB
+fra-mysql 232.7MiB / 512MiB
+free_used_mb 4339
+SAMPLER_DONE

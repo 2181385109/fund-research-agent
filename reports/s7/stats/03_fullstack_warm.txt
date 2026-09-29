@@ -1,0 +1,13 @@
+== full-stack-warm (app profile up, models loaded after a chat, ticket-qa stopped) 2026-09-29T22:20:25+08:00
+NAME                MEM USAGE / LIMIT    MEM %     CPU %
+fra-frontend        17.42MiB / 64MiB     27.22%    0.00%
+fra-ai-service      1.18GiB / 2.5GiB     47.19%    0.20%
+fra-backend         382.3MiB / 768MiB    49.77%    0.14%
+fra-mcp-tools       77.61MiB / 256MiB    30.31%    0.17%
+fra-redis           19.27MiB / 256MiB    7.53%     0.14%
+fra-elasticsearch   1.528GiB / 1.75GiB   87.30%    0.37%
+fra-milvus          274.8MiB / 2GiB      13.42%    4.77%
+fra-mysql           230.9MiB / 512MiB    45.10%    0.41%
+-- free -m
+               total        used        free      shared  buff/cache   available
+Mem:            9943        4295         527           4        5341        5648

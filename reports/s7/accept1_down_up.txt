@@ -1,0 +1,66 @@
+== 2026-09-29T21:51:27+08:00 docker compose --profile app down -v
+ Container fra-redis Stopping 
+ Container fra-mysql Stopping 
+ Container fra-elasticsearch Stopping 
+ Container fra-milvus Stopping 
+ Container fra-redis Stopped 
+ Container fra-redis Removing 
+ Container fra-redis Removed 
+ Container fra-mysql Stopped 
+ Container fra-mysql Removing 
+ Container fra-mysql Removed 
+ Container fra-elasticsearch Stopped 
+ Container fra-elasticsearch Removing 
+ Container fra-elasticsearch Removed 
+ Container fra-milvus Stopped 
+ Container fra-milvus Removing 
+ Container fra-milvus Removed 
+ Volume fra_milvus_data Removing 
+ Volume fra_es_data Removing 
+ Volume fra_redis_data Removing 
+ Volume fra_mysql_data Removing 
+ Network fra_default Removing 
+ Volume fra_es_data Removed 
+ Volume fra_milvus_data Removed 
+ Volume fra_redis_data Removed 
+ Volume fra_mysql_data Removed 
+ Network fra_default Removed 
+-- volumes after down -v (fra_*):
+== 2026-09-29T21:51:38+08:00 docker compose --profile app up -d --build
+up returned in 34s (exit 0)
+ Container fra-redis Waiting 
+ Container fra-elasticsearch Started 
+ Container fra-redis Healthy 
+ Container fra-mysql Healthy 
+ Container fra-mcp-tools Starting 
+ Container fra-mysql Healthy 
+ Container fra-backend Starting 
+ Container fra-mcp-tools Started 
+ Container fra-mysql Waiting 
+ Container fra-redis Waiting 
+ Container fra-elasticsearch Waiting 
+ Container fra-milvus Waiting 
+ Container fra-mcp-tools Waiting 
+ Container fra-backend Started 
+ Container fra-backend Waiting 
+ Container fra-mysql Healthy 
+ Container fra-redis Healthy 
+ Container fra-milvus Healthy 
+ Container fra-mcp-tools Healthy 
+ Container fra-elasticsearch Healthy 
+ Container fra-ai-service Starting 
+ Container fra-ai-service Started 
+ Container fra-backend Healthy 
+ Container fra-frontend Starting 
+ Container fra-frontend Started 
+== 2026-09-29T21:52:23+08:00 all healthy after 45s since up started (bad=0)
+NAME                IMAGE                          COMMAND                  SERVICE         CREATED          STATUS                    PORTS
+fra-ai-service      fra/ai-service:dev             "uvicorn fund_ai.api…"   ai-service      34 seconds ago   Up 12 seconds (healthy)   0.0.0.0:8001->8001/tcp, [::]:8001->8001/tcp
+fra-backend         fra/backend:dev                "java -Xmx512m -XX:+…"   backend         34 seconds ago   Up 22 seconds (healthy)   0.0.0.0:8081->8081/tcp, [::]:8081->8081/tcp
+fra-elasticsearch   fra/elasticsearch-ik:8.19.22   "/bin/tini -- /usr/l…"   elasticsearch   34 seconds ago   Up 33 seconds (healthy)   9300/tcp, 0.0.0.0:9201->9200/tcp, [::]:9201->9200/tcp
+fra-frontend        fra/frontend:dev               "/docker-entrypoint.…"   frontend        34 seconds ago   Up 11 seconds (healthy)   0.0.0.0:8088->8080/tcp, [::]:8088->8080/tcp
+fra-mcp-tools       fra/mcp-tools:dev              "python -m fund_mcp_…"   mcp-tools       34 seconds ago   Up 22 seconds (healthy)   0.0.0.0:8101->8101/tcp, [::]:8101->8101/tcp
+fra-milvus          milvusdb/milvus:v2.5.27        "/tini -- milvus run…"   milvus          34 seconds ago   Up 34 seconds (healthy)   0.0.0.0:9091->9091/tcp, [::]:9091->9091/tcp, 0.0.0.0:19530->19530/tcp, [::]:19530->19530/tcp
+fra-mysql           mysql:8.4.11                   "docker-entrypoint.s…"   mysql           34 seconds ago   Up 34 seconds (healthy)   33060/tcp, 0.0.0.0:3307->3306/tcp, [::]:3307->3306/tcp
+fra-redis           redis:8.10.2                   "docker-entrypoint.s…"   redis           34 seconds ago   Up 34 seconds (healthy)   0.0.0.0:6380->6379/tcp, [::]:6380->6379/tcp
+ACCEPT1_DONE

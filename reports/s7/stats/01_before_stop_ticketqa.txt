@@ -1,0 +1,14 @@
+== before-stop-ticketqa (fra infra + ticket-qa running; app not started) 2026-09-29T21:46:49+08:00
+NAME                  MEM USAGE / LIMIT     MEM %     CPU %
+fra-mysql             288MiB / 512MiB       56.25%    0.43%
+fra-elasticsearch     1.653GiB / 1.75GiB    94.48%    1.48%
+fra-milvus            454.5MiB / 2GiB       22.19%    4.90%
+fra-redis             22.81MiB / 256MiB     8.91%     0.13%
+ticketqa-rabbitmq     175.9MiB / 9.711GiB   1.77%     0.17%
+ticketqa-redis        8.441MiB / 9.711GiB   0.08%     0.29%
+ticketqa-wiremock     236.6MiB / 9.711GiB   2.38%     2.77%
+ticketqa-mysql        410.3MiB / 9.711GiB   4.13%     0.47%
+ticketqa-prometheus   41.84MiB / 9.711GiB   0.42%     0.00%
+-- free -m
+               total        used        free      shared  buff/cache   available
+Mem:            9943        4054         240          39        5888        5889

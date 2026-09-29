@@ -1,0 +1,5 @@
+fra/frontend:dev 74MB
+fra/ai-service:dev 2.65GB
+fra/backend:dev 462MB
+fra/mcp-tools:dev 244MB
+fra/elasticsearch-ik:8.19.22 2.17GB
