@@ -4,7 +4,7 @@
 
 ## 1. 当前进度
 - **B1–B6 都已完成。S6 全部验收通过**，证据见 `docs/PROGRESS.md`「S6 Java 主后端」（含统筹关于私有库提问的四条决定逐条对应）。
-- 代码提交到 `efad335`，CI run 36571231993 全绿（6 个 job；backend job 的 Testcontainers 集成测试在 CI 通过）。其后只有本文件和 PROGRESS 的文档提交。
+- 代码提交到 `efad335`，CI run 36571231993 全绿；最后一个功能 / 脚本提交 `bc8ad06`（安全扫描豁免 HANDOFF 里的本机命令路径）CI run 36571740503 全绿（6 个 job；backend job 的 Testcontainers 集成测试在 CI 通过）。其后只有本文件和 PROGRESS 的文档提交。
 - 选型与取舍：**ADR-043**（私有库：检索范围只由服务端注入）、**ADR-044**（Java 后端：异步入库 + 回调、SseEmitter + JDK HttpClient、心跳发现断开、错误响应强制 JSON、JaCoCo 每个 service 包 ≥70%）。局限见 `docs/LIMITATIONS.md`「私有知识库与 Java 后端（S6）」11 条。
 - 现状：backend 有 auth / kb / document / conversation / chat 全套接口，**接口与错误码以 `docs/API.md` 的「backend」一节为准**（前端只对着它写）；ai-service 增加 `kb_scope`、私有库入库（`user_chunks`）、异步回调、`.md/.txt` 解析。测试：backend 108 个（`mvn verify`），ai-service 169 个（CI marker）+ 8 个 integration（本机通过）。
 

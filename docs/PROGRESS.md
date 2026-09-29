@@ -544,7 +544,7 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 无阻塞。
 
 ## S6 Java 主后端 — 2026-09-29（B6）
-- commit 范围：`3d51826..efad335`；CI：[run 36571231993](https://github.com/2181385109/fund-research-agent/actions/runs/36571231993)（efad335，6 个 job 全绿；此前 run 36570941044 因安全扫描 --history 扫到两处已推送的测试路径样例而失败，已按文件豁免，见「已知问题」）
+- commit 范围：`3d51826..efad335`；CI：[run 36571231993](https://github.com/2181385109/fund-research-agent/actions/runs/36571231993)（efad335，6 个 job 全绿；此前 run 36570941044 因安全扫描 --history 扫到两处已推送的测试路径样例而失败，已按文件豁免，见「已知问题」）；最后一个功能 / 脚本提交 bc8ad06 的 [run 36571740503](https://github.com/2181385109/fund-research-agent/actions/runs/36571740503) 也是 6 个 job 全绿
 - 统筹开工前的决定（私有库提问）已登记为 **ADR-043**，Java 侧实现取舍是 **ADR-044**。
 
 ### 完成项
