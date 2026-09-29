@@ -58,7 +58,12 @@ CALLS: dict[str, list[tuple[str, dict, bool]]] = {
         ),
         (
             "参数错误：含费但没给金额",
-            {"share_code": "003095", "start": "2026-03-01", "end": "2026-06-27", "include_fees": True},
+            {
+                "share_code": "003095",
+                "start": "2026-03-01",
+                "end": "2026-06-27",
+                "include_fees": True,
+            },
             True,
         ),
     ],
@@ -85,11 +90,15 @@ async def check(url: str, out: list[str]) -> tuple[int, int]:
     ):
         init = await session.initialize()
         out.append(f"## 服务 {url}")
-        out.append(f"server: {init.serverInfo.name} {init.serverInfo.version}；协议 {init.protocolVersion}")
+        out.append(
+            f"server: {init.serverInfo.name} {init.serverInfo.version}；协议 {init.protocolVersion}"
+        )
         tools = (await session.list_tools()).tools
         out.append(f"list_tools → {len(tools)} 个工具：{', '.join(t.name for t in tools)}")
         for t in tools:
-            props = ", ".join(f"{k}:{v.get('type', '?')}" for k, v in t.inputSchema.get("properties", {}).items())
+            props = ", ".join(
+                f"{k}:{v.get('type', '?')}" for k, v in t.inputSchema.get("properties", {}).items()
+            )
             out.append(f"- `{t.name}`({props}) — {(t.description or '').splitlines()[0][:80]}")
         for t in tools:
             for label, args, expect_error in CALLS.get(t.name, []):
