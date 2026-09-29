@@ -1,0 +1,2 @@
+2026-09-29 20:44:03,390 INFO fund_ai.api.chat chat_stream_cancelled request=60cda3e2b27b47bc elapsed_ms=7313
+                    INFO     chat_stream_cancelled                  chat.py:101

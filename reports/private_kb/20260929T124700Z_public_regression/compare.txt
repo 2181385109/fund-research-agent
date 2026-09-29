@@ -1,0 +1,1 @@
+IDENTICAL：8 条查询、80 个命中（chunk_id 与重排分数）逐条一致

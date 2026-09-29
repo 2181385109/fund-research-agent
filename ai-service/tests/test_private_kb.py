@@ -347,7 +347,7 @@ def test_private_ingest_validates_owner_and_ids(ingest_env):
     assert r.status_code == 422
     r = client.post("/v1/documents/ingest", json=_priv_body(tmp / "nope.md"))
     assert r.status_code == 404
-    r = client.post("/v1/documents/ingest", json=_priv_body(path, file_path="C:/Windows/win.ini"))
+    r = client.post("/v1/documents/ingest", json=_priv_body(path, file_path="/etc/passwd"))
     assert r.status_code == 400
 
 
@@ -379,6 +379,18 @@ def test_async_ingest_failure_calls_back_failed(ingest_env):
     assert r.status_code == 202
     assert sink.payloads[0]["status"] == "FAILED" and "UTF-8" in sink.payloads[0]["error"]
     assert priv[0].count() == 0
+
+
+def test_private_document_without_extractable_text_is_failed_not_ready(ingest_env):
+    client, _, priv, sink, tmp = ingest_env
+    blank = _md(tmp, "blank.md", text="\n   \n\n")
+    r = client.post("/v1/documents/ingest", json=_priv_body(blank, callback=True))
+    assert r.status_code == 202
+    assert (
+        sink.payloads[0]["status"] == "FAILED" and "没有可提取的文字" in sink.payloads[0]["error"]
+    )
+    r = client.post("/v1/documents/ingest", json=_priv_body(blank))
+    assert r.status_code == 422 and priv[0].count() == 0
 
 
 def test_public_ingest_path_is_unchanged_by_private_support(ingest_env):

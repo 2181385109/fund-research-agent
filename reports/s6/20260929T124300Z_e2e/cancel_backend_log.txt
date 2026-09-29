@@ -1,0 +1,4 @@
+2026-09-29T20:44:03.383+08:00  INFO [] 14232 --- [fund-research-agent-backend] [  chat-stream-1] c.f.backend.chat.service.ChatService     : chat client gone request=60cda3e2b27b47bc reason=send failed, cancelling upstream
+2026-09-29T20:44:03.383+08:00  INFO [] 14232 --- [fund-research-agent-backend] [  chat-stream-1] c.f.b.aiclient.HttpAiServiceClient       : chat upstream cancel requested request_id=60cda3e2b27b47bc
+2026-09-29T20:44:03.383+08:00  INFO [] 14232 --- [fund-research-agent-backend] [nio-8081-exec-5] c.f.backend.chat.service.ChatService     : chat client gone request=60cda3e2b27b47bc reason=emitter error: IOException, cancelling upstream
+2026-09-29T20:44:03.394+08:00  INFO [] 14232 --- [fund-research-agent-backend] [nio-8081-exec-5] c.f.backend.chat.service.ChatService     : chat finished request=60cda3e2b27b47bc status=CANCELLED answer_chars=0

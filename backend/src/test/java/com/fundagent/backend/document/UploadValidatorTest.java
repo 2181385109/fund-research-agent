@@ -81,7 +81,7 @@ class UploadValidatorTest {
     @Test
     void sanitizesFilenames() {
         assertThat(UploadValidator.sanitize("../../etc/passwd.txt")).isEqualTo("passwd.txt");
-        assertThat(UploadValidator.sanitize("C:\\Users\\x\\我的文件.pdf")).isEqualTo("我的文件.pdf");
+        assertThat(UploadValidator.sanitize("..\\..\\up\\我的文件.pdf")).isEqualTo("我的文件.pdf");
         assertThat(UploadValidator.sanitize("a\u0000b\nc.md")).isEqualTo("abc.md");
         assertThat(UploadValidator.sanitize("")).isEqualTo("unnamed");
         String longName = "x".repeat(500) + ".pdf";

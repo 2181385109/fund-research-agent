@@ -30,6 +30,7 @@ log = logging.getLogger("fund_ai.api.documents")
 router = APIRouter(prefix="/v1")
 ERROR_MAX = 300
 TITLE_MAX = 250
+EMPTY_DOC_MESSAGE = "文档中没有可提取的文字（扫描件或图片型 PDF 不支持，也不做 OCR）"
 
 
 class IngestRequest(BaseModel):
@@ -110,6 +111,8 @@ async def _run_and_callback(request_app: Any, pipeline: IngestPipeline, path: Pa
     async with request_app.state.ingest_lock:
         try:
             result = await run_in_threadpool(pipeline.ingest, path, meta)
+            if meta.store_fields and result.chunks == 0:  # 私有文档没有文字：不能算 READY
+                raise ValueError(EMPTY_DOC_MESSAGE)
             payload = {
                 "doc_id": meta.doc_id,
                 "status": "READY",
@@ -143,6 +146,8 @@ async def ingest(req: IngestRequest, request: Request, background: BackgroundTas
         raise HTTPException(status_code=500, detail=str(e)) from e
     except ValueError as e:  # 不支持的类型 / 非 UTF-8 文本
         raise HTTPException(status_code=422, detail=str(e)) from e
+    if private and result.chunks == 0:
+        raise HTTPException(status_code=422, detail=EMPTY_DOC_MESSAGE)
     return result.to_dict()
 
 
