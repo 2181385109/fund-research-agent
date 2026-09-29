@@ -592,3 +592,76 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 ### 给统筹的问题
 - PLAN §7 的 B6 状态（✅）由统筹更新。
 - S7 前端要注意：对话接口的错误（401 / 403 / 404 / 503）在流开始之前是普通 JSON，流开始之后的错误是 SSE 的 `error` 事件；`fetch` 解析 SSE 时先看 HTTP 状态码。
+
+## S7 前端 + 一键启动 — 2026-09-29（B7）
+- commit 范围：`7f29714..d4de28b`（功能与证据）+ 文档提交；CI：[run 36583178684](https://github.com/2181385109/fund-research-agent/actions/runs/36583178684)（7 个 job 全绿）
+- 统筹 / 用户对前端的补充要求已落实：**显示检索范围（公共库 / 私有库）、展示四类出处、风险提示固定显示不能折叠隐藏**（ADR-045）。
+
+### 完成项
+- **前端**（`frontend/`，Vue3 + Vite 6 + TS + vue-router；说明见 `frontend/README.md`）：登录 / 注册；知识库与文档管理（建 / 删私有库、上传、轮询入库状态 PENDING → PROCESSING → READY / FAILED、失败原因、删除；公共库只读并说明其文件清单不在此列出）；对话页（会话列表、SSE 流式渲染、工具调用状态、`[n]` 角标 + 出处列表、检索范围勾选、停止生成、历史回放）。SSE 是 fetch + ReadableStream 的自写解析器，先看 HTTP 状态码再读流，忽略 `: ping`。
+  - **检索范围**：`ScopePicker` 勾选公共库 / 私有库，作为 `kbIds` 显式发给 backend；每条提问下显示「检索范围：公共库 + 私有库「…」」（历史消息取 `kbIds`）；文档出处另标「公共库 / 私有库」。
+  - **四类出处**：`document / database / computation / api` 各有图标与类型标签；折叠态一行摘要，展开看页码与片段 / 数据表、数据源、快照日期、SQL / 计算入参与实际起止净值日 / 净值日期与抓取时间（stale 标「非最新」）。流式过程中角标类型按 `tool_end` 的工具名推断。
+  - **风险提示两层，均无关闭 / 折叠入口**：每条回答下显示服务端 `disclaimer` 原文（无则回退固定文案）；页面底部常驻 `DisclaimerBar`。
+- **四个 Dockerfile**（`deploy/{backend,ai-service,mcp-tools,frontend}/Dockerfile`）：均非 root；ai-service 用 CPU 版 torch、模型缓存命名卷；backend 两阶段（构建跳过测试）；frontend 用 `nginx-unprivileged`。`docker-compose.yml` 增加 profile `app`，`nginx.conf` 对话流 location `proxy_buffering off`。`ai-service` 新增 `python -m fund_ai.models_cli`（预下载并验证两个模型；README 首次启动要用）。
+- `scripts/sse_timing.py`（SSE 逐块到达时间线，验收 4 用）；CI 增加 `frontend` job（`npm ci` → vitest → `vue-tsc` + `vite build`）。
+- 按任务补充：验收 1、2 之前先问了用户是否停 ticket-qa（同意）；用 `docker stop`（未 rm）停了 5 个容器，`docker stats` 分停前 / 停后记录；起 compose `app` profile 之前先停掉本机的 mcp-tools、ai-service（以及我为联调起的 backend、vite），避免端口冲突。
+
+### 验收逐条
+1. **`down -v` 清空后按 README 一键起全部服务并 healthy（贴 ps 原文）** — ✅ — 证据：`reports/s7/accept1_down_up.txt`（`docker compose --profile app down -v` 之后 `docker volume ls | grep fra_` 为空；`up -d --build` 34 s 返回；**45 s 内 8 个服务全部 healthy**）。ps 原文：
+   ```
+   NAME                IMAGE                          COMMAND                  SERVICE         CREATED          STATUS                    PORTS
+   fra-ai-service      fra/ai-service:dev             "uvicorn fund_ai.api…"   ai-service      34 seconds ago   Up 12 seconds (healthy)   0.0.0.0:8001->8001/tcp, [::]:8001->8001/tcp
+   fra-backend         fra/backend:dev                "java -Xmx512m -XX:+…"   backend         34 seconds ago   Up 22 seconds (healthy)   0.0.0.0:8081->8081/tcp, [::]:8081->8081/tcp
+   fra-elasticsearch   fra/elasticsearch-ik:8.19.22   "/bin/tini -- /usr/l…"   elasticsearch   34 seconds ago   Up 33 seconds (healthy)   9300/tcp, 0.0.0.0:9201->9200/tcp, [::]:9201->9200/tcp
+   fra-frontend        fra/frontend:dev               "/docker-entrypoint.…"   frontend        34 seconds ago   Up 11 seconds (healthy)   0.0.0.0:8088->8080/tcp, [::]:8088->8080/tcp
+   fra-mcp-tools       fra/mcp-tools:dev              "python -m fund_mcp_…"   mcp-tools       34 seconds ago   Up 22 seconds (healthy)   0.0.0.0:8101->8101/tcp, [::]:8101->8101/tcp
+   fra-milvus          milvusdb/milvus:v2.5.27        "/tini -- milvus run…"   milvus          34 seconds ago   Up 34 seconds (healthy)   0.0.0.0:9091->9091/tcp, [::]:9091->9091/tcp, 0.0.0.0:19530->19530/tcp, [::]:19530->19530/tcp
+   fra-mysql           mysql:8.4.11                   "docker-entrypoint.s…"   mysql           34 seconds ago   Up 34 seconds (healthy)   33060/tcp, 0.0.0.0:3307->3306/tcp, [::]:3307->3306/tcp
+   fra-redis           redis:8.10.2                   "docker-entrypoint.s…"   redis           34 seconds ago   Up 34 seconds (healthy)   0.0.0.0:6380->6379/tcp, [::]:6380->6379/tcp
+   ```
+   诚实说明：这次 `up --build` 用的是已构建好的镜像缓存；**首次构建**（依赖全部现下载，本机网络约 1 MB/s）耗时见 `reports/s7/build_times.txt`：mcp-tools 40 s、frontend 11 s、backend 433 s、ai-service 428 s。README 后续步骤也按原文执行并留了证据：下载模型 `models_cli` 166 s（bge-small-zh 35.1 s、bge-reranker-base 121.7 s，`reports/s7/models_download.log`）；`fund_pipeline.load` 9.4 s，12 张表行数与 csv 一致、mismatch=无（`reports/s7/load_fund_data.log`、`reports/data_load/20260929T135338Z/summary.json`）；容器内入库 1454 s，**100/100 份、失败 0、13812 块，按类型 prospectus 5222 / contract 3035 / annual_report 4218 / quarterly_report 1337，与 B3 重入库的分布完全一致**（`reports/ingest/20260929T141806Z/summary.json`，原始日志 `reports/s7/ingest_container.log`）。**采集步骤（联网抓取 PDF 与结构化数据）没有从零重跑**，只验证了快照导入 + 入库（LIMITATIONS S7-11）。
+2. **全栈 `docker stats` 实测，总量不超过 WSL 上限的 85%** — ✅ — 证据：`reports/s7/stats/`。WSL 上限 10GB = 10240 MiB，85% = 8704 MiB（`free -m` 的 total 是 9943 MiB，85% = 8452 MiB）。**全栈（8 个容器，ticket-qa 已停，ai-service 已加载两个模型并处理过对话）24 次采样：容器内存合计 3806–3928 MiB（≤ 38.4% × 10240），WSL `free -m` used 4299–4470 MiB（≤ 43.7%）**，均远低于 85%（`05_peak_summary.json`）。最大样本各容器（MiB）：ai-service 1212、elasticsearch 1566、milvus 415、backend 391、mysql 232、mcp-tools 78、redis 18、frontend 17。各容器 `mem_limit` 之和（8.9 GB，PLAN §3）是上限而非实测。
+   - **停 ticket-qa 之前 / 之后**（按补充要求分别列出；`01_before_stop_ticketqa.txt`、`02_after_stop_ticketqa.txt`，此时 app 还没启动）：停之前 fra 的 4 个 infra 容器 + ticket-qa 5 个容器，容器内存合计 3331 MiB（其中 ticket-qa 873 MiB：rabbitmq 175.9、redis 8.4、wiremock 236.6、mysql 410.3、prometheus 41.8），`free -m` used 4054 MiB；停之后合计 2461 MiB，used 3249 MiB。（诚实说明：「停之前」那次采样时 ai-service 镜像正在后台构建，used 里含构建占用。）全栈稳态见 `03_fullstack_warm.txt`（合计 3775 MiB）。
+   - 未存档的观察：入库期间另起的 `ai-service run` 容器约占 1.2 GiB，是一次性工具，不计入稳态。
+3. **截图：综合题的流式回答同时带文档出处和数据库出处，页面上有风险提示** — ✅ — 证据：`docs/images/s7_integrated_answer.jpg`（整页：工具调用状态、带角标的回答、4 条出处、回答下的风险提示、底部常驻风险提示、检索范围勾选）、`docs/images/s7_citation_details.jpg`（出处展开：文档的页码与片段、数据库的数据表 / 数据源 / 快照日期 / SQL）、页面文本 `reports/s7/acceptance3_page_text.txt`。综合题同时得到 **文档出处 [1][3]（公共库，招募说明书第 70–71 页）、数据库出处 [6]（`fees` 表，快照 2026-09-28）、计算出处 [7]**。这是容器化全栈里经 nginx 的真实一次对话；提问里我把 010500 误写成 001551，Agent 在回答里指出并按 010500 作答（真实输出，未改）。刷新页面走历史接口重新加载，4 条出处与风险提示都在。首字 13.2 s 是冷启动（首次检索加载模型），不是性能基线。另在容器栈里验证了私有库链路：上传 `.md` → 状态「入库中 → 已就绪」→ 提问检索范围「公共库 + 私有库」（backend 与 ai-service 共享 `uploads` 卷、入库回调都通）。
+4. **证明 nginx 没有缓冲 SSE** — ✅ — 证据：`scripts/sse_timing.py` 对同一个问题分别测 nginx（:8088）、backend 直连（:8081）、和一个**故意打开缓冲 + gzip** 的 nginx 对照（`reports/s7/nginx_control_buffering_gzip.conf`），结果 `reports/s7/sse_*.json`：
+
+   | 路径 | 首字节 | 首个 token | 结束 | 数据块数 | 心跳 `: ping` 到达（ms） |
+   |---|---|---|---|---|---|
+   | nginx（生产配置） | 63 ms | 10785 ms | 11960 ms | 515 | 5383、10570（约每 5 s 一个） |
+   | backend 直连 | 57 ms | 9698 ms | 10533 ms | 775 | 5135 |
+   | 对照：缓冲 + gzip | 12477 ms | 12477 ms | 12477 ms | **1** | 12477、12477（全部挤在结束时） |
+
+   （n=1 次对话/路径，同一问题；LLM 耗时逐次不同，重点是**到达时间的形状**。）经生产 nginx 时事件按产生时间逐个到达，与直连一致；缓冲 + gzip 的对照把整个响应攒到最后一次吐出，说明这个测量方法能区分缓冲与否。另有一次带内存采样的 nginx 复测：`sse_nginx_second_run.json`（心跳 4923、9841 ms）。
+   - **一个如实记录的发现**：只把 `proxy_buffering` 打开（默认 4k/8k，甚至放大到 128k 缓冲区）**并没有**让这个 Spring SSE 流变成一次性到达（`sse_control_proxybuffering_only.json`：首字节 65 ms，心跳仍约 5 s 一个）；nginx 对这类小块 chunked 响应仍会逐个透传。所以对照组用了「缓冲 + gzip」（常见的把 SSE 攒住的配置，也是生产 location 里显式 `gzip off` 的原因）。生产配置同时关了 `proxy_buffering`、`gzip`，并加 `X-Accel-Buffering: no`；后端响应头本来也带这个头。
+5. **CI 增加前端 build，全绿** — ✅ — 证据：`.github/workflows/ci.yml` 新增 `frontend` job（node 22：`npm ci` → `npm test` → `npm run build`）；run 36583178684 的 `frontend (test + build)` job 成功，同一 run 的其余 6 个 job 也成功。
+
+### 实测数字
+| 指标 | 值 | n / 分母 | 结果文件 |
+|---|---|---|---|
+| 前端单测 | 30 通过 | vitest 5 个文件（SSE 解析：样本在每个字节位置切开 × LF/CRLF、事件状态、渲染与清洗、出处摘要、风险提示 / 范围组件） | `cd frontend && npm test` |
+| ai-service 新增单测 | 2 | `test_models_cli.py`；本机 `ruff check` / `format --check` 通过 | — |
+| scripts 新增单测 | 3（scripts 共 29 通过） | `test_sse_timing.py` | — |
+| 镜像体积 | ai-service 2.65 GB、backend 462 MB、mcp-tools 244 MB、frontend 74 MB | 4 个镜像 | `reports/s7/image_sizes.txt` |
+| 首次镜像构建耗时 | mcp-tools 40 s、frontend 11 s、backend 433 s、ai-service 428 s | 各 1 次，网络约 1 MB/s | `reports/s7/build_times.txt` |
+| `down -v` 后全部 healthy | 45 s | 8 个服务，1 次 | `reports/s7/accept1_down_up.txt` |
+| 模型下载 / 快照导入 / 入库耗时 | 166 s / 9.4 s / 1454 s | 各 1 次 | 见验收 1 |
+| 全栈内存（稳态 + 一次对话） | 容器合计 3806–3928 MiB；WSL used 4299–4470 MiB | 24 次采样 | `reports/s7/stats/05_peak_summary.json` |
+| 公共库检索回归（容器重入库后 vs B6 的 after 快照） | **79/80 个命中一致**；1 条查询（「风险收益特征 混合型基金」）的第 10 名不同（`040025_annual_report_2025#0011` → `002236_annual_report_2025#0011`），其余 7 条查询完全一致 | 8 条手写查询 × top 10 | `reports/s7/public_regression/compare.txt` |
+
+### 与计划的偏差（附理由和 ADR 编号）
+- 无对验收标准的偏差。ai-service 新增 `models_cli`（PLAN S7「README 写清首次需要下载模型」需要一个可执行的下载步骤）；容器化与前端的取舍见 **ADR-045**。
+- 验收 4 的对照组：见验收 4 的「如实记录的发现」——只开 `proxy_buffering` 不足以让该流一次性到达，对照改为缓冲 + gzip。
+
+### 已知问题 / 技术债
+- 见 `docs/LIMITATIONS.md`「前端与容器化（S7）」11 条。要点：没有浏览器 e2e 自动化；前端有一份风险提示文案拷贝；出处不能看原文件；采集步骤未从零重跑；`npm audit` 有 2 条 moderate（vitest 3 开发期依赖，不进产物）。
+- **索引重建后候选边界有微小差异**：`down -v` + 容器内重入库之后，切块数与按类型分布完全一致，但 8 条固定查询里有 1 个命中（一条查询的第 10 名）与 B6 的快照不同。原因**未查明**（可能是 Milvus 近似检索索引 / ES BM25 统计量在重建后的差异，也可能是 Windows 与 Linux 上 torch 数值差异，都只是猜测）。这不是代码变更，但意味着 **S4 已冻结的 test 评测结论所对应的索引与现在的索引不是逐比特相同的**；S8 回答评测请记录所用索引的入库 run（`reports/ingest/20260929T141806Z`），不要拿 S4 的数字直接与 S8 对照而不加说明。
+- 本机 mcp-tools / ai-service / backend 现在由 compose 容器提供（同样的端口）；回到本机进程开发前要先 `docker compose --profile app stop backend ai-service mcp-tools frontend`（SETUP §6.3）。
+
+### 需要用户做的事
+- **ticket-qa 的 5 个容器现在仍是停止状态**（按你的同意只做了 `docker stop`，未 `rm`）。要恢复：`docker start ticketqa-rabbitmq ticketqa-redis ticketqa-wiremock ticketqa-mysql ticketqa-prometheus`（在 WSL 里，`wsl.exe -d Ubuntu-24.04 -u root -- docker start …`）。fra 全栈在跑时同时开 ticket-qa，内存合计约 3.9 GiB（fra 全栈）+ 0.9 GiB（ticket-qa），仍在 WSL 上限内，但留意 fra 的 ES 已接近它自己的 1.75 GiB 上限。
+- 可选：用你自己的浏览器打开 <http://127.0.0.1:8088> 走一遍界面（目前只在内置浏览器里人工验证过）。
+
+### 给统筹的问题
+- 工作区里 `docs/PLAN.md` 有一处未提交的改动（§7 表 B3–B6 加 ✅），不是我改的，我没有提交它，请统筹自行提交。
+- 前端范围：公共库文件清单页仍没做（`GET /api/kbs/1/documents` 恒为空，LIMITATIONS S6-7 / S7-4），界面上只放了说明文字；需要的话请在 B8 前给出要求。

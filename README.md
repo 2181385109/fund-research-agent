@@ -46,7 +46,7 @@
 | S0–S4 | 脚手架 → 数据采集 → 文档入库 → 评测集 v1 → 混合检索 + 重排 + 检索评测 | ✅ 完成（2026-09-29），证据见 PROGRESS |
 | S5 | MCP 工具 + LangGraph Agent + SSE | ✅ 完成（2026-09-29）：mcp-tools 四个工具（[说明](mcp-tools/README.md)）、文档 MCP `/mcp`、`POST /v1/chat/stream`（协议见 [docs/API.md](docs/API.md)），证据见 PROGRESS |
 | S6 | Java 主后端 | ✅ 完成（2026-09-29）：auth / kb / document / conversation / chat（SSE 代理，断开取消上游）、私有知识库检索范围由服务端注入（ADR-043）；接口见 [docs/API.md](docs/API.md)，证据见 PROGRESS |
-| S7 | 前端（Vue3）+ 四个 Dockerfile + 一键启动 | ✅ 代码与镜像完成；全栈验收证据见 PROGRESS「S7」 |
+| S7 | 前端（Vue3）+ 四个 Dockerfile + 一键启动 | ✅ 完成（2026-09-29）：登录 / 知识库与文档 / 对话页（检索范围、四类出处、固定风险提示）；`docker compose --profile app up -d` 一键起全栈（见「一键启动全栈」）；证据见 PROGRESS |
 | S8 | 回答评测 | 未开始 |
 | S9–S13 | 第二期：gRPC → Redis → Kafka → 压测 → 优化 | 未开始 |
 
