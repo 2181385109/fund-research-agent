@@ -25,7 +25,8 @@ def _git(*args: str) -> str:
 def env_block(dataset_paths: list[Path] | None = None) -> dict:
     return {
         "git_commit": _git("rev-parse", "HEAD"),
-        "git_dirty": bool(_git("status", "--porcelain")),
+        # 只看已跟踪文件的改动；刚写出、尚未提交的 reports/ 目录不算 dirty
+        "git_dirty": bool(_git("status", "--porcelain", "--untracked-files=no")),
         "data_as_of": data_as_of(),
         "manifest_sha256": sha256_file(MANIFEST_PATH),
         "dataset_sha256": {p.name: sha256_file(p) for p in (dataset_paths or []) if p.exists()},

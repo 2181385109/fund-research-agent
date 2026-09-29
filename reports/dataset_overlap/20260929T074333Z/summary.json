@@ -1,0 +1,138 @@
+{
+  "git_commit": "b31982d9bf8cfdafe49baece95ee55e5c37a63f5",
+  "git_dirty": true,
+  "data_as_of": "2026-09-28",
+  "manifest_sha256": "b5df59cb954c170e44071fb38603f57eff401863656912e410a96a721d49e127",
+  "dataset_sha256": {
+    "fund_qa_v1.jsonl": "77fb06a9686ea195ef8813d192bc90ffceb05ffe0b1122864777dc026997e48d",
+    "agent_tasks_v1.jsonl": "7d4c4fc3f4d6b63643fe608ca17c1ca07177257086253a1c878cf13bb33c3b77"
+  },
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.3",
+    "cpu_count": 16
+  },
+  "command": "cd eval && python -m reference.overlap --out",
+  "by_style": {
+    "agent_tasks_v1.jsonl:keyword": {
+      "bigram_containment": {
+        "n": 12,
+        "mean": 0.2038,
+        "p25": 0.0784,
+        "p50": 0.1114,
+        "p75": 0.2525,
+        "min": 0.0556,
+        "max": 0.6
+      },
+      "char_containment": {
+        "n": 12,
+        "mean": 0.3555,
+        "p25": 0.2388,
+        "p50": 0.3125,
+        "p75": 0.3718,
+        "min": 0.1429,
+        "max": 0.8
+      }
+    },
+    "agent_tasks_v1.jsonl:paraphrase": {
+      "bigram_containment": {
+        "n": 9,
+        "mean": 0.1648,
+        "p25": 0.05,
+        "p50": 0.125,
+        "p75": 0.2632,
+        "min": 0.0,
+        "max": 0.4
+      },
+      "char_containment": {
+        "n": 9,
+        "mean": 0.2885,
+        "p25": 0.15,
+        "p50": 0.2273,
+        "p75": 0.4483,
+        "min": 0.0,
+        "max": 0.6
+      }
+    },
+    "fund_qa_v1.jsonl:keyword": {
+      "bigram_containment": {
+        "n": 52,
+        "mean": 0.2128,
+        "p25": 0.0867,
+        "p50": 0.2,
+        "p75": 0.32,
+        "min": 0.0,
+        "max": 0.5
+      },
+      "char_containment": {
+        "n": 52,
+        "mean": 0.3481,
+        "p25": 0.1579,
+        "p50": 0.35,
+        "p75": 0.5,
+        "min": 0.0,
+        "max": 0.6875
+      }
+    },
+    "fund_qa_v1.jsonl:paraphrase": {
+      "bigram_containment": {
+        "n": 50,
+        "mean": 0.1443,
+        "p25": 0.1,
+        "p50": 0.1335,
+        "p75": 0.181,
+        "min": 0.0,
+        "max": 0.44
+      },
+      "char_containment": {
+        "n": 50,
+        "mean": 0.311,
+        "p25": 0.2222,
+        "p50": 0.3,
+        "p75": 0.4,
+        "min": 0.0556,
+        "max": 0.75
+      }
+    },
+    "keyword": {
+      "bigram_containment": {
+        "n": 64,
+        "mean": 0.2111,
+        "p25": 0.084,
+        "p50": 0.2,
+        "p75": 0.3108,
+        "min": 0.0,
+        "max": 0.6
+      },
+      "char_containment": {
+        "n": 64,
+        "mean": 0.3495,
+        "p25": 0.2007,
+        "p50": 0.35,
+        "p75": 0.5,
+        "min": 0.0,
+        "max": 0.8
+      }
+    },
+    "paraphrase": {
+      "bigram_containment": {
+        "n": 59,
+        "mean": 0.1474,
+        "p25": 0.0895,
+        "p50": 0.129,
+        "p75": 0.1972,
+        "min": 0.0,
+        "max": 0.44
+      },
+      "char_containment": {
+        "n": 59,
+        "mean": 0.3075,
+        "p25": 0.2163,
+        "p50": 0.3,
+        "p75": 0.4027,
+        "min": 0.0,
+        "max": 0.75
+      }
+    }
+  }
+}

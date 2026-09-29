@@ -1,0 +1,194 @@
+{
+  "git_commit": "b31982d9bf8cfdafe49baece95ee55e5c37a63f5",
+  "git_dirty": false,
+  "data_as_of": "2026-09-28",
+  "manifest_sha256": "b5df59cb954c170e44071fb38603f57eff401863656912e410a96a721d49e127",
+  "dataset_sha256": {
+    "fund_qa_v1.jsonl": "77fb06a9686ea195ef8813d192bc90ffceb05ffe0b1122864777dc026997e48d",
+    "agent_tasks_v1.jsonl": "7d4c4fc3f4d6b63643fe608ca17c1ca07177257086253a1c878cf13bb33c3b77"
+  },
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.3",
+    "cpu_count": 16
+  },
+  "command": "cd eval && python validate_dataset.py --chunks ../data/raw/_chunks.jsonl --out",
+  "files": {
+    "fund_qa_v1.jsonl": {
+      "rows": 112,
+      "distribution": {
+        "n": 112,
+        "split": {
+          "dev": 33,
+          "test": 79
+        },
+        "topic": {
+          "commentary": 18,
+          "contract_clause": 17,
+          "cross_doc": 11,
+          "fee": 17,
+          "holdings": 16,
+          "manager": 11,
+          "performance": 12,
+          "unanswerable": 10
+        },
+        "topic_split": {
+          "commentary": {
+            "dev": 5,
+            "test": 13
+          },
+          "contract_clause": {
+            "dev": 5,
+            "test": 12
+          },
+          "cross_doc": {
+            "dev": 3,
+            "test": 8
+          },
+          "fee": {
+            "dev": 5,
+            "test": 12
+          },
+          "holdings": {
+            "dev": 5,
+            "test": 11
+          },
+          "manager": {
+            "dev": 3,
+            "test": 8
+          },
+          "performance": {
+            "dev": 4,
+            "test": 8
+          },
+          "unanswerable": {
+            "dev": 3,
+            "test": 7
+          }
+        },
+        "style": {
+          "keyword": 58,
+          "paraphrase": 54
+        },
+        "answer_type": {
+          "entity": 19,
+          "list": 7,
+          "numeric": 46,
+          "refusal": 10,
+          "text": 30
+        },
+        "answerable": {
+          "false": 10,
+          "true": 102
+        },
+        "provenance": {
+          "llm_draft": 60,
+          "llm_draft_human_verified": 11,
+          "template_reference_script": 41
+        },
+        "funds_covered": 20,
+        "with_gold_sql": 0,
+        "with_evidence": 102,
+        "volatile": 0
+      }
+    },
+    "agent_tasks_v1.jsonl": {
+      "rows": 66,
+      "distribution": {
+        "n": 66,
+        "split": {
+          "dev": 21,
+          "test": 45
+        },
+        "topic": {
+          "advice_request": 6,
+          "calc_return": 9,
+          "doc_db": 13,
+          "doc_only": 8,
+          "latest_nav": 5,
+          "no_tool": 3,
+          "tool_sql": 22
+        },
+        "topic_split": {
+          "advice_request": {
+            "dev": 2,
+            "test": 4
+          },
+          "calc_return": {
+            "dev": 3,
+            "test": 6
+          },
+          "doc_db": {
+            "dev": 4,
+            "test": 9
+          },
+          "doc_only": {
+            "dev": 2,
+            "test": 6
+          },
+          "latest_nav": {
+            "dev": 2,
+            "test": 3
+          },
+          "no_tool": {
+            "dev": 1,
+            "test": 2
+          },
+          "tool_sql": {
+            "dev": 7,
+            "test": 15
+          }
+        },
+        "style": {
+          "keyword": 40,
+          "paraphrase": 26
+        },
+        "answer_type": {
+          "entity": 7,
+          "list": 4,
+          "numeric": 30,
+          "refusal": 6,
+          "text": 19
+        },
+        "answerable": {
+          "false": 6,
+          "true": 60
+        },
+        "provenance": {
+          "llm_draft": 14,
+          "llm_draft_human_verified": 3,
+          "template_reference_script": 49
+        },
+        "funds_covered": 19,
+        "with_gold_sql": 35,
+        "with_evidence": 21,
+        "volatile": 5
+      }
+    }
+  },
+  "errors": [],
+  "checks": {
+    "quotes_checked": 152,
+    "gold_sql_checked": 35,
+    "content_rules": {
+      "errors": 0,
+      "support_skipped_no_sql": 0,
+      "text_points_to_review": 5,
+      "date_rule": "checked"
+    },
+    "reachability": {
+      "quotes": 152,
+      "whole_quote_in_one_chunk": 135,
+      "unreachable": 0,
+      "unreachable_items": []
+    }
+  },
+  "warnings": [
+    "qa-0092: 要点「一季度末：药明康德」与引文的词面覆盖 < 0.5，需人工复核",
+    "qa-0092: 要点「二季度末：凯莱英」与引文的词面覆盖 < 0.5，需人工复核",
+    "qa-0092: 要点「第一大重仓股发生了变化」与引文的词面覆盖 < 0.5，需人工复核",
+    "qa-0102: 要点「易方达医疗保健行业混合：恒瑞医药」与引文的词面覆盖 < 0.5，需人工复核",
+    "qa-0102: 要点「中欧医疗健康混合：凯莱英」与引文的词面覆盖 < 0.5，需人工复核"
+  ],
+  "ok": true
+}

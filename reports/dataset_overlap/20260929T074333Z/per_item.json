@@ -1,0 +1,986 @@
+[
+  {
+    "id": "qa-0001",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "fee",
+    "bigram_containment": 0.2,
+    "char_containment": 0.35
+  },
+  {
+    "id": "qa-0002",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "fee",
+    "bigram_containment": 0.2,
+    "char_containment": 0.35
+  },
+  {
+    "id": "qa-0003",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "fee",
+    "bigram_containment": 0.2,
+    "char_containment": 0.35
+  },
+  {
+    "id": "qa-0004",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "fee",
+    "bigram_containment": 0.2,
+    "char_containment": 0.35
+  },
+  {
+    "id": "qa-0005",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "fee",
+    "bigram_containment": 0.2,
+    "char_containment": 0.35
+  },
+  {
+    "id": "qa-0006",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "fee",
+    "bigram_containment": 0.129,
+    "char_containment": 0.3
+  },
+  {
+    "id": "qa-0007",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "fee",
+    "bigram_containment": 0.129,
+    "char_containment": 0.3
+  },
+  {
+    "id": "qa-0008",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "fee",
+    "bigram_containment": 0.2,
+    "char_containment": 0.35
+  },
+  {
+    "id": "qa-0009",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "fee",
+    "bigram_containment": 0.2,
+    "char_containment": 0.35
+  },
+  {
+    "id": "qa-0010",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "fee",
+    "bigram_containment": 0.1471,
+    "char_containment": 0.2727
+  },
+  {
+    "id": "qa-0011",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "fee",
+    "bigram_containment": 0.3077,
+    "char_containment": 0.5
+  },
+  {
+    "id": "qa-0012",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "fee",
+    "bigram_containment": 0.3077,
+    "char_containment": 0.5
+  },
+  {
+    "id": "qa-0013",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "fee",
+    "bigram_containment": 0.1429,
+    "char_containment": 0.2791
+  },
+  {
+    "id": "qa-0014",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "fee",
+    "bigram_containment": 0.1429,
+    "char_containment": 0.2791
+  },
+  {
+    "id": "qa-0015",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "fee",
+    "bigram_containment": 0.1489,
+    "char_containment": 0.2791
+  },
+  {
+    "id": "qa-0016",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "fee",
+    "bigram_containment": 0.1053,
+    "char_containment": 0.2308
+  },
+  {
+    "id": "qa-0017",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "fee",
+    "bigram_containment": 0.2703,
+    "char_containment": 0.2941
+  },
+  {
+    "id": "qa-0018",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "manager",
+    "bigram_containment": 0.087,
+    "char_containment": 0.0952
+  },
+  {
+    "id": "qa-0019",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "manager",
+    "bigram_containment": 0.0455,
+    "char_containment": 0.15
+  },
+  {
+    "id": "qa-0020",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "manager",
+    "bigram_containment": 0.2609,
+    "char_containment": 0.3333
+  },
+  {
+    "id": "qa-0021",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "manager",
+    "bigram_containment": 0.0909,
+    "char_containment": 0.1
+  },
+  {
+    "id": "qa-0022",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "manager",
+    "bigram_containment": 0.087,
+    "char_containment": 0.0952
+  },
+  {
+    "id": "qa-0023",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "manager",
+    "bigram_containment": 0.2069,
+    "char_containment": 0.4074
+  },
+  {
+    "id": "qa-0024",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "manager",
+    "bigram_containment": 0.1034,
+    "char_containment": 0.1379
+  },
+  {
+    "id": "qa-0025",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "manager",
+    "bigram_containment": 0.1,
+    "char_containment": 0.2143
+  },
+  {
+    "id": "qa-0026",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "manager",
+    "bigram_containment": 0.1667,
+    "char_containment": 0.2333
+  },
+  {
+    "id": "qa-0027",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "manager",
+    "bigram_containment": 0.2414,
+    "char_containment": 0.3571
+  },
+  {
+    "id": "qa-0028",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "manager",
+    "bigram_containment": 0.1786,
+    "char_containment": 0.2308
+  },
+  {
+    "id": "qa-0029",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "holdings",
+    "bigram_containment": 0.05,
+    "char_containment": 0.1579
+  },
+  {
+    "id": "qa-0030",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "holdings",
+    "bigram_containment": 0.0323,
+    "char_containment": 0.1071
+  },
+  {
+    "id": "qa-0031",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "holdings",
+    "bigram_containment": 0.05,
+    "char_containment": 0.1053
+  },
+  {
+    "id": "qa-0032",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "holdings",
+    "bigram_containment": 0.0323,
+    "char_containment": 0.1071
+  },
+  {
+    "id": "qa-0033",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "holdings",
+    "bigram_containment": 0.0,
+    "char_containment": 0.1579
+  },
+  {
+    "id": "qa-0034",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "holdings",
+    "bigram_containment": 0.0,
+    "char_containment": 0.1071
+  },
+  {
+    "id": "qa-0035",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "holdings",
+    "bigram_containment": 0.037,
+    "char_containment": 0.1111
+  },
+  {
+    "id": "qa-0036",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "holdings",
+    "bigram_containment": 0.0,
+    "char_containment": 0.1111
+  },
+  {
+    "id": "qa-0037",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "holdings",
+    "bigram_containment": 0.037,
+    "char_containment": 0.1111
+  },
+  {
+    "id": "qa-0038",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "holdings",
+    "bigram_containment": 0.0526,
+    "char_containment": 0.1579
+  },
+  {
+    "id": "qa-0039",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "holdings",
+    "bigram_containment": 0.1,
+    "char_containment": 0.2105
+  },
+  {
+    "id": "qa-0040",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "holdings",
+    "bigram_containment": 0.0435,
+    "char_containment": 0.1
+  },
+  {
+    "id": "qa-0041",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "holdings",
+    "bigram_containment": 0.0435,
+    "char_containment": 0.1
+  },
+  {
+    "id": "qa-0042",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "holdings",
+    "bigram_containment": 0.1,
+    "char_containment": 0.2222
+  },
+  {
+    "id": "qa-0043",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "holdings",
+    "bigram_containment": 0.0513,
+    "char_containment": 0.1714
+  },
+  {
+    "id": "qa-0044",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "holdings",
+    "bigram_containment": 0.125,
+    "char_containment": 0.2222
+  },
+  {
+    "id": "qa-0045",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "performance",
+    "bigram_containment": 0.3448,
+    "char_containment": 0.5185
+  },
+  {
+    "id": "qa-0046",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "performance",
+    "bigram_containment": 0.0882,
+    "char_containment": 0.3
+  },
+  {
+    "id": "qa-0047",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "performance",
+    "bigram_containment": 0.3448,
+    "char_containment": 0.5714
+  },
+  {
+    "id": "qa-0048",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "performance",
+    "bigram_containment": 0.2069,
+    "char_containment": 0.4444
+  },
+  {
+    "id": "qa-0049",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "performance",
+    "bigram_containment": 0.32,
+    "char_containment": 0.5833
+  },
+  {
+    "id": "qa-0050",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "performance",
+    "bigram_containment": 0.3214,
+    "char_containment": 0.5769
+  },
+  {
+    "id": "qa-0051",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "performance",
+    "bigram_containment": 0.1471,
+    "char_containment": 0.4
+  },
+  {
+    "id": "qa-0052",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "performance",
+    "bigram_containment": 0.3704,
+    "char_containment": 0.5769
+  },
+  {
+    "id": "qa-0053",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "performance",
+    "bigram_containment": 0.32,
+    "char_containment": 0.5417
+  },
+  {
+    "id": "qa-0054",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "performance",
+    "bigram_containment": 0.3333,
+    "char_containment": 0.4615
+  },
+  {
+    "id": "qa-0055",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "performance",
+    "bigram_containment": 0.0857,
+    "char_containment": 0.2333
+  },
+  {
+    "id": "qa-0056",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "performance",
+    "bigram_containment": 0.1765,
+    "char_containment": 0.3548
+  },
+  {
+    "id": "qa-0057",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "contract_clause",
+    "bigram_containment": 0.3793,
+    "char_containment": 0.6071
+  },
+  {
+    "id": "qa-0058",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "contract_clause",
+    "bigram_containment": 0.25,
+    "char_containment": 0.4762
+  },
+  {
+    "id": "qa-0059",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "contract_clause",
+    "bigram_containment": 0.4615,
+    "char_containment": 0.5
+  },
+  {
+    "id": "qa-0060",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "contract_clause",
+    "bigram_containment": 0.44,
+    "char_containment": 0.75
+  },
+  {
+    "id": "qa-0061",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "contract_clause",
+    "bigram_containment": 0.2222,
+    "char_containment": 0.3333
+  },
+  {
+    "id": "qa-0062",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "contract_clause",
+    "bigram_containment": 0.0556,
+    "char_containment": 0.1667
+  },
+  {
+    "id": "qa-0063",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "contract_clause",
+    "bigram_containment": 0.5,
+    "char_containment": 0.6364
+  },
+  {
+    "id": "qa-0064",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "contract_clause",
+    "bigram_containment": 0.1379,
+    "char_containment": 0.2857
+  },
+  {
+    "id": "qa-0065",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "contract_clause",
+    "bigram_containment": 0.4545,
+    "char_containment": 0.65
+  },
+  {
+    "id": "qa-0066",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "contract_clause",
+    "bigram_containment": 0.4667,
+    "char_containment": 0.6875
+  },
+  {
+    "id": "qa-0067",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "contract_clause",
+    "bigram_containment": 0.1111,
+    "char_containment": 0.5
+  },
+  {
+    "id": "qa-0068",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "contract_clause",
+    "bigram_containment": 0.4211,
+    "char_containment": 0.6
+  },
+  {
+    "id": "qa-0069",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "contract_clause",
+    "bigram_containment": 0.1818,
+    "char_containment": 0.3478
+  },
+  {
+    "id": "qa-0070",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "contract_clause",
+    "bigram_containment": 0.2632,
+    "char_containment": 0.5
+  },
+  {
+    "id": "qa-0071",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "contract_clause",
+    "bigram_containment": 0.2857,
+    "char_containment": 0.375
+  },
+  {
+    "id": "qa-0072",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "contract_clause",
+    "bigram_containment": 0.0,
+    "char_containment": 0.0
+  },
+  {
+    "id": "qa-0073",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "contract_clause",
+    "bigram_containment": 0.0667,
+    "char_containment": 0.2
+  },
+  {
+    "id": "qa-0074",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "commentary",
+    "bigram_containment": 0.3077,
+    "char_containment": 0.5
+  },
+  {
+    "id": "qa-0075",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "commentary",
+    "bigram_containment": 0.129,
+    "char_containment": 0.3333
+  },
+  {
+    "id": "qa-0076",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "commentary",
+    "bigram_containment": 0.2903,
+    "char_containment": 0.5172
+  },
+  {
+    "id": "qa-0077",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "commentary",
+    "bigram_containment": 0.1724,
+    "char_containment": 0.4828
+  },
+  {
+    "id": "qa-0078",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "commentary",
+    "bigram_containment": 0.1,
+    "char_containment": 0.25
+  },
+  {
+    "id": "qa-0079",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "commentary",
+    "bigram_containment": 0.2069,
+    "char_containment": 0.4815
+  },
+  {
+    "id": "qa-0080",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "commentary",
+    "bigram_containment": 0.1429,
+    "char_containment": 0.3182
+  },
+  {
+    "id": "qa-0081",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "commentary",
+    "bigram_containment": 0.0,
+    "char_containment": 0.2222
+  },
+  {
+    "id": "qa-0082",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "commentary",
+    "bigram_containment": 0.2222,
+    "char_containment": 0.4444
+  },
+  {
+    "id": "qa-0083",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "commentary",
+    "bigram_containment": 0.0,
+    "char_containment": 0.0556
+  },
+  {
+    "id": "qa-0084",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "commentary",
+    "bigram_containment": 0.3182,
+    "char_containment": 0.5652
+  },
+  {
+    "id": "qa-0085",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "commentary",
+    "bigram_containment": 0.1739,
+    "char_containment": 0.3333
+  },
+  {
+    "id": "qa-0086",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "commentary",
+    "bigram_containment": 0.24,
+    "char_containment": 0.4
+  },
+  {
+    "id": "qa-0087",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "commentary",
+    "bigram_containment": 0.12,
+    "char_containment": 0.32
+  },
+  {
+    "id": "qa-0088",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "commentary",
+    "bigram_containment": 0.1875,
+    "char_containment": 0.4706
+  },
+  {
+    "id": "qa-0089",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "commentary",
+    "bigram_containment": 0.125,
+    "char_containment": 0.4054
+  },
+  {
+    "id": "qa-0090",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "commentary",
+    "bigram_containment": 0.2353,
+    "char_containment": 0.3333
+  },
+  {
+    "id": "qa-0091",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "commentary",
+    "bigram_containment": 0.0769,
+    "char_containment": 0.1429
+  },
+  {
+    "id": "qa-0092",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "cross_doc",
+    "bigram_containment": 0.0345,
+    "char_containment": 0.1154
+  },
+  {
+    "id": "qa-0093",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "cross_doc",
+    "bigram_containment": 0.1515,
+    "char_containment": 0.3667
+  },
+  {
+    "id": "qa-0094",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "cross_doc",
+    "bigram_containment": 0.1875,
+    "char_containment": 0.4643
+  },
+  {
+    "id": "qa-0095",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "cross_doc",
+    "bigram_containment": 0.3636,
+    "char_containment": 0.5833
+  },
+  {
+    "id": "qa-0096",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "cross_doc",
+    "bigram_containment": 0.1786,
+    "char_containment": 0.3846
+  },
+  {
+    "id": "qa-0097",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "cross_doc",
+    "bigram_containment": 0.2353,
+    "char_containment": 0.3529
+  },
+  {
+    "id": "qa-0098",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "cross_doc",
+    "bigram_containment": 0.1,
+    "char_containment": 0.16
+  },
+  {
+    "id": "qa-0099",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "cross_doc",
+    "bigram_containment": 0.2308,
+    "char_containment": 0.28
+  },
+  {
+    "id": "qa-0100",
+    "file": "fund_qa_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "cross_doc",
+    "bigram_containment": 0.1,
+    "char_containment": 0.2857
+  },
+  {
+    "id": "qa-0101",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "cross_doc",
+    "bigram_containment": 0.2917,
+    "char_containment": 0.4583
+  },
+  {
+    "id": "qa-0102",
+    "file": "fund_qa_v1.jsonl",
+    "style": "keyword",
+    "topic": "cross_doc",
+    "bigram_containment": 0.0476,
+    "char_containment": 0.1429
+  },
+  {
+    "id": "agent-0037",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "keyword",
+    "topic": "doc_db",
+    "bigram_containment": 0.0556,
+    "char_containment": 0.2258
+  },
+  {
+    "id": "agent-0038",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "keyword",
+    "topic": "doc_db",
+    "bigram_containment": 0.0606,
+    "char_containment": 0.1429
+  },
+  {
+    "id": "agent-0039",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "doc_db",
+    "bigram_containment": 0.0606,
+    "char_containment": 0.2258
+  },
+  {
+    "id": "agent-0040",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "keyword",
+    "topic": "doc_db",
+    "bigram_containment": 0.1176,
+    "char_containment": 0.2353
+  },
+  {
+    "id": "agent-0041",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "doc_db",
+    "bigram_containment": 0.3659,
+    "char_containment": 0.5641
+  },
+  {
+    "id": "agent-0042",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "keyword",
+    "topic": "doc_db",
+    "bigram_containment": 0.1818,
+    "char_containment": 0.35
+  },
+  {
+    "id": "agent-0043",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "keyword",
+    "topic": "doc_db",
+    "bigram_containment": 0.1026,
+    "char_containment": 0.2812
+  },
+  {
+    "id": "agent-0044",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "doc_db",
+    "bigram_containment": 0.0,
+    "char_containment": 0.0
+  },
+  {
+    "id": "agent-0045",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "keyword",
+    "topic": "doc_db",
+    "bigram_containment": 0.0789,
+    "char_containment": 0.2778
+  },
+  {
+    "id": "agent-0046",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "keyword",
+    "topic": "doc_db",
+    "bigram_containment": 0.1053,
+    "char_containment": 0.3438
+  },
+  {
+    "id": "agent-0047",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "doc_db",
+    "bigram_containment": 0.2188,
+    "char_containment": 0.4483
+  },
+  {
+    "id": "agent-0048",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "keyword",
+    "topic": "doc_db",
+    "bigram_containment": 0.0769,
+    "char_containment": 0.24
+  },
+  {
+    "id": "agent-0049",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "doc_db",
+    "bigram_containment": 0.0,
+    "char_containment": 0.0476
+  },
+  {
+    "id": "agent-0056",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "keyword",
+    "topic": "doc_only",
+    "bigram_containment": 0.2353,
+    "char_containment": 0.3529
+  },
+  {
+    "id": "agent-0057",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "doc_only",
+    "bigram_containment": 0.2632,
+    "char_containment": 0.3333
+  },
+  {
+    "id": "agent-0058",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "keyword",
+    "topic": "doc_only",
+    "bigram_containment": 0.6,
+    "char_containment": 0.8
+  },
+  {
+    "id": "agent-0059",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "keyword",
+    "topic": "doc_only",
+    "bigram_containment": 0.3043,
+    "char_containment": 0.4286
+  },
+  {
+    "id": "agent-0060",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "doc_only",
+    "bigram_containment": 0.4,
+    "char_containment": 0.6
+  },
+  {
+    "id": "agent-0061",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "keyword",
+    "topic": "doc_only",
+    "bigram_containment": 0.5263,
+    "char_containment": 0.5882
+  },
+  {
+    "id": "agent-0062",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "doc_only",
+    "bigram_containment": 0.125,
+    "char_containment": 0.2273
+  },
+  {
+    "id": "agent-0063",
+    "file": "agent_tasks_v1.jsonl",
+    "style": "paraphrase",
+    "topic": "doc_only",
+    "bigram_containment": 0.05,
+    "char_containment": 0.15
+  }
+]

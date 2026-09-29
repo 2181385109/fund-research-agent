@@ -3,14 +3,13 @@
 > 由执行者在每个阶段结束时按 CLAUDE.md §11 的模板追加一节，旧内容不删除。统筹审查后会在对应小节末尾追加「统筹审查结论」。
 
 ## 当前状态
-- 当前阶段：**批次 B1（S1 + S2）已完成**（2026-09-29）；下一批 B2 = S3 评测集 + S4 检索，见 `docs/HANDOFF.md`
-- 最近一次 CI：见 `docs/HANDOFF.md`（S1 push 时 run 36517568380 全绿）
-- 已完成的用户事项：`.env` 已生成（含 DeepSeek key）；`.wslconfig` 已设 10GB/4GB；**基金池 v1 已于 2026-09-29 确认并冻结**
+- 当前阶段：批次 B2 进行中。**S3 评测集 v1 已完成并冻结**（2026-09-29），接下来做 S4 检索，见 `docs/HANDOFF.md`
+- 最近一次 CI：见 `docs/HANDOFF.md`
+- 已完成的用户事项：`.env` 已生成（含 DeepSeek key）；`.wslconfig` 已设 10GB/4GB；**基金池 v1 已于 2026-09-29 确认并冻结**；**S3 评测集抽检已于 2026-09-29 完成**（27 条，通过 23，修改 4）
 - 待用户处理：
   1. 决定是否停掉 ticket-qa 的容器（S0 实测合计约 844MiB）
   2. （可选）用自己的浏览器确认证监会披露网站能否访问
-  3. S3 抽检评测集；S8 盲标回答
-  4. universe.yaml 规模口径注释的更正是否批准（见 S1「给统筹的问题」1）
+  3. S8 盲标回答
 
 ---
 
@@ -302,3 +301,63 @@ $ git check-ignore -v .env
 
 ### 给统筹的问题
 - 无。
+
+---
+
+## S3 评测集 v1 — 2026-09-29
+- commit 范围：`4445b18`..本节所在提交（草案 `ee29d39`，按抽检意见修改 `b31982d`，冻结在本节所在提交）；CI：ee29d39 run 36523663880 全绿，冻结提交的 CI 见 `docs/HANDOFF.md`
+- 证据：`reports/dataset_validation/20260929T074332Z/`（最终校验，git b31982d、干净工作区）、`reports/dataset_overlap/20260929T074333Z/`、`reports/data_quality/20260929T045331Z/`（费率核对）；抽检表与结论 `eval/datasets/review/spotcheck_v1.md`
+
+### 完成项
+- 统筹决定落实：universe.yaml 规模注释改为「A 类份额规模，截至 2026-06-30」，基金池本身不变，`data/CHANGELOG.md` 已登记，MANIFEST 的 `universe_sha256` 已同步（`4445b18`）。
+- `eval/` 独立成包（ADR-034）：参考脚本 `reference/gold.py`（pandas 读快照）、`doc_facts.py`（pdfplumber 原文抽取）、出题模板与手写题、`build_datasets.py`（确定性构建，冻结后拒绝覆盖）、`validate_dataset.py`、`rules.py`（内容规则 a–d）、词面重叠、抽检表、冻结脚本。CI 矩阵加了 `eval`。
+- `fund_qa_v1.jsonl` 112 题、`agent_tasks_v1.jsonl` 66 题；`SCHEMA.md`（字段、gold 约定、口径、内容规则、命中规则、第三期如何转训练对、test 不进训练）、`MANIFEST.json`（frozen=true）、`CHANGELOG.md`。
+- 证据命中规则的参考实现与共享测试向量 `eval/reference/evidence_cases.json`，S4 在 ai-service 里的实现要通过同一组用例。
+
+### 验收逐条
+1. 校验通过，附分布表和词面重叠报告 — ✅ — `reports/dataset_validation/20260929T074332Z/report.md`：错误 0；PDF 逐字校验 152/152 条引文；gold_sql 35/35 在 fund_data 上的执行结果与 pandas 参考值一致；内容规则 a–d 错误 0；引文在入库 chunk 中可达 152/152（整条落在单个 chunk 内 135/152）。各 topic 的 dev/test 分布见同一报告。词面重叠见 `reports/dataset_overlap/20260929T074333Z/report.md`。
+2. 用户抽检 ≥25 条（两个文件都抽到） — ✅ — 27 条（fund_qa 16、agent_tasks 11，按 `reference/spotcheck.py` 的固定规则分层抽样）：**通过 23，需修改 4（qa-0091、agent-0049、agent-0047、agent-0029），判错 0**。4 条都按用户给的方案修改了，结论写进了 `reference/items/spotcheck_v1_results.yaml` 和各题的 `verified_by`。
+3. 抽检通过后冻结，sha256 写入 MANIFEST；冻结前没用它跑任何检索或 Agent — ✅ — `eval/datasets/MANIFEST.json`：fund_qa_v1 `77fb06a9686ea195ef8813d192bc90ffceb05ffe0b1122864777dc026997e48d`，agent_tasks_v1 `7d4c4fc3f4d6b63643fe608ca17c1ca07177257086253a1c878cf13bb33c3b77`。冻结前只从 ES 导出了 chunk 文本，用来做引文可达性诊断（只读索引内容，没有用题目做检索）。
+
+### 全量扫描（按抽检暴露的问题，用户要求）
+新增的 4 条规则都写进了 `validate_dataset.py`（`reference/rules.py`，单测 `eval/tests/test_rules.py`）：a 答案里的数字和实体必须有引文或 gold_sql 支撑；b 份额级表的 gold_sql 必须用字面量限定份额；c 题面日期必须是交易日，否则写明规则；d 收益、年化、回撤类题必须写明口径。
+全量扫描另外修改了 **32 条**（不含抽检的 4 条；与草案逐题对比）。按类别计，一条可能属于多类：
+| 类别 | 条数 | 条目 |
+|---|---|---|
+| a 支撑（补引文 / 延长引文 / SQL 附带支撑列 / 删去无出处的表述） | 18 | qa-0037、0050、0053、0056、0067、0073、0081；agent-0003、0004、0008、0011、0012、0013、0015、0022、0060、0062、0063 |
+| b 份额限定 | 0 | 其余 gold_sql 原本都限定了 share_code / share_class（规则本身的单测发现 JOIN 条件被误当成限定，已修正规则） |
+| c 非交易日 | 3 | agent-0024（2026-01-01）、0026（2025-09-28）、0027（2023-01-01、2023-12-31）：题面写明「遇非交易日取前一交易日净值」 |
+| d 口径 | 16 | qa-0046、0048、0051、0056、0089、0093、0096；agent-0008、0024、0026、0027、0028、0030、0031、0043、0046 |
+- 专考非交易日的收益计算题保留了 3 道（agent-0024、0026、0027）。
+- 收益口径统一为「遇非交易日取前一交易日净值；年化 = (1+区间收益率)^(365/自然日天数)−1」，写进了 SCHEMA.md。快照中有 184 条周末披露的季末或年末净值，不算交易日（ADR-036）。agent-0027 实际使用的起止日因此变化，标准答案 -6.18% 不变。
+- 剩下 5 条「文字要点词面覆盖低」的提示（qa-0092 三条、qa-0102 两条）已人工复核：股票名都在对应的持仓行引文里，是「一季度末：」这类前缀拉低了覆盖率，不需要修改。
+- 改题面导致两对题的 dev/test 互换（qa-0079 与 qa-0089，agent-0024 与 agent-0025），每类 dev 条数不变。
+
+### 实测数字
+| 指标 | 值 | n / 分母 | 结果文件 |
+|---|---|---|---|
+| fund_qa_v1 | 112 题（dev 33 / test 79），paraphrase 54，覆盖 20/20 只基金 | 各 topic 均达到 PLAN 最低题数 | reports/dataset_validation/20260929T074332Z |
+| agent_tasks_v1 | 66 题（dev 21 / test 45），gold_sql 35，volatile 5 | 同上 | 同上 |
+| 引文逐字校验 | 152/152 | 全部 evidence | 同上 |
+| gold_sql 与参考值一致 | 35/35 | 全部带 gold_sql 的题 | 同上 |
+| 引文可达（命中规则） | 152/152；整条落在单个 chunk 内 135/152 | 18353 个入库 chunk | 同上 |
+| 词面重叠（问题 vs 引文，字符二元组覆盖率，p50 / 均值） | keyword 0.200 / 0.211；paraphrase 0.129 / 0.147 | n=64 / 59（有 evidence 的题） | reports/dataset_overlap/20260929T074333Z |
+| 季报业绩原文 vs 快照净值自算 | 11/11 一致 | 带 nav_check 的业绩题 | 各题 notes |
+| 招募说明书费率 vs 快照 fees | 59/60 一致 | 20 只 × 3 项 | reports/data_quality/20260929T045331Z |
+
+### 与计划的偏差（附理由和 ADR 编号）
+1. eval 独立成包（ADR-034）；quote 按「去空白与竖线」口径比对，出题方式见 ADR-035。
+2. PLAN S5 写的是「就近取前一个净值日」，按用户的抽检意见改为「前一交易日」，周末季末净值不算交易日（ADR-036）。S5 实现 `calc_fund_return` 时按 SCHEMA.md「口径」一节执行。
+3. 题目的 provenance 分 `template_reference_script`（90 题）和 `llm_draft`（88 题，其中抽检通过或按意见修改后标为 `llm_draft_human_verified` 的 14 题）。没有让 DeepSeek 起草（ADR-035）。
+
+### 已知问题 / 技术债
+1. 001551（天弘中证医药100 C）的销售服务费：快照 0.20%，招募说明书 0.25%，只做了登记，没有改快照，也没有就此出题。
+2. 部分季报的经理表、持仓表单元格在 pdfplumber 文本里串行，这些基金没出对应的模板题；经理题 11 道只来自 6 只基金。
+3. 最终的重叠报告 summary 里 `git_dirty=true`：原因只是刚写出的校验报告目录还没被跟踪。之后 `git_dirty` 改为只看已跟踪文件。
+4. latest_nav 的 5 道题在评测时实时抓取，结果会随时间变化（PLAN §4.3 的设计）。
+
+### 需要用户做的事
+- 无（抽检已完成）。
+
+### 给统筹的问题
+- 无。S1 的「规模口径注释」问题已按统筹决定处理。

@@ -118,3 +118,14 @@ def test_command_line_has_no_absolute_path():
     cmd = command_line()
     assert cmd.startswith("cd eval && python")
     assert ":\\" not in cmd and not cmd.split("&& ")[1].startswith("/")
+
+
+def test_frozen_datasets_match_manifest_sha256():
+    """冻结后数据集文件不得被改动（改题须升版本，见 eval/datasets/CHANGELOG.md）。"""
+    from reference.common import DATASETS_DIR, sha256_file
+
+    m = json.loads((DATASETS_DIR / "MANIFEST.json").read_text(encoding="utf-8"))
+    if not m["frozen"]:
+        return
+    for name, meta in m["files"].items():
+        assert sha256_file(DATASETS_DIR / name) == meta["sha256"], name
