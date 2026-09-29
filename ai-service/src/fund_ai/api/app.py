@@ -29,7 +29,12 @@ def build_pipeline(settings: Settings) -> IngestPipeline:
         MilvusChunkStore(settings.milvus_uri, settings.milvus_collection, embedder.dim),
         EsChunkStore(settings.es_url, settings.es_index),
     ]
-    params = ChunkParams(settings.chunk_size, settings.chunk_overlap, settings.table_max_chars)
+    params = ChunkParams(
+        settings.chunk_size,
+        settings.chunk_overlap,
+        settings.table_max_chars,
+        settings.chunk_min_chars,
+    )
     pipeline = IngestPipeline(embedder, stores, params)
     pipeline.ensure()
     return pipeline

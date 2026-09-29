@@ -5,7 +5,7 @@ from fixture_pdfs import HEADER, LONG_PARA, STRATEGY, empty_pdf, report_like
 
 from fund_ai.embedding.fake import FakeEmbedder
 from fund_ai.ingest.chunking import ChunkParams, DocMeta, chunk_document, heading_level
-from fund_ai.ingest.parsers.pdf import parse_pdf, table_to_markdown
+from fund_ai.ingest.parsers.pdf import Block, ParsedDoc, parse_pdf, table_to_markdown
 from fund_ai.ingest.pipeline import IngestConsistencyError, IngestPipeline
 from fund_ai.stores.base import InMemoryStore
 
@@ -69,7 +69,8 @@ def test_long_paragraph_split_with_overlap(report: Path) -> None:
     chunks, _ = chunk_document(parse_pdf(report), META, PARAMS)
     long_parts = [c for c in chunks if "长期投资理念" in c.text and not c.is_table]
     assert len(long_parts) >= len(LONG_PARA) // PARAMS.chunk_size
-    assert all(len(c.text) <= PARAMS.chunk_size for c in long_parts)
+    # 合并后的上限是 chunk_size + min_chars（ADR-037）
+    assert all(len(c.text) <= PARAMS.chunk_size + PARAMS.min_chars for c in long_parts)
     a, b = long_parts[0], long_parts[1]
     assert b.char_start < a.char_end  # 硬切时相邻块重叠
 
@@ -134,3 +135,63 @@ def test_pipeline_detects_inconsistent_store(report: Path) -> None:
     p = _pipeline([InMemoryStore("milvus"), LossyStore("elasticsearch")])
     with pytest.raises(IngestConsistencyError):
         p.ingest(report, META)
+
+
+# ---- 最小块长合并（ADR-037）
+
+
+def _doc(*items: tuple[str, str, int]) -> ParsedDoc:
+    return ParsedDoc(pages=3, blocks=[Block(k, p, t) for k, t, p in items])
+
+
+def _body(n: int, tag: str = "甲") -> str:
+    return (tag * n) + "。"
+
+
+def test_short_chunks_merge_and_offsets_stay_exact() -> None:
+    doc = _doc(
+        ("text", "2.1 投资目标", 1),
+        ("text", _body(20), 1),  # 只有一小段正文的章节
+        ("text", "2.2 投资范围", 2),
+        ("text", _body(200, "乙"), 2),
+    )
+    off, _ = chunk_document(doc, META, ChunkParams(300, 30, 3000, min_chars=0))
+    on, canon = chunk_document(doc, META, ChunkParams(300, 30, 3000, min_chars=150))
+    assert len(off) == 2 and len(on) == 1
+    c = on[0]
+    assert c.text == canon[c.char_start : c.char_end]
+    assert "2.1 投资目标" in c.text and "2.2 投资范围" in c.text
+    assert (c.page_start, c.page_end) == (1, 2)
+    assert c.section_path.endswith("2.2 投资范围")  # 取较长的那一块
+    assert c.text_ctx.startswith("【假想医疗混合｜2026年第2季度报告｜2.2 投资范围】\n")
+    assert on[0].chunk_id == f"{META.doc_id}#0000"
+
+
+def test_merge_respects_cap_and_never_touches_tables() -> None:
+    table = "| a | b |\n|---|---|\n| 1 | 2 |"
+    doc = _doc(
+        ("text", "3.1 甲", 1),
+        ("text", _body(40), 1),
+        ("table", table, 1),
+        ("text", "3.2 乙", 2),
+        ("text", _body(40, "丙"), 2),
+        ("text", "3.3 丁", 2),
+        ("text", _body(290, "丁"), 2),  # 与前块合并会超过 chunk_size + min_chars
+    )
+    params = ChunkParams(300, 30, 3000, min_chars=150)
+    chunks, canon = chunk_document(doc, META, params)
+    assert [c.is_table for c in chunks].count(True) == 1
+    tbl = next(c for c in chunks if c.is_table)
+    assert tbl.text == table  # 表格块原样
+    for c in chunks:
+        assert c.text == canon[c.char_start : c.char_end]
+        if not c.is_table:
+            assert len(c.text) <= params.chunk_size + params.min_chars
+    assert all(c.chunk_id == f"{META.doc_id}#{i:04d}" for i, c in enumerate(chunks))
+
+
+def test_heading_is_not_lost_before_long_paragraph() -> None:
+    doc = _doc(("text", "4.1 长段落章节", 1), ("text", _body(700, "戊"), 1))
+    chunks, canon = chunk_document(doc, META, ChunkParams(300, 30, 3000, min_chars=150))
+    assert chunks[0].text.startswith("4.1 长段落章节\n")
+    assert all(c.text == canon[c.char_start : c.char_end] for c in chunks)

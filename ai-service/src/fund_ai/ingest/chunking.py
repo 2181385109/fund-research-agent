@@ -7,7 +7,9 @@
    先按句号等切句再贪心拼，单句仍超长就硬切（相邻块重叠 ``chunk_overlap``）。
 4. 表格独立成块，不与正文混切；超过 ``table_max_chars`` 按行拆成连续的几块，
    拆出来的后续块在 embedding/BM25 用的 ``text_ctx`` 里补上表头行。
-5. 上下文头 ``【基金简称｜文档名｜章节】`` 只加在 ``text_ctx``，是否使用由检索侧开关决定（S4）。
+5. 合并：不足 ``min_chars`` 的正文块与相邻正文块合并（标题只带一小段正文的块并入后一块；
+   表格块不参与），合并后仍满足 ``text == canonical[char_start:char_end]``。
+6. 上下文头 ``【基金简称｜文档名｜章节】`` 只加在 ``text_ctx``，是否使用由检索侧开关决定（S4）。
 """
 
 from __future__ import annotations
@@ -129,6 +131,7 @@ class ChunkParams:
     chunk_size: int = 600
     chunk_overlap: int = 60
     table_max_chars: int = 3000
+    min_chars: int = 150  # 正文块最小字符数：不足的与相邻正文块合并（0 = 不合并）
 
 
 def _split_long(text: str, size: int, overlap: int) -> list[tuple[int, int]]:
@@ -242,9 +245,16 @@ def chunk_document(
             continue
         # 段落
         if len(u.text) > params.chunk_size:
+            # buf 里只有标题时，并入第一片，不让标题丢在任何块之外
+            lead = buf[0] if buf and all(x.kind == "heading" for x in buf) else None
             flush()
-            for s, e in _split_long(u.text, params.chunk_size, params.chunk_overlap):
-                emit(u.start + s, u.start + e, u.page_start, u.page_end, False)
+            for i, (s, e) in enumerate(
+                _split_long(u.text, params.chunk_size, params.chunk_overlap)
+            ):
+                if i == 0 and lead is not None:
+                    emit(lead.start, u.start + e, lead.page_start, u.page_end, False)
+                else:
+                    emit(u.start + s, u.start + e, u.page_start, u.page_end, False)
             continue
         if (
             buf
@@ -254,7 +264,56 @@ def chunk_document(
             flush()
         buf.append(u)
     flush()
+    if params.min_chars > 0:
+        chunks = _merge_short(chunks, canon, meta, params)
     return chunks, canon
+
+
+def _merge_short(
+    chunks: list[Chunk], canon: str, meta: DocMeta, params: ChunkParams
+) -> list[Chunk]:
+    """把不足 ``min_chars`` 的正文块与相邻正文块合并（表格块不参与）。
+
+    只合并规范文本里相邻的两块，合并后 ``text == canon[char_start:char_end]`` 仍成立；合并后
+    长度不超过 ``chunk_size + min_chars``。章节路径取合并前较长的那一块（等长取后者）。
+    """
+    cap = params.chunk_size + params.min_chars
+    out: list[Chunk] = []
+    for c in chunks:
+        prev = out[-1] if out else None
+        if (
+            prev is not None
+            and not prev.is_table
+            and not c.is_table
+            and (len(prev.text) < params.min_chars or len(c.text) < params.min_chars)
+            and max(prev.char_end, c.char_end) - min(prev.char_start, c.char_start) <= cap
+        ):
+            keep = prev if len(prev.text) > len(c.text) else c
+            start = min(prev.char_start, c.char_start)
+            end = max(prev.char_end, c.char_end)
+            sec = keep.section_path.rsplit(" > ", 1)[-1]
+            text = canon[start:end]
+            out[-1] = Chunk(
+                chunk_id="",
+                doc_id=meta.doc_id,
+                fund_code=meta.fund_code,
+                fund_name=meta.fund_name,
+                doc_type=meta.doc_type,
+                report_period=meta.report_period,
+                page_start=min(prev.page_start, c.page_start),
+                page_end=max(prev.page_end, c.page_end),
+                section_path=keep.section_path,
+                is_table=False,
+                char_start=start,
+                char_end=end,
+                text=text,
+                text_ctx=f"【{meta.fund_name}｜{meta.doc_title}｜{sec}】\n{text}",
+            )
+        else:
+            out.append(c)
+    for i, c in enumerate(out):
+        c.chunk_id = f"{meta.doc_id}#{i:04d}"
+    return out
 
 
 def doc_title_for(doc_type: str, report_period: str, title: str = "") -> str:

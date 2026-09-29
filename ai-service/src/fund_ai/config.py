@@ -49,6 +49,7 @@ class Settings(BaseSettings):
     chunk_size: int = 600  # 正文块目标字符数
     chunk_overlap: int = 60  # 超长段落硬切时相邻块的重叠字符数
     table_max_chars: int = 3000  # 表格块上限，超过按行拆分并重复表头
+    chunk_min_chars: int = 150  # 正文块最小字符数，不足的与相邻正文块合并（0 = 不合并）
     data_dir: Path = REPO_ROOT / "data"
 
     # 重排（S4）：cross_encoder（本地 BAAI/bge-reranker-base）| noop（不重排，测试 / CI）

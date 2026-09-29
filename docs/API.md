@@ -44,6 +44,32 @@
  "elasticsearch": {"total": 35510, "by_doc_type": {...}}}
 ```
 
+### `POST /v1/retrieve`（S4）
+检索并返回命中切块及各阶段分数。检索服务在第一次请求时构造（加载模型、连接 Milvus / ES / fund_data）。
+
+请求（除 `query` 外都可省略，缺省用服务配置 `RETRIEVAL_*`）：
+```json
+{"query": "中银创新医疗混合C 的销售服务费率是多少", "mode": "hybrid_rerank", "top_n": 10,
+ "vector_k": 50, "bm25_k": 50, "rerank_candidates": 20,
+ "entity_filter": true, "use_ctx": true, "query_instruction": false,
+ "fund_codes": ["001551"], "doc_types": ["prospectus"]}
+```
+- `mode`：`vector` | `bm25` | `hybrid`（RRF，k=60）| `vector_rerank` | `hybrid_rerank`。
+- `fund_codes` 显式给出时不再做实体识别；识别不到基金时不过滤。未知的 `mode` 返回 422。
+
+响应：
+```json
+{"query": "...", "config": {"mode": "hybrid_rerank", "vector_k": 50, "...": "..."},
+ "entity_fund_codes": ["001551"], "filter_fund_codes": ["001551"],
+ "hits": [{"chunk_id": "...", "doc_id": "...", "fund_code": "...", "fund_name": "...", "doc_type": "...",
+           "report_period": "...", "page_start": 3, "page_end": 3, "section_path": "...", "is_table": false,
+           "text": "原文（不带上下文头）",
+           "scores": {"vector": 0.71, "bm25": 12.3, "rrf": 0.031, "rerank": 4.2},
+           "ranks": {"vector": 2, "bm25": 5, "rrf": 1, "rerank": 1}}],
+ "timings_ms": {"...": 0.0}, "candidates": {"...": 0}, "models": {"...": "..."}}
+```
+`scores` / `ranks` 只包含该模式实际经过的阶段。
+
 ### 切块字段（Milvus 集合与 ES 索引 `fund_chunks`）
 `chunk_id`、`doc_id`、`fund_code`、`fund_name`、`doc_type`、`report_period`、`page_start`、`page_end`（从 1 开始）、`section_path`（章节路径，` > ` 分隔）、`is_table`、`char_start`、`char_end`（在文档规范文本中的位置）、`text`（原文，对外展示用）。
 ES 另有 `text_ctx`（`【基金简称｜文档名｜章节】` + 正文，BM25 用）；Milvus 有 `embedding`（正文向量）和 `embedding_ctx`（带上下文头文本的向量），用哪一个由检索侧的开关决定（S4）。

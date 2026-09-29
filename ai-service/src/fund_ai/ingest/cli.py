@@ -96,6 +96,7 @@ def main(argv: list[str] | None = None) -> int:
             "chunk_size": settings.chunk_size,
             "chunk_overlap": settings.chunk_overlap,
             "table_max_chars": settings.table_max_chars,
+            "chunk_min_chars": settings.chunk_min_chars,
             "milvus_collection": settings.milvus_collection,
             "es_index": settings.es_index,
         },
