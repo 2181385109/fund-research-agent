@@ -145,17 +145,20 @@ def render(s: dict) -> str:
         "",
         "## 数值判分灵敏度（numeric 题，规则见 `fund_ai/eval/scoring.py`）",
         "",
-        "| 配置 | any（主判分） | first（只看第一个相容数字） |",
-        "|---|---|---|",
+        "| 配置 | first（主口径，只看第一个相容数字） | any（仅供参考） | any ≠ first 的题 |",
+        "|---|---|---|---|",
     ]
     for c in cfgs:
         ns = res[c]["numeric_sensitivity"]
-        L.append(f"| {c} | {_rate(ns['any'])} | {_rate(ns['first'])} |")
+        L.append(
+            f"| {c} | {_rate(ns['first_primary'])} | {_rate(ns['any_reference_only'])} | "
+            f"{ns['any_not_equal_first']} |"
+        )
     L += [
         "",
         "## list 判分灵敏度（list 题）",
         "",
-        "| 配置 | 标准项全部出现（主判分） | 另要求没有多出的基金名（严格） |",
+        "| 配置 | 标准项全部出现（主口径） | 另要求没有多出的基金名（严格） |",
         "|---|---|---|",
     ]
     for c in cfgs:

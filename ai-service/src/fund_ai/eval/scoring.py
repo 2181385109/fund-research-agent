@@ -2,14 +2,17 @@
 
 规则在跑评测之前写定，之后不因分数而改（红线 2）。规则本身用两类测试守住：
 - 单元测试（tests/test_eval_scoring.py）；
-- 对整个评测集做「自洽检查」：每道 numeric / entity / list 题的 ``reference_answer`` 送进判分器必须判对。
+- 对整个评测集做「自洽检查」：每道 entity / list 题的 ``reference_answer`` 送进判分器必须判对；numeric 题必须
+  ``any`` 判对（参考回答常先给出别的相关数字，如「日均偏离度 0.35%，年跟踪误差 4%」，所以 ``first`` 不要求）。
 
 数值判分口径（题目 gold_value 的写法见 eval/datasets/SCHEMA.md）：
 - 从回答里抽出所有「数字 + 单位」，去掉出处标记 ``[n]``、日期、6 位基金 / 份额代码；
 - 两边都换算到基本单位（% → 小数，亿元 / 万元 → 元），单位种类必须相容（百分比对百分比、金额对金额、
   计数对计数或无单位数字），容差取 gold 的 ``tolerance``（展示单位下的绝对值）；
-- 主判分 ``any``：回答里有任一相容数字落在容差内即判对；灵敏度检查 ``first``：只看回答里第一个相容数字。
-  ``any`` 偏宽松（回答里罗列很多数字时可能碰巧命中），所以两个都报。
+- 主判分 ``first``：只看回答里第一个相容数字是否落在容差内；参考口径 ``any``：任一相容数字落在容差内即判对。
+  ``any`` 偏宽松（回答里罗列很多数字时可能碰巧命中），所以只作参考、单列；对外的准确率只引用 ``first``。
+  （最初的设计以 any 为主口径；dev 小样里出现 any 碰巧命中的例子，用户 2026-09-30 决定主口径改为 first，
+  此时 test 尚未跑过。）
 - 负号：显式的 ``-`` / ``−`` / ``负``，或数字前 5 个字内出现 亏 / 跌 / 下降 / 回撤 / 减少 / 缩水（且前面不是「不」）。
 
 entity：标准答案出现在回答里（日期归一化）；标准答案是基金简称且题面里还有别的候选基金时，要求它先于别的候选出现。
@@ -131,10 +134,10 @@ def score_numeric(answer: str, gold_value: str, tolerance: float | None) -> Scor
     hit_any = any(abs(v - gold) <= tol for v, _ in cands)
     hit_first = bool(cands) and abs(cands[0][0] - gold) <= tol
     return Score(
-        hit_any,
-        "numeric_any",
+        hit_first,  # 主口径：回答里第一个相容数字（用户 2026-09-30 定；any 只作参考）
+        "numeric_first",
         {
-            "first_correct": hit_first,
+            "any_correct": hit_any,
             "n_candidates": len(cands),
             "candidates": [str(v) for v, _ in cands[:8]],
         },

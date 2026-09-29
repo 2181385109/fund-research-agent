@@ -288,10 +288,19 @@ def aggregate(scores: list[dict], recs: dict[str, dict]) -> dict:
         ((s.get("judge") or {}).get("call") or {}).get("output_tokens", 0) for s in scores
     )
 
+    judge_model = next(
+        (
+            c["request_model"]
+            for s in scores
+            if (c := (s.get("judge") or {}).get("call")) and c.get("request_model")
+        ),
+        "deepseek-flash",
+    )
+
     def grp(kind: str) -> dict:
         return {k: _acc(v) for (kk, k), v in sorted(by.items()) if kk == kind}
 
-    numeric = [s for s in scores if s["answer_type"] == "numeric" and s["method"] == "numeric_any"]
+    numeric = [s for s in scores if s["method"] == "numeric_first"]
     lists = [s for s in scores if s["method"] == "list"]
     return {
         "n_questions": len(scores),
@@ -317,8 +326,13 @@ def aggregate(scores: list[dict], recs: dict[str, dict]) -> dict:
         },
         "numeric_sensitivity": {
             "n": len(numeric),
-            "any": _rate([s["correct"] for s in numeric]),
-            "first": _rate([bool(s["detail"].get("first_correct")) for s in numeric]),
+            "first_primary": _rate([bool(s["correct"]) for s in numeric]),
+            "any_reference_only": _rate([bool(s["detail"].get("any_correct")) for s in numeric]),
+            "any_not_equal_first": [
+                s["id"]
+                for s in numeric
+                if bool(s["detail"].get("any_correct")) != bool(s["correct"])
+            ],
         },
         "tool_selection": {
             "required_recall": _rate([t["required_hit"] for t in need]),
@@ -388,7 +402,7 @@ def aggregate(scores: list[dict], recs: dict[str, dict]) -> dict:
             "cost_usd_upper_bound": {
                 mode: round(
                     cost_usd("deepseek-flash", usage_in, usage_out, mode == "peak")
-                    + cost_usd("deepseek-v4-pro", judge_in, judge_out, mode == "peak"),
+                    + cost_usd(judge_model, judge_in, judge_out, mode == "peak"),
                     4,
                 )
                 for mode in ("peak", "off_peak")

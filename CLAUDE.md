@@ -116,7 +116,7 @@ fund-research-agent/
 
 ## 5. 配置与密钥
 - 所有可变配置走环境变量；`.env.example` 与代码实际读取的变量一一对应，并带注释。
-- LLM：`LLM_BASE_URL`、`LLM_API_KEY`、`LLM_MODEL`（默认 deepseek-flash）、`LLM_THINKING`（默认 disabled；开启思考模式时，多轮 tool call 必须回传推理内容）、`JUDGE_MODEL`（默认 deepseek-v4-pro，与被测模型刻意不同）。
+- LLM：`LLM_BASE_URL`、`LLM_API_KEY`、`LLM_MODEL`（默认 deepseek-flash）、`LLM_THINKING`（默认 disabled；开启思考模式时，多轮 tool call 必须回传推理内容）、`JUDGE_MODEL`（默认 deepseek-flash，与被测模型同一个；2026-09-30 用户决定，见 ADR-046）。
 - 数据库账号：`fund_reader`（fund_data 只读，Agent 和 Text2SQL 用）、`fund_loader`（仅 fund_data 的读写和建表权限，只给 data-pipeline 导入用），应用账号只能访问 fra_app。任何代码都不许用 root。模型：`EMBEDDING_MODEL`、`RERANKER_PROVIDER`、`RERANKER_MODEL`、`HF_ENDPOINT`、`MODEL_CACHE_DIR`。数据：`DATA_AS_OF`、`NAV_API_BASE_URL`。
 - push 前运行 `scripts/security_scan.py`：检查 key 模式、本机绝对路径、`.env`、PDF 文件和 `data/raw`、`data/snapshots` 下的文件。
 

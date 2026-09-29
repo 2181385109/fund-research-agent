@@ -38,14 +38,17 @@ def test_numeric_sign_and_kind():
     # 百分比与金额种类不相容
     assert not S.score_numeric("规模 4 亿元", "4%", 0).correct
     # 区间里的「–」不是负号；日期、6 位代码、出处标记不当数字
-    assert S.score_numeric("比例区间 0%–50%，上限 50%[1]", "50%", 0).correct
+    assert S.score_numeric("比例区间 0%–50%，上限 50%[1]", "50%", 0).detail["any_correct"]
+    assert S.score_numeric("上限 50%，区间 0%–50%", "50%", 0).correct
     nums = [v for v, _ in S.extract_numbers("003095 在 2026年6月30日 [12] 的费率 1.5%")]
     assert [str(v) for v in nums] == ["0.015"]
 
 
 def test_numeric_any_vs_first():
     s = S.score_numeric("日均偏离度不超过0.35%，年跟踪误差不超过4%", "4%", 0)
-    assert s.correct and not s.detail["first_correct"]
+    # 主口径 first：第一个相容数字是 0.35%，判错；参考口径 any 判对
+    assert not s.correct and s.detail["any_correct"]
+    assert S.score_numeric("年跟踪误差不超过4%，日均偏离度不超过0.35%", "4%", 0).correct
 
 
 # ---------------------------------------------------------------- entity / list
@@ -98,7 +101,8 @@ def test_gold_tables():
 
 
 def test_reference_answers_pass_their_own_scorer():
-    """自洽检查：评测集里每道 numeric / entity / list 题的参考回答，送进判分器必须判对。"""
+    """自洽检查：评测集里每道 entity / list 题的参考回答必须判对；numeric 题必须 any 判对
+    （参考回答常先给别的相关数字，first 不要求）。"""
     n = 0
     for fn in ("fund_qa_v1.jsonl", "agent_tasks_v1.jsonl"):
         for line in (REPO_ROOT / "eval/datasets" / fn).read_text(encoding="utf-8").splitlines():
@@ -113,7 +117,8 @@ def test_reference_answers_pass_their_own_scorer():
             else:
                 continue
             n += 1
-            assert s.correct, (r["id"], ans, s)
+            ok = s.detail["any_correct"] if t == "numeric" else s.correct
+            assert ok, (r["id"], ans, s)
     assert n >= 100
 
 
