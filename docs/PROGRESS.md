@@ -542,3 +542,53 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 
 ### 给统筹的问题
 无阻塞。
+
+## S6 Java 主后端 — 2026-09-29（B6）
+- commit 范围：`3d51826..efad335`；CI：[run 36571231993](https://github.com/2181385109/fund-research-agent/actions/runs/36571231993)（efad335，6 个 job 全绿；此前 run 36570941044 因安全扫描 --history 扫到两处已推送的测试路径样例而失败，已按文件豁免，见「已知问题」）
+- 统筹开工前的决定（私有库提问）已登记为 **ADR-043**，Java 侧实现取舍是 **ADR-044**。
+
+### 完成项
+- **ai-service（ADR-043 要求的接口变更）**：`POST /v1/chat/stream` 增加服务端注入的 `kb_scope`；`search_fund_documents` 在服务端按范围过滤（范围来自带签名的 HTTP 头，不在工具 schema 里，LLM 伪造的 `kb_ids` 被丢弃）；私有文档独立的 Milvus 集合 / ES 索引 `user_chunks`（`kb_id`、`owner_id`、`doc_title`），公共 `fund_chunks` 未改动；公共与私有召回融合后合并成一个池再重排；`POST /v1/documents/ingest` 支持 `kb_id`/`owner_id`/`callback`（202 + 带共享密钥回调 backend）、`.md`/`.txt` 解析、无可提取文字的私有文档置为 FAILED。
+- **backend**：auth（BCrypt + JWT）、kb（公共库只读 + 私有库，`resolveScope` 判定范围）、document（魔数 / 大小 / sha256 去重、状态机条件更新、回调、超时清理）、conversation（答案 / 出处 / 风险提示 / 检索范围落库，最近 N 轮上下文）、chat（`SseEmitter` 代理、心跳、断开取消上游）、`AiServiceClient` + `HttpAiServiceClient`；Flyway V2；统一响应体 / 全局异常 / 参数校验 / springdoc。
+- `scripts/e2e_smoke.sh` + `scripts/e2e_helpers.py`；`scripts/public_retrieval_regression.py`（公共库检索回归）；`scripts/docker_tcp_proxy.py`（本机跑 Testcontainers 用）。
+
+### 验收逐条
+1. **单测：service 层、JWT、状态机、上传校验、`@WebMvcTest`；JaCoCo service 包行覆盖率 ≥ 70%** — ✅ — 证据：`cd backend && mvn -B -ntp verify` 退出码 0，共 108 个测试（AuthService 6、JwtService 4、ChatService 13、ConversationService 7、DocumentService 19、DocumentStatus 2、UploadValidator 6、KbService 9、控制器 `@WebMvcTest` 10、路由鉴权 5、GlobalExceptionHandler 2、health 3、HttpAiServiceClient 12、集成测试 10）；JaCoCo `check` 规则是「每个 `*.service` 包各自 ≥ 70%」，实测 auth.service 96.6%（57/59 行）、chat.service 91.7%（122/133）、conversation.service 98.0%（97/99）、document.service 97.1%（101/104）、kb.service 100%（62/62），原文 `reports/s6/20260929T124300Z_e2e/jacoco_line_coverage.txt`。
+2. **Testcontainers MySQL 集成测试在 CI 运行** — ✅ — 证据：`BackendIntegrationTest`（`mysql:8.4.11`，真实 Flyway 迁移、条件更新 SQL、级联删除、唯一约束，整个 HTTP 栈；含注册登录、建库、上传、回调、私有库提问、越权、断开取消、超时清理、删库联动）在 `mvn verify` 中运行，本机 10/10 通过；CI 的 backend job 同一条命令（ubuntu runner 自带 Docker），结果见上面的 CI 链接。
+3. **`scripts/e2e_smoke.sh`：注册 → 对公共库提问（流式，带出处和风险提示）→ 上传一份私有 PDF → READY → 对私有库提问 → 查询会话历史，贴原文** — ✅ — 证据：`reports/s6/20260929T124300Z_e2e/`（`e2e_smoke.log` 全程输出；`chat_public.sse`、`chat_private.sse` 是 SSE 原文；`history.json`；`summary.json`），18 项检查全部 ✓、0 项 ✗，末行 `E2E RESULT: PASS`。要点摘录：公共库提问答出「中国工商银行股份有限公司」并带 3 条 `document` 出处；私有 PDF（自造的 1 页虚构备忘录）上传 202→ 轮询到 `READY`（pages 1、chunks 1）；对私有库提问，事件顺序 `meta → tool_start → tool_end → token → citations → disclaimer → done`，答案 `青鸾项目的止盈阈值：17.3% [1]、复核周期：每周三 [1]`，`citations` 里 `kind=document`、`doc_title=星河研究院备忘录.pdf`、`kb_id=100`（即引用了这份私有文档）；历史里 2 问 2 答共 4 条，助手消息的出处与风险提示都已落库。
+4. **断开取消的证据** — ✅ — 证据三层：(a) `HttpAiServiceClientTest`：JDK `HttpServer` 扮演 ai-service，`cancel()` 之后服务端写失败（连接确实被断开），且不再回调 onComplete / onError；监听器抛异常、请求尚未得到响应头时取消也同样；(b) `BackendIntegrationTest#clientDisconnectCancelsTheUpstreamRequestAndSavesThePartialAnswer`：真实 HTTP 客户端读到第一个事件后关闭连接，假 ai-service 观察到 backend 断开了上游连接，助手消息以 `CANCELLED` 保存已生成的部分，且不进入之后的上下文；(c) live：`e2e_smoke.sh` 第 8 步，curl 约 4 秒后主动断开 → backend 日志 `chat client gone … reason=send failed, cancelling upstream` / `chat upstream cancel requested` / `chat finished … status=CANCELLED`，**ai-service 日志 `chat_stream_cancelled request=60cda3e2b27b47bc elapsed_ms=7313`**（原文 `reports/s6/20260929T124300Z_e2e/cancel_ai_log.txt`、`cancel_backend_log.txt`；被取消的回答 `history_after_cancel.json` 末条 `ASSISTANT CANCELLED`）。取消延迟最长一个心跳间隔（默认 5 s），见 LIMITATIONS。
+5. **CI 全绿** — ✅ — 证据：[run 36571231993](https://github.com/2181385109/fund-research-agent/actions/runs/36571231993)（efad335，6 个 job 全绿；此前 run 36570941044 因安全扫描 --history 扫到两处已推送的测试路径样例而失败，已按文件豁免，见「已知问题」）
+
+### 统筹关于「私有库提问」的四条决定，逐条对应
+1. **范围只能由服务端注入，不是 LLM 可填的工具参数，工具 schema 里也不能出现** — ✅ — Java `KbService.resolveScope` 算出范围 → `ChatCommand.kb_scope` → ai-service `RunContext.scope` → `McpToolBackend` 签名后放进 HTTP 头 → 文档 MCP 校验；`test_mcp_server_ignores_or_rejects_unknown_args_even_without_backend_filter` 断言工具 schema 只有 `query/fund_codes/doc_types/top_n`；LLM 在 tool call 里写的 `kb_ids`/`owner_id`/`scope` 被丢弃（`test_mcp_cross_user_scope_and_llm_supplied_kb_ids_cannot_reach_other_users`，走真实 MCP/HTTP）；伪造 / 过期 / 无签名的头：工具报错而不是回退成公共库（`test_mcp_forged_or_expired_scope_header_is_an_error_not_a_public_fallback`）。
+2. **私有文档单独一套 Milvus 集合和 ES 索引（`user_chunks`），`fund_chunks` 不改，S4 评测结果保持有效；范围含私有库时两边结果合并后再重排** — ✅ — 公共库路径：`reports/private_kb/20260929T124700Z_public_regression/`，改动前后 8 条固定查询、80 个命中（chunk_id 与 4 位小数的重排分数）**逐条一致**，最终代码上重新抓取也一致（`compare.txt`：`IDENTICAL`）；合并重排：`test_merged_pool_is_reranked_together`；真实 Milvus + ES 上的过滤：`tests/test_private_kb_integration.py`（`pytest -m integration`，本机 4/4 通过）。**没有重新入库，也没有跑 S4 的 test 评测。**
+3. **越权测试：用户 A 在 chat 请求里手动带上用户 B 的 kb_id，必须被拒或剔除；B 的文档内容不出现；Java 层和 ai-service 层各测一次** — ✅ — Java 层：`ChatServiceTest#userAPassingUserBsKbIdIsRejectedAndNothingReachesAiServiceOrTheDatabase`（403，未调用 ai-service、未保存消息）、`KbServiceTest#anotherUsersOrNonexistentKbIsRejectedForTheWholeRequest`、集成测试 `crossUserAccessIsRejectedAndNeverReachesAiService`（HTTP 403 ×3、B 读 A 的会话 / 文档 404、B 往 A 的库上传 403、ai-service 收到的 chat 请求数不变）、live `e2e_smoke.sh` 第 7 步（B 带 A 的 kbId → 403，且 ai-service 的 chat 请求数 2→2）。ai-service 层：`test_cross_user_kb_id_returns_nothing_of_the_other_user`（范围里带别人的 kb_id：owner 条件挡住，5 种模式下 B 的内容一个字都不出现）、真实 MCP/HTTP 版 `test_mcp_cross_user_scope_…`、真实 Milvus + ES 版 `test_real_stores_enforce_kb_and_owner`。策略选的是「整个请求 403」而不是静默剔除（ADR-043）。
+4. **S6 验收 3 按原文：私有 PDF 入库到 READY 之后，对私有库提问，回答里引用这份私有文档** — ✅ — 见验收 3 的证据（`citations` 里 `doc_title=星河研究院备忘录.pdf`，脚本断言「引用了私有文档的出处条数 ≥ 1」）。
+
+### 实测数字
+| 指标 | 值 | n / 分母 | 结果文件 |
+|---|---|---|---|
+| backend 测试 | 108 通过 | `mvn verify` 全部 | `backend/target/surefire-reports`（不入库）；摘要见验收 1 |
+| ai-service 单测（CI 同款 marker） | 169 通过 | 全部；另有 8 个 integration（旧 4 + 私有库 4），本机通过 | `pytest -m "not integration and not slow and not live"` |
+| service 包行覆盖率（最低） | 91.7%（chat.service） | 5 个 service 包 | `reports/s6/20260929T124300Z_e2e/jacoco_line_coverage.txt` |
+| 公共库检索回归 | 80/80 命中逐条一致 | 8 条手写查询 × top 10 | `reports/private_kb/20260929T124700Z_public_regression/summary.json` |
+| e2e 检查 | 18 通过 / 0 失败 | 18 项 | `reports/s6/20260929T124300Z_e2e/summary.json` |
+| e2e 对话耗时 | 私有库提问 done.timings_ms.total = 2999.2 ms，输入 6287 token | 单次 | `chat_private.sse`（不是性能基线） |
+| 取消延迟 | curl 约 4 s 断开 → ai-service 请求开始后 7313 ms 记录取消（≈3 s 延迟） | 单次 | `cancel_ai_log.txt`（不是基线，受心跳间隔影响） |
+
+### 与计划的偏差（附理由和 ADR 编号）
+- 无偏差。ai-service 的接口变更（`kb_scope`、私有入库、异步回调、`.md/.txt` 解析）是统筹批准的范围内改动（ADR-043）；PLAN S6 交付里的「上传 PDF/MD/TXT」需要 ai-service 增加文本解析，一并做了。
+- 鉴权不用整套 Spring Security（ADR-043 / 044）。
+
+### 已知问题 / 技术债
+- 见 `docs/LIMITATIONS.md`「私有知识库与 Java 后端（S6）」11 条，要点：私有库检索质量没有评测；用户文档是不可信输入（提示注入未系统测试）；取消最晚延迟一个心跳间隔；ai-service 后台入库任务只在内存里；扫描件无 OCR；JWT 无吊销；多 worker 必须固定 `KB_SCOPE_SECRET`。
+- 集成测试发现并修复了一个真实缺陷：SSE 接口出错时（带 `Accept: text/event-stream`）响应会变成 500（找不到写 `ApiResponse` 的转换器），已让错误响应强制 JSON，并加了回归用例（ADR-044）。
+- 安全扫描（`--history`）第一次在 CI 上失败：本轮早先提交的两个测试文件里有过 `C:/Windows/win.ini`、`C:\Users\x\…` 这类路径穿越 / 文件名净化的测试输入，被 local-path 规则扫到；这两个提交已经推送（不改写历史），所以在 `scripts/security_scan.py` 的 `LOCAL_PATH_EXEMPT` 里按文件豁免这两个测试文件（现在的版本已不含这些样例，豁免只影响历史扫描）。
+- e2e 第一次运行失败原因是 Windows 上的 Git Bash 把含中文的命令行参数按系统代码页传给 curl（JSON 变成非法 UTF-8 → 400），不是系统缺陷；脚本改为先用 `printf` 把请求体写成 UTF-8 文件再 `-d @文件`（首次失败的输出没有保留）。
+
+### 需要用户做的事
+无。
+
+### 给统筹的问题
+- PLAN §7 的 B6 状态（✅）由统筹更新。
+- S7 前端要注意：对话接口的错误（401 / 403 / 404 / 503）在流开始之前是普通 JSON，流开始之后的错误是 SSE 的 `error` 事件；`fetch` 解析 SSE 时先看 HTTP 状态码。
