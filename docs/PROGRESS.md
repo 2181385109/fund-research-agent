@@ -682,7 +682,7 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 2. 人工一致性已完成 — ❌ **等用户盲标**（≥ 30 条；表里 36 行）。
 3. 分母和失败数已上报 — ✅ — `summary.json` 的 `failed_runs`（0）、`api_error_retries`（0）、`results.*.n_run_failed` / `n_judge_failed`（0）；各指标的分母写在 README 与 `report.md`。
 4. 成本已记录 — ✅ — `cost_actual_vs_estimate.md`：实测（非高峰价，上界）约 $0.53，估算约 $0.51–0.55。
-5. CI 全绿 — 见 HANDOFF（push 后确认）。
+5. CI 全绿 — ✅ — run 36608275582，7 个 job（backend、frontend、python × 4、scripts + security scan）success；打 tag 前还要在最后一次提交后再确认一次。
 6. tag 已推送 — ❌ 等 2。
 
 ### 实测数字（摘要；全表见 README 与 `report.md`）
