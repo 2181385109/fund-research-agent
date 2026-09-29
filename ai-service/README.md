@@ -1,10 +1,10 @@
 # ai-service（包名 `fund_ai`）
 
-FastAPI 服务（端口 `AI_SERVICE_PORT`，默认 8001）：文档入库、混合检索与重排、LangGraph Agent、文档 MCP Server。S0 只有健康检查。
+FastAPI 服务（端口 `AI_SERVICE_PORT`，默认 8001）：文档入库（S2）、混合检索与重排（S4，`POST /v1/retrieve`）；LangGraph Agent、文档 MCP Server 属于 S5。
 
 - `config.py`：所有配置从这里读（pydantic-settings，环境变量或仓库根目录 `.env`）。
 - `api/health.py`：`GET /health` 并发探测 Milvus（RESTful v2 `collections/list`）、Elasticsearch（`_cluster/health`，green/yellow 为 UP）、Redis（PING）；每项带超时 `HEALTH_TIMEOUT_SECONDS`，任一 DOWN 返回 503。
-- 其余子目录是占位，README 里写明所属阶段。
+- 子目录：`ingest/`（S2）、`retrieval/` `rerank/` `eval/`（S4）；其余是占位，README 里写明所属阶段。接口见 `docs/API.md`。
 
 ## 本地开发
 
