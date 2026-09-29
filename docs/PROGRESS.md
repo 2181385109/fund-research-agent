@@ -665,3 +665,46 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 ### 给统筹的问题
 - 工作区里 `docs/PLAN.md` 有一处未提交的改动（§7 表 B3–B6 加 ✅），不是我改的，我没有提交它，请统筹自行提交。
 - 前端范围：公共库文件清单页仍没做（`GET /api/kbs/1/documents` 恒为空，LIMITATIONS S6-7 / S7-4），界面上只放了说明文字；需要的话请在 B8 前给出要求。
+
+## S8 端到端回答评测 + 第一期收尾 — 进行中（2026-09-30，B8；停在用户关卡：人工盲标）
+- commit 范围：`a5b05fe`..本节所在提交；CI：见 HANDOFF；**tag `v0.1-phase1` 尚未打**（等盲标一致率，见「需要用户做的事」）。
+- 证据目录：`reports/answer_eval/20260929T171529Z/`（目录名是 UTC 时间戳；两个配置各一个子目录，`summary.json` / `report.md` 在根）；费用小样 `reports/answer_eval/cost_sample_dev_20260930/`；复现性检查 `reports/retrieval/20260929T164941Z/`、`20260929T165108Z/`。
+
+### 完成项
+- **复现性检查**（统筹补充 1）：当前索引上用 S4 最终配置重跑 test 检索评测，不调 LLM；vector / vector_rerank 与 run 9 逐题一致，BM25 路有小差异（nDCG@10 bm25 +0.0056、hybrid +0.0007、hybrid_rerank −0.0021），原因未验证，没有调参；`docs/tuning_log.md` run 11、12，LIMITATIONS S8-1。
+- **费用关卡**（补充 2）：dev 小样（每类 2 题共 29 题）实测 token → 推算全量；用户确认后跑全量。估算与实测对照见 `cost_actual_vs_estimate.md`。
+- **回答评测**（补充 4）：test 124 题（fund_qa 79 + agent_tasks 45）× 2 个检索配置（本机 ai-service 进程，`RETRIEVAL_MODE=vector|hybrid_rerank`，并发 1）；**248 次运行全部成功，没有失败、没有 API 报错重试、没有判分失败**。代码：`ai-service/src/fund_ai/eval/{scoring,judge,answer_score,answer,answer_report}.py`，单测 `tests/test_eval_scoring.py`（15 个，含「评测集参考回答自洽检查」）。
+- **盲标表**（补充 3）：`reports/answer_eval/20260929T171529Z/blind_table/blind_table.xlsx`，36 行（候选池 = 两个配置的 text 类回答共 72 条，种子 20260930，按 topic 比例分层；只有问题、参考要点、Agent 回答，不含裁判分和配置名）；行号与（配置, 题号）的对照在同目录上一层的 `blind_key.json`。算一致率与 kappa 的命令已用随机标注演练过。
+- README 指标表（每个数字带链接和 `summary.json` 字段路径）、`docs/LIMITATIONS.md`（一期汇总 + S8 九条）、ADR-046。
+
+### 验收逐条（PLAN §5 S8）
+1. 每个数字都可追溯 — ✅ — README 表每个数字链接到 `summary.json` 并写明字段（已用脚本逐个核对）。
+2. 人工一致性已完成 — ❌ **等用户盲标**（≥ 30 条；表里 36 行）。
+3. 分母和失败数已上报 — ✅ — `summary.json` 的 `failed_runs`（0）、`api_error_retries`（0）、`results.*.n_run_failed` / `n_judge_failed`（0）；各指标的分母写在 README 与 `report.md`。
+4. 成本已记录 — ✅ — `cost_actual_vs_estimate.md`：实测（非高峰价，上界）约 $0.53，估算约 $0.51–0.55。
+5. CI 全绿 — 见 HANDOFF（push 后确认）。
+6. tag 已推送 — ❌ 等 2。
+
+### 实测数字（摘要；全表见 README 与 `report.md`）
+| 指标 | hybrid_rerank | vector | n / 分母 | 结果文件 |
+|---|---|---|---|---|
+| 统一得分（numeric 用 first 口径） | 0.875 | 0.875 | 124 | `summary.json` `results.*.overall` |
+| 配对差（hybrid_rerank − vector） | +0.000，95% CI [−0.048, +0.048] | | 124 | `summary.json` `comparison_vector_to_hybrid_rerank.all_questions` |
+| text 类裁判均分（0–2） | 1.972 | 1.917 | 36 | 同上 `text_judge` |
+| 出处准确率 | 86/111 | 73/111 | 111 | `citation_accuracy.overall` |
+| 风险提示覆盖率 | 124/124 | 124/124 | 124 | `disclaimer_coverage` |
+| 首 token p50（ms） | 7836 | 4112 | 124 | `latency_ms.first_token` |
+
+### 与计划的偏差（附理由和 ADR 编号）
+- 裁判由 PLAN 隐含的「与被测不同源」（deepseek-v4-pro）改为 **deepseek-flash（与被测同一个）**：用户 2026-09-30 决定，ADR-046，LIMITATIONS S8-2。费用小样（dev）仍是 v4-pro 判的。
+- 判分口径在 dev 小样后修订三处（list 主判分、多调用只算 no_tool、numeric 主口径改 first），**都在跑 test 之前**，依据只是 dev 小样，ADR-046 写明。
+- CLAUDE.md §5 的 `JUDGE_MODEL` 默认值随用户决定改了一行（执行者通常不改 CLAUDE.md，这里是为了不留下自相矛盾的说明，请统筹知悉）。
+
+### 已知问题 / 技术债
+- 见 LIMITATIONS「回答评测方法（S8）」9 条与「第一期局限汇总」。要点：numeric 的 first 口径是下界（hybrid_rerank 47 题里 any 与 first 差 13 题，其中 12 题回答本身是对的，逐条说明见 `numeric_any_vs_first.md`）；entity 二选一规则对 qa-0101 误判；agent-0020（两个配置都答 21，gold 23）原因未查明；vector 配置有 4 题因检索不到而答错或答「没有找到」。
+
+### 需要用户做的事
+- **人工盲标**：打开 `reports/answer_eval/20260929T171529Z/blind_table/blind_table.xlsx`，在最后一列填 0 / 1 / 2（评分标准写在表头），保存后告诉我路径；我用 `python -m fund_ai.eval.answer blind-score` 算一致率与 kappa，补进 README，然后打 tag。**标完之前请不要去看 `scores.jsonl` / `report.md` 里的裁判分。**
+
+### 给统筹的问题
+- 无阻塞问题。请知悉：CLAUDE.md §5 `JUDGE_MODEL` 那一行已按用户决定修改；`docs/PLAN.md` §7 的 B7 / B8 状态请统筹标记。

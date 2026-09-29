@@ -1,0 +1,10 @@
+{
+  "config": "vector",
+  "service_url": "http://127.0.0.1:8012",
+  "split": "test",
+  "sample_per_topic": 0,
+  "n_items": 124,
+  "concurrency": 1,
+  "command": "cd ai-service && python -m fund_ai.eval.answer run --config vector --url http://127.0.0.1:8012 --split test --out ..\\reports\\answer_eval\\20260929T171529Z --concurrency 1",
+  "finished_utc": "20260929T174551Z"
+}

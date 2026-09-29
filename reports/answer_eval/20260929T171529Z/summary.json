@@ -1,0 +1,1292 @@
+{
+  "label": "S8 回答评测（test：fund_qa 79 + agent_tasks 45 = 124 题；vector vs hybrid_rerank）",
+  "env": {
+    "git_commit": "ea12542c763cc4dbf6eb8c7581673b91ba415353",
+    "git_dirty": false,
+    "data_as_of": "2026-09-28",
+    "data_manifest_sha256": "b5df59cb954c170e44071fb38603f57eff401863656912e410a96a721d49e127",
+    "models": {
+      "embedding": "BAAI/bge-small-zh-v1.5",
+      "reranker": "cross_encoder:BAAI/bge-reranker-base",
+      "llm_requested": [
+        "deepseek-flash"
+      ],
+      "llm_response": [
+        "deepseek-flash"
+      ],
+      "judge_requested": "deepseek-flash",
+      "judge_response": [
+        "deepseek-flash"
+      ]
+    },
+    "index": {
+      "milvus_collection": "fund_chunks",
+      "es_index": "fund_chunks",
+      "ingest_run": "20260929T141806Z"
+    },
+    "machine": {
+      "platform": "Windows-11-10.0.26200-SP0",
+      "python": "3.12.3",
+      "cpu_count": 16
+    },
+    "command": "cd ai-service && python -m fund_ai.eval.retrieval score --dir ..\\reports\\answer_eval\\20260929T171529Z --label S8 回答评测（test：fund_qa 79 + agent_tasks 45 = 124 题；vector vs hybrid_rerank）",
+    "dataset_sha256": {
+      "fund_qa_v1.jsonl": "77fb06a9686ea195ef8813d192bc90ffceb05ffe0b1122864777dc026997e48d",
+      "agent_tasks_v1.jsonl": "7d4c4fc3f4d6b63643fe608ca17c1ca07177257086253a1c878cf13bb33c3b77"
+    }
+  },
+  "params": {
+    "agent_max_steps": 6,
+    "agent_sql_retries": 2,
+    "llm_thinking": "disabled",
+    "api_retries_max": 2,
+    "numeric_rule": "见 fund_ai/eval/scoring.py 文件头",
+    "prices": {
+      "source": "https://api-docs.deepseek.com/quick_start/pricing",
+      "checked_on": "2026-09-30",
+      "usd_per_1m_tokens": {
+        "deepseek-flash": {
+          "peak": {
+            "input_cache_hit": 0.006,
+            "input_cache_miss": 0.3,
+            "output": 1.2
+          },
+          "off_peak": {
+            "input_cache_hit": 0.003,
+            "input_cache_miss": 0.15,
+            "output": 0.6
+          }
+        },
+        "deepseek-v4-pro": {
+          "peak": {
+            "input_cache_hit": 0.044,
+            "input_cache_miss": 1.32,
+            "output": 3.96
+          },
+          "off_peak": {
+            "input_cache_hit": 0.022,
+            "input_cache_miss": 0.66,
+            "output": 1.98
+          }
+        }
+      }
+    }
+  },
+  "runs": {
+    "hybrid_rerank": {
+      "config": "hybrid_rerank",
+      "service_url": "http://127.0.0.1:8011",
+      "split": "test",
+      "sample_per_topic": 0,
+      "n_items": 124,
+      "concurrency": 1,
+      "command": "cd ai-service && python -m fund_ai.eval.answer run --config hybrid_rerank --url http://127.0.0.1:8011 --split test --out ..\\reports\\answer_eval\\20260929T171529Z --concurrency 1",
+      "finished_utc": "20260929T173326Z"
+    },
+    "vector": {
+      "config": "vector",
+      "service_url": "http://127.0.0.1:8012",
+      "split": "test",
+      "sample_per_topic": 0,
+      "n_items": 124,
+      "concurrency": 1,
+      "command": "cd ai-service && python -m fund_ai.eval.answer run --config vector --url http://127.0.0.1:8012 --split test --out ..\\reports\\answer_eval\\20260929T171529Z --concurrency 1",
+      "finished_utc": "20260929T174551Z"
+    }
+  },
+  "results": {
+    "hybrid_rerank": {
+      "n_questions": 124,
+      "n_run_failed": 0,
+      "n_judge_failed": 0,
+      "overall": {
+        "n_total": 124,
+        "n_run_failed": 0,
+        "n_judge_failed": 0,
+        "acc_all": {
+          "n": 124,
+          "value": 0.875
+        },
+        "acc_completed": {
+          "n": 124,
+          "value": 0.875
+        }
+      },
+      "by_answer_type": {
+        "entity": {
+          "n_total": 17,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 17,
+            "value": 0.9412
+          },
+          "acc_completed": {
+            "n": 17,
+            "value": 0.9412
+          }
+        },
+        "list": {
+          "n_total": 10,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 10,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 10,
+            "value": 1.0
+          }
+        },
+        "numeric": {
+          "n_total": 50,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 50,
+            "value": 0.72
+          },
+          "acc_completed": {
+            "n": 50,
+            "value": 0.72
+          }
+        },
+        "refusal": {
+          "n_total": 11,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 11,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 11,
+            "value": 1.0
+          }
+        },
+        "text": {
+          "n_total": 36,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 36,
+            "value": 0.9861
+          },
+          "acc_completed": {
+            "n": 36,
+            "value": 0.9861
+          }
+        }
+      },
+      "by_topic": {
+        "advice_request": {
+          "n_total": 4,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 4,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 4,
+            "value": 1.0
+          }
+        },
+        "calc_return": {
+          "n_total": 6,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 6,
+            "value": 0.6667
+          },
+          "acc_completed": {
+            "n": 6,
+            "value": 0.6667
+          }
+        },
+        "commentary": {
+          "n_total": 13,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 13,
+            "value": 0.9615
+          },
+          "acc_completed": {
+            "n": 13,
+            "value": 0.9615
+          }
+        },
+        "contract_clause": {
+          "n_total": 12,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 12,
+            "value": 0.8333
+          },
+          "acc_completed": {
+            "n": 12,
+            "value": 0.8333
+          }
+        },
+        "cross_doc": {
+          "n_total": 8,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 8,
+            "value": 0.875
+          },
+          "acc_completed": {
+            "n": 8,
+            "value": 0.875
+          }
+        },
+        "doc_db": {
+          "n_total": 9,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 9,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 9,
+            "value": 1.0
+          }
+        },
+        "doc_only": {
+          "n_total": 6,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 6,
+            "value": 0.5
+          },
+          "acc_completed": {
+            "n": 6,
+            "value": 0.5
+          }
+        },
+        "fee": {
+          "n_total": 12,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 12,
+            "value": 0.8333
+          },
+          "acc_completed": {
+            "n": 12,
+            "value": 0.8333
+          }
+        },
+        "holdings": {
+          "n_total": 11,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 11,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 11,
+            "value": 1.0
+          }
+        },
+        "latest_nav": {
+          "n_total": 3,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 3,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 3,
+            "value": 1.0
+          }
+        },
+        "manager": {
+          "n_total": 8,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 8,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 8,
+            "value": 1.0
+          }
+        },
+        "no_tool": {
+          "n_total": 2,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 2,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 2,
+            "value": 1.0
+          }
+        },
+        "performance": {
+          "n_total": 8,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 8,
+            "value": 0.75
+          },
+          "acc_completed": {
+            "n": 8,
+            "value": 0.75
+          }
+        },
+        "tool_sql": {
+          "n_total": 15,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 15,
+            "value": 0.8
+          },
+          "acc_completed": {
+            "n": 15,
+            "value": 0.8
+          }
+        },
+        "unanswerable": {
+          "n_total": 7,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 7,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 7,
+            "value": 1.0
+          }
+        }
+      },
+      "by_dataset": {
+        "agent": {
+          "n_total": 45,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 45,
+            "value": 0.8222
+          },
+          "acc_completed": {
+            "n": 45,
+            "value": 0.8222
+          }
+        },
+        "qa": {
+          "n_total": 79,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 79,
+            "value": 0.9051
+          },
+          "acc_completed": {
+            "n": 79,
+            "value": 0.9051
+          }
+        }
+      },
+      "text_judge": {
+        "n": 36,
+        "mean_score_0_2": 1.9722,
+        "distribution": {
+          "0": 0,
+          "1": 1,
+          "2": 35
+        }
+      },
+      "list_sensitivity": {
+        "n": 10,
+        "all_present": {
+          "n": 10,
+          "k": 10,
+          "rate": 1.0
+        },
+        "strict_no_extra_funds": {
+          "n": 10,
+          "k": 9,
+          "rate": 0.9
+        }
+      },
+      "numeric_sensitivity": {
+        "n": 47,
+        "first_primary": {
+          "n": 47,
+          "k": 33,
+          "rate": 0.7021
+        },
+        "any_reference_only": {
+          "n": 47,
+          "k": 46,
+          "rate": 0.9787
+        },
+        "any_not_equal_first": [
+          "agent-0005",
+          "agent-0019",
+          "agent-0028",
+          "agent-0029",
+          "agent-0056",
+          "agent-0057",
+          "agent-0058",
+          "qa-0016",
+          "qa-0017",
+          "qa-0046",
+          "qa-0055",
+          "qa-0059",
+          "qa-0061"
+        ]
+      },
+      "tool_selection": {
+        "required_recall": {
+          "n": 118,
+          "k": 99,
+          "rate": 0.839
+        },
+        "exact_set": {
+          "n": 118,
+          "k": 88,
+          "rate": 0.7458
+        },
+        "overcall_on_no_tool_items": {
+          "n": 2,
+          "k": 2,
+          "rate": 1.0
+        },
+        "denominator": "run 成功且 expected_tools 非空的题（required_recall / exact_set）；no_tool 类题（overcall）"
+      },
+      "sql": {
+        "exec_ok": {
+          "n": 24,
+          "k": 21,
+          "rate": 0.875
+        },
+        "end_to_end_correct": {
+          "n": 15,
+          "k": 12,
+          "rate": 0.8
+        }
+      },
+      "calc_return_correct": {
+        "n": 6,
+        "k": 4,
+        "rate": 0.6667
+      },
+      "latest_nav_correct": {
+        "n": 3,
+        "k": 3,
+        "rate": 1.0
+      },
+      "citation_accuracy": {
+        "overall": {
+          "n": 111,
+          "k": 86,
+          "rate": 0.7748
+        },
+        "by_component": {
+          "api": {
+            "n": 3,
+            "k": 3,
+            "rate": 1.0
+          },
+          "computation": {
+            "n": 6,
+            "k": 6,
+            "rate": 1.0
+          },
+          "db": {
+            "n": 24,
+            "k": 19,
+            "rate": 0.7917
+          },
+          "docs": {
+            "n": 87,
+            "k": 66,
+            "rate": 0.7586
+          }
+        },
+        "denominator": "run 成功且有可核对出处的题（有 evidence / gold_sql / 收益计算 / 最新净值）；失败 run 不计入"
+      },
+      "disclaimer_coverage": {
+        "n": 124,
+        "k": 124,
+        "rate": 1.0
+      },
+      "disclaimer_coverage_denominator": "全部 run（含失败的）",
+      "compliance": {
+        "server_guard_flagged": {
+          "n": 124,
+          "k": 0,
+          "rate": 0.0
+        },
+        "advice_request_correct": {
+          "n": 4,
+          "k": 4,
+          "rate": 1.0
+        }
+      },
+      "latency_ms": {
+        "first_token": {
+          "p50": 7835.7,
+          "p95": 14204.1,
+          "n": 124
+        },
+        "total": {
+          "p50": 7995.6,
+          "p95": 15370.0,
+          "n": 124
+        }
+      },
+      "tokens_and_cost": {
+        "agent_input_tokens": 1453580,
+        "agent_output_tokens": 55250,
+        "judge_input_tokens": 32010,
+        "judge_output_tokens": 2212,
+        "n_runs_counted": 124,
+        "cost_usd_upper_bound": {
+          "peak": 0.5146,
+          "off_peak": 0.2573
+        },
+        "note": "只统计 run 成功的题的 token（失败 run 的用量未被服务端上报）；费用按全部输入为缓存未命中计的上界"
+      }
+    },
+    "vector": {
+      "n_questions": 124,
+      "n_run_failed": 0,
+      "n_judge_failed": 0,
+      "overall": {
+        "n_total": 124,
+        "n_run_failed": 0,
+        "n_judge_failed": 0,
+        "acc_all": {
+          "n": 124,
+          "value": 0.875
+        },
+        "acc_completed": {
+          "n": 124,
+          "value": 0.875
+        }
+      },
+      "by_answer_type": {
+        "entity": {
+          "n_total": 17,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 17,
+            "value": 0.9412
+          },
+          "acc_completed": {
+            "n": 17,
+            "value": 0.9412
+          }
+        },
+        "list": {
+          "n_total": 10,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 10,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 10,
+            "value": 1.0
+          }
+        },
+        "numeric": {
+          "n_total": 50,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 50,
+            "value": 0.74
+          },
+          "acc_completed": {
+            "n": 50,
+            "value": 0.74
+          }
+        },
+        "refusal": {
+          "n_total": 11,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 11,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 11,
+            "value": 1.0
+          }
+        },
+        "text": {
+          "n_total": 36,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 36,
+            "value": 0.9583
+          },
+          "acc_completed": {
+            "n": 36,
+            "value": 0.9583
+          }
+        }
+      },
+      "by_topic": {
+        "advice_request": {
+          "n_total": 4,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 4,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 4,
+            "value": 1.0
+          }
+        },
+        "calc_return": {
+          "n_total": 6,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 6,
+            "value": 0.8333
+          },
+          "acc_completed": {
+            "n": 6,
+            "value": 0.8333
+          }
+        },
+        "commentary": {
+          "n_total": 13,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 13,
+            "value": 0.9615
+          },
+          "acc_completed": {
+            "n": 13,
+            "value": 0.9615
+          }
+        },
+        "contract_clause": {
+          "n_total": 12,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 12,
+            "value": 0.8333
+          },
+          "acc_completed": {
+            "n": 12,
+            "value": 0.8333
+          }
+        },
+        "cross_doc": {
+          "n_total": 8,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 8,
+            "value": 0.9375
+          },
+          "acc_completed": {
+            "n": 8,
+            "value": 0.9375
+          }
+        },
+        "doc_db": {
+          "n_total": 9,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 9,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 9,
+            "value": 1.0
+          }
+        },
+        "doc_only": {
+          "n_total": 6,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 6,
+            "value": 0.5
+          },
+          "acc_completed": {
+            "n": 6,
+            "value": 0.5
+          }
+        },
+        "fee": {
+          "n_total": 12,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 12,
+            "value": 0.8333
+          },
+          "acc_completed": {
+            "n": 12,
+            "value": 0.8333
+          }
+        },
+        "holdings": {
+          "n_total": 11,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 11,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 11,
+            "value": 1.0
+          }
+        },
+        "latest_nav": {
+          "n_total": 3,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 3,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 3,
+            "value": 1.0
+          }
+        },
+        "manager": {
+          "n_total": 8,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 8,
+            "value": 0.875
+          },
+          "acc_completed": {
+            "n": 8,
+            "value": 0.875
+          }
+        },
+        "no_tool": {
+          "n_total": 2,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 2,
+            "value": 0.75
+          },
+          "acc_completed": {
+            "n": 2,
+            "value": 0.75
+          }
+        },
+        "performance": {
+          "n_total": 8,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 8,
+            "value": 0.75
+          },
+          "acc_completed": {
+            "n": 8,
+            "value": 0.75
+          }
+        },
+        "tool_sql": {
+          "n_total": 15,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 15,
+            "value": 0.8
+          },
+          "acc_completed": {
+            "n": 15,
+            "value": 0.8
+          }
+        },
+        "unanswerable": {
+          "n_total": 7,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 7,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 7,
+            "value": 1.0
+          }
+        }
+      },
+      "by_dataset": {
+        "agent": {
+          "n_total": 45,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 45,
+            "value": 0.8333
+          },
+          "acc_completed": {
+            "n": 45,
+            "value": 0.8333
+          }
+        },
+        "qa": {
+          "n_total": 79,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 79,
+            "value": 0.8987
+          },
+          "acc_completed": {
+            "n": 79,
+            "value": 0.8987
+          }
+        }
+      },
+      "text_judge": {
+        "n": 36,
+        "mean_score_0_2": 1.9167,
+        "distribution": {
+          "0": 0,
+          "1": 3,
+          "2": 33
+        }
+      },
+      "list_sensitivity": {
+        "n": 10,
+        "all_present": {
+          "n": 10,
+          "k": 10,
+          "rate": 1.0
+        },
+        "strict_no_extra_funds": {
+          "n": 10,
+          "k": 9,
+          "rate": 0.9
+        }
+      },
+      "numeric_sensitivity": {
+        "n": 47,
+        "first_primary": {
+          "n": 47,
+          "k": 34,
+          "rate": 0.7234
+        },
+        "any_reference_only": {
+          "n": 47,
+          "k": 43,
+          "rate": 0.9149
+        },
+        "any_not_equal_first": [
+          "agent-0005",
+          "agent-0019",
+          "agent-0029",
+          "agent-0056",
+          "agent-0057",
+          "agent-0058",
+          "qa-0017",
+          "qa-0059",
+          "qa-0061"
+        ]
+      },
+      "tool_selection": {
+        "required_recall": {
+          "n": 118,
+          "k": 99,
+          "rate": 0.839
+        },
+        "exact_set": {
+          "n": 118,
+          "k": 89,
+          "rate": 0.7542
+        },
+        "overcall_on_no_tool_items": {
+          "n": 2,
+          "k": 2,
+          "rate": 1.0
+        },
+        "denominator": "run 成功且 expected_tools 非空的题（required_recall / exact_set）；no_tool 类题（overcall）"
+      },
+      "sql": {
+        "exec_ok": {
+          "n": 24,
+          "k": 22,
+          "rate": 0.9167
+        },
+        "end_to_end_correct": {
+          "n": 15,
+          "k": 12,
+          "rate": 0.8
+        }
+      },
+      "calc_return_correct": {
+        "n": 6,
+        "k": 5,
+        "rate": 0.8333
+      },
+      "latest_nav_correct": {
+        "n": 3,
+        "k": 3,
+        "rate": 1.0
+      },
+      "citation_accuracy": {
+        "overall": {
+          "n": 111,
+          "k": 73,
+          "rate": 0.6577
+        },
+        "by_component": {
+          "api": {
+            "n": 3,
+            "k": 3,
+            "rate": 1.0
+          },
+          "computation": {
+            "n": 6,
+            "k": 6,
+            "rate": 1.0
+          },
+          "db": {
+            "n": 24,
+            "k": 18,
+            "rate": 0.75
+          },
+          "docs": {
+            "n": 87,
+            "k": 54,
+            "rate": 0.6207
+          }
+        },
+        "denominator": "run 成功且有可核对出处的题（有 evidence / gold_sql / 收益计算 / 最新净值）；失败 run 不计入"
+      },
+      "disclaimer_coverage": {
+        "n": 124,
+        "k": 124,
+        "rate": 1.0
+      },
+      "disclaimer_coverage_denominator": "全部 run（含失败的）",
+      "compliance": {
+        "server_guard_flagged": {
+          "n": 124,
+          "k": 0,
+          "rate": 0.0
+        },
+        "advice_request_correct": {
+          "n": 4,
+          "k": 4,
+          "rate": 1.0
+        }
+      },
+      "latency_ms": {
+        "first_token": {
+          "p50": 4112.5,
+          "p95": 6232.5,
+          "n": 124
+        },
+        "total": {
+          "p50": 4885.4,
+          "p95": 9667.6,
+          "n": 124
+        }
+      },
+      "tokens_and_cost": {
+        "agent_input_tokens": 1559449,
+        "agent_output_tokens": 61101,
+        "judge_input_tokens": 33511,
+        "judge_output_tokens": 2197,
+        "n_runs_counted": 124,
+        "cost_usd_upper_bound": {
+          "peak": 0.5538,
+          "off_peak": 0.2769
+        },
+        "note": "只统计 run 成功的题的 token（失败 run 的用量未被服务端上报）；费用按全部输入为缓存未命中计的上界"
+      }
+    }
+  },
+  "comparison_vector_to_hybrid_rerank": {
+    "unit": "逐题统一得分 value（规则类 0/1，text 类裁判分/2，refusal 类 0/1）；差 = hybrid_rerank − vector",
+    "all_questions": {
+      "n": 124,
+      "mean_a": 0.875,
+      "mean_b": 0.875,
+      "mean_diff": 0.0,
+      "ci95": [
+        -0.04838709677419355,
+        0.04838709677419355
+      ],
+      "p_diff_le_0": 0.537,
+      "n_boot": 10000,
+      "seed": 20260929
+    },
+    "reference_only_numeric_any_all_questions": {
+      "n": 124,
+      "mean_a": 0.9475806451612904,
+      "mean_b": 0.9798387096774194,
+      "mean_diff": 0.03225806451612903,
+      "ci95": [
+        0.0,
+        0.07258064516129033
+      ],
+      "p_diff_le_0": 0.0439,
+      "n_boot": 10000,
+      "seed": 20260929
+    },
+    "questions_where_docs_tool_used_in_either_run": {
+      "n": 84,
+      "mean_a": 0.8630952380952381,
+      "mean_b": 0.875,
+      "mean_diff": 0.011904761904761904,
+      "ci95": [
+        -0.05357142857142857,
+        0.08333333333333333
+      ],
+      "p_diff_le_0": 0.4012,
+      "n_boot": 10000,
+      "seed": 20260929
+    },
+    "by_topic": {
+      "advice_request": {
+        "n": 4,
+        "mean_a": 1.0,
+        "mean_b": 1.0,
+        "mean_diff": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "p_diff_le_0": 1.0,
+        "n_boot": 10000,
+        "seed": 20260929
+      },
+      "calc_return": {
+        "n": 6,
+        "mean_a": 0.8333333333333334,
+        "mean_b": 0.6666666666666666,
+        "mean_diff": -0.16666666666666666,
+        "ci95": [
+          -0.5,
+          0.0
+        ],
+        "p_diff_le_0": 1.0,
+        "n_boot": 10000,
+        "seed": 20260929
+      },
+      "commentary": {
+        "n": 13,
+        "mean_a": 0.9615384615384616,
+        "mean_b": 0.9615384615384616,
+        "mean_diff": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "p_diff_le_0": 1.0,
+        "n_boot": 10000,
+        "seed": 20260929
+      },
+      "contract_clause": {
+        "n": 12,
+        "mean_a": 0.8333333333333334,
+        "mean_b": 0.8333333333333334,
+        "mean_diff": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "p_diff_le_0": 1.0,
+        "n_boot": 10000,
+        "seed": 20260929
+      },
+      "cross_doc": {
+        "n": 8,
+        "mean_a": 0.9375,
+        "mean_b": 0.875,
+        "mean_diff": -0.0625,
+        "ci95": [
+          -0.375,
+          0.1875
+        ],
+        "p_diff_le_0": 0.7318,
+        "n_boot": 10000,
+        "seed": 20260929
+      },
+      "doc_db": {
+        "n": 9,
+        "mean_a": 1.0,
+        "mean_b": 1.0,
+        "mean_diff": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "p_diff_le_0": 1.0,
+        "n_boot": 10000,
+        "seed": 20260929
+      },
+      "doc_only": {
+        "n": 6,
+        "mean_a": 0.5,
+        "mean_b": 0.5,
+        "mean_diff": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "p_diff_le_0": 1.0,
+        "n_boot": 10000,
+        "seed": 20260929
+      },
+      "fee": {
+        "n": 12,
+        "mean_a": 0.8333333333333334,
+        "mean_b": 0.8333333333333334,
+        "mean_diff": 0.0,
+        "ci95": [
+          -0.25,
+          0.25
+        ],
+        "p_diff_le_0": 0.6551,
+        "n_boot": 10000,
+        "seed": 20260929
+      },
+      "holdings": {
+        "n": 11,
+        "mean_a": 1.0,
+        "mean_b": 1.0,
+        "mean_diff": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "p_diff_le_0": 1.0,
+        "n_boot": 10000,
+        "seed": 20260929
+      },
+      "latest_nav": {
+        "n": 3,
+        "mean_a": 1.0,
+        "mean_b": 1.0,
+        "mean_diff": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "p_diff_le_0": 1.0,
+        "n_boot": 10000,
+        "seed": 20260929
+      },
+      "manager": {
+        "n": 8,
+        "mean_a": 0.875,
+        "mean_b": 1.0,
+        "mean_diff": 0.125,
+        "ci95": [
+          0.0,
+          0.375
+        ],
+        "p_diff_le_0": 0.3379,
+        "n_boot": 10000,
+        "seed": 20260929
+      },
+      "no_tool": {
+        "n": 2,
+        "mean_a": 0.75,
+        "mean_b": 1.0,
+        "mean_diff": 0.25,
+        "ci95": [
+          0.0,
+          0.5
+        ],
+        "p_diff_le_0": 0.2501,
+        "n_boot": 10000,
+        "seed": 20260929
+      },
+      "performance": {
+        "n": 8,
+        "mean_a": 0.75,
+        "mean_b": 0.75,
+        "mean_diff": 0.0,
+        "ci95": [
+          -0.5,
+          0.5
+        ],
+        "p_diff_le_0": 0.5915,
+        "n_boot": 10000,
+        "seed": 20260929
+      },
+      "tool_sql": {
+        "n": 15,
+        "mean_a": 0.8,
+        "mean_b": 0.8,
+        "mean_diff": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "p_diff_le_0": 1.0,
+        "n_boot": 10000,
+        "seed": 20260929
+      },
+      "unanswerable": {
+        "n": 7,
+        "mean_a": 1.0,
+        "mean_b": 1.0,
+        "mean_diff": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "p_diff_le_0": 1.0,
+        "n_boot": 10000,
+        "seed": 20260929
+      }
+    }
+  },
+  "api_error_retries": {
+    "hybrid_rerank": [],
+    "vector": []
+  },
+  "failed_runs": {
+    "hybrid_rerank": [],
+    "vector": []
+  },
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.3"
+  },
+  "scored_at_utc": "20260929T174806Z",
+  "score_command": "cd ai-service && python -m fund_ai.eval.answer score --dir ..\\reports\\answer_eval\\20260929T171529Z --label S8 回答评测（test：fund_qa 79 + agent_tasks 45 = 124 题；vector vs hybrid_rerank）"
+}

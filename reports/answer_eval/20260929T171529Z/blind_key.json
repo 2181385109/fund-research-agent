@@ -1,0 +1,223 @@
+{
+ "seed": 20260930,
+ "n": 36,
+ "pool": 72,
+ "rows": [
+  {
+   "row": "B001",
+   "config": "vector",
+   "id": "qa-0082",
+   "topic": "commentary"
+  },
+  {
+   "row": "B002",
+   "config": "hybrid_rerank",
+   "id": "agent-0061",
+   "topic": "doc_only"
+  },
+  {
+   "row": "B003",
+   "config": "vector",
+   "id": "qa-0074",
+   "topic": "commentary"
+  },
+  {
+   "row": "B004",
+   "config": "hybrid_rerank",
+   "id": "agent-0045",
+   "topic": "doc_db"
+  },
+  {
+   "row": "B005",
+   "config": "vector",
+   "id": "qa-0099",
+   "topic": "cross_doc"
+  },
+  {
+   "row": "B006",
+   "config": "hybrid_rerank",
+   "id": "agent-0047",
+   "topic": "doc_db"
+  },
+  {
+   "row": "B007",
+   "config": "hybrid_rerank",
+   "id": "qa-0087",
+   "topic": "commentary"
+  },
+  {
+   "row": "B008",
+   "config": "hybrid_rerank",
+   "id": "qa-0069",
+   "topic": "contract_clause"
+  },
+  {
+   "row": "B009",
+   "config": "hybrid_rerank",
+   "id": "agent-0040",
+   "topic": "doc_db"
+  },
+  {
+   "row": "B010",
+   "config": "vector",
+   "id": "qa-0078",
+   "topic": "commentary"
+  },
+  {
+   "row": "B011",
+   "config": "hybrid_rerank",
+   "id": "qa-0094",
+   "topic": "cross_doc"
+  },
+  {
+   "row": "B012",
+   "config": "vector",
+   "id": "agent-0045",
+   "topic": "doc_db"
+  },
+  {
+   "row": "B013",
+   "config": "hybrid_rerank",
+   "id": "qa-0084",
+   "topic": "commentary"
+  },
+  {
+   "row": "B014",
+   "config": "vector",
+   "id": "agent-0042",
+   "topic": "doc_db"
+  },
+  {
+   "row": "B015",
+   "config": "hybrid_rerank",
+   "id": "qa-0098",
+   "topic": "cross_doc"
+  },
+  {
+   "row": "B016",
+   "config": "hybrid_rerank",
+   "id": "qa-0099",
+   "topic": "cross_doc"
+  },
+  {
+   "row": "B017",
+   "config": "hybrid_rerank",
+   "id": "qa-0057",
+   "topic": "contract_clause"
+  },
+  {
+   "row": "B018",
+   "config": "vector",
+   "id": "qa-0093",
+   "topic": "cross_doc"
+  },
+  {
+   "row": "B019",
+   "config": "vector",
+   "id": "agent-0064",
+   "topic": "no_tool"
+  },
+  {
+   "row": "B020",
+   "config": "hybrid_rerank",
+   "id": "qa-0082",
+   "topic": "commentary"
+  },
+  {
+   "row": "B021",
+   "config": "vector",
+   "id": "qa-0079",
+   "topic": "commentary"
+  },
+  {
+   "row": "B022",
+   "config": "vector",
+   "id": "qa-0087",
+   "topic": "commentary"
+  },
+  {
+   "row": "B023",
+   "config": "vector",
+   "id": "agent-0040",
+   "topic": "doc_db"
+  },
+  {
+   "row": "B024",
+   "config": "hybrid_rerank",
+   "id": "qa-0071",
+   "topic": "contract_clause"
+  },
+  {
+   "row": "B025",
+   "config": "vector",
+   "id": "qa-0071",
+   "topic": "contract_clause"
+  },
+  {
+   "row": "B026",
+   "config": "vector",
+   "id": "qa-0069",
+   "topic": "contract_clause"
+  },
+  {
+   "row": "B027",
+   "config": "hybrid_rerank",
+   "id": "agent-0043",
+   "topic": "doc_db"
+  },
+  {
+   "row": "B028",
+   "config": "hybrid_rerank",
+   "id": "qa-0090",
+   "topic": "commentary"
+  },
+  {
+   "row": "B029",
+   "config": "hybrid_rerank",
+   "id": "agent-0041",
+   "topic": "doc_db"
+  },
+  {
+   "row": "B030",
+   "config": "hybrid_rerank",
+   "id": "qa-0074",
+   "topic": "commentary"
+  },
+  {
+   "row": "B031",
+   "config": "vector",
+   "id": "agent-0048",
+   "topic": "doc_db"
+  },
+  {
+   "row": "B032",
+   "config": "hybrid_rerank",
+   "id": "qa-0079",
+   "topic": "commentary"
+  },
+  {
+   "row": "B033",
+   "config": "hybrid_rerank",
+   "id": "qa-0086",
+   "topic": "commentary"
+  },
+  {
+   "row": "B034",
+   "config": "hybrid_rerank",
+   "id": "qa-0085",
+   "topic": "commentary"
+  },
+  {
+   "row": "B035",
+   "config": "hybrid_rerank",
+   "id": "agent-0066",
+   "topic": "no_tool"
+  },
+  {
+   "row": "B036",
+   "config": "vector",
+   "id": "agent-0061",
+   "topic": "doc_only"
+  }
+ ]
+}

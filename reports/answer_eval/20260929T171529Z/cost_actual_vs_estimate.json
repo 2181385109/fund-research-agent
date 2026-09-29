@@ -1,0 +1,72 @@
+{
+  "run": "reports\\answer_eval\\20260929T171529Z",
+  "judge_model_in_run": "deepseek-flash",
+  "per_config_tokens": {
+    "hybrid_rerank": {
+      "agent_input_tokens": 1453580,
+      "agent_output_tokens": 55250,
+      "judge_input_tokens": 32010,
+      "judge_output_tokens": 2212
+    },
+    "vector": {
+      "agent_input_tokens": 1559449,
+      "agent_output_tokens": 61101,
+      "judge_input_tokens": 33511,
+      "judge_output_tokens": 2197
+    }
+  },
+  "modes": {
+    "peak": {
+      "actual_upper_bound_usd": {
+        "agent": 1.0435,
+        "judge": 0.0249,
+        "total": 1.0685
+      },
+      "estimate_at_gate_usd": {
+        "agent": 0.9955,
+        "judge_v4_pro": 0.1078,
+        "total": 1.1033
+      },
+      "estimate_recomputed_with_flash_judge_usd": {
+        "agent": 0.9955,
+        "judge": 0.0259,
+        "total": 1.0214
+      }
+    },
+    "off_peak": {
+      "actual_upper_bound_usd": {
+        "agent": 0.5218,
+        "judge": 0.0125,
+        "total": 0.5342
+      },
+      "estimate_at_gate_usd": {
+        "agent": 0.4978,
+        "judge_v4_pro": 0.0539,
+        "total": 0.5517
+      },
+      "estimate_recomputed_with_flash_judge_usd": {
+        "agent": 0.4978,
+        "judge": 0.0129,
+        "total": 0.5107
+      }
+    }
+  },
+  "tokens": {
+    "actual": {
+      "agent_in": 3013029,
+      "agent_out": 116351,
+      "judge_in": 65521,
+      "judge_out": 4409,
+      "judge_calls": 94
+    },
+    "estimate": {
+      "agent_in": 2844087,
+      "agent_out": 118569,
+      "judge_in": 67868,
+      "judge_out": 4606,
+      "judge_calls": 94
+    },
+    "agent_in_ratio_actual_over_estimate": 1.059,
+    "agent_out_ratio_actual_over_estimate": 0.981
+  }
+}
