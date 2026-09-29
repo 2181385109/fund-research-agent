@@ -1,0 +1,29 @@
+{
+  "name": "fund-research-frontend",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "description": "fund-research-agent 前端：登录、知识库与文档管理、对话页（SSE 流式、出处、固定风险提示）",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "test": "vitest run",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "dompurify": "^3.2.0",
+    "marked": "^15.0.0",
+    "vue": "^3.5.0",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.4",
+    "@vitejs/plugin-vue": "^5.2.0",
+    "@vue/test-utils": "^2.5.1",
+    "jsdom": "^26.0.0",
+    "typescript": "~5.8.0",
+    "vite": "^6.0.0",
+    "vitest": "^3.0.0",
+    "vue-tsc": "^2.2.0"
+  }
+}

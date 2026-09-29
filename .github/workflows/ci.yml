@@ -1,5 +1,6 @@
 # CI（CLAUDE.md §9）：不下载模型、不调用真实 LLM、不访问外网（除依赖下载外）。
 #   backend       temurin 17，mvn -B verify
+#   frontend      node 22，npm ci → vitest（单测）→ vue-tsc + vite build（S7）
 #   python        ai-service / mcp-tools / data-pipeline / eval 四个包矩阵：ruff check、ruff format --check、pytest（排除 integration/slow/live）；
 #                 eval 的 pytest 含对仓库内评测集的离线校验（schema、题数、分层、引用）
 #   scripts       security_scan / llm_smoke / gen_env 的离线单测 + 对本仓库跑安全扫描（含 --history）
@@ -39,6 +40,27 @@ jobs:
           name: backend-surefire-reports
           path: backend/target/surefire-reports/
           retention-days: 14
+
+  frontend:
+    name: frontend (test + build)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: 安装
+        run: npm ci
+      - name: 单测（vitest）
+        run: npm test
+      - name: 类型检查 + 构建
+        run: npm run build
 
   python:
     name: python (${{ matrix.package }})
