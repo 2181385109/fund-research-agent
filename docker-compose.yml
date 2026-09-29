@@ -1,5 +1,6 @@
 # fund-research-agent 本地编排。默认只起 infra（mysql / redis / elasticsearch / milvus）；
-# 应用服务（backend、ai-service、mcp-tools、frontend）在 S7 以 profile "app" 加入，Kafka 在 S11 加入。
+# 应用服务（backend、ai-service、mcp-tools、frontend）属于 profile "app"（S7）：docker compose --profile app up -d --build。
+# Kafka 在 S11 加入。
 # 在 WSL2 里的 Docker Engine 上运行，启动命令见 docs/SETUP.md。
 # 端口、密码全部来自 .env（由 scripts/gen_env.py 生成）；mem_limit 按 PLAN §3。
 
@@ -126,8 +127,164 @@ services:
       retries: 3
       start_period: 90s
 
+  # ------------------------------------------------------------------ 应用服务（profile "app"，S7）
+  # 容器内互连一律用服务名和容器端口，宿主机端口（.env 的 *_PORT）只用于对外发布；
+  # 每个服务只拿自己用得到的变量（least privilege：例如 ai-service 拿不到 MySQL root 密码）。
+  # 构建上下文都是仓库根，Dockerfile 在 deploy/<服务>/。
+
+  mcp-tools:
+    profiles: ["app"]
+    build:
+      context: .
+      dockerfile: deploy/mcp-tools/Dockerfile
+    image: fra/mcp-tools:dev
+    container_name: fra-mcp-tools
+    restart: unless-stopped
+    mem_limit: 256m
+    environment:
+      MCP_TOOLS_HOST: 0.0.0.0
+      MCP_TOOLS_PORT: "8101"
+      MYSQL_HOST: mysql
+      MYSQL_PORT: "3306"
+      FUND_DATA_DB: ${FUND_DATA_DB:-fund_data}
+      FUND_READER_USER: ${FUND_READER_USER:-fund_reader}
+      FUND_READER_PASSWORD: ${FUND_READER_PASSWORD:-}
+      NAV_API_BASE_URL: ${NAV_API_BASE_URL:-https://api.fund.eastmoney.com}
+      NAV_TIMEOUT_S: ${NAV_TIMEOUT_S:-3}
+      NAV_RETRIES: ${NAV_RETRIES:-2}
+      NAV_CACHE_TTL_S: ${NAV_CACHE_TTL_S:-600}
+      SQL_MAX_ROWS: ${SQL_MAX_ROWS:-200}
+      SQL_TIMEOUT_S: ${SQL_TIMEOUT_S:-5}
+      DATA_AS_OF: ${DATA_AS_OF:-}
+      TZ: Asia/Shanghai
+    ports:
+      - "${MCP_TOOLS_PORT:-8101}:8101"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  ai-service:
+    profiles: ["app"]
+    build:
+      context: .
+      dockerfile: deploy/ai-service/Dockerfile
+    image: fra/ai-service:dev
+    container_name: fra-ai-service
+    restart: unless-stopped
+    mem_limit: 2560m
+    environment:
+      AI_SERVICE_PORT: "8001"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+      ES_URL: http://elasticsearch:9200
+      MILVUS_URI: http://milvus:19530
+      MYSQL_HOST: mysql
+      MYSQL_PORT: "3306"
+      FUND_DATA_DB: ${FUND_DATA_DB:-fund_data}
+      FUND_READER_USER: ${FUND_READER_USER:-fund_reader}
+      FUND_READER_PASSWORD: ${FUND_READER_PASSWORD:-}
+      LLM_BASE_URL: ${LLM_BASE_URL:-https://api.deepseek.com}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_MODEL: ${LLM_MODEL:-deepseek-flash}
+      LLM_THINKING: ${LLM_THINKING:-disabled}
+      LLM_TIMEOUT_SECONDS: ${LLM_TIMEOUT_SECONDS:-60}
+      # Agent 用 HTTP 回环调自己的 /mcp：Host 头是服务名，必须在白名单里（否则 421）
+      MCP_TOOLS_URL: http://mcp-tools:8101/mcp
+      MCP_DOCS_URL: http://ai-service:8001/mcp
+      MCP_ALLOWED_HOSTS: '["127.0.0.1:*","localhost:*","[::1]:*","ai-service:*"]'
+      BACKEND_BASE_URL: http://backend:8081
+      INTERNAL_CALLBACK_SECRET: ${INTERNAL_CALLBACK_SECRET:-}
+      KB_SCOPE_SECRET: ${KB_SCOPE_SECRET:-}
+      EMBEDDING_PROVIDER: ${EMBEDDING_PROVIDER:-bge}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-BAAI/bge-small-zh-v1.5}
+      EMBEDDING_BATCH_SIZE: ${EMBEDDING_BATCH_SIZE:-32}
+      RERANKER_PROVIDER: ${RERANKER_PROVIDER:-cross_encoder}
+      RERANKER_MODEL: ${RERANKER_MODEL:-BAAI/bge-reranker-base}
+      HF_ENDPOINT: ${HF_ENDPOINT:-https://hf-mirror.com}
+      DATA_AS_OF: ${DATA_AS_OF:-}
+      TZ: Asia/Shanghai
+    ports:
+      - "${AI_SERVICE_PORT:-8001}:8001"
+    volumes:
+      # 模型缓存：命名卷，首次用 `docker compose --profile app run --rm ai-service python -m fund_ai.models_cli` 下载
+      - model_cache:/models
+      # data/ 只读挂入（MANIFEST、披露 PDF、快照不进镜像）；入库 CLI 按 MANIFEST 里的 data/raw/... 路径读 PDF
+      - ./data:/app/data:ro
+      # 用户上传：backend 写、ai-service 读，路径在两个容器里必须一致（ai-service 只接受 DATA_DIR 之下的路径）
+      - uploads:/app/data/uploads:ro
+      # 入库 CLI 把 summary.json 写到 reports/ingest/
+      - ./reports:/app/reports
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
+      milvus:
+        condition: service_healthy
+      mcp-tools:
+        condition: service_healthy
+
+  backend:
+    profiles: ["app"]
+    build:
+      context: .
+      dockerfile: deploy/backend/Dockerfile
+    image: fra/backend:dev
+    container_name: fra-backend
+    restart: unless-stopped
+    mem_limit: 768m
+    environment:
+      BACKEND_PORT: "8081"
+      MYSQL_HOST: mysql
+      MYSQL_PORT: "3306"
+      MYSQL_APP_DB: ${MYSQL_APP_DB:-fra_app}
+      MYSQL_APP_USER: ${MYSQL_APP_USER:-fra_app}
+      MYSQL_APP_PASSWORD: ${MYSQL_APP_PASSWORD:-}
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+      JWT_SECRET: ${JWT_SECRET:-}
+      JWT_TTL: ${JWT_TTL:-12h}
+      INTERNAL_CALLBACK_SECRET: ${INTERNAL_CALLBACK_SECRET:-}
+      AI_SERVICE_BASE_URL: http://ai-service:8001
+      AI_CHAT_IDLE_TIMEOUT: ${AI_CHAT_IDLE_TIMEOUT:-120s}
+      CHAT_HISTORY_ROUNDS: ${CHAT_HISTORY_ROUNDS:-6}
+      CHAT_HEARTBEAT: ${CHAT_HEARTBEAT:-5s}
+      UPLOAD_STALE_AFTER: ${UPLOAD_STALE_AFTER:-15m}
+      UPLOAD_DIR: /app/data/uploads
+      TZ: Asia/Shanghai
+    ports:
+      - "${BACKEND_PORT:-8081}:8081"
+    volumes:
+      - uploads:/app/data/uploads
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  frontend:
+    profiles: ["app"]
+    build:
+      context: .
+      dockerfile: deploy/frontend/Dockerfile
+    image: fra/frontend:dev
+    container_name: fra-frontend
+    restart: unless-stopped
+    mem_limit: 64m
+    ports:
+      - "${FRONTEND_PORT:-8088}:8080"
+    depends_on:
+      backend:
+        condition: service_healthy
+
 volumes:
   mysql_data:
   redis_data:
   es_data:
   milvus_data:
+  model_cache:
+  uploads:

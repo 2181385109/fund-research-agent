@@ -1,0 +1,26 @@
+# 四个 Dockerfile 都以仓库根为构建上下文（deploy/<服务>/Dockerfile）；这里排除用不到的大目录，
+# 尤其是 data/（披露 PDF 与快照不进任何镜像，运行时以卷挂载）、模型缓存和各种本地产物。
+.git
+.github
+.env
+.env.*
+!.env.example
+.scratch*
+.cache
+data
+reports
+eval
+loadtest
+docs
+scripts
+data-pipeline
+proto
+**/.venv
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+**/*.egg-info
+**/node_modules
+frontend/dist
+backend/target
+**/*.log
