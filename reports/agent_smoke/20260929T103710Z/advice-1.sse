@@ -1,0 +1,2982 @@
+event: meta
+data: {"request_id": "9a8c81128a4d48c1", "model": "deepseek-flash", "max_steps": 6}
+
+event: tool_start
+data: {"call_id": "call_00_XUnDndMAtOw7JOSA8QXq9124", "name": "get_fund_db_schema", "args": {}, "step": 1}
+
+event: tool_end
+data: {"call_id": "call_00_XUnDndMAtOw7JOSA8QXq9124", "name": "get_fund_db_schema", "duration_ms": 194.2, "status": "ok", "summary": "已返回表结构", "citation_ids": []}
+
+event: tool_start
+data: {"call_id": "call_01_3IX2JKFRiMmKScz1pxlp8277", "name": "search_fund_documents", "args": {"query": "投资范围 投资策略 风险提示", "fund_codes": ["003095", "001513"], "doc_types": ["prospectus"], "top_n": 6}, "step": 1}
+
+event: tool_end
+data: {"call_id": "call_01_3IX2JKFRiMmKScz1pxlp8277", "name": "search_fund_documents", "duration_ms": 3560.1, "status": "ok", "summary": "检索到 6 个片段", "citation_ids": [1, 2, 3, 4, 5, 6]}
+
+event: tool_start
+data: {"call_id": "call_00_3SLZcJpccPYWpQmVzbDd9849", "name": "run_fund_sql", "args": {"sql": "SELECT f.fund_code, f.fund_name, f.theme, f.style, f.fund_type, f.company, f.established, f.benchmark FROM funds f WHERE f.fund_code IN ('003095','001513')"}, "step": 2}
+
+event: tool_end
+data: {"call_id": "call_00_3SLZcJpccPYWpQmVzbDd9849", "name": "run_fund_sql", "duration_ms": 250.7, "status": "ok", "summary": "返回 2 行", "citation_ids": [7]}
+
+event: tool_start
+data: {"call_id": "call_01_62Wpko5S64qmSvPZCjvU3891", "name": "run_fund_sql", "args": {"sql": "SELECT share_code, management_fee, custody_fee, sales_service_fee FROM fees WHERE share_code IN ('003095','003096','001513','019018')"}, "step": 2}
+
+event: tool_end
+data: {"call_id": "call_01_62Wpko5S64qmSvPZCjvU3891", "name": "run_fund_sql", "duration_ms": 253.7, "status": "ok", "summary": "返回 4 行", "citation_ids": [8]}
+
+event: tool_start
+data: {"call_id": "call_02_uIjt38p9rbcuQas1PUvv0576", "name": "run_fund_sql", "args": {"sql": "SELECT fund_code, report_date, net_assets FROM fund_scale WHERE fund_code IN ('003095','001513') ORDER BY fund_code, report_date"}, "step": 2}
+
+event: tool_end
+data: {"call_id": "call_02_uIjt38p9rbcuQas1PUvv0576", "name": "run_fund_sql", "duration_ms": 250.8, "status": "ok", "summary": "返回 4 行", "citation_ids": [9]}
+
+event: tool_start
+data: {"call_id": "call_03_R2p5lQq5yEZI097YXiTb8862", "name": "run_fund_sql", "args": {"sql": "SELECT share_code, period, ret, end_date FROM period_returns WHERE share_code IN ('003095','001513') ORDER BY share_code, period"}, "step": 2}
+
+event: tool_end
+data: {"call_id": "call_03_R2p5lQq5yEZI097YXiTb8862", "name": "run_fund_sql", "duration_ms": 252.5, "status": "ok", "summary": "返回 18 行", "citation_ids": [10]}
+
+event: tool_start
+data: {"call_id": "call_04_SdXat2O9rLzYcP1prVsU3382", "name": "run_fund_sql", "args": {"sql": "SELECT fund_code, report_period, rank_no, stock_name, weight FROM holdings_top10 WHERE fund_code IN ('003095','001513') AND report_period = (SELECT MAX(report_period) FROM holdings_top10 WHERE fund_code='003095') ORDER BY fund_code, rank_no"}, "step": 2}
+
+event: tool_end
+data: {"call_id": "call_04_SdXat2O9rLzYcP1prVsU3382", "name": "run_fund_sql", "duration_ms": 254.9, "status": "ok", "summary": "返回 20 行", "citation_ids": [11]}
+
+event: tool_start
+data: {"call_id": "call_05_DywEAQqHJe6yfdIMwJFs4704", "name": "run_fund_sql", "args": {"sql": "SELECT fund_code, manager_name, start_date, end_date FROM fund_manager_tenures WHERE fund_code IN ('003095','001513') ORDER BY fund_code, start_date"}, "step": 2}
+
+event: tool_end
+data: {"call_id": "call_05_DywEAQqHJe6yfdIMwJFs4704", "name": "run_fund_sql", "duration_ms": 265.4, "status": "ok", "summary": "返回 3 行", "citation_ids": [12]}
+
+event: tool_start
+data: {"call_id": "call_00_PdSslivj6Z9otDgt1aAu2633", "name": "calc_fund_return", "args": {"share_code": "003095", "start": "2024-09-28", "end": "2026-09-28"}, "step": 3}
+
+event: tool_end
+data: {"call_id": "call_00_PdSslivj6Z9otDgt1aAu2633", "name": "calc_fund_return", "duration_ms": 374.9, "status": "ok", "summary": "区间 2024-09-27~2026-09-28，收益 23.65%", "citation_ids": [13]}
+
+event: tool_start
+data: {"call_id": "call_01_WefVhkfYhBnv18YHf8R85620", "name": "calc_fund_return", "args": {"share_code": "001513", "start": "2024-09-28", "end": "2026-09-28"}, "step": 3}
+
+event: tool_end
+data: {"call_id": "call_01_WefVhkfYhBnv18YHf8R85620", "name": "calc_fund_return", "duration_ms": 374.6, "status": "ok", "summary": "区间 2024-09-27~2026-09-28，收益 239.69%", "citation_ids": [14]}
+
+event: tool_start
+data: {"call_id": "call_02_0OfIzDTPiHmwLMco3IKk0170", "name": "calc_fund_return", "args": {"share_code": "003095", "start": "2026-01-01", "end": "2026-09-28"}, "step": 3}
+
+event: tool_end
+data: {"call_id": "call_02_0OfIzDTPiHmwLMco3IKk0170", "name": "calc_fund_return", "duration_ms": 381.6, "status": "ok", "summary": "区间 2025-12-31~2026-09-28，收益 10.02%", "citation_ids": [15]}
+
+event: tool_start
+data: {"call_id": "call_03_tifW6VWKrDVt9hgmxh713950", "name": "calc_fund_return", "args": {"share_code": "001513", "start": "2026-01-01", "end": "2026-09-28"}, "step": 3}
+
+event: tool_end
+data: {"call_id": "call_03_tifW6VWKrDVt9hgmxh713950", "name": "calc_fund_return", "duration_ms": 375.8, "status": "ok", "summary": "区间 2025-12-31~2026-09-28，收益 38.95%", "citation_ids": [16]}
+
+event: token
+data: {"text": "无法替您选择或推荐其中一只，也不能判断现在是否适合买入。以下为两只基金的客观数据（均按 A 类份额，即主代码），供您自行参考。\n\n**基本信息（截至 2026-09-28 快照）**\n\n| 项目 | 中欧医疗健康混合 003095 | 易方达信息产业混合 001513 |\n|---|---|---|\n| 主题 / 类型 |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "医疗"}
+
+event: token
+data: {"text": " /"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": "型"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "偏"}
+
+event: token
+data: {"text": "股"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "主动"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "[7]"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "科技"}
+
+event: token
+data: {"text": " /"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": "型"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "偏"}
+
+event: token
+data: {"text": "股"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "主动"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "[7]"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "管理人"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "欧"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[7]"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "易"}
+
+event: token
+data: {"text": "方"}
+
+event: token
+data: {"text": "达"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[7]"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "成立"}
+
+event: token
+data: {"text": "日"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "201"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "09"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "29"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[7]"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "201"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "09"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "27"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[7]"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "业绩"}
+
+event: token
+data: {"text": "比较"}
+
+event: token
+data: {"text": "基准"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "证"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "卫生"}
+
+event: token
+data: {"text": "指数"}
+
+event: token
+data: {"text": "×"}
+
+event: token
+data: {"text": "90"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": "+"}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "证"}
+
+event: token
+data: {"text": "综合"}
+
+event: token
+data: {"text": "债"}
+
+event: token
+data: {"text": "指数"}
+
+event: token
+data: {"text": "×"}
+
+event: token
+data: {"text": "10"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[7]"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "证"}
+
+event: token
+data: {"text": "T"}
+
+event: token
+data: {"text": "MT"}
+
+event: token
+data: {"text": "产业"}
+
+event: token
+data: {"text": "主题"}
+
+event: token
+data: {"text": "指数"}
+
+event: token
+data: {"text": "×"}
+
+event: token
+data: {"text": "85"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": "+"}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "债"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "总"}
+
+event: token
+data: {"text": "全"}
+
+event: token
+data: {"text": "价"}
+
+event: token
+data: {"text": "("}
+
+event: token
+data: {"text": "总值"}
+
+event: token
+data: {"text": ")"}
+
+event: token
+data: {"text": "指数"}
+
+event: token
+data: {"text": "×"}
+
+event: token
+data: {"text": "15"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[7]"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "现任"}
+
+event: token
+data: {"text": "基金经理"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "葛"}
+
+event: token
+data: {"text": "兰"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "201"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "09"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "29"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "起"}
+
+event: token
+data: {"text": "）、"}
+
+event: token
+data: {"text": "赵"}
+
+event: token
+data: {"text": "磊"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "202"}
+
+event: token
+data: {"text": "5"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "07"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "04"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "起"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "[12]"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "郑"}
+
+event: token
+data: {"text": "希"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "201"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "09"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "27"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "起"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "[12]"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "资产"}
+
+event: token
+data: {"text": "净值"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "247"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "70"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "亿元"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "202"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "06"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "30"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "[9]"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "211"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "44"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "亿元"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "202"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "06"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "30"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "[9]"}
+
+event: token
+data: {"text": " |\n\n"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "费率"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "A"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "类"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "年"}
+
+event: token
+data: {"text": "费率"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "："}
+
+event: token
+data: {"text": "两只"}
+
+event: token
+data: {"text": "管理"}
+
+event: token
+data: {"text": "费"}
+
+event: token
+data: {"text": "均为"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "1"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "20"}
+
+event: token
+data: {"text": "%、"}
+
+event: token
+data: {"text": "托管"}
+
+event: token
+data: {"text": "费"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "0"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "20"}
+
+event: token
+data: {"text": "%、"}
+
+event: token
+data: {"text": "销售"}
+
+event: token
+data: {"text": "服务"}
+
+event: token
+data: {"text": "费"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "0"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[8]。"}
+
+event: token
+data: {"text": "C"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "类"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "003"}
+
+event: token
+data: {"text": "096"}
+
+event: token
+data: {"text": " /"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "019"}
+
+event: token
+data: {"text": "018"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "销售"}
+
+event: token
+data: {"text": "服务"}
+
+event: token
+data: {"text": "费"}
+
+event: token
+data: {"text": "分别为"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "0"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "80"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " /"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "0"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "50"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[8]。\n\n"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "区间"}
+
+event: token
+data: {"text": "收益"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "复"}
+
+event: token
+data: {"text": "权"}
+
+event: token
+data: {"text": "口径"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "由"}
+
+event: token
+data: {"text": "工具"}
+
+event: token
+data: {"text": "计算"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "**\n\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "区间"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "003"}
+
+event: token
+data: {"text": "095"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "001"}
+
+event: token
+data: {"text": "513"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|---|---"}
+
+event: token
+data: {"text": "|---"}
+
+event: token
+data: {"text": "|\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "202"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "年初"}
+
+event: token
+data: {"text": "至"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "202"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "09"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "28"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "10"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "02"}
+
+event: token
+data: {"text": "%，"}
+
+event: token
+data: {"text": "年"}
+
+event: token
+data: {"text": "化"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "13"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "73"}
+
+event: token
+data: {"text": "%，"}
+
+event: token
+data: {"text": "最大"}
+
+event: token
+data: {"text": "回"}
+
+event: token
+data: {"text": "撤"}
+
+event: token
+data: {"text": " -"}
+
+event: token
+data: {"text": "23"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "37"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[15]"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "38"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "95"}
+
+event: token
+data: {"text": "%，"}
+
+event: token
+data: {"text": "年"}
+
+event: token
+data: {"text": "化"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "55"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "74"}
+
+event: token
+data: {"text": "%，"}
+
+event: token
+data: {"text": "最大"}
+
+event: token
+data: {"text": "回"}
+
+event: token
+data: {"text": "撤"}
+
+event: token
+data: {"text": " -"}
+
+event: token
+data: {"text": "34"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "30"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[16]"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "202"}
+
+event: token
+data: {"text": "4"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "09"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "27"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "至"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "202"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "09"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "28"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "约"}
+
+event: token
+data: {"text": "两年"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "23"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "65"}
+
+event: token
+data: {"text": "%，"}
+
+event: token
+data: {"text": "年"}
+
+event: token
+data: {"text": "化"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "11"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "18"}
+
+event: token
+data: {"text": "%，"}
+
+event: token
+data: {"text": "最大"}
+
+event: token
+data: {"text": "回"}
+
+event: token
+data: {"text": "撤"}
+
+event: token
+data: {"text": " -"}
+
+event: token
+data: {"text": "30"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "32"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[13]"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "239"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "69"}
+
+event: token
+data: {"text": "%，"}
+
+event: token
+data: {"text": "年"}
+
+event: token
+data: {"text": "化"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "84"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "15"}
+
+event: token
+data: {"text": "%，"}
+
+event: token
+data: {"text": "最大"}
+
+event: token
+data: {"text": "回"}
+
+event: token
+data: {"text": "撤"}
+
+event: token
+data: {"text": " -"}
+
+event: token
+data: {"text": "34"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "30"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[14]"}
+
+event: token
+data: {"text": " |\n\n"}
+
+event: token
+data: {"text": "来源"}
+
+event: token
+data: {"text": "方"}
+
+event: token
+data: {"text": "口径"}
+
+event: token
+data: {"text": "的"}
+
+event: token
+data: {"text": "区间"}
+
+event: token
+data: {"text": "收益"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "截至"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "202"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "09"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "28"}
+
+event: token
+data: {"text": "）："}
+
+event: token
+data: {"text": "003"}
+
+event: token
+data: {"text": "095"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "近"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "1"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "年"}
+
+event: token
+data: {"text": " -"}
+
+event: token
+data: {"text": "4"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "34"}
+
+event: token
+data: {"text": "%、"}
+
+event: token
+data: {"text": "近"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "3"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "年"}
+
+event: token
+data: {"text": " -"}
+
+event: token
+data: {"text": "2"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "20"}
+
+event: token
+data: {"text": "%、"}
+
+event: token
+data: {"text": "成立"}
+
+event: token
+data: {"text": "以来"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "114"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "93"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[10]"}
+
+event: token
+data: {"text": "；"}
+
+event: token
+data: {"text": "001"}
+
+event: token
+data: {"text": "513"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "近"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "1"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "年"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "48"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "16"}
+
+event: token
+data: {"text": "%、"}
+
+event: token
+data: {"text": "近"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "3"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "年"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "252"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "30"}
+
+event: token
+data: {"text": "%、"}
+
+event: token
+data: {"text": "成立"}
+
+event: token
+data: {"text": "以来"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "668"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "37"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[10]。\n\n"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "202"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "年"}
+
+event: token
+data: {"text": "二"}
+
+event: token
+data: {"text": "季度"}
+
+event: token
+data: {"text": "末"}
+
+event: token
+data: {"text": "前"}
+
+event: token
+data: {"text": "十大"}
+
+event: token
+data: {"text": "重"}
+
+event: token
+data: {"text": "仓"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "占"}
+
+event: token
+data: {"text": "净值"}
+
+event: token
+data: {"text": "比"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "**\n\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "003"}
+
+event: token
+data: {"text": "095"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[11]"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "权重"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "001"}
+
+event: token
+data: {"text": "513"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[11]"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "权重"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|---|---"}
+
+event: token
+data: {"text": "|---|---"}
+
+event: token
+data: {"text": "|\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "凯"}
+
+event: token
+data: {"text": "莱"}
+
+event: token
+data: {"text": "英"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "10"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "57"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "新"}
+
+event: token
+data: {"text": "易"}
+
+event: token
+data: {"text": "盛"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "09"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "百"}
+
+event: token
+data: {"text": "利"}
+
+event: token
+data: {"text": "天"}
+
+event: token
+data: {"text": "恒"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "9"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "89"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "际"}
+
+event: token
+data: {"text": "旭"}
+
+event: token
+data: {"text": "创"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "5"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "55"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "恒"}
+
+event: token
+data: {"text": "瑞"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "9"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "86"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "三"}
+
+event: token
+data: {"text": "环"}
+
+event: token
+data: {"text": "集团"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "4"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "86"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "药"}
+
+event: token
+data: {"text": "明"}
+
+event: token
+data: {"text": "康德"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "9"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "85"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "生"}
+
+event: token
+data: {"text": "益"}
+
+event: token
+data: {"text": "科技"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "4"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "56"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "海"}
+
+event: token
+data: {"text": "思"}
+
+event: token
+data: {"text": "科"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "8"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "62"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "源"}
+
+event: token
+data: {"text": "杰"}
+
+event: token
+data: {"text": "科技"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "4"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "50"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "康"}
+
+event: token
+data: {"text": "龙"}
+
+event: token
+data: {"text": "化成"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "8"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "45"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "寒"}
+
+event: token
+data: {"text": "武"}
+
+event: token
+data: {"text": "纪"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "4"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "48"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "科"}
+
+event: token
+data: {"text": "伦"}
+
+event: token
+data: {"text": "药业"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "8"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "14"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "鼎"}
+
+event: token
+data: {"text": "泰"}
+
+event: token
+data: {"text": "高"}
+
+event: token
+data: {"text": "科"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "3"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "86"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "泰"}
+
+event: token
+data: {"text": "格"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "4"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "33"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "华"}
+
+event: token
+data: {"text": "虹"}
+
+event: token
+data: {"text": "宏"}
+
+event: token
+data: {"text": "力"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "3"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "52"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "艾"}
+
+event: token
+data: {"text": "力"}
+
+event: token
+data: {"text": "斯"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "3"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "37"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "微"}
+
+event: token
+data: {"text": "公司"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "3"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "11"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "君"}
+
+event: token
+data: {"text": "实"}
+
+event: token
+data: {"text": "生物"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "2"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "02"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "东山"}
+
+event: token
+data: {"text": "精密"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "2"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "96"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " |\n\n"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "招募"}
+
+event: token
+data: {"text": "说明书"}
+
+event: token
+data: {"text": "中的"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "揭示"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "原文"}
+
+event: token
+data: {"text": "要点"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "**\n"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "001"}
+
+event: token
+data: {"text": "513"}
+
+event: token
+data: {"text": "："}
+
+event: token
+data: {"text": "股票"}
+
+event: token
+data: {"text": "资产"}
+
+event: token
+data: {"text": "占"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "资产"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "60"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": "–"}
+
+event: token
+data: {"text": "95"}
+
+event: token
+data: {"text": "%，"}
+
+event: token
+data: {"text": "属"}
+
+event: token
+data: {"text": "股票"}
+
+event: token
+data: {"text": "仓位"}
+
+event: token
+data: {"text": "偏高"}
+
+event: token
+data: {"text": "且"}
+
+event: token
+data: {"text": "相对"}
+
+event: token
+data: {"text": "稳定的"}
+
+event: token
+data: {"text": "品种"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "受"}
+
+event: token
+data: {"text": "股市"}
+
+event: token
+data: {"text": "系统性"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "影响"}
+
+event: token
+data: {"text": "较大"}
+
+event: token
+data: {"text": "；"}
+
+event: token
+data: {"text": "非"}
+
+event: token
+data: {"text": "现金"}
+
+event: token
+data: {"text": "资产"}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "不低于"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "80"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "投资"}
+
+event: token
+data: {"text": "于"}
+
+event: token
+data: {"text": "信息"}
+
+event: token
+data: {"text": "产业"}
+
+event: token
+data: {"text": "证券"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "须"}
+
+event: token
+data: {"text": "承受"}
+
+event: token
+data: {"text": "信息"}
+
+event: token
+data: {"text": "产业"}
+
+event: token
+data: {"text": "特有"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "行业"}
+
+event: token
+data: {"text": "表现"}
+
+event: token
+data: {"text": "不佳"}
+
+event: token
+data: {"text": "时"}
+
+event: token
+data: {"text": "净值"}
+
+event: token
+data: {"text": "将"}
+
+event: token
+data: {"text": "受"}
+
+event: token
+data: {"text": "较大"}
+
+event: token
+data: {"text": "影响"}
+
+event: token
+data: {"text": "；"}
+
+event: token
+data: {"text": "投资"}
+
+event: token
+data: {"text": "范围"}
+
+event: token
+data: {"text": "含"}
+
+event: token
+data: {"text": "股指"}
+
+event: token
+data: {"text": "期货"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "期权"}
+
+event: token
+data: {"text": "等"}
+
+event: token
+data: {"text": "衍生"}
+
+event: token
+data: {"text": "品"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "可能"}
+
+event: token
+data: {"text": "增加"}
+
+event: token
+data: {"text": "净值"}
+
+event: token
+data: {"text": "波动"}
+
+event: token
+data: {"text": "性"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[3]"}
+
+event: token
+data: {"text": "。\n"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "003"}
+
+event: token
+data: {"text": "095"}
+
+event: token
+data: {"text": "："}
+
+event: token
+data: {"text": "招募"}
+
+event: token
+data: {"text": "说明书"}
+
+event: token
+data: {"text": "披露"}
+
+event: token
+data: {"text": "的投资"}
+
+event: token
+data: {"text": "策略"}
+
+event: token
+data: {"text": "涵盖"}
+
+event: token
+data: {"text": "债券"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "股指"}
+
+event: token
+data: {"text": "期货"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "资产"}
+
+event: token
+data: {"text": "支持"}
+
+event: token
+data: {"text": "证券"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "中小企业"}
+
+event: token
+data: {"text": "私募"}
+
+event: token
+data: {"text": "债"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "权"}
+
+event: token
+data: {"text": "证"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "股票"}
+
+event: token
+data: {"text": "期权"}
+
+event: token
+data: {"text": "等"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "其中"}
+
+event: token
+data: {"text": "中小企业"}
+
+event: token
+data: {"text": "私募"}
+
+event: token
+data: {"text": "债"}
+
+event: token
+data: {"text": "\""}
+
+event: token
+data: {"text": "普遍"}
+
+event: token
+data: {"text": "具有"}
+
+event: token
+data: {"text": "高风险"}
+
+event: token
+data: {"text": "和高"}
+
+event: token
+data: {"text": "收益"}
+
+event: token
+data: {"text": "的"}
+
+event: token
+data: {"text": "显著"}
+
+event: token
+data: {"text": "特点"}
+
+event: token
+data: {"text": "\"，"}
+
+event: token
+data: {"text": "股票"}
+
+event: token
+data: {"text": "期权"}
+
+event: token
+data: {"text": "以"}
+
+event: token
+data: {"text": "套"}
+
+event: token
+data: {"text": "期"}
+
+event: token
+data: {"text": "保"}
+
+event: token
+data: {"text": "值为"}
+
+event: token
+data: {"text": "主要"}
+
+event: token
+data: {"text": "目的"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[2]"}
+
+event: token
+data: {"text": "[6]。\n\n"}
+
+event: token
+data: {"text": "两只"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "主题"}
+
+event: token
+data: {"text": "不同"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "医疗"}
+
+event: token
+data: {"text": " vs"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "科技"}
+
+event: token
+data: {"text": "），"}
+
+event: token
+data: {"text": "上述"}
+
+event: token
+data: {"text": "数据"}
+
+event: token
+data: {"text": "仅"}
+
+event: token
+data: {"text": "反映"}
+
+event: token
+data: {"text": "历史"}
+
+event: token
+data: {"text": "表现"}
+
+event: token
+data: {"text": "与"}
+
+event: token
+data: {"text": "持仓"}
+
+event: token
+data: {"text": "结构"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "不"}
+
+event: token
+data: {"text": "构成"}
+
+event: token
+data: {"text": "对未来"}
+
+event: token
+data: {"text": "走势"}
+
+event: token
+data: {"text": "的判断"}
+
+event: token
+data: {"text": "。"}
+
+event: citations
+data: {"items": [{"id": 2, "kind": "document", "fund_code": "003095", "fund_name": "中欧医疗健康混合", "doc_id": "003095_prospectus_2026-09-21", "doc_type": "prospectus", "doc_title": "招募说明书（2026-09-21更新）", "report_period": "2026-09-21", "page_start": 44, "page_end": 45, "section": "三、投资策略", "snippet": "（4）对于存托凭证的投资，本基金将依照境内上市交易的股票，通过定性分析和定量分析相结合的方式，精选优质上市公司；并最大限度避免由于存托凭证在交易规则、上市公司治理结构等方面的差异而或有的负面影响。\n3、债券投资策略本基金考察国内宏观经济景气周期引发的债券市场收益率的变化趋势，采取利率预期、久期管理、收益率曲线策略等积极投资策略，力求获取高于业绩比较基准的回报。\n4、股指期货投资策略本基金投资股指期货将根据风险管理的原则，主要选择流动性好、交易活跃的股指期货合约。本基金力争利用股指期货的杠杆作用，降低股票仓位频繁调整的交易成本。\n5、资产支持证券投资策略在控制风险的前提下，本基金对资产支持证券从五个方面综合定价，选择低估的品种进行投资。五个方面包括信用因素、流动性因素、利率因素、税收因素和提前还款因素。而当前的信用因素是需要重点考虑的因素。\n6、中小企业私募债投资策略与传统的信用债券相比，中"}, {"id": 3, "kind": "document", "fund_code": "001513", "fund_name": "易方达信息产业混合", "doc_id": "001513_prospectus_2026-06-01", "doc_type": "prospectus", "doc_title": "招募说明书（2026-06-01更新）", "report_period": "2026-06-01", "page_start": 78, "page_end": 78, "section": "（一）本基金的特有风险", "snippet": "二十、风险揭示\n（一）本基金的特有风险\n1、资产配置风险。本基金股票资产占基金资产的比例为 60%-95%，属于股票仓位偏高且相对稳定的基金品种，受股票市场系统性风险影响较大，如果股票市场出现整体下跌，本基金的净值表现将受到影响，投资者面临无法获得收益甚至可能发生较大亏损的风险。\n2、信息产业证券集中度较高的风险。本基金非现金资产中不低于 80%的资产将投资于信息产业证券，须承受与信息产业相关的特有风险。本基金对于信息产业证券定义和筛选标准的确定是基于上市公司过往历史数据及其他多方面因素，不预示其未来表现，因此最终能否带来收益具有较大不确定性。同时本基金投资于股票市场所获取的收益受多种因素影响，因此即便根据投资策略投资于信息产业股票，也不意味着本基金一定盈利。本基金非现金资产中较大比例资产投资信息产业证券，当信息产业证券表现不佳时，本基金的净值将会受到较大影响。投资者须在理性判断的基础上做"}, {"id": 6, "kind": "document", "fund_code": "003095", "fund_name": "中欧医疗健康混合", "doc_id": "003095_prospectus_2026-09-21", "doc_type": "prospectus", "doc_title": "招募说明书（2026-09-21更新）", "report_period": "2026-09-21", "page_start": 45, "page_end": 45, "section": "三、投资策略", "snippet": "8、股票期权投资策略本基金将按照风险管理的原则，以套期保值为主要目的，参与股票期权的投资。本基金将在有效控制风险的前提下，选择流动性好、交易活跃的期权合约进行投资。本基金将基于对证券市场的预判，并结合股指期权定价模型，选择估值合理的期权合约。\n基金管理人将根据审慎原则，建立股票期权交易决策部门或小组，按照有关要求做好人员培训工作，确保投资、风控等核心岗位人员具备股票期权业务知识和相应的专业能力，同时授权特定的管理人员负责股票期权的投资审批事项，以防范期权投资的风险。"}, {"id": 7, "kind": "database", "tables": ["funds"], "source": "fund_data（MySQL 快照库）表 funds", "as_of": "2026-09-28", "sql": "SELECT f.fund_code, f.fund_name, f.theme, f.style, f.fund_type, f.company, f.established, f.benchmark FROM funds AS f WHERE f.fund_code IN ('003095', '001513') LIMIT 201", "row_count": 2}, {"id": 8, "kind": "database", "tables": ["fees"], "source": "fund_data（MySQL 快照库）表 fees", "as_of": "2026-09-28", "sql": "SELECT share_code, management_fee, custody_fee, sales_service_fee FROM fees WHERE share_code IN ('003095', '003096', '001513', '019018') LIMIT 201", "row_count": 4}, {"id": 9, "kind": "database", "tables": ["fund_scale"], "source": "fund_data（MySQL 快照库）表 fund_scale", "as_of": "2026-09-28", "sql": "SELECT fund_code, report_date, net_assets FROM fund_scale WHERE fund_code IN ('003095', '001513') ORDER BY fund_code, report_date LIMIT 201", "row_count": 4}, {"id": 10, "kind": "database", "tables": ["period_returns"], "source": "fund_data（MySQL 快照库）表 period_returns", "as_of": "2026-09-28", "sql": "SELECT share_code, period, ret, end_date FROM period_returns WHERE share_code IN ('003095', '001513') ORDER BY share_code, period LIMIT 201", "row_count": 18}, {"id": 11, "kind": "database", "tables": ["holdings_top10"], "source": "fund_data（MySQL 快照库）表 holdings_top10", "as_of": "2026-09-28", "sql": "SELECT fund_code, report_period, rank_no, stock_name, weight FROM holdings_top10 WHERE fund_code IN ('003095', '001513') AND report_period = (SELECT MAX(report_period) FROM holdings_top10 WHERE fund_code = '003095') ORDER BY fund_code, rank_no LIMIT 201", "row_count": 20}, {"id": 12, "kind": "database", "tables": ["fund_manager_tenures"], "source": "fund_data（MySQL 快照库）表 fund_manager_tenures", "as_of": "2026-09-28", "sql": "SELECT fund_code, manager_name, start_date, end_date FROM fund_manager_tenures WHERE fund_code IN ('003095', '001513') ORDER BY fund_code, start_date LIMIT 201", "row_count": 3}, {"id": 13, "kind": "computation", "tool": "calc_fund_return", "args": {"share_code": "003095", "start": "2024-09-28", "end": "2026-09-28"}, "share_code": "003095", "start_used": "2024-09-27", "end_used": "2026-09-28", "source": "fund_data.nav_daily / fund_data.dividends（快照）", "as_of": "2026-09-28"}, {"id": 14, "kind": "computation", "tool": "calc_fund_return", "args": {"share_code": "001513", "start": "2024-09-28", "end": "2026-09-28"}, "share_code": "001513", "start_used": "2024-09-27", "end_used": "2026-09-28", "source": "fund_data.nav_daily / fund_data.dividends（快照）", "as_of": "2026-09-28"}, {"id": 15, "kind": "computation", "tool": "calc_fund_return", "args": {"share_code": "003095", "start": "2026-01-01", "end": "2026-09-28"}, "share_code": "003095", "start_used": "2025-12-31", "end_used": "2026-09-28", "source": "fund_data.nav_daily / fund_data.dividends（快照）", "as_of": "2026-09-28"}, {"id": 16, "kind": "computation", "tool": "calc_fund_return", "args": {"share_code": "001513", "start": "2026-01-01", "end": "2026-09-28"}, "share_code": "001513", "start_used": "2025-12-31", "end_used": "2026-09-28", "source": "fund_data.nav_daily / fund_data.dividends（快照）", "as_of": "2026-09-28"}]}
+
+event: disclaimer
+data: {"text": "以上内容基于公开披露信息整理，仅供学习研究，不构成投资建议。基金有风险，投资需谨慎。"}
+
+event: done
+data: {"request_id": "9a8c81128a4d48c1", "status": "ok", "request_model": "deepseek-flash", "timings_ms": {"total": 17631.6, "first_token": 14642.7, "llm": 10834.5, "tools": 6789.2}, "response_models": ["deepseek-flash"], "usage": {"input_tokens": 32189, "output_tokens": 1977, "total_tokens": 34166}, "tool_rounds": 3, "llm_calls": [{"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 2730, "output_tokens": 152, "total_tokens": 2882, "duration_ms": 1901.7, "first_token_ms": 1103.0, "tool_calls": 2}, {"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 7960, "output_tokens": 434, "total_tokens": 8394, "duration_ms": 2012.1, "first_token_ms": null, "tool_calls": 6}, {"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 9896, "output_tokens": 305, "total_tokens": 10201, "duration_ms": 2063.3, "first_token_ms": null, "tool_calls": 4}, {"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 11603, "output_tokens": 1086, "total_tokens": 12689, "duration_ms": 4857.4, "first_token_ms": 1454.3, "tool_calls": 0}], "tools": [{"name": "get_fund_db_schema", "status": "ok", "duration_ms": 194.2, "step": 1}, {"name": "search_fund_documents", "status": "ok", "duration_ms": 3560.1, "step": 1}, {"name": "run_fund_sql", "status": "ok", "duration_ms": 250.7, "step": 2}, {"name": "run_fund_sql", "status": "ok", "duration_ms": 253.7, "step": 2}, {"name": "run_fund_sql", "status": "ok", "duration_ms": 250.8, "step": 2}, {"name": "run_fund_sql", "status": "ok", "duration_ms": 252.5, "step": 2}, {"name": "run_fund_sql", "status": "ok", "duration_ms": 254.9, "step": 2}, {"name": "run_fund_sql", "status": "ok", "duration_ms": 265.4, "step": 2}, {"name": "calc_fund_return", "status": "ok", "duration_ms": 374.9, "step": 3}, {"name": "calc_fund_return", "status": "ok", "duration_ms": 374.6, "step": 3}, {"name": "calc_fund_return", "status": "ok", "duration_ms": 381.6, "step": 3}, {"name": "calc_fund_return", "status": "ok", "duration_ms": 375.8, "step": 3}], "compliance_flags": [], "dropped_citations": [], "answer_chars": 1722, "preamble_dropped_chars": 45, "preamble_leaked_chars": 0}
+

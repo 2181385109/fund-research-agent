@@ -260,3 +260,27 @@
 - **`get_latest_nav`**：份额不在基金池内直接报错（不去请求外部接口）；回退结果不缓存，接口恢复后下一次调用立即拿到实时数据；User-Agent 如实填写项目名。
 - **工具错误用 MCP 的 `isError` 回传**（FastMCP 会加前缀 `Error executing tool <name>:`），不用 200 + 错误字段，Agent 侧的重试逻辑（B5）可统一处理。
 - **备选**：用 2.x 的 `MCPServer`（与 B5 客户端不兼容风险）；用正则做 SQL 守卫（容易被注释和大小写绕过）。
+
+## ADR-041 langchain-mcp-adapters 固定 0.3.2，与 mcp 1.x 搭配（S5 后半，B5）
+- **背景**：ADR-040 把 `mcp` 固定在 1.x，并把「`langchain-mcp-adapters` 与 mcp 2.x 是否兼容」留给 B5。PLAN 要求 Agent 用 langchain-mcp-adapters 做多服务器 MCP 客户端。
+- **决定**：`langchain-mcp-adapters==0.3.2`（当前最新；元数据 `mcp>=1.24,<2`、`langchain-core>=1.3.3`）+ `mcp>=1.24,<2`（实装 1.30.0）+ `langgraph>=1.2,<2`（1.2.12）+ `langchain-openai>=1.6,<2`（1.6.6）。0.3.2 自己就要求 `mcp<2`，所以「adapters 与 mcp 2.x 是否兼容」不再是问题：ai-service 与 mcp-tools 都停在 mcp 1.x。
+- **验证**（写 LangGraph 之前先做的最小例子）：一个 `MultiServerMCPClient` 同时配 `fund_tools`（:8101/mcp）与 `fund_docs`（:8001/mcp），`get_tools()` 得到五个工具；分别调用 `run_fund_sql`、`search_fund_documents` 成功；调用被守卫拒绝的 `DROP TABLE` 时行为见下。固化为 `ai-service/tests/test_agent_integration.py`（`-m integration`）。
+- **踩到的行为**：默认 `handle_tool_errors=True` 时，`isError=true` 的结果被包成**普通文本**（`Error executing tool …`）返回，调用方无法区分「工具报错」与「正常结果」。所以 `McpToolBackend` 用 `handle_tool_errors=False`，此时适配器抛 `ToolException`，据此可靠地得到 `ToolOutcome(ok=False)`。另外：适配器每次工具调用新建一个 MCP 会话；`structuredContent` 在我们的工具上为空，结果从文本 JSON 解析；httpx 客户端必须 `trust_env=False`（本机服务不能走系统代理，经 `httpx_client_factory` 传入）。
+- **备选**：直接用 `mcp.ClientSession` 自己写多服务器路由（少一层依赖，但 PLAN 指定了 adapters，且它的工具 schema 转换够用）；`mcp` 升 2.x（要改 mcp-tools 的服务端 API，收益为零）。
+- **后果**：ai-service 依赖里新增 langgraph / langchain-openai / langchain-mcp-adapters / mcp；升级任何一个之前要重跑集成测试。CI 只装 `.[dev]`，不需要 torch，装这几个包不影响 CI 时长量级。
+
+## ADR-042 Agent（LangGraph）的设计取舍（S5 后半，B5）
+- **图与循环上限**：`agent ⇄ tools` 两个节点。`max_steps`（默认 6）数的是**工具轮数**（一轮里可以并行多个 tool call）；满 6 轮后下一次 `agent` 调用**不再绑定工具**并附一条「不能再调用工具」的提示，强制作答，所以图一定终止（若模型仍返回 tool call 就丢弃）。`recursion_limit` 按 `2*(max_steps+1)+4` 设置，只作兜底。
+- **SQL 重试**：`run_fund_sql` 连续失败计数（成功清零）；失败信息原文回传并提示「还可重试 n 次」；连续失败 3 次（首次 + 2 次重试）后，第 4 次调用**不再执行**，直接回「已达重试上限，请如实告知查不到」。其他工具的报错原文回传，不设单独上限（受 max_steps 约束）。
+- **工具后端接口**：图只依赖 `ToolBackend`（`specs()` / `call()`）。真实实现 `McpToolBackend`（ADR-041），测试用 `FakeToolBackend`；LLM 侧 `FakeChatModel` 按脚本逐轮「回答」，都放在 `fund_ai/agent/fake.py`（包内，S12 压测的 mock 也可复用）。每次请求的可变状态（出处登记、计时、用量、SQL 失败计数）在 `RunContext` 里，经 `config["configurable"]["ctx"]` 传入；图状态只有 messages。事件经 LangGraph 的 `get_stream_writer` 发出。
+- **出处编号**：一次请求内全局编号；文档片段一个片段一个编号（同一切块重复命中沿用旧编号），SQL / 计算 / 净值各一次调用一个编号，schema 不编号。编号写进给 LLM 的工具结果文本（`[3] …`）。MCP 工具 `search_fund_documents` 返回的 `ref` 只是单次调用内的序号，全局编号在 Agent 侧分配——否则两次检索会撞号。
+- **非法 `[n]`**：不是事后清洗，而是**流式过滤**（`CitationStreamFilter`，遇到 `[` 先缓冲，判定后再放行），所以用户永远看不到无效编号；`[1, 2]` 规整成 `[1][2]`。`citations` 事件只列回答里实际引用的编号。
+- **只支持 `LLM_THINKING=disabled`**：langchain-openai 不保留 `reasoning_content`，开启思考后多轮 tool call 会 400（ADR-018 已预告）。配置成别的值时构造模型直接报错，不静默降级。要支持思考模式需要自己写回传逻辑，留给有需要时再做。
+- **tool call 参数严格解析**：langchain 的 `tool_calls` 用宽松 partial-JSON 解析，被截断的参数会被「补全」成一条看似合法的调用（对 `run_fund_sql` 就是执行半条 SQL）。改为对累积后的原始参数串 `json.loads`，失败的当作 invalid tool call 回传给 LLM 重调，不执行。
+- **开场白扣留（`_TurnGate`）**：DeepSeek 在 tool call 之前常先说一句（第一次 live 冒烟 13 题里有 11 题出现，其中有英文的「I'll look up …」），它会混进答案里。做法：每轮先扣留前 `AGENT_PREAMBLE_HOLDBACK_CHARS`（默认 160）个字符，本轮以 tool call 结束就丢弃，否则放行后实时流出。代价是最终回答最前面 160 个字符晚到；超过 160 字的开场白仍会漏出，`done` 里如实记 `preamble_dropped_chars` / `preamble_leaked_chars`。同时在 system prompt 里要求「工具轮只调用工具、不输出文字」。默认值的来由：第二次冒烟用 100，13 题里有 2 题（mixed-1、mixed-2）的开场白是 118 / 127 字的英文而漏出，第三次改 160 后 13 题都被吞掉、无漏出——这个值是看着冒烟样本调的（n=13，不是评测集），换一个模型或 prompt 后要重看 `preamble_leaked_chars`。备选：整轮缓冲后再决定（最终回答无法流式，违背 PLAN 的流式要求）；不处理（答案里混入开场白）。
+- **风险提示**：`disclaimer` 事件在任何路径上（含 Agent 构造失败、LLM 报错、工具不可用）都紧挨在 `done` 之前发出，文案固定在 `compliance.DISCLAIMER`。它不进 `token` 流，也不由 LLM 生成。
+- **输出守卫**：关键词启发式（`compliance.scan_output`），只标记 + 记日志，不改写（PLAN S5 第一期要求）。命中词之前同一句内有否定或疑问词（不 / 无法 / 是否 / 该不该……）时不算，否则拒答话术（「无法建议买入」「判断是否适合加仓」）会被误报——第一次冒烟就出现过一例误报，据此加了疑问词。它会漏报，评测集里的 advice_request 题才是拒答的真正检验（S8）。
+- **基金池清单与表清单写进 system prompt**：启动时从 fund_data 读 20 只基金（主代码、简称、主题、份额代码）和 12 张表（表名 + 表 COMMENT）。原因：ADR-038 要求 `fund_codes` 由 Agent 显式传入，而用户多半只写简称；第一次冒烟里模型猜了不存在的表名 `fund_basic_info`；补上表清单后并没有杜绝（第三次冒烟的 tool-sql-1 又猜错一次），但错误原文回传后下一轮即恢复，这正是 SQL 重试机制的用途。`get_fund_db_schema`（约 8.6 KB）只在列名不确定时调用。
+- **文档 MCP 挂载**：`FastMCP.streamable_http_app()` 挂在 FastAPI 根路径最后（其余路由先匹配，剩下的 `/mcp` 交给它），session manager 在 FastAPI lifespan 里运行。Host 头白名单 `MCP_ALLOWED_HOSTS`（MCP SDK 的 DNS rebinding 防护，默认只放回环）；S7 容器互连时要加 `ai-service:*`。Agent 用 HTTP 回环调用自己的 `/mcp`（与 PLAN §1 的「MCP Client」一致，也让文档检索工具能被外部 MCP 客户端直接使用）。
+- **历史消息**：请求可带最近几轮 `history`；其中助手回答里的 `[n]` 去掉，避免被当成本次请求的出处。
+- **备选**：Agent 用 `create_react_agent` 预置图（少写代码，但循环上限、SQL 重试、出处登记都要靠钩子，不如显式 StateGraph 清楚）；答案事后整体校验 `[n]`（用户已经看到了无效编号）。

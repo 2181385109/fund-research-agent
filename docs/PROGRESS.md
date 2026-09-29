@@ -483,3 +483,62 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 
 ### 给统筹的问题
 无阻塞。一处提示：README 进度表此前停在 S0（B1–B3 都没更新），这次已经更正到 S0–S4 完成、S5 进行中。
+
+## S5 后半 文档 MCP + LangGraph Agent + 出处 + 风险提示 + SSE — 2026-09-29（B5）
+- commit 范围：`ae92d44`（B4 HANDOFF）..CI 结论提交见 HANDOFF；CI：__CI__
+- 范围：PLAN §7 的 B5 = S5 除 mcp-tools 之外的交付与验收（验收 3、验收 4 的另一半、验收 5、验收 7）。至此 S5 全部完成（验收 1、2、6 在 B4）。
+
+### 完成项
+- **选型验证在先**：`langchain-mcp-adapters==0.3.2`（要求 `mcp>=1.24,<2`）+ `mcp` 1.30.0 + `langgraph` 1.2.12 + `langchain-openai` 1.6.6。先用一个最小例子让一个 `MultiServerMCPClient` 同时连上 mcp-tools 与 ai-service `/mcp`（五个工具、各调一次、错误路径），再写图；结果与踩到的行为（默认会把 `isError` 吞成普通文本，必须 `handle_tool_errors=False`）见 ADR-041，固化为 `ai-service/tests/test_agent_integration.py`。
+- `ai-service/src/fund_ai/mcp_server/server.py`：文档 MCP，`search_fund_documents(query, fund_codes?, doc_types?, top_n)`，挂在 FastAPI 的 `/mcp`（session manager 在 lifespan 里运行，Host 白名单）；检索用 `config.py` 默认（hybrid_rerank、实体过滤关），**没有改检索和入库代码**。
+- `ai-service/src/fund_ai/agent/`：`graph.py`（StateGraph agent ⇄ tools，`max_steps=6`，SQL 报错回传并最多重试 2 次）、`citations.py`（四种出处 + 流式 `[n]` 过滤）、`compliance.py`（固定风险提示 + 输出守卫）、`mcp_client.py`、`prompts.py`（持仓走 SQL、`[n]` 引用、无依据拒答、荐基拒绝）、`llm.py`、`runner.py`、`fake.py`（测试替身）、`universe.py`；`api/chat.py`：`POST /v1/chat/stream`。
+- 事件协议与出处字段写入 `docs/API.md`；`.env.example` 补 Agent 变量；README 进度表；`docs/LIMITATIONS.md` 新增「Agent（S5）」一节；ADR-041、ADR-042。
+- `scripts/agent_smoke.py`（live 冒烟，保存 SSE 原文）；`scripts/mcp_client_check.py` 增加文档 MCP 的错误用例。
+
+### 验收逐条
+3. Agent 单测用 Fake LLM 覆盖：循环上限、工具报错后恢复、引用映射、非法编号丢弃、风险提示必定出现（含报错路径）— ✅ — `ai-service/tests/test_agent_graph.py`（27 条）+ `test_agent_units.py`（30 条）+ `test_agent_mcp_api.py`（11 条）。对应关系：循环上限 `test_loop_cap_forces_a_final_answer_without_tools`（max_steps=3 时恰好 3 轮工具，第 4 次调用不绑定工具）、`test_default_max_steps_is_six`；工具报错后恢复 `test_sql_error_is_returned_to_the_llm_and_the_retry_succeeds`、`test_sql_retries_are_capped_at_two`（首次 + 2 次重试后第 4 次不执行）、`test_unavailable_tool_does_not_break_the_request`；引用映射 `test_mixed_answer_cites_all_four_kinds`（database / document / computation / api，含 args 与实际起止日）；非法编号丢弃 `test_invalid_reference_numbers_are_dropped_and_logged`（用户流里看不到，日志有 warning，`done.dropped_citations`）；风险提示必定出现 `test_disclaimer_present_when_llm_fails_on_first_call`、`…_mid_run_…`、`…_when_tool_listing_fails`、`test_empty_model_answer_…`、`test_chat_stream_when_agent_cannot_be_built_still_sends_disclaimer`，且每个正常路径测试都断言 `disclaimer` 紧挨 `done`。命令：`cd ai-service && .venv/Scripts/python -m pytest -q -m "not integration and not slow and not live"` → 134 passed, 4 deselected。
+4. （文档 MCP 部分）用独立 MCP 客户端列出并调用两个服务的全部工具，贴原文 — ✅ — `reports/mcp_tools/20260929T103458Z_client_check/client_check.md`：官方 SDK 的 streamable HTTP 客户端，`:8101/mcp` 4 个工具、`:8001/mcp` 1 个工具，共 14 次调用（含 mcp-tools 的守卫拒绝 3 次、参数错误 1 次，文档 MCP 的正常 2 次、参数错误 2 次），与期望不符 0 次。命令：`python scripts/mcp_client_check.py --url http://127.0.0.1:8101/mcp --url http://127.0.0.1:8001/mcp`。
+5. live 冒烟：每种工具至少 2 题、综合题 3 题、荐基请求 2 题，贴 SSE 原文 — ✅ — 13 题，SSE 原文在 `reports/agent_smoke/20260929T103710Z/<题号>.sse`，汇总 `summary.json`。协议层面的结果（n=13，冒烟不是评测，没有标准答案）：13/13 `done.status=ok`；13/13 用到了预期工具；13/13 `disclaimer` 紧挨 `done`；输出守卫标记 0/13；无效编号丢弃 0 次；请求模型 `deepseek-flash`，响应模型 `deepseek-flash`。每类题的用法见下表。回答内容我读了原文（长回答只读了前 700–1400 字，数字没有逐项对账）：荐基题两题都先声明无法推荐、只陈述客观数据并标出处；**发现 1 处事实错误**——tool-calc-2 把 003095 写成「C 类」（003095 是 A 类，C 类是 003096；工具入参与结果都对，是最终回答的措辞错），没有任何自动检查会拦住这类错误，只能靠 S8 的回答评测量化。**没有做自动评分**，准确率数字要等 S8。
+7. CI 全绿 — __CI7__
+
+**冒烟明细**（第三次运行；工具 = 实际调用序列的去重）：
+
+| 类别 | 题号 | 用到的工具 | 出处类型 |
+|---|---|---|---|
+| 文档检索 | tool-docs-1 / -2 | search_fund_documents | document |
+| 数据库 | tool-sql-1 / -2 | run_fund_sql（+ get_fund_db_schema） | database |
+| 收益计算 | tool-calc-1 / -2（含 include_fees、非交易日起止） | calc_fund_return | computation |
+| 最新净值 | tool-nav-1 / -2 | get_latest_nav | api |
+| 综合 | mixed-1 / -2 / -3 | 数据库 + 文档（+ 计算） | database、document、computation |
+| 荐基请求 | advice-1 / -2 | 检索、SQL、计算都用了，回答先声明无法推荐，再列客观数据 | document、database、computation |
+
+### 实测数字
+| 指标 | 值 | n / 分母 | 结果文件 |
+|---|---|---|---|
+| 冒烟 done.status=ok | 13 | 13 题 | `reports/agent_smoke/20260929T103710Z/summary.json` |
+| 首 token 延迟（从请求到第一个 token，含全部工具轮）中位 / 最小 / 最大 | 7.3 s / 2.3 s / 15.1 s | 13 题，单次运行 | 同上（`first_token_ms`）；含 160 字开场白扣留的延迟 |
+| 总耗时中位 / 最大 | 7.9 s / 17.6 s | 13 题 | 同上（`total_ms`） |
+| 13 题的 token 用量（输入 + 输出）合计 | 197,261 | 13 题 | 同上（`usage`）；**费用未测算**（没有核对当前单价） |
+| 开场白被丢弃 / 漏出的题数 | 7 / 0 | 13 题 | 同上（`preamble_*_chars`） |
+| ai-service 单测（CI 同款 marker） | 134 通过 | 全部（另有 4 个 integration，其中 3 个本轮新增，本机通过） | 验收 3 的命令 |
+
+前两次运行（同一 13 题，保留）：`20260929T102752Z`（开场白处理之前：13 题中 11 题的答案里混入了工具调用前的开场白，含英文；输出守卫 1 题误报，见下）、`20260929T103200Z`（扣留长度 100：2 题的 118 / 127 字开场白漏出）。第三次是最终配置。第一、二次的 summary.json 没有 `preamble_*` 字段（脚本当时还没加），开场白的数字是从 SSE 原文里数出来的。三次都是 13/13 ok。
+
+### 与计划的偏差（附理由和 ADR 编号）
+- 无偏差。PLAN 里的「多服务器 MCP 客户端」用 langchain-mcp-adapters 0.3.2（ADR-041）；Agent 只支持 `LLM_THINKING=disabled`（ADR-018 / ADR-042）。
+- 首次冒烟发现并处理了三个问题（ADR-042）：① 工具调用前的开场白混进答案（扣留 + prompt）；② 输出守卫把「无法判断是否适合加仓」误报成违规（补疑问词）；③ langchain 宽松解析会把被截断的 tool call 参数补成合法调用（改为严格解析）。
+
+### 已知问题 / 技术债
+- **首 token 延迟高**：中位 7.3 s。构成：每次 LLM 调用之间的工具轮（文档检索含重排，CPU 上数秒）+ 160 字扣留；文档检索第一次调用还要加载模型（约 20 s，冒烟脚本默认先预热）。没有在 GPU 或更小重排模型上测过；这是 S12–S13 的优化对象。
+- 开场白扣留是启发式：超过 160 字的开场白仍会漏出（`preamble_leaked_chars` 如实上报）；值是看冒烟样本调的（n=13），换模型 / prompt 后要重看。
+- 输出守卫是关键词启发式，会漏报也可能误报；拒答是否可靠要由 S8 的 advice_request 评测来回答，冒烟只有 2 题。
+- 每次 MCP 工具调用新建一个会话（适配器行为），增加约几十毫秒；调用量小，暂不优化。
+- 模型有时不先看表结构就猜表名 / 列名（冒烟里 1 次），靠错误回传 + 重试恢复，多耗一轮。
+- `mcp_allowed_hosts` 默认只放回环；S7 容器互连时必须加 `ai-service:*`，否则 Agent 调自己的 `/mcp` 会被 421 拒绝。
+- 没有做请求总超时（只有单次 LLM 调用 60 s 与单次工具调用 30 s 的超时）。
+
+### 需要用户做的事
+无。
+
+### 给统筹的问题
+无阻塞。

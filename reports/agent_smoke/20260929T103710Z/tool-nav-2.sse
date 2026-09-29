@@ -1,0 +1,21 @@
+event: meta
+data: {"request_id": "c8bc9831bf4a417c", "model": "deepseek-flash", "max_steps": 6}
+
+event: tool_start
+data: {"call_id": "call_00_BeTdz5MjHTCnSjMWLdiB9079", "name": "get_latest_nav", "args": {"share_code": "001513"}, "step": 1}
+
+event: tool_end
+data: {"call_id": "call_00_BeTdz5MjHTCnSjMWLdiB9079", "name": "get_latest_nav", "duration_ms": 250.6, "status": "ok", "summary": "净值日期 2026-09-28", "citation_ids": [1]}
+
+event: token
+data: {"text": "易方达信息产业混合 A（001513）最新单位净值为 **7.52 元**，净值日期 2026-09-28，当日涨跌幅 -5.46%；累计净值 7.64 元 [1]。"}
+
+event: citations
+data: {"items": [{"id": 1, "kind": "api", "share_code": "001513", "source": "东方财富 api.fund.eastmoney.com/f10/lsjz（非官方接口）", "nav_date": "2026-09-28", "fetched_at": "2026-09-29T10:28:46+00:00", "stale": false}]}
+
+event: disclaimer
+data: {"text": "以上内容基于公开披露信息整理，仅供学习研究，不构成投资建议。基金有风险，投资需谨慎。"}
+
+event: done
+data: {"request_id": "c8bc9831bf4a417c", "status": "ok", "request_model": "deepseek-flash", "timings_ms": {"total": 2321.2, "first_token": 2320.0, "llm": 2067.1, "tools": 250.6}, "response_models": ["deepseek-flash"], "usage": {"input_tokens": 5638, "output_tokens": 94, "total_tokens": 5732}, "tool_rounds": 1, "llm_calls": [{"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 2722, "output_tokens": 42, "total_tokens": 2764, "duration_ms": 889.1, "first_token_ms": null, "tool_calls": 1}, {"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 2916, "output_tokens": 52, "total_tokens": 2968, "duration_ms": 1178.0, "first_token_ms": 952.7, "tool_calls": 0}], "tools": [{"name": "get_latest_nav", "status": "ok", "duration_ms": 250.6, "step": 1}], "compliance_flags": [], "dropped_citations": [], "answer_chars": 83, "preamble_dropped_chars": 0, "preamble_leaked_chars": 0}
+

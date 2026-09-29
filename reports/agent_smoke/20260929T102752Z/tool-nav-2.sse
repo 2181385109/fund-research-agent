@@ -1,0 +1,171 @@
+event: meta
+data: {"request_id": "0be0d948ee35453d", "model": "deepseek-flash", "max_steps": 6}
+
+event: tool_start
+data: {"call_id": "call_00_0LrfZcP5UbZEaj4fNSAH6052", "name": "get_latest_nav", "args": {"share_code": "001513"}, "step": 1}
+
+event: tool_end
+data: {"call_id": "call_00_0LrfZcP5UbZEaj4fNSAH6052", "name": "get_latest_nav", "duration_ms": 585.4, "status": "ok", "summary": "净值日期 2026-09-28", "citation_ids": [1]}
+
+event: token
+data: {"text": "易"}
+
+event: token
+data: {"text": "方"}
+
+event: token
+data: {"text": "达"}
+
+event: token
+data: {"text": "信息"}
+
+event: token
+data: {"text": "产业"}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": " A"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "001"}
+
+event: token
+data: {"text": "513"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "最新"}
+
+event: token
+data: {"text": "单位"}
+
+event: token
+data: {"text": "净"}
+
+event: token
+data: {"text": "值为"}
+
+event: token
+data: {"text": " **"}
+
+event: token
+data: {"text": "7"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "52"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "元"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "净值"}
+
+event: token
+data: {"text": "日期"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "202"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "09"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "28"}
+
+event: token
+data: {"text": "；"}
+
+event: token
+data: {"text": "当日"}
+
+event: token
+data: {"text": "涨"}
+
+event: token
+data: {"text": "跌幅"}
+
+event: token
+data: {"text": " -"}
+
+event: token
+data: {"text": "5"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "46"}
+
+event: token
+data: {"text": "%，"}
+
+event: token
+data: {"text": "累计"}
+
+event: token
+data: {"text": "净值"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "7"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "64"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "元"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[1]。"}
+
+event: citations
+data: {"items": [{"id": 1, "kind": "api", "share_code": "001513", "source": "东方财富 api.fund.eastmoney.com/f10/lsjz（非官方接口）", "nav_date": "2026-09-28", "fetched_at": "2026-09-29T10:28:46+00:00", "stale": false}]}
+
+event: disclaimer
+data: {"text": "以上内容基于公开披露信息整理，仅供学习研究，不构成投资建议。基金有风险，投资需谨慎。"}
+
+event: done
+data: {"request_id": "0be0d948ee35453d", "status": "ok", "request_model": "deepseek-flash", "timings_ms": {"total": 2954.3, "first_token": 2703.1, "llm": 2365.6, "tools": 585.4}, "response_models": ["deepseek-flash"], "usage": {"input_tokens": 5588, "output_tokens": 94, "total_tokens": 5682}, "tool_rounds": 1, "llm_calls": [{"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 2697, "output_tokens": 42, "total_tokens": 2739, "duration_ms": 1054.2, "first_token_ms": null, "tool_calls": 1}, {"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 2891, "output_tokens": 52, "total_tokens": 2943, "duration_ms": 1311.4, "first_token_ms": 1061.2, "tool_calls": 0}], "tools": [{"name": "get_latest_nav", "status": "ok", "duration_ms": 585.4, "step": 1}], "compliance_flags": [], "dropped_citations": [], "answer_chars": 83}
+

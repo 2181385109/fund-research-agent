@@ -1,0 +1,1185 @@
+event: meta
+data: {"request_id": "f872da6f29364508", "model": "deepseek-flash", "max_steps": 6}
+
+event: tool_start
+data: {"call_id": "call_00_GKeXD3jnrNEK2ZT8Xaqy0093", "name": "get_fund_db_schema", "args": {}, "step": 1}
+
+event: tool_end
+data: {"call_id": "call_00_GKeXD3jnrNEK2ZT8Xaqy0093", "name": "get_fund_db_schema", "duration_ms": 195.7, "status": "ok", "summary": "已返回表结构", "citation_ids": []}
+
+event: tool_start
+data: {"call_id": "call_01_b4gA8VIQtn6Ox5cC94hX7540", "name": "search_fund_documents", "args": {"query": "半导体行业投资风险提示 行业波动 集中度风险", "fund_codes": ["012650", "013840", "014193"], "doc_types": ["annual_report", "prospectus"], "top_n": 6}, "step": 1}
+
+event: tool_end
+data: {"call_id": "call_01_b4gA8VIQtn6Ox5cC94hX7540", "name": "search_fund_documents", "duration_ms": 3502.1, "status": "ok", "summary": "检索到 6 个片段", "citation_ids": [1, 2, 3, 4, 5, 6]}
+
+event: token
+data: {"text": "我无法提供投资建议，也不能预测半导体基金未来会不会涨、或判断现在是否适合加仓。以下是与半导体主题基金相关的客观数据，供你参考。\n\n**基金池中的半导体主题基金（共 3 只）**\n\n| 主代码 | 简称 |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "类型"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "管理人"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|---|---"}
+
+event: token
+data: {"text": "|---|---"}
+
+event: token
+data: {"text": "|\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "012"}
+
+event: token
+data: {"text": "650"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "博"}
+
+event: token
+data: {"text": "时"}
+
+event: token
+data: {"text": "半导体"}
+
+event: token
+data: {"text": "主题"}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": "型"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "博"}
+
+event: token
+data: {"text": "时"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "013"}
+
+event: token
+data: {"text": "840"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "银"}
+
+event: token
+data: {"text": "华"}
+
+event: token
+data: {"text": "集成电路"}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " —"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "银"}
+
+event: token
+data: {"text": "华"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "014"}
+
+event: token
+data: {"text": "193"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "汇"}
+
+event: token
+data: {"text": "添"}
+
+event: token
+data: {"text": "富"}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "证"}
+
+event: token
+data: {"text": "芯片"}
+
+event: token
+data: {"text": "产业"}
+
+event: token
+data: {"text": "指数"}
+
+event: token
+data: {"text": "增强"}
+
+event: token
+data: {"text": "发起"}
+
+event: token
+data: {"text": "式"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " —"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "汇"}
+
+event: token
+data: {"text": "添"}
+
+event: token
+data: {"text": "富"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": " |\n\n"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "招募"}
+
+event: token
+data: {"text": "说明书"}
+
+event: token
+data: {"text": "披露"}
+
+event: token
+data: {"text": "的风险"}
+
+event: token
+data: {"text": "提示"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "以"}
+
+event: token
+data: {"text": "博"}
+
+event: token
+data: {"text": "时"}
+
+event: token
+data: {"text": "半导体"}
+
+event: token
+data: {"text": "主题"}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "012"}
+
+event: token
+data: {"text": "650"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "为例"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "202"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "09"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "21"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "更新"}
+
+event: token
+data: {"text": "版"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "**\n\n"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "该"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "为"}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": "型"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "不低于"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "80"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "的非"}
+
+event: token
+data: {"text": "现金"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "资产"}
+
+event: token
+data: {"text": "投资"}
+
+event: token
+data: {"text": "于"}
+
+event: token
+data: {"text": "半导体"}
+
+event: token
+data: {"text": "产业"}
+
+event: token
+data: {"text": "相关"}
+
+event: token
+data: {"text": "证券"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "该类"}
+
+event: token
+data: {"text": "证券"}
+
+event: token
+data: {"text": "的"}
+
+event: token
+data: {"text": "特定"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "即"}
+
+event: token
+data: {"text": "成为"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "及"}
+
+event: token
+data: {"text": "投资者"}
+
+event: token
+data: {"text": "主要"}
+
+event: token
+data: {"text": "面对的"}
+
+event: token
+data: {"text": "特定"}
+
+event: token
+data: {"text": "投资"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "；"}
+
+event: token
+data: {"text": "收益"}
+
+event: token
+data: {"text": "会"}
+
+event: token
+data: {"text": "受"}
+
+event: token
+data: {"text": "宏观经济"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "政府"}
+
+event: token
+data: {"text": "产业"}
+
+event: token
+data: {"text": "政策"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "市场需求"}
+
+event: token
+data: {"text": "变化"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "行业"}
+
+event: token
+data: {"text": "波动"}
+
+event: token
+data: {"text": "和"}
+
+event: token
+data: {"text": "公司"}
+
+event: token
+data: {"text": "自身"}
+
+event: token
+data: {"text": "经营"}
+
+event: token
+data: {"text": "状况"}
+
+event: token
+data: {"text": "等因素"}
+
+event: token
+data: {"text": "影响"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "可能存在"}
+
+event: token
+data: {"text": "所选"}
+
+event: token
+data: {"text": "标的"}
+
+event: token
+data: {"text": "成长"}
+
+event: token
+data: {"text": "性与"}
+
+event: token
+data: {"text": "市场"}
+
+event: token
+data: {"text": "一致"}
+
+event: token
+data: {"text": "预期"}
+
+event: token
+data: {"text": "不符"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "个股"}
+
+event: token
+data: {"text": "价格"}
+
+event: token
+data: {"text": "表现"}
+
+event: token
+data: {"text": "低于"}
+
+event: token
+data: {"text": "预期的"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "；"}
+
+event: token
+data: {"text": "所"}
+
+event: token
+data: {"text": "投"}
+
+event: token
+data: {"text": "半导体"}
+
+event: token
+data: {"text": "主题"}
+
+event: token
+data: {"text": "证券"}
+
+event: token
+data: {"text": "可能"}
+
+event: token
+data: {"text": "在一定"}
+
+event: token
+data: {"text": "时期内"}
+
+event: token
+data: {"text": "表现"}
+
+event: token
+data: {"text": "与其他"}
+
+event: token
+data: {"text": "未"}
+
+event: token
+data: {"text": "投资"}
+
+event: token
+data: {"text": "证券"}
+
+event: token
+data: {"text": "不同"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "造成"}
+
+event: token
+data: {"text": "收益"}
+
+event: token
+data: {"text": "低于"}
+
+event: token
+data: {"text": "其他"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "或"}
+
+event: token
+data: {"text": "波动"}
+
+event: token
+data: {"text": "率"}
+
+event: token
+data: {"text": "高于"}
+
+event: token
+data: {"text": "其他"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "或"}
+
+event: token
+data: {"text": "市场"}
+
+event: token
+data: {"text": "平均水平"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[2]"}
+
+event: token
+data: {"text": "。\n"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "存在"}
+
+event: token
+data: {"text": "大类"}
+
+event: token
+data: {"text": "资产"}
+
+event: token
+data: {"text": "配置"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "管理"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "管理人"}
+
+event: token
+data: {"text": "判断"}
+
+event: token
+data: {"text": "不"}
+
+event: token
+data: {"text": "准确"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "操作"}
+
+event: token
+data: {"text": "失误"}
+
+event: token
+data: {"text": "等"}
+
+event: token
+data: {"text": "会影响"}
+
+event: token
+data: {"text": "收益"}
+
+event: token
+data: {"text": "）、"}
+
+event: token
+data: {"text": "流动性"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "市场"}
+
+event: token
+data: {"text": "交易"}
+
+event: token
+data: {"text": "量"}
+
+event: token
+data: {"text": "不足"}
+
+event: token
+data: {"text": "导致"}
+
+event: token
+data: {"text": "不能"}
+
+event: token
+data: {"text": "迅速"}
+
+event: token
+data: {"text": "低成本"}
+
+event: token
+data: {"text": "变现"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "以及"}
+
+event: token
+data: {"text": "巨额"}
+
+event: token
+data: {"text": "赎回"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "）、"}
+
+event: token
+data: {"text": "合规"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "等"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[1]"}
+
+event: token
+data: {"text": "[2]"}
+
+event: token
+data: {"text": "。\n"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "声明"}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "明确"}
+
+event: token
+data: {"text": "："}
+
+event: token
+data: {"text": "投资者"}
+
+event: token
+data: {"text": "投资"}
+
+event: token
+data: {"text": "于"}
+
+event: token
+data: {"text": "本"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "须"}
+
+event: token
+data: {"text": "自行"}
+
+event: token
+data: {"text": "承担"}
+
+event: token
+data: {"text": "投资"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "管理"}
+
+event: token
+data: {"text": "人与"}
+
+event: token
+data: {"text": "销售"}
+
+event: token
+data: {"text": "机构"}
+
+event: token
+data: {"text": "都不能"}
+
+event: token
+data: {"text": "保证"}
+
+event: token
+data: {"text": "收益"}
+
+event: token
+data: {"text": "或"}
+
+event: token
+data: {"text": "本金"}
+
+event: token
+data: {"text": "安全"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[4]。\n\n"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "关于"}
+
+event: token
+data: {"text": "「"}
+
+event: token
+data: {"text": "会不会"}
+
+event: token
+data: {"text": "涨"}
+
+event: token
+data: {"text": " /"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "要不要"}
+
+event: token
+data: {"text": "加"}
+
+event: token
+data: {"text": "仓"}
+
+event: token
+data: {"text": "」"}
+
+event: token
+data: {"text": "**\n\n"}
+
+event: token
+data: {"text": "这类"}
+
+event: token
+data: {"text": "问题"}
+
+event: token
+data: {"text": "属于"}
+
+event: token
+data: {"text": "对未来"}
+
+event: token
+data: {"text": "净值"}
+
+event: token
+data: {"text": "走势"}
+
+event: token
+data: {"text": "的"}
+
+event: token
+data: {"text": "预测"}
+
+event: token
+data: {"text": "和"}
+
+event: token
+data: {"text": "买卖"}
+
+event: token
+data: {"text": "时"}
+
+event: token
+data: {"text": "点"}
+
+event: token
+data: {"text": "判断"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "我"}
+
+event: token
+data: {"text": "无法"}
+
+event: token
+data: {"text": "提供"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "也没有"}
+
+event: token
+data: {"text": "任何"}
+
+event: token
+data: {"text": "资料"}
+
+event: token
+data: {"text": "能"}
+
+event: token
+data: {"text": "给出"}
+
+event: token
+data: {"text": "这类"}
+
+event: token
+data: {"text": "结论"}
+
+event: token
+data: {"text": "。"}
+
+event: token
+data: {"text": "如果你"}
+
+event: token
+data: {"text": "需要"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "我可以"}
+
+event: token
+data: {"text": "帮你"}
+
+event: token
+data: {"text": "查"}
+
+event: token
+data: {"text": "这些"}
+
+event: token
+data: {"text": "基金的"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "历史"}
+
+event: token
+data: {"text": "区间"}
+
+event: token
+data: {"text": "收益"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "最大"}
+
+event: token
+data: {"text": "回"}
+
+event: token
+data: {"text": "撤"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "费率"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "前"}
+
+event: token
+data: {"text": "十大"}
+
+event: token
+data: {"text": "持仓"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "等"}
+
+event: token
+data: {"text": "客观"}
+
+event: token
+data: {"text": "数据"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "供"}
+
+event: token
+data: {"text": "你自己"}
+
+event: token
+data: {"text": "判断"}
+
+event: token
+data: {"text": "时"}
+
+event: token
+data: {"text": "参考"}
+
+event: token
+data: {"text": "——"}
+
+event: token
+data: {"text": "请"}
+
+event: token
+data: {"text": "告诉我"}
+
+event: token
+data: {"text": "具体"}
+
+event: token
+data: {"text": "想看"}
+
+event: token
+data: {"text": "哪"}
+
+event: token
+data: {"text": "只"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "哪个"}
+
+event: token
+data: {"text": "份额"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "A"}
+
+event: token
+data: {"text": "/C"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "类"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "和"}
+
+event: token
+data: {"text": "哪个"}
+
+event: token
+data: {"text": "时间段"}
+
+event: token
+data: {"text": "。"}
+
+event: citations
+data: {"items": [{"id": 1, "kind": "document", "fund_code": "012650", "fund_name": "博时半导体主题混合", "doc_id": "012650_prospectus_2026-09-21", "doc_type": "prospectus", "doc_title": "招募说明书（2026-09-21更新）", "report_period": "2026-09-21", "page_start": 109, "page_end": 110, "section": "一、投资于本基金的主要风险", "snippet": "（7）波动性风险波动性风险主要存在于可转债的投资中，具体表现为可转债的价格受到其相对应股票价格波动的影响，同时可转债还有信用风险与转股风险。转股风险指相对应股票价格跌破转股价，不能获得转股收益，从而无法弥补当初付出的转股期权价值。\n2、信用风险信用风险主要指债券、资产支持证券等信用证券发行主体信用状况恶化，导致信用评级下降甚至到期不能履行合约进行兑付的风险，另外，信用风险也包括证券交易对手因违约而产生的证券交割风险。\n3、流动性风险流动性风险是指因证券市场交易量不足，导致证券不能迅速、低成本地变现的风险。流动性风险还包括基金出现巨额赎回，致使没有足够的现金应付赎回支付所引致的风险。\n（1）基金申购、赎回安排本基金基于客户集中度控制、巨额赎回监测及应对在投资者申购赎回方面均明确了管理机制，在接受申购申请对存量客户利益构成潜在重大不利影响，以及市场大幅波动、流动性枯竭等极端情况下发生无法应对投"}, {"id": 2, "kind": "document", "fund_code": "012650", "fund_name": "博时半导体主题混合", "doc_id": "012650_prospectus_2026-09-21", "doc_type": "prospectus", "doc_title": "招募说明书（2026-09-21更新）", "report_period": "2026-09-21", "page_start": 111, "page_end": 111, "section": "一、投资于本基金的主要风险", "snippet": "5、管理风险在基金管理运作过程中，基金管理人的研究水平、投资管理水平直接影响基金收益水平，如果基金管理人对经济形势和证券市场判断不准确、获取的信息不充分、投资操作出现失误等，都会影响基金的收益水平。\n6、合规风险合规风险指基金管理或运作过程中，违反国家法律、法规的规定，或者违反《基金合同》有关规定的风险。\n7、本基金的特有风险\n（1）本基金为混合型证券投资基金，存在大类资产配置风险，有可能因为受到经济周期、市场环境或管理人能力等因素的影响，导致基金的大类资产配置比例偏离最优化水平，给基金投资组合的绩效带来风险。\n本基金不低于80%的非现金基金资产将投资于半导体产业相关证券，该类证券的特定风险即成为本基金及投资者主要面对的特定投资风险，其投资收益会受到宏观经济、政府产业政策、市场需求变化、行业波动和公司自身经营状况等因素的影响，可能存在所选投资标的的成长性与市场一致预期不符而造成个股价格表现"}, {"id": 4, "kind": "document", "fund_code": "012650", "fund_name": "博时半导体主题混合", "doc_id": "012650_prospectus_2026-09-21", "doc_type": "prospectus", "doc_title": "招募说明书（2026-09-21更新）", "report_period": "2026-09-21", "page_start": 116, "page_end": 116, "section": "一、投资于本基金的主要风险", "snippet": "（2）操作风险：证券交易所、期货交易所、证券登记结算机构等在业务操作过程中，因操作失误或违反操作规程而引起的风险。\n9、其它风险\n（1）战争、自然灾害等不可抗力因素的出现，将会严重影响证券市场的运行，可能导致委托财产的损失；\n（2）金融市场危机、行业竞争、代理商违约等超出基金管理人自身直接控制能力之外的风险，也可能导致资产委托人利益受损。\n二、声明\n1、投资者投资于本基金，须自行承担投资风险；\n2、除基金管理人直接办理本基金的销售外，本基金还通过基金销售机构销售，基金管理人与基金销售机构都不能保证其收益或本金安全。"}]}
+
+event: disclaimer
+data: {"text": "以上内容基于公开披露信息整理，仅供学习研究，不构成投资建议。基金有风险，投资需谨慎。"}
+
+event: done
+data: {"request_id": "f872da6f29364508", "status": "ok", "request_model": "deepseek-flash", "timings_ms": {"total": 8290.7, "first_token": 6628.7, "llm": 4589.0, "tools": 3697.8}, "response_models": ["deepseek-flash"], "usage": {"input_tokens": 10599, "output_tokens": 615, "total_tokens": 11214}, "tool_rounds": 1, "llm_calls": [{"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 2722, "output_tokens": 167, "total_tokens": 2889, "duration_ms": 1692.5, "first_token_ms": 1078.2, "tool_calls": 2}, {"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 7877, "output_tokens": 448, "total_tokens": 8325, "duration_ms": 2896.5, "first_token_ms": 950.1, "tool_calls": 0}], "tools": [{"name": "get_fund_db_schema", "status": "ok", "duration_ms": 195.7, "step": 1}, {"name": "search_fund_documents", "status": "ok", "duration_ms": 3502.1, "step": 1}], "compliance_flags": [], "dropped_citations": [], "answer_chars": 813, "preamble_dropped_chars": 53, "preamble_leaked_chars": 0}
+

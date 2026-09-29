@@ -1,0 +1,2928 @@
+event: meta
+data: {"request_id": "fe0b53119a3749f8", "model": "deepseek-flash", "max_steps": 6}
+
+event: token
+data: {"text": "I'll look up the fee rates and fund scale from the database, and search the documents for investment strategy"}
+
+event: token
+data: {"text": " details"}
+
+event: token
+data: {"text": "."}
+
+event: tool_start
+data: {"call_id": "call_00_ZnbdmUecwUy12bGgskxw2650", "name": "get_fund_db_schema", "args": {}, "step": 1}
+
+event: tool_end
+data: {"call_id": "call_00_ZnbdmUecwUy12bGgskxw2650", "name": "get_fund_db_schema", "duration_ms": 192.5, "status": "ok", "summary": "已返回表结构", "citation_ids": []}
+
+event: tool_start
+data: {"call_id": "call_01_I94uocXgqmzS3z3QsQJh8026", "name": "search_fund_documents", "args": {"query": "中欧医疗健康混合 投资策略 投资范围 侧重", "fund_codes": ["003095"], "top_n": 5}, "step": 1}
+
+event: tool_end
+data: {"call_id": "call_01_I94uocXgqmzS3z3QsQJh8026", "name": "search_fund_documents", "duration_ms": 3933.0, "status": "ok", "summary": "检索到 5 个片段", "citation_ids": [1, 2, 3, 4, 5]}
+
+event: tool_start
+data: {"call_id": "call_02_GfqLDZiQHwZZuyo7oo8K7702", "name": "search_fund_documents", "args": {"query": "南方医药保健混合 投资策略 投资范围 侧重", "fund_codes": ["000452"], "top_n": 5}, "step": 1}
+
+event: tool_end
+data: {"call_id": "call_02_GfqLDZiQHwZZuyo7oo8K7702", "name": "search_fund_documents", "duration_ms": 3964.8, "status": "ok", "summary": "检索到 5 个片段", "citation_ids": [6, 7, 8, 9, 10]}
+
+event: tool_start
+data: {"call_id": "call_00_OIEvilVOnrPZDtWgxrvb7173", "name": "run_fund_sql", "args": {"sql": "SELECT share_code, management_fee, custody_fee, sales_service_fee, source, as_of FROM fees WHERE share_code IN ('003095','003096','000452','014933')"}, "step": 2}
+
+event: tool_end
+data: {"call_id": "call_00_OIEvilVOnrPZDtWgxrvb7173", "name": "run_fund_sql", "duration_ms": 252.2, "status": "ok", "summary": "返回 4 行", "citation_ids": [11]}
+
+event: tool_start
+data: {"call_id": "call_01_VLhyXrJ7VqaCqkfX4sZ64900", "name": "run_fund_sql", "args": {"sql": "SELECT fund_code, report_date, net_assets, source, as_of FROM fund_scale WHERE fund_code IN ('003095','000452') ORDER BY fund_code, report_date DESC"}, "step": 2}
+
+event: tool_end
+data: {"call_id": "call_01_VLhyXrJ7VqaCqkfX4sZ64900", "name": "run_fund_sql", "duration_ms": 255.0, "status": "ok", "summary": "返回 4 行", "citation_ids": [12]}
+
+event: token
+data: {"text": "## 一、管理费率\n\n两只基金 A 类份额的管理费率相同，均为 **1.20%/年**；托管费率均为 0.20%/年。C 类份额另收 0.80%/年销售服务费。\n\n| 基金 | 份额 | 管理费率（年）"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "托管"}
+
+event: token
+data: {"text": "费率"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "年"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "销售"}
+
+event: token
+data: {"text": "服务"}
+
+event: token
+data: {"text": "费率"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "年"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|---|---"}
+
+event: token
+data: {"text": "|---|---"}
+
+event: token
+data: {"text": "|---"}
+
+event: token
+data: {"text": "|\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "欧"}
+
+event: token
+data: {"text": "医疗"}
+
+event: token
+data: {"text": "健康"}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " A"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "类"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "003"}
+
+event: token
+data: {"text": "095"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "1"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "20"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[11]"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "0"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "20"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[11]"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "0"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[11]"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "欧"}
+
+event: token
+data: {"text": "医疗"}
+
+event: token
+data: {"text": "健康"}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " C"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "类"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "003"}
+
+event: token
+data: {"text": "096"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "1"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "20"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[11]"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "0"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "20"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[11]"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "0"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "80"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[11]"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "南方"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "保健"}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " A"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "类"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "000"}
+
+event: token
+data: {"text": "452"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "1"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "20"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[11]"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "0"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "20"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[11]"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "0"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[11]"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "南方"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "保健"}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " C"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "类"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "014"}
+
+event: token
+data: {"text": "933"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "1"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "20"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[11]"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "0"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "20"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[11]"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "0"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "80"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[11]"}
+
+event: token
+data: {"text": " |\n\n"}
+
+event: token
+data: {"text": "##"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "二"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "最近"}
+
+event: token
+data: {"text": "一期"}
+
+event: token
+data: {"text": "披露"}
+
+event: token
+data: {"text": "的"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "规模"}
+
+event: token
+data: {"text": "\n\n"}
+
+event: token
+data: {"text": "最近"}
+
+event: token
+data: {"text": "一期"}
+
+event: token
+data: {"text": "为"}
+
+event: token
+data: {"text": " **"}
+
+event: token
+data: {"text": "202"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "年"}
+
+event: token
+data: {"text": "二"}
+
+event: token
+data: {"text": "季度"}
+
+event: token
+data: {"text": "末"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "202"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "06"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "30"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "规模"}
+
+event: token
+data: {"text": "为"}
+
+event: token
+data: {"text": "全部"}
+
+event: token
+data: {"text": "份额"}
+
+event: token
+data: {"text": "合计"}
+
+event: token
+data: {"text": "的"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "资产"}
+
+event: token
+data: {"text": "净值"}
+
+event: token
+data: {"text": "：\n\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "报告"}
+
+event: token
+data: {"text": "期末"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "资产"}
+
+event: token
+data: {"text": "净值"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "全部"}
+
+event: token
+data: {"text": "份额"}
+
+event: token
+data: {"text": "合计"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|---|---"}
+
+event: token
+data: {"text": "|---"}
+
+event: token
+data: {"text": "|\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "欧"}
+
+event: token
+data: {"text": "医疗"}
+
+event: token
+data: {"text": "健康"}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "003"}
+
+event: token
+data: {"text": "095"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "202"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "06"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "30"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "约"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "247"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "70"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "亿元"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[12]"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "南方"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "保健"}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "000"}
+
+event: token
+data: {"text": "452"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "202"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "06"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "30"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "约"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "20"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "55"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "亿元"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[12]"}
+
+event: token
+data: {"text": " |\n\n"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "上一"}
+
+event: token
+data: {"text": "期"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "202"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "03"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "31"}
+
+event: token
+data: {"text": "："}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "欧"}
+
+event: token
+data: {"text": "医疗"}
+
+event: token
+data: {"text": "健康"}
+
+event: token
+data: {"text": "约"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "252"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "70"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "亿元"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "南方"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "保健"}
+
+event: token
+data: {"text": "约"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "21"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "01"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "亿元"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[12]"}
+
+event: token
+data: {"text": "）\n\n"}
+
+event: token
+data: {"text": "##"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "三"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "投资"}
+
+event: token
+data: {"text": "策略"}
+
+event: token
+data: {"text": "侧重"}
+
+event: token
+data: {"text": "\n\n"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "欧"}
+
+event: token
+data: {"text": "医疗"}
+
+event: token
+data: {"text": "健康"}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "003"}
+
+event: token
+data: {"text": "095"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "**\n"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "大类"}
+
+event: token
+data: {"text": "资产"}
+
+event: token
+data: {"text": "配置"}
+
+event: token
+data: {"text": "采用"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "自上"}
+
+event: token
+data: {"text": "而下"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "方法"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "跟踪"}
+
+event: token
+data: {"text": " GDP"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "工业"}
+
+event: token
+data: {"text": "增加值"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "PP"}
+
+event: token
+data: {"text": "I"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "CPI"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "利率"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "进出口"}
+
+event: token
+data: {"text": "等"}
+
+event: token
+data: {"text": "宏观"}
+
+event: token
+data: {"text": "数据"}
+
+event: token
+data: {"text": "及"}
+
+event: token
+data: {"text": "政策"}
+
+event: token
+data: {"text": "环境"}
+
+event: token
+data: {"text": "做"}
+
+event: token
+data: {"text": "前瞻"}
+
+event: token
+data: {"text": "性"}
+
+event: token
+data: {"text": "战略"}
+
+event: token
+data: {"text": "判断"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[1]"}
+
+event: token
+data: {"text": "[2]"}
+
+event: token
+data: {"text": "[5]"}
+
+event: token
+data: {"text": "。\n"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "行业"}
+
+event: token
+data: {"text": "界定"}
+
+event: token
+data: {"text": "较"}
+
+event: token
+data: {"text": "宽"}
+
+event: token
+data: {"text": "："}
+
+event: token
+data: {"text": "除"}
+
+event: token
+data: {"text": "医疗卫生"}
+
+event: token
+data: {"text": "服务"}
+
+event: token
+data: {"text": "及"}
+
+event: token
+data: {"text": "支撑"}
+
+event: token
+data: {"text": "产业"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "制药"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "医疗服务"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "医疗器械"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "制药"}
+
+event: token
+data: {"text": "装备"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "商业"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "医疗"}
+
+event: token
+data: {"text": "信息化"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "移动"}
+
+event: token
+data: {"text": "医疗"}
+
+event: token
+data: {"text": "/"}
+
+event: token
+data: {"text": "互联网"}
+
+event: token
+data: {"text": "/"}
+
+event: token
+data: {"text": "物联网"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "医疗保险"}
+
+event: token
+data: {"text": "相关"}
+
+event: token
+data: {"text": "产品"}
+
+event: token
+data: {"text": "服务"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "外"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "还"}
+
+event: token
+data: {"text": "纳入"}
+
+event: token
+data: {"text": "\""}
+
+event: token
+data: {"text": "与"}
+
+event: token
+data: {"text": "人们"}
+
+event: token
+data: {"text": "生命"}
+
+event: token
+data: {"text": "健康"}
+
+event: token
+data: {"text": "和生活"}
+
+event: token
+data: {"text": "质量"}
+
+event: token
+data: {"text": "相关"}
+
+event: token
+data: {"text": "\""}
+
+event: token
+data: {"text": "的"}
+
+event: token
+data: {"text": "行业"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "如"}
+
+event: token
+data: {"text": "养生"}
+
+event: token
+data: {"text": "保健"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "养老"}
+
+event: token
+data: {"text": "社区"}
+
+event: token
+data: {"text": "和"}
+
+event: token
+data: {"text": "养老"}
+
+event: token
+data: {"text": "地产"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "保健品"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "体育"}
+
+event: token
+data: {"text": "健身"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "健康"}
+
+event: token
+data: {"text": "食品"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "环境保护"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "清洁"}
+
+event: token
+data: {"text": "能源"}
+
+event: token
+data: {"text": "；"}
+
+event: token
+data: {"text": "行业"}
+
+event: token
+data: {"text": "分类"}
+
+event: token
+data: {"text": "上"}
+
+event: token
+data: {"text": "涉及"}
+
+event: token
+data: {"text": "申"}
+
+event: token
+data: {"text": "万"}
+
+event: token
+data: {"text": "一级"}
+
+event: token
+data: {"text": "的"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "生物"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "计算机"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "传媒"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "机械设备"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "电子"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "房地产"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "商业"}
+
+event: token
+data: {"text": "贸易"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "食品"}
+
+event: token
+data: {"text": "饮料"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "电气"}
+
+event: token
+data: {"text": "设备"}
+
+event: token
+data: {"text": "及"}
+
+event: token
+data: {"text": "二级"}
+
+event: token
+data: {"text": "的"}
+
+event: token
+data: {"text": "环保"}
+
+event: token
+data: {"text": "工程"}
+
+event: token
+data: {"text": "及"}
+
+event: token
+data: {"text": "服务"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[1]"}
+
+event: token
+data: {"text": "[2]"}
+
+event: token
+data: {"text": "。\n"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "行业"}
+
+event: token
+data: {"text": "配置"}
+
+event: token
+data: {"text": "重点"}
+
+event: token
+data: {"text": "考虑"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "政策和"}
+
+event: token
+data: {"text": "人口"}
+
+event: token
+data: {"text": "因素"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "动态"}
+
+event: token
+data: {"text": "关注"}
+
+event: token
+data: {"text": "社会"}
+
+event: token
+data: {"text": "因素"}
+
+event: token
+data: {"text": "与"}
+
+event: token
+data: {"text": "政府"}
+
+event: token
+data: {"text": "政策"}
+
+event: token
+data: {"text": "变化"}
+
+event: token
+data: {"text": "趋势"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "重点"}
+
+event: token
+data: {"text": "投资"}
+
+event: token
+data: {"text": "受"}
+
+event: token
+data: {"text": "惠"}
+
+event: token
+data: {"text": "于"}
+
+event: token
+data: {"text": "人口"}
+
+event: token
+data: {"text": "因素"}
+
+event: token
+data: {"text": "和政策"}
+
+event: token
+data: {"text": "变化的"}
+
+event: token
+data: {"text": "子"}
+
+event: token
+data: {"text": "行业"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[3]"}
+
+event: token
+data: {"text": "[4]"}
+
+event: token
+data: {"text": "。\n"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "业绩"}
+
+event: token
+data: {"text": "比较"}
+
+event: token
+data: {"text": "基准"}
+
+event: token
+data: {"text": "："}
+
+event: token
+data: {"text": "65"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": "×"}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "证"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "卫生"}
+
+event: token
+data: {"text": "指数"}
+
+event: token
+data: {"text": "收益率"}
+
+event: token
+data: {"text": " +"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "35"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": "×"}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "证"}
+
+event: token
+data: {"text": "综合"}
+
+event: token
+data: {"text": "债券"}
+
+event: token
+data: {"text": "指数"}
+
+event: token
+data: {"text": "收益率"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[5]。\n\n"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "南方"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "保健"}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "000"}
+
+event: token
+data: {"text": "452"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "**\n"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "大类"}
+
+event: token
+data: {"text": "资产"}
+
+event: token
+data: {"text": "配置"}
+
+event: token
+data: {"text": "采用"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "定量"}
+
+event: token
+data: {"text": "与"}
+
+event: token
+data: {"text": "定性"}
+
+event: token
+data: {"text": "相结合"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "的方法"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "分析"}
+
+event: token
+data: {"text": "宏观经济"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "证券市场"}
+
+event: token
+data: {"text": "及"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "保健"}
+
+event: token
+data: {"text": "行业"}
+
+event: token
+data: {"text": "发展趋势"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "评估"}
+
+event: token
+data: {"text": "系统性"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "与"}
+
+event: token
+data: {"text": "各类"}
+
+event: token
+data: {"text": "资产"}
+
+event: token
+data: {"text": "预期"}
+
+event: token
+data: {"text": "收益"}
+
+event: token
+data: {"text": "/"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "在"}
+
+event: token
+data: {"text": "保持"}
+
+event: token
+data: {"text": "总体"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "水平"}
+
+event: token
+data: {"text": "相对"}
+
+event: token
+data: {"text": "稳定的"}
+
+event: token
+data: {"text": "基础上"}
+
+event: token
+data: {"text": "力争"}
+
+event: token
+data: {"text": "稳定"}
+
+event: token
+data: {"text": "增值"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[6]"}
+
+event: token
+data: {"text": "[8]"}
+
+event: token
+data: {"text": "[10]"}
+
+event: token
+data: {"text": "。\n"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "行业"}
+
+event: token
+data: {"text": "界定"}
+
+event: token
+data: {"text": "更"}
+
+event: token
+data: {"text": "聚焦"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "保健"}
+
+event: token
+data: {"text": "本身"}
+
+event: token
+data: {"text": "："}
+
+event: token
+data: {"text": "制药"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "生物"}
+
+event: token
+data: {"text": "制品"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "生物"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "智能"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "医疗服务"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "医疗器械"}
+
+event: token
+data: {"text": "和"}
+
+event: token
+data: {"text": "耗"}
+
+event: token
+data: {"text": "材"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "制药"}
+
+event: token
+data: {"text": "装备"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "商业"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "医疗"}
+
+event: token
+data: {"text": "信息化"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "移动"}
+
+event: token
+data: {"text": "医疗"}
+
+event: token
+data: {"text": "/"}
+
+event: token
+data: {"text": "互联网"}
+
+event: token
+data: {"text": "/"}
+
+event: token
+data: {"text": "物联网"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "保健品"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "体育"}
+
+event: token
+data: {"text": "健身"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "居家"}
+
+event: token
+data: {"text": "健康"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "医疗保险"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "医疗"}
+
+event: token
+data: {"text": "美容"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "美容"}
+
+event: token
+data: {"text": "护理"}
+
+event: token
+data: {"text": "等"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[7]"}
+
+event: token
+data: {"text": "。\n"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "子"}
+
+event: token
+data: {"text": "行业"}
+
+event: token
+data: {"text": "配置"}
+
+event: token
+data: {"text": "综合考虑"}
+
+event: token
+data: {"text": "经济"}
+
+event: token
+data: {"text": "因素"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "重点"}
+
+event: token
+data: {"text": "配置"}
+
+event: token
+data: {"text": "经济"}
+
+event: token
+data: {"text": "周期"}
+
+event: token
+data: {"text": "各"}
+
+event: token
+data: {"text": "阶段"}
+
+event: token
+data: {"text": "预期"}
+
+event: token
+data: {"text": "收益率"}
+
+event: token
+data: {"text": "较高的"}
+
+event: token
+data: {"text": "子"}
+
+event: token
+data: {"text": "行业"}
+
+event: token
+data: {"text": "）、"}
+
+event: token
+data: {"text": "社会"}
+
+event: token
+data: {"text": "与"}
+
+event: token
+data: {"text": "政策"}
+
+event: token
+data: {"text": "因素"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "超"}
+
+event: token
+data: {"text": "配"}
+
+event: token
+data: {"text": "受"}
+
+event: token
+data: {"text": "惠"}
+
+event: token
+data: {"text": "于"}
+
+event: token
+data: {"text": "社会"}
+
+event: token
+data: {"text": "因素"}
+
+event: token
+data: {"text": "和政策"}
+
+event: token
+data: {"text": "变化的"}
+
+event: token
+data: {"text": "子"}
+
+event: token
+data: {"text": "行业"}
+
+event: token
+data: {"text": "）、"}
+
+event: token
+data: {"text": "行业"}
+
+event: token
+data: {"text": "竞争"}
+
+event: token
+data: {"text": "格局"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "重点"}
+
+event: token
+data: {"text": "投资"}
+
+event: token
+data: {"text": "进入"}
+
+event: token
+data: {"text": "壁垒"}
+
+event: token
+data: {"text": "较高"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "利润率"}
+
+event: token
+data: {"text": "稳定"}
+
+event: token
+data: {"text": "或"}
+
+event: token
+data: {"text": "保持"}
+
+event: token
+data: {"text": "增长的"}
+
+event: token
+data: {"text": "子"}
+
+event: token
+data: {"text": "行业"}
+
+event: token
+data: {"text": "）、"}
+
+event: token
+data: {"text": "技术水平"}
+
+event: token
+data: {"text": "及"}
+
+event: token
+data: {"text": "发展趋势"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[7]"}
+
+event: token
+data: {"text": "[9]"}
+
+event: token
+data: {"text": "。\n"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "个股"}
+
+event: token
+data: {"text": "层面"}
+
+event: token
+data: {"text": "在"}
+
+event: token
+data: {"text": "行业"}
+
+event: token
+data: {"text": "配置"}
+
+event: token
+data: {"text": "基础上"}
+
+event: token
+data: {"text": "做"}
+
+event: token
+data: {"text": "定性"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "竞争优势"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "盈利"}
+
+event: token
+data: {"text": "模式"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "公司"}
+
+event: token
+data: {"text": "治理"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "与"}
+
+event: token
+data: {"text": "定量"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "成长"}
+
+event: token
+data: {"text": "性"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "财务"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "估值"}
+
+event: token
+data: {"text": "指标"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "分析"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "并"}
+
+event: token
+data: {"text": "关注"}
+
+event: token
+data: {"text": "港股"}
+
+event: token
+data: {"text": "通"}
+
+event: token
+data: {"text": "股票"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[9]"}
+
+event: token
+data: {"text": "。\n"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "业绩"}
+
+event: token
+data: {"text": "比较"}
+
+event: token
+data: {"text": "基准"}
+
+event: token
+data: {"text": "："}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "证"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "卫生"}
+
+event: token
+data: {"text": "指数"}
+
+event: token
+data: {"text": "收益率"}
+
+event: token
+data: {"text": "×"}
+
+event: token
+data: {"text": "60"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " +"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "上证"}
+
+event: token
+data: {"text": "国债"}
+
+event: token
+data: {"text": "指数"}
+
+event: token
+data: {"text": "收益率"}
+
+event: token
+data: {"text": "×"}
+
+event: token
+data: {"text": "40"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[8]"}
+
+event: token
+data: {"text": "[10]。\n\n"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "简要"}
+
+event: token
+data: {"text": "对比"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "："}
+
+event: token
+data: {"text": "两者"}
+
+event: token
+data: {"text": "均为"}
+
+event: token
+data: {"text": "主动"}
+
+event: token
+data: {"text": "管理的"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "医疗"}
+
+event: token
+data: {"text": "主题"}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": "型"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "管理"}
+
+event: token
+data: {"text": "费率"}
+
+event: token
+data: {"text": "一致"}
+
+event: token
+data: {"text": "；"}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "欧"}
+
+event: token
+data: {"text": "医疗"}
+
+event: token
+data: {"text": "健康"}
+
+event: token
+data: {"text": "规模"}
+
+event: token
+data: {"text": "显著"}
+
+event: token
+data: {"text": "更大"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "约"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "247"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "70"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "亿元"}
+
+event: token
+data: {"text": " vs"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "约"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "20"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "55"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "亿元"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "[12]。"}
+
+event: token
+data: {"text": "策略"}
+
+event: token
+data: {"text": "上"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "欧"}
+
+event: token
+data: {"text": "医疗"}
+
+event: token
+data: {"text": "健康"}
+
+event: token
+data: {"text": "强调"}
+
+event: token
+data: {"text": "自上"}
+
+event: token
+data: {"text": "而下"}
+
+event: token
+data: {"text": "的大"}
+
+event: token
+data: {"text": "类"}
+
+event: token
+data: {"text": "资产"}
+
+event: token
+data: {"text": "配置"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "行业"}
+
+event: token
+data: {"text": "界定"}
+
+event: token
+data: {"text": "外"}
+
+event: token
+data: {"text": "延"}
+
+event: token
+data: {"text": "更"}
+
+event: token
+data: {"text": "宽"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "含"}
+
+event: token
+data: {"text": "养老"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "环保"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "清洁"}
+
+event: token
+data: {"text": "能源"}
+
+event: token
+data: {"text": "等"}
+
+event: token
+data: {"text": "泛"}
+
+event: token
+data: {"text": "健康"}
+
+event: token
+data: {"text": "领域"}
+
+event: token
+data: {"text": "），"}
+
+event: token
+data: {"text": "侧重"}
+
+event: token
+data: {"text": "政策"}
+
+event: token
+data: {"text": "与"}
+
+event: token
+data: {"text": "人口"}
+
+event: token
+data: {"text": "因素"}
+
+event: token
+data: {"text": "驱动的"}
+
+event: token
+data: {"text": "子"}
+
+event: token
+data: {"text": "行业"}
+
+event: token
+data: {"text": "选择"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[1]"}
+
+event: token
+data: {"text": "[2]"}
+
+event: token
+data: {"text": "[3]"}
+
+event: token
+data: {"text": "；"}
+
+event: token
+data: {"text": "南方"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "保健"}
+
+event: token
+data: {"text": "则"}
+
+event: token
+data: {"text": "更"}
+
+event: token
+data: {"text": "聚焦"}
+
+event: token
+data: {"text": "医药"}
+
+event: token
+data: {"text": "保健"}
+
+event: token
+data: {"text": "产业链"}
+
+event: token
+data: {"text": "本身"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "采用"}
+
+event: token
+data: {"text": "定量"}
+
+event: token
+data: {"text": "与"}
+
+event: token
+data: {"text": "定性"}
+
+event: token
+data: {"text": "结合"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "并"}
+
+event: token
+data: {"text": "强调"}
+
+event: token
+data: {"text": "子"}
+
+event: token
+data: {"text": "行业"}
+
+event: token
+data: {"text": "竞争"}
+
+event: token
+data: {"text": "壁垒"}
+
+event: token
+data: {"text": "与"}
+
+event: token
+data: {"text": "技术水平"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "同时"}
+
+event: token
+data: {"text": "明确"}
+
+event: token
+data: {"text": "纳入"}
+
+event: token
+data: {"text": "港股"}
+
+event: token
+data: {"text": "通"}
+
+event: token
+data: {"text": "标的"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[6]"}
+
+event: token
+data: {"text": "[7]"}
+
+event: token
+data: {"text": "[9]。"}
+
+event: citations
+data: {"items": [{"id": 1, "kind": "document", "fund_code": "003095", "fund_name": "中欧医疗健康混合", "doc_id": "003095_contract_2026-08-21", "doc_type": "contract", "doc_title": "基金合同", "report_period": "2026-08-21", "page_start": 43, "page_end": 44, "section": "三、投资策略", "snippet": "三、投资策略\n1、大类资产配置本基金主要采用自上而下分析的方法进行大类资产配置，确定股票、债券、现金的投资比例，重点通过跟踪宏观经济数据（包括GDP 增长率、工业增加值、PPI、CPI、市场利率变化、进出口贸易数据等）和政策环境的变化趋势，来做前瞻性的战略判断。\n2、股票投资策略\n（1）医疗健康相关行业的界定：\n本基金所定义的医疗健康相关行业由以改善和提高人们身心健康水平为目的公司组成，主要包括a) 医疗卫生服务及其支撑产业b) 与人们生命健康和生活质量相关的行业。本基金投资的医疗健康相关行业股票包括目前主营业务从事上述医疗健康领域业务的公司股票，以及当前非主营业务属于上述医疗健康领域业务且该业务未来有望成为主营业务的公司股票。\n医疗卫生服务及其支撑产业包括：制药、医疗服务、医疗器械、制药装备、医药商业、医疗信息化、移动医疗、医疗互联网、医疗物联网、医疗保险相关产品服务；落实到行业分类层面"}, {"id": 2, "kind": "document", "fund_code": "003095", "fund_name": "中欧医疗健康混合", "doc_id": "003095_prospectus_2026-09-21", "doc_type": "prospectus", "doc_title": "招募说明书（2026-09-21更新）", "report_period": "2026-09-21", "page_start": 41, "page_end": 42, "section": "三、投资策略", "snippet": "三、投资策略\n1、大类资产配置本基金主要采用自上而下分析的方法进行大类资产配置，确定股票、债券、现金的投资比例，重点通过跟踪宏观经济数据（包括GDP 增长率、工业增加值、PPI、CPI、市场利率变化、进出口贸易数据等）和政策环境的变化趋势，来做前瞻性的战略判断。\n2、股票投资策略\n（1）医疗健康相关行业的界定：\n本基金所定义的医疗健康相关行业由以改善和提高人们身心健康水平为目的公司组成，主要包括 a) 医疗卫生服务及其支撑产业 b) 与人们生命健康和生活质量相关的行业。本基金投资的医疗健康相关行业股票包括目前主营业务从事上述医疗健康领域业务的公司股票，以及当前非主营业务属于上述医疗健康领域业务且该业务未来有望成为主营业务的公司股票。\n医疗卫生服务及其支撑产业包括：制药、医疗服务、医疗器械、制药装备、医药商业、医疗信息化、移动医疗、医疗互联网、医疗物联网、医疗保险相关产品服务；落实到行业分类"}, {"id": 3, "kind": "document", "fund_code": "003095", "fund_name": "中欧医疗健康混合", "doc_id": "003095_prospectus_2026-09-21", "doc_type": "prospectus", "doc_title": "招募说明书（2026-09-21更新）", "report_period": "2026-09-21", "page_start": 42, "page_end": 43, "section": "三、投资策略", "snippet": "未来随着政策或市场环境发生变化导致本基金对医疗健康相关行业的界定范围发生变动，本基金可调整对上述主题界定的标准，并在更新的招募说明书中进行公告。如未来由于行业分类标准体系未能及时反映公司主营业务或非主营业务中的潜力核心业务的迁移，则本基金将在审慎研究的基础上根据公司真实状况将其纳入股票库。如未来申万宏源证券研究所对行业分类标准进行调整，则本基金亦将酌情进行相应调整。如申万宏源证券研究所不再发布行业分类标准，本基金将根据对医疗健康相关行业的界定，选择符合相应主题范畴的上市公司股票进行投资。因上述原因使得本基金持有的医疗健康产业股票的比例低于非现金基金资产的80%，本基金将在三十个工作日之内进行调整。\n（2）行业配置策略医疗健康相关行业根据所提供的产品与服务类别不同，可划分为不同的细分子行业。本基金将综合考虑以下因素，进行股票资产在各细分子行业间的配置。\na） 政策和人口因素医疗健康相关行业受"}, {"id": 4, "kind": "document", "fund_code": "003095", "fund_name": "中欧医疗健康混合", "doc_id": "003095_contract_2026-08-21", "doc_type": "contract", "doc_title": "基金合同", "report_period": "2026-08-21", "page_start": 44, "page_end": 45, "section": "三、投资策略", "snippet": "未来随着政策或市场环境发生变化导致本基金对医疗健康相关行业的界定范围发生变动，本基金可调整对上述主题界定的标准，并在更新的招募说明书中进行公告。如未来由于行业分类标准体系未能及时反映公司主营业务或非主营业务中的潜力核心业务的迁移，则本基金将在审慎研究的基础上根据公司真实状况将其纳入股票库。如未来申万宏源证券研究所对行业分类标准进行调整，则本基金亦将酌情进行相应调整。如申万宏源证券研究所不再发布行业分类标准，本基金将根据对医疗健康相关行业的界定，选择符合相应主题范畴的上市公司股票进行投资。因上述原因使得本基金持有的医疗健康产业股票的比例低于非现金基金资产的80%，本基金将在三十个工作日之内进行调整。\n（2）行业配置策略医疗健康相关行业根据所提供的产品与服务类别不同，可划分为不同的细分子行业。本基金将综合考虑以下因素，进行股票资产在各细分子行业间的配置。\na）政策和人口因素医疗健康相关行业受到"}, {"id": 5, "kind": "document", "fund_code": "003095", "fund_name": "中欧医疗健康混合", "doc_id": "003095_quarterly_report_2026Q2", "doc_type": "quarterly_report", "doc_title": "2026年第2季度报告", "report_period": "2026Q2", "page_start": 2, "page_end": 2, "section": "§2 基金产品概况", "snippet": "| 基金简称 | 中欧医疗健康混合 |  |\n|---|---|---|\n| 基金主代码 | 003095 |  |\n| 基金运作方式 | 契约型开放式 |  |\n| 基金合同生效日 | 2016年9月29日 |  |\n| 报告期末基金份额总额 | 13,789,490,021.09份 |  |\n| 投资目标 | 本基金主要投资于医疗健康相关行业股票，在有效控制投资组合风险的前提下，通过积极主动的资产配置，力争获得超越业绩比较基准的收益。 |  |\n| 投资策略 | 本基金主要采用自上而下分析的方法进行大类资产配置，确定股票、债券、现金的投资比例，重点通过跟踪宏观经济数据（包括GDP增长率、工业增加值、PPI、CPI、市场利率变化、进出口贸易数据等）和政策环境的变化趋势，来做前瞻性的战略判断。 |  |\n| 业绩比较基准 | 65%×中证医药卫生指数收益率+35%×中证综合债券指数收益率 "}, {"id": 6, "kind": "document", "fund_code": "000452", "fund_name": "南方医药保健混合", "doc_id": "000452_contract_2026-09-03", "doc_type": "contract", "doc_title": "基金合同", "report_period": "2026-09-03", "page_start": 37, "page_end": 38, "section": "三、投资策略", "snippet": "三、投资策略\n1、大类资产配置策略本基金通过定量与定性相结合的方法分析宏观经济、证券市场以及医药保健行业的发展趋势，评估市场的系统性风险和各类资产的预期收益与风险，据此合理制定和调整股票、债券等各类资产的比例，在保持总体风险水平相对稳定的基础上，力争投资组合的稳定增值。此外，本基金将持续地进行定期与不定期的资产配置风险监控，适时地做出相应的调整。\n在大类资产配置中，本基金主要考虑（1）宏观经济指标，包括国际经济和国内经济的GDP增长率、工业增加值、PPI、CPI、市场利率变化、进出口贸易数据等，以判断阶段性的最优资产；（2）微观经济指标，包括市场资金供求状况、不同类资产的盈利变化情况及盈利预期等；（3）医药保健行业的发展状况，包括医药保健行业的产业政策变化情况、新药研发创新状况、医药行业的增长变化情况等；（4）市场方面指标，包括市场成交量、估值水平、股票及债券市场的涨跌及预期收益率以及反映"}, {"id": 7, "kind": "document", "fund_code": "000452", "fund_name": "南方医药保健混合", "doc_id": "000452_contract_2026-09-03", "doc_type": "contract", "doc_title": "基金合同", "report_period": "2026-09-03", "page_start": 38, "page_end": 38, "section": "三、投资策略", "snippet": "（1）医药保健行业股票的界定本基金所指的医药保健行业具体包括：制药、生物制品、生物医药、智能医药、医疗服务、医疗器械和耗材、制药装备、医药商业、医疗信息化、移动医疗、医疗互联网、医疗物联网、保健品、体育健身、居家健康、医疗保险、医疗美容、美容护理等。本基金将对医药保健行业的发展进行密切跟踪，随着市场环境不断变化，相关主题的上市公司范围也会相应改变。在履行适当程序后，本基金将根据实际情况调整相关主题概念和投资范围的认定。\n（2）子行业配置策略医药保健行业股票根据所提供的产品与服务类别不同，可划分为不同的细分子行业，不同子行业又有不同的市场运行属性。本基金将综合考虑以下因素，进行股票资产在各细分子行业间的配置。\n1）经济因素医药保健行业各细分子行业受宏观经济形势影响，在经济周期各个阶段的表现不同，预期收益率存在较大差异。本基金将重点配置经济周期各个阶段预期收益率较高的子行业，并根据经济形式变化"}, {"id": 8, "kind": "document", "fund_code": "000452", "fund_name": "南方医药保健混合", "doc_id": "000452_annual_report_2025", "doc_type": "annual_report", "doc_title": "2025年年度报告", "report_period": "2025", "page_start": 5, "page_end": 5, "section": "2.2 基金产品说明", "snippet": "| 投资目标 | 本基金主要投资于医药保健行业证券，在严格控制风险的前提下，追求超越业绩比较基准的投资回报。 |\n|---|---|\n| 投资策略 | 本基金通过定量与定性相结合的方法分析宏观经济、证券市场以及医药保健行业的发展趋势，评估市场的系统性风险和各类资产的预期收益与风险，据此合理制定和调整股票、债券等各类资产的比例，在保持总体风险水平相对稳定的基础上，力争投资组合的稳定增值。此外，本基金将持续地进行定期与不定期的资产配置风险监控，适时地做出相应的调整。 |\n| 业绩比较基准 | 中证医药卫生指数收益率*60%+上证国债指数收益率*40% |\n| 风险收益特征 | 本基金为混合型基金，其长期平均风险和预期收益率低于股票型基金，高于债券型基金、货币市场基金。 |"}, {"id": 9, "kind": "document", "fund_code": "000452", "fund_name": "南方医药保健混合", "doc_id": "000452_prospectus_2026-09-03", "doc_type": "prospectus", "doc_title": "招募说明书（2026-09-03更新）", "report_period": "2026-09-03", "page_start": 39, "page_end": 39, "section": "5.1.2 代销机构", "snippet": "| 医药保健行业各细分子行业内部的竞争格局不同，行业利润率存在较大差异。本基金将 |\n|---|\n| 重点投资行业进入壁垒较高、利润率稳定或保持增长的子行业股票。 |\n| 5）技术水平及其发展趋势 |\n| 技术进步情况影响医药保健行业的长期生命力。医药保健行业技术进步情况受市场需求 |\n| 产业政策及国际化程度等因素影响。本基金将关注医药保健行业各细分子行业的技术水平变 |\n| 化及其发展趋势，重点投资整体技术水平提高较快且发展趋势良好的子行业股票。 |\n| （3）个股投资策略 |\n| 本基金在行业配置的基础上，通过定性分析和定量分析相结合的办法，挑选出医药保健 |\n| 行业中的优质上市公司。 |\n| 1）定性分析 |\n| 本基金对上市公司的竞争优势进行定性评估。上市公司在行业中的相对竞争力是决定投 |\n| 资价值的重要依据，主要包括以下几个方面： |\n| A、公司的竞争优势：重点考察公司"}, {"id": 10, "kind": "document", "fund_code": "000452", "fund_name": "南方医药保健混合", "doc_id": "000452_quarterly_report_2026Q2", "doc_type": "quarterly_report", "doc_title": "2026年第2季度报告", "report_period": "2026Q2", "page_start": 2, "page_end": 2, "section": "§2 基金产品概况", "snippet": "| 基金简称 | 南方医药保健灵活配置混合 |  |\n|---|---|---|\n| 基金主代码 | 000452 |  |\n| 交易代码 | 000452 |  |\n| 基金运作方式 | 契约型开放式 |  |\n| 基金合同生效日 | 2014年1月23日 |  |\n| 报告期末基金份额总额 | 754,445,268.94份 |  |\n| 投资目标 | 本基金主要投资于医药保健行业证券，在严格控制风险的前提下，追求超越业绩比较基准的投资回报。 |  |\n| 投资策略 | 本基金通过定量与定性相结合的方法分析宏观经济、证券市场以及医药保健行业的发展趋势，评估市场的系统性风险和各类资产的预期收益与风险，据此合理制定和调整股票、债券等各类资产的比例，在保持总体风险水平相对稳定的基础上，力争投资组合的稳定增值。此外，本基金将持续地进行定期与不定期的资产配置风险监控，适时地做出相应的调整。 | "}, {"id": 11, "kind": "database", "tables": ["fees"], "source": "fund_data（MySQL 快照库）表 fees", "as_of": "2026-09-28", "sql": "SELECT share_code, management_fee, custody_fee, sales_service_fee, source, as_of FROM fees WHERE share_code IN ('003095', '003096', '000452', '014933') LIMIT 201", "row_count": 4}, {"id": 12, "kind": "database", "tables": ["fund_scale"], "source": "fund_data（MySQL 快照库）表 fund_scale", "as_of": "2026-09-28", "sql": "SELECT fund_code, report_date, net_assets, source, as_of FROM fund_scale WHERE fund_code IN ('003095', '000452') ORDER BY fund_code, report_date DESC LIMIT 201", "row_count": 4}]}
+
+event: disclaimer
+data: {"text": "以上内容基于公开披露信息整理，仅供学习研究，不构成投资建议。基金有风险，投资需谨慎。"}
+
+event: done
+data: {"request_id": "fe0b53119a3749f8", "status": "ok", "request_model": "deepseek-flash", "timings_ms": {"total": 17007.7, "first_token": 1119.7, "llm": 8404.4, "tools": 8597.5}, "response_models": ["deepseek-flash"], "usage": {"input_tokens": 22938, "output_tokens": 1431, "total_tokens": 24369}, "tool_rounds": 2, "llm_calls": [{"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 2741, "output_tokens": 208, "total_tokens": 2949, "duration_ms": 1560.3, "first_token_ms": 940.3, "tool_calls": 3}, {"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 9748, "output_tokens": 160, "total_tokens": 9908, "duration_ms": 1810.2, "first_token_ms": 1330.5, "tool_calls": 2}, {"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 10449, "output_tokens": 1063, "total_tokens": 11512, "duration_ms": 5033.9, "first_token_ms": 1221.2, "tool_calls": 0}], "tools": [{"name": "get_fund_db_schema", "status": "ok", "duration_ms": 192.5, "step": 1}, {"name": "search_fund_documents", "status": "ok", "duration_ms": 3933.0, "step": 1}, {"name": "search_fund_documents", "status": "ok", "duration_ms": 3964.8, "step": 1}, {"name": "run_fund_sql", "status": "ok", "duration_ms": 252.2, "step": 2}, {"name": "run_fund_sql", "status": "ok", "duration_ms": 255.0, "step": 2}], "compliance_flags": [], "dropped_citations": [], "answer_chars": 1941, "preamble_dropped_chars": 64, "preamble_leaked_chars": 118}
+

@@ -1,0 +1,273 @@
+event: meta
+data: {"request_id": "bc193df00a9744ec", "model": "deepseek-flash", "max_steps": 6}
+
+event: tool_start
+data: {"call_id": "call_00_msBKMBmeGKm7x3cxrijw3348", "name": "calc_fund_return", "args": {"share_code": "003095", "start": "2025-12-31", "end": "2026-06-30"}, "step": 1}
+
+event: tool_end
+data: {"call_id": "call_00_msBKMBmeGKm7x3cxrijw3348", "name": "calc_fund_return", "duration_ms": 378.6, "status": "ok", "summary": "区间 2025-12-31~2026-06-30，收益 3.86%", "citation_ids": [1]}
+
+event: token
+data: {"text": "中欧医疗健康混合 A 类（003095）在 2025-12-31 至 2026-06-30 区间（实际使用起止日均为该两日）[1]：\n\n| 指标 | 数值 |\n|---|---|\n| 区间收益率 | 3.86% |\n| 年化收益率 | 7.93% |\n| 最大回撤 | -23.37% |\n\n- 区间单位净值：期初 1.773"}
+
+event: token
+data: {"text": "7"}
+
+event: token
+data: {"text": " →"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "期末"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "1"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "842"}
+
+event: token
+data: {"text": "1"}
+
+event: token
+data: {"text": "；"}
+
+event: token
+data: {"text": "区间"}
+
+event: token
+data: {"text": "内"}
+
+event: token
+data: {"text": "无"}
+
+event: token
+data: {"text": "分红"}
+
+event: token
+data: {"text": "[1]"}
+
+event: token
+data: {"text": "。\n"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "口径"}
+
+event: token
+data: {"text": "："}
+
+event: token
+data: {"text": "分红"}
+
+event: token
+data: {"text": "按"}
+
+event: token
+data: {"text": "除"}
+
+event: token
+data: {"text": "息"}
+
+event: token
+data: {"text": "日"}
+
+event: token
+data: {"text": "再"}
+
+event: token
+data: {"text": "投资"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "复"}
+
+event: token
+data: {"text": "权"}
+
+event: token
+data: {"text": "），"}
+
+event: token
+data: {"text": "最大"}
+
+event: token
+data: {"text": "回"}
+
+event: token
+data: {"text": "撤"}
+
+event: token
+data: {"text": "按"}
+
+event: token
+data: {"text": "复"}
+
+event: token
+data: {"text": "权"}
+
+event: token
+data: {"text": "净值"}
+
+event: token
+data: {"text": "相对"}
+
+event: token
+data: {"text": "此前"}
+
+event: token
+data: {"text": "最高"}
+
+event: token
+data: {"text": "点"}
+
+event: token
+data: {"text": "计算"}
+
+event: token
+data: {"text": "；"}
+
+event: token
+data: {"text": "区间"}
+
+event: token
+data: {"text": "共"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "181"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "个"}
+
+event: token
+data: {"text": "自然"}
+
+event: token
+data: {"text": "日"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "116"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "个"}
+
+event: token
+data: {"text": "交易日"}
+
+event: token
+data: {"text": "[1]"}
+
+event: token
+data: {"text": "。\n"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "数据"}
+
+event: token
+data: {"text": "来源"}
+
+event: token
+data: {"text": "："}
+
+event: token
+data: {"text": "fund"}
+
+event: token
+data: {"text": "_data"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "净值"}
+
+event: token
+data: {"text": "/"}
+
+event: token
+data: {"text": "分红"}
+
+event: token
+data: {"text": "表"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "快"}
+
+event: token
+data: {"text": "照"}
+
+event: token
+data: {"text": "截止"}
+
+event: token
+data: {"text": "日"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "202"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "09"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "28"}
+
+event: token
+data: {"text": "[1]。"}
+
+event: citations
+data: {"items": [{"id": 1, "kind": "computation", "tool": "calc_fund_return", "args": {"share_code": "003095", "start": "2025-12-31", "end": "2026-06-30"}, "share_code": "003095", "start_used": "2025-12-31", "end_used": "2026-06-30", "source": "fund_data.nav_daily / fund_data.dividends（快照）", "as_of": "2026-09-28"}]}
+
+event: disclaimer
+data: {"text": "以上内容基于公开披露信息整理，仅供学习研究，不构成投资建议。基金有风险，投资需谨慎。"}
+
+event: done
+data: {"request_id": "bc193df00a9744ec", "status": "ok", "request_model": "deepseek-flash", "timings_ms": {"total": 3794.2, "first_token": 3477.6, "llm": 3412.3, "tools": 378.6}, "response_models": ["deepseek-flash"], "usage": {"input_tokens": 5879, "output_tokens": 275, "total_tokens": 6154}, "tool_rounds": 1, "llm_calls": [{"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 2739, "output_tokens": 83, "total_tokens": 2822, "duration_ms": 1718.8, "first_token_ms": null, "tool_calls": 1}, {"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 3140, "output_tokens": 192, "total_tokens": 3332, "duration_ms": 1693.5, "first_token_ms": 1012.7, "tool_calls": 0}], "tools": [{"name": "calc_fund_return", "status": "ok", "duration_ms": 378.6, "step": 1}], "compliance_flags": [], "dropped_citations": [], "answer_chars": 296, "preamble_dropped_chars": 0, "preamble_leaked_chars": 0}
+

@@ -1,0 +1,552 @@
+{
+  "type": "agent_smoke",
+  "created_at": "20260929T103710Z",
+  "git_commit": "ae92d449815539e74b34ae0d58f43c1f672e6d6e",
+  "git_dirty": true,
+  "request_models": [
+    "deepseek-flash"
+  ],
+  "response_models": [
+    "deepseek-flash"
+  ],
+  "warmup": true,
+  "n_questions": 13,
+  "n_status_ok": 13,
+  "n_expected_tool_used": 13,
+  "n_disclaimer_before_done": 13,
+  "n_with_compliance_flags": 0,
+  "machine": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.3",
+  "command": "python scripts/agent_smoke.py ",
+  "results": [
+    {
+      "id": "tool-docs-1",
+      "category": "文档检索",
+      "question": "中欧医疗健康混合的招募说明书里，管理费率和托管费率分别是多少？",
+      "tools_used": [
+        "search_fund_documents"
+      ],
+      "expected_any_of": [
+        "search_fund_documents"
+      ],
+      "expected_tool_used": true,
+      "tool_errors": [],
+      "citation_kinds": [
+        "document",
+        "document"
+      ],
+      "disclaimer_before_done": true,
+      "status": "ok",
+      "compliance_flags": [],
+      "dropped_citations": [],
+      "usage": {
+        "input_tokens": 8210,
+        "output_tokens": 229,
+        "total_tokens": 8439
+      },
+      "response_models": [
+        "deepseek-flash"
+      ],
+      "first_token_ms": 7321.2,
+      "total_ms": 7899.0,
+      "wall_s": 8.78,
+      "answer_chars": 203,
+      "request_model": "deepseek-flash",
+      "tool_rounds": 1,
+      "preamble_dropped_chars": 0,
+      "preamble_leaked_chars": 0
+    },
+    {
+      "id": "tool-docs-2",
+      "category": "文档检索",
+      "question": "易方达信息产业混合的 2025 年年报里，基金经理对后市的看法是什么？",
+      "tools_used": [
+        "search_fund_documents"
+      ],
+      "expected_any_of": [
+        "search_fund_documents"
+      ],
+      "expected_tool_used": true,
+      "tool_errors": [],
+      "citation_kinds": [
+        "document",
+        "document",
+        "document",
+        "document"
+      ],
+      "disclaimer_before_done": true,
+      "status": "ok",
+      "compliance_flags": [],
+      "dropped_citations": [],
+      "usage": {
+        "input_tokens": 7751,
+        "output_tokens": 614,
+        "total_tokens": 8365
+      },
+      "response_models": [
+        "deepseek-flash"
+      ],
+      "first_token_ms": 7569.1,
+      "total_ms": 9151.3,
+      "wall_s": 9.15,
+      "answer_chars": 868,
+      "request_model": "deepseek-flash",
+      "tool_rounds": 1,
+      "preamble_dropped_chars": 75,
+      "preamble_leaked_chars": 0
+    },
+    {
+      "id": "tool-sql-1",
+      "category": "数据库",
+      "question": "基金池里医药医疗和科技两个主题各有多少只基金？",
+      "tools_used": [
+        "run_fund_sql",
+        "get_fund_db_schema",
+        "run_fund_sql"
+      ],
+      "expected_any_of": [
+        "run_fund_sql"
+      ],
+      "expected_tool_used": true,
+      "tool_errors": [
+        "Error executing tool run_fund_sql: SQL 执行失败 (1146): Table 'fund_data.fund_basic_info' doesn't exist\n（第 1 次失败，还可以修改后重试 2 次）"
+      ],
+      "citation_kinds": [
+        "database"
+      ],
+      "disclaimer_before_done": true,
+      "status": "ok",
+      "compliance_flags": [],
+      "dropped_citations": [],
+      "usage": {
+        "input_tokens": 17924,
+        "output_tokens": 214,
+        "total_tokens": 18138
+      },
+      "response_models": [
+        "deepseek-flash"
+      ],
+      "first_token_ms": 5557.4,
+      "total_ms": 5558.5,
+      "wall_s": 5.56,
+      "answer_chars": 145,
+      "request_model": "deepseek-flash",
+      "tool_rounds": 3,
+      "preamble_dropped_chars": 0,
+      "preamble_leaked_chars": 0
+    },
+    {
+      "id": "tool-sql-2",
+      "category": "数据库",
+      "question": "永赢科技驱动混合 2026 年二季度末的前十大重仓股有哪些，各占净值比例多少？",
+      "tools_used": [
+        "get_fund_db_schema",
+        "run_fund_sql"
+      ],
+      "expected_any_of": [
+        "run_fund_sql"
+      ],
+      "expected_tool_used": true,
+      "tool_errors": [],
+      "citation_kinds": [
+        "database"
+      ],
+      "disclaimer_before_done": true,
+      "status": "ok",
+      "compliance_flags": [],
+      "dropped_citations": [],
+      "usage": {
+        "input_tokens": 15489,
+        "output_tokens": 420,
+        "total_tokens": 15909
+      },
+      "response_models": [
+        "deepseek-flash"
+      ],
+      "first_token_ms": 4369.1,
+      "total_ms": 4800.8,
+      "wall_s": 4.8,
+      "answer_chars": 484,
+      "request_model": "deepseek-flash",
+      "tool_rounds": 2,
+      "preamble_dropped_chars": 45,
+      "preamble_leaked_chars": 0
+    },
+    {
+      "id": "tool-calc-1",
+      "category": "收益计算",
+      "question": "003095 从 2025-12-31 到 2026-06-30 的区间收益率和最大回撤是多少？",
+      "tools_used": [
+        "calc_fund_return"
+      ],
+      "expected_any_of": [
+        "calc_fund_return"
+      ],
+      "expected_tool_used": true,
+      "tool_errors": [],
+      "citation_kinds": [
+        "computation"
+      ],
+      "disclaimer_before_done": true,
+      "status": "ok",
+      "compliance_flags": [],
+      "dropped_citations": [],
+      "usage": {
+        "input_tokens": 5879,
+        "output_tokens": 275,
+        "total_tokens": 6154
+      },
+      "response_models": [
+        "deepseek-flash"
+      ],
+      "first_token_ms": 3477.6,
+      "total_ms": 3794.2,
+      "wall_s": 3.8,
+      "answer_chars": 296,
+      "request_model": "deepseek-flash",
+      "tool_rounds": 1,
+      "preamble_dropped_chars": 0,
+      "preamble_leaked_chars": 0
+    },
+    {
+      "id": "tool-calc-2",
+      "category": "收益计算",
+      "question": "假如 2026-03-01 申购 10000 元 003095，持有到 2026-06-27 赎回，扣除申购费和赎回费后的收益率是多少？",
+      "tools_used": [
+        "calc_fund_return"
+      ],
+      "expected_any_of": [
+        "calc_fund_return"
+      ],
+      "expected_tool_used": true,
+      "tool_errors": [],
+      "citation_kinds": [
+        "computation"
+      ],
+      "disclaimer_before_done": true,
+      "status": "ok",
+      "compliance_flags": [],
+      "dropped_citations": [],
+      "usage": {
+        "input_tokens": 6119,
+        "output_tokens": 454,
+        "total_tokens": 6573
+      },
+      "response_models": [
+        "deepseek-flash"
+      ],
+      "first_token_ms": 2843.3,
+      "total_ms": 3643.9,
+      "wall_s": 3.65,
+      "answer_chars": 542,
+      "request_model": "deepseek-flash",
+      "tool_rounds": 1,
+      "preamble_dropped_chars": 0,
+      "preamble_leaked_chars": 0
+    },
+    {
+      "id": "tool-nav-1",
+      "category": "最新净值",
+      "question": "003095 的最新净值是多少？是哪天的？",
+      "tools_used": [
+        "get_latest_nav"
+      ],
+      "expected_any_of": [
+        "get_latest_nav"
+      ],
+      "expected_tool_used": true,
+      "tool_errors": [],
+      "citation_kinds": [
+        "api"
+      ],
+      "disclaimer_before_done": true,
+      "status": "ok",
+      "compliance_flags": [],
+      "dropped_citations": [],
+      "usage": {
+        "input_tokens": 5633,
+        "output_tokens": 111,
+        "total_tokens": 5744
+      },
+      "response_models": [
+        "deepseek-flash"
+      ],
+      "first_token_ms": 3185.3,
+      "total_ms": 3186.3,
+      "wall_s": 3.19,
+      "answer_chars": 107,
+      "request_model": "deepseek-flash",
+      "tool_rounds": 1,
+      "preamble_dropped_chars": 0,
+      "preamble_leaked_chars": 0
+    },
+    {
+      "id": "tool-nav-2",
+      "category": "最新净值",
+      "question": "易方达信息产业混合 A 现在的单位净值是多少？",
+      "tools_used": [
+        "get_latest_nav"
+      ],
+      "expected_any_of": [
+        "get_latest_nav"
+      ],
+      "expected_tool_used": true,
+      "tool_errors": [],
+      "citation_kinds": [
+        "api"
+      ],
+      "disclaimer_before_done": true,
+      "status": "ok",
+      "compliance_flags": [],
+      "dropped_citations": [],
+      "usage": {
+        "input_tokens": 5638,
+        "output_tokens": 94,
+        "total_tokens": 5732
+      },
+      "response_models": [
+        "deepseek-flash"
+      ],
+      "first_token_ms": 2320.0,
+      "total_ms": 2321.2,
+      "wall_s": 2.32,
+      "answer_chars": 83,
+      "request_model": "deepseek-flash",
+      "tool_rounds": 1,
+      "preamble_dropped_chars": 0,
+      "preamble_leaked_chars": 0
+    },
+    {
+      "id": "mixed-1",
+      "category": "综合",
+      "question": "对比中欧医疗健康混合和南方医药保健混合：管理费率、最近一期披露的基金规模各是多少？两只基金的投资策略各有什么侧重？",
+      "tools_used": [
+        "get_fund_db_schema",
+        "search_fund_documents",
+        "run_fund_sql",
+        "run_fund_sql"
+      ],
+      "expected_any_of": [
+        "run_fund_sql",
+        "search_fund_documents"
+      ],
+      "expected_tool_used": true,
+      "tool_errors": [],
+      "citation_kinds": [
+        "document",
+        "document",
+        "document",
+        "document",
+        "document",
+        "database",
+        "database"
+      ],
+      "disclaimer_before_done": true,
+      "status": "ok",
+      "compliance_flags": [],
+      "dropped_citations": [],
+      "usage": {
+        "input_tokens": 20999,
+        "output_tokens": 1323,
+        "total_tokens": 22322
+      },
+      "response_models": [
+        "deepseek-flash"
+      ],
+      "first_token_ms": 9438.4,
+      "total_ms": 12606.5,
+      "wall_s": 12.61,
+      "answer_chars": 1628,
+      "request_model": "deepseek-flash",
+      "tool_rounds": 2,
+      "preamble_dropped_chars": 112,
+      "preamble_leaked_chars": 0
+    },
+    {
+      "id": "mixed-2",
+      "category": "综合",
+      "question": "003095 现任基金经理是谁、哪天开始管理这只基金？从他的任职起始日到 2026-06-30，这只基金的区间收益是多少？招募说明书里对它的投资目标是怎么写的？",
+      "tools_used": [
+        "get_fund_db_schema",
+        "search_fund_documents",
+        "run_fund_sql",
+        "search_fund_documents",
+        "calc_fund_return",
+        "calc_fund_return"
+      ],
+      "expected_any_of": [
+        "run_fund_sql",
+        "calc_fund_return",
+        "search_fund_documents"
+      ],
+      "expected_tool_used": true,
+      "tool_errors": [],
+      "citation_kinds": [
+        "database",
+        "document",
+        "document",
+        "computation",
+        "computation"
+      ],
+      "disclaimer_before_done": true,
+      "status": "ok",
+      "compliance_flags": [],
+      "dropped_citations": [],
+      "usage": {
+        "input_tokens": 32580,
+        "output_tokens": 933,
+        "total_tokens": 33513
+      },
+      "response_models": [
+        "deepseek-flash"
+      ],
+      "first_token_ms": 15057.0,
+      "total_ms": 16143.2,
+      "wall_s": 16.14,
+      "answer_chars": 756,
+      "request_model": "deepseek-flash",
+      "tool_rounds": 3,
+      "preamble_dropped_chars": 219,
+      "preamble_leaked_chars": 0
+    },
+    {
+      "id": "mixed-3",
+      "category": "综合",
+      "question": "永赢科技驱动混合 2026 年二季度末占比最大的重仓股是哪只？季报里管理人对相关行业是怎么看的？",
+      "tools_used": [
+        "get_fund_db_schema",
+        "search_fund_documents",
+        "run_fund_sql"
+      ],
+      "expected_any_of": [
+        "run_fund_sql",
+        "search_fund_documents"
+      ],
+      "expected_tool_used": true,
+      "tool_errors": [],
+      "citation_kinds": [
+        "document",
+        "document",
+        "document",
+        "database"
+      ],
+      "disclaimer_before_done": true,
+      "status": "ok",
+      "compliance_flags": [],
+      "dropped_citations": [],
+      "usage": {
+        "input_tokens": 19684,
+        "output_tokens": 1045,
+        "total_tokens": 20729
+      },
+      "response_models": [
+        "deepseek-flash"
+      ],
+      "first_token_ms": 8328.7,
+      "total_ms": 10473.5,
+      "wall_s": 10.47,
+      "answer_chars": 1426,
+      "request_model": "deepseek-flash",
+      "tool_rounds": 2,
+      "preamble_dropped_chars": 73,
+      "preamble_leaked_chars": 0
+    },
+    {
+      "id": "advice-1",
+      "category": "荐基请求",
+      "question": "现在该买中欧医疗健康混合还是易方达信息产业混合？直接帮我选一只。",
+      "tools_used": [
+        "get_fund_db_schema",
+        "search_fund_documents",
+        "run_fund_sql",
+        "run_fund_sql",
+        "run_fund_sql",
+        "run_fund_sql",
+        "run_fund_sql",
+        "run_fund_sql",
+        "calc_fund_return",
+        "calc_fund_return",
+        "calc_fund_return",
+        "calc_fund_return"
+      ],
+      "expected_any_of": [],
+      "expected_tool_used": true,
+      "tool_errors": [],
+      "citation_kinds": [
+        "document",
+        "document",
+        "document",
+        "database",
+        "database",
+        "database",
+        "database",
+        "database",
+        "database",
+        "computation",
+        "computation",
+        "computation",
+        "computation"
+      ],
+      "disclaimer_before_done": true,
+      "status": "ok",
+      "compliance_flags": [],
+      "dropped_citations": [],
+      "usage": {
+        "input_tokens": 32189,
+        "output_tokens": 1977,
+        "total_tokens": 34166
+      },
+      "response_models": [
+        "deepseek-flash"
+      ],
+      "first_token_ms": 14642.7,
+      "total_ms": 17631.6,
+      "wall_s": 17.63,
+      "answer_chars": 1722,
+      "request_model": "deepseek-flash",
+      "tool_rounds": 3,
+      "preamble_dropped_chars": 45,
+      "preamble_leaked_chars": 0
+    },
+    {
+      "id": "advice-2",
+      "category": "荐基请求",
+      "question": "半导体基金接下来会涨吗？我要不要现在加仓？",
+      "tools_used": [
+        "get_fund_db_schema",
+        "search_fund_documents"
+      ],
+      "expected_any_of": [],
+      "expected_tool_used": true,
+      "tool_errors": [],
+      "citation_kinds": [
+        "document",
+        "document",
+        "document",
+        "document",
+        "document"
+      ],
+      "disclaimer_before_done": true,
+      "status": "ok",
+      "compliance_flags": [],
+      "dropped_citations": [],
+      "usage": {
+        "input_tokens": 10652,
+        "output_tokens": 825,
+        "total_tokens": 11477
+      },
+      "response_models": [
+        "deepseek-flash"
+      ],
+      "first_token_ms": 7383.7,
+      "total_ms": 9453.8,
+      "wall_s": 9.46,
+      "answer_chars": 1144,
+      "request_model": "deepseek-flash",
+      "tool_rounds": 1,
+      "preamble_dropped_chars": 53,
+      "preamble_leaked_chars": 0
+    }
+  ],
+  "note": "冒烟，不是评测：没有标准答案，回答质量由人读 .sse 原文判断；单次运行，n=1/题。"
+}

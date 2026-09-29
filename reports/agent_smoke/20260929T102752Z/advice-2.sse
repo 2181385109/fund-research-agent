@@ -1,0 +1,1542 @@
+event: meta
+data: {"request_id": "ad16b30276e6423a", "model": "deepseek-flash", "max_steps": 6}
+
+event: token
+data: {"text": "我"}
+
+event: token
+data: {"text": "无法"}
+
+event: token
+data: {"text": "提供"}
+
+event: token
+data: {"text": "投资"}
+
+event: token
+data: {"text": "建议"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "也不能"}
+
+event: token
+data: {"text": "预测"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "净值"}
+
+event: token
+data: {"text": "走势"}
+
+event: token
+data: {"text": "或"}
+
+event: token
+data: {"text": "判断"}
+
+event: token
+data: {"text": "买卖"}
+
+event: token
+data: {"text": "时"}
+
+event: token
+data: {"text": "点"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "包括"}
+
+event: token
+data: {"text": "\""}
+
+event: token
+data: {"text": "会不会"}
+
+event: token
+data: {"text": "涨"}
+
+event: token
+data: {"text": "\"\""}
+
+event: token
+data: {"text": "要不要"}
+
+event: token
+data: {"text": "加"}
+
+event: token
+data: {"text": "仓"}
+
+event: token
+data: {"text": "\""}
+
+event: token
+data: {"text": "这类"}
+
+event: token
+data: {"text": "问题"}
+
+event: token
+data: {"text": "。"}
+
+event: token
+data: {"text": "下面"}
+
+event: token
+data: {"text": "只"}
+
+event: token
+data: {"text": "列出"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "池"}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "半导体"}
+
+event: token
+data: {"text": "相关"}
+
+event: token
+data: {"text": "基金的"}
+
+event: token
+data: {"text": "客观"}
+
+event: token
+data: {"text": "数据"}
+
+event: token
+data: {"text": "供"}
+
+event: token
+data: {"text": "你"}
+
+event: token
+data: {"text": "参考"}
+
+event: token
+data: {"text": "。"}
+
+event: tool_start
+data: {"call_id": "call_00_5UTsZQvKNzyI3gWOKVHt0859", "name": "get_fund_db_schema", "args": {}, "step": 1}
+
+event: tool_end
+data: {"call_id": "call_00_5UTsZQvKNzyI3gWOKVHt0859", "name": "get_fund_db_schema", "duration_ms": 198.7, "status": "ok", "summary": "已返回表结构", "citation_ids": []}
+
+event: tool_start
+data: {"call_id": "call_01_qbyVxFbbjn84HkBNnvXv7045", "name": "search_fund_documents", "args": {"query": "半导体行业投资风险提示 行业波动 集中度风险", "fund_codes": ["012650", "013840", "014193"], "doc_types": ["annual_report"], "top_n": 6}, "step": 1}
+
+event: tool_end
+data: {"call_id": "call_01_qbyVxFbbjn84HkBNnvXv7045", "name": "search_fund_documents", "duration_ms": 4119.7, "status": "ok", "summary": "检索到 6 个片段", "citation_ids": [1, 2, 3, 4, 5, 6]}
+
+event: token
+data: {"text": "我"}
+
+event: token
+data: {"text": "无法"}
+
+event: token
+data: {"text": "提供"}
+
+event: token
+data: {"text": "投资"}
+
+event: token
+data: {"text": "建议"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "也不能"}
+
+event: token
+data: {"text": "预测"}
+
+event: token
+data: {"text": "半导体"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "未来"}
+
+event: token
+data: {"text": "会不会"}
+
+event: token
+data: {"text": "涨"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "或"}
+
+event: token
+data: {"text": "判断"}
+
+event: token
+data: {"text": "现在"}
+
+event: token
+data: {"text": "是否"}
+
+event: token
+data: {"text": "适合"}
+
+event: token
+data: {"text": "加"}
+
+event: token
+data: {"text": "仓"}
+
+event: token
+data: {"text": "。"}
+
+event: token
+data: {"text": "下面"}
+
+event: token
+data: {"text": "只"}
+
+event: token
+data: {"text": "列出"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "池"}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "半导体"}
+
+event: token
+data: {"text": "相关"}
+
+event: token
+data: {"text": "基金的"}
+
+event: token
+data: {"text": "客观"}
+
+event: token
+data: {"text": "数据"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "供"}
+
+event: token
+data: {"text": "你"}
+
+event: token
+data: {"text": "自行"}
+
+event: token
+data: {"text": "参考"}
+
+event: token
+data: {"text": "。\n\n"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "池"}
+
+event: token
+data: {"text": "中的"}
+
+event: token
+data: {"text": "半导体"}
+
+event: token
+data: {"text": "相关"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "主"}
+
+event: token
+data: {"text": "代码"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "**\n\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "主题"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "类型"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "业绩"}
+
+event: token
+data: {"text": "比较"}
+
+event: token
+data: {"text": "基准"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|---|---"}
+
+event: token
+data: {"text": "|---|---"}
+
+event: token
+data: {"text": "|\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "012"}
+
+event: token
+data: {"text": "650"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "博"}
+
+event: token
+data: {"text": "时"}
+
+event: token
+data: {"text": "半导体"}
+
+event: token
+data: {"text": "主题"}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "科技"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": "型"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "证"}
+
+event: token
+data: {"text": "全"}
+
+event: token
+data: {"text": "指"}
+
+event: token
+data: {"text": "半导体"}
+
+event: token
+data: {"text": "产品"}
+
+event: token
+data: {"text": "与"}
+
+event: token
+data: {"text": "设备"}
+
+event: token
+data: {"text": "指数"}
+
+event: token
+data: {"text": "×"}
+
+event: token
+data: {"text": "60"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": "+"}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "证"}
+
+event: token
+data: {"text": "港股"}
+
+event: token
+data: {"text": "通"}
+
+event: token
+data: {"text": "综合"}
+
+event: token
+data: {"text": "指数"}
+
+event: token
+data: {"text": "("}
+
+event: token
+data: {"text": "CN"}
+
+event: token
+data: {"text": "Y"}
+
+event: token
+data: {"text": ")×"}
+
+event: token
+data: {"text": "20"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": "+"}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "债"}
+
+event: token
+data: {"text": "综合"}
+
+event: token
+data: {"text": "财富"}
+
+event: token
+data: {"text": "("}
+
+event: token
+data: {"text": "总值"}
+
+event: token
+data: {"text": ")×"}
+
+event: token
+data: {"text": "20"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[3]"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "013"}
+
+event: token
+data: {"text": "840"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "银"}
+
+event: token
+data: {"text": "华"}
+
+event: token
+data: {"text": "集成电路"}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "科技"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": "型"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " —"}
+
+event: token
+data: {"text": " |\n"}
+
+event: token
+data: {"text": "|"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "014"}
+
+event: token
+data: {"text": "193"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "汇"}
+
+event: token
+data: {"text": "添"}
+
+event: token
+data: {"text": "富"}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "证"}
+
+event: token
+data: {"text": "芯片"}
+
+event: token
+data: {"text": "产业"}
+
+event: token
+data: {"text": "指数"}
+
+event: token
+data: {"text": "增强"}
+
+event: token
+data: {"text": "发起"}
+
+event: token
+data: {"text": "式"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "科技"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "指数"}
+
+event: token
+data: {"text": "增强"}
+
+event: token
+data: {"text": " |"}
+
+event: token
+data: {"text": " —"}
+
+event: token
+data: {"text": " |\n\n"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "已"}
+
+event: token
+data: {"text": "披露"}
+
+event: token
+data: {"text": "的"}
+
+event: token
+data: {"text": "客观"}
+
+event: token
+data: {"text": "数据"}
+
+event: token
+data: {"text": "与"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "特征"}
+
+event: token
+data: {"text": "**\n\n"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "博"}
+
+event: token
+data: {"text": "时"}
+
+event: token
+data: {"text": "半导体"}
+
+event: token
+data: {"text": "主题"}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "012"}
+
+event: token
+data: {"text": "650"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "收益"}
+
+event: token
+data: {"text": "特征"}
+
+event: token
+data: {"text": "："}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": "型"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "预期"}
+
+event: token
+data: {"text": "收益"}
+
+event: token
+data: {"text": "和"}
+
+event: token
+data: {"text": "预期"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "水平"}
+
+event: token
+data: {"text": "高于"}
+
+event: token
+data: {"text": "债券"}
+
+event: token
+data: {"text": "型"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "和"}
+
+event: token
+data: {"text": "货币"}
+
+event: token
+data: {"text": "市场"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "低于"}
+
+event: token
+data: {"text": "股票"}
+
+event: token
+data: {"text": "型"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "；"}
+
+event: token
+data: {"text": "若"}
+
+event: token
+data: {"text": "投资"}
+
+event: token
+data: {"text": "港股"}
+
+event: token
+data: {"text": "通"}
+
+event: token
+data: {"text": "标的"}
+
+event: token
+data: {"text": "股票"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "需"}
+
+event: token
+data: {"text": "承担"}
+
+event: token
+data: {"text": "汇率"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "及"}
+
+event: token
+data: {"text": "境外"}
+
+event: token
+data: {"text": "市场"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[3]"}
+
+event: token
+data: {"text": "[6]"}
+
+event: token
+data: {"text": "。\n"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "银"}
+
+event: token
+data: {"text": "华"}
+
+event: token
+data: {"text": "集成电路"}
+
+event: token
+data: {"text": "混合"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "013"}
+
+event: token
+data: {"text": "840"}
+
+event: token
+data: {"text": "）"}
+
+event: token
+data: {"text": "202"}
+
+event: token
+data: {"text": "5"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "年年"}
+
+event: token
+data: {"text": "报"}
+
+event: token
+data: {"text": "披露"}
+
+event: token
+data: {"text": "："}
+
+event: token
+data: {"text": "截至"}
+
+event: token
+data: {"text": "报告"}
+
+event: token
+data: {"text": "期末"}
+
+event: token
+data: {"text": " A"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "类"}
+
+event: token
+data: {"text": "份额"}
+
+event: token
+data: {"text": "净值"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "1"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "560"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "元"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "本"}
+
+event: token
+data: {"text": "报告"}
+
+event: token
+data: {"text": "期"}
+
+event: token
+data: {"text": "份额"}
+
+event: token
+data: {"text": "净值"}
+
+event: token
+data: {"text": "增长率"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "55"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "66"}
+
+event: token
+data: {"text": "%；"}
+
+event: token
+data: {"text": "C"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "类"}
+
+event: token
+data: {"text": "净值"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "1"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "547"}
+
+event: token
+data: {"text": "9"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "元"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "增长率"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "55"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "33"}
+
+event: token
+data: {"text": "%；"}
+
+event: token
+data: {"text": "同期"}
+
+event: token
+data: {"text": "业绩"}
+
+event: token
+data: {"text": "比较"}
+
+event: token
+data: {"text": "基准"}
+
+event: token
+data: {"text": "收益率"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "32"}
+
+event: token
+data: {"text": "."}
+
+event: token
+data: {"text": "72"}
+
+event: token
+data: {"text": "%"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[5]。"}
+
+event: token
+data: {"text": "管理"}
+
+event: token
+data: {"text": "人在"}
+
+event: token
+data: {"text": "展望"}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "表示"}
+
+event: token
+data: {"text": "\""}
+
+event: token
+data: {"text": "半导体"}
+
+event: token
+data: {"text": "是"}
+
+event: token
+data: {"text": "科技"}
+
+event: token
+data: {"text": "股"}
+
+event: token
+data: {"text": "的中"}
+
+event: token
+data: {"text": "坚"}
+
+event: token
+data: {"text": "力量"}
+
+event: token
+data: {"text": "\"\""}
+
+event: token
+data: {"text": "国产"}
+
+event: token
+data: {"text": "化"}
+
+event: token
+data: {"text": "仍是"}
+
+event: token
+data: {"text": "国内"}
+
+event: token
+data: {"text": "半导体"}
+
+event: token
+data: {"text": "领域"}
+
+event: token
+data: {"text": "最"}
+
+event: token
+data: {"text": "确定的"}
+
+event: token
+data: {"text": "投资"}
+
+event: token
+data: {"text": "机会"}
+
+event: token
+data: {"text": "之一"}
+
+event: token
+data: {"text": "\"，"}
+
+event: token
+data: {"text": "同时"}
+
+event: token
+data: {"text": "提到"}
+
+event: token
+data: {"text": "\""}
+
+event: token
+data: {"text": "高"}
+
+event: token
+data: {"text": "波"}
+
+event: token
+data: {"text": "动的"}
+
+event: token
+data: {"text": "市场"}
+
+event: token
+data: {"text": "\""}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[4]"}
+
+event: token
+data: {"text": "——"}
+
+event: token
+data: {"text": "这是"}
+
+event: token
+data: {"text": "管理"}
+
+event: token
+data: {"text": "人的"}
+
+event: token
+data: {"text": "主观"}
+
+event: token
+data: {"text": "判断"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "不"}
+
+event: token
+data: {"text": "构成"}
+
+event: token
+data: {"text": "对未来"}
+
+event: token
+data: {"text": "走势"}
+
+event: token
+data: {"text": "的"}
+
+event: token
+data: {"text": "保证"}
+
+event: token
+data: {"text": "。\n"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "上述"}
+
+event: token
+data: {"text": "年报"}
+
+event: token
+data: {"text": "片段"}
+
+event: token
+data: {"text": "中"}
+
+event: token
+data: {"text": "未"}
+
+event: token
+data: {"text": "检索"}
+
+event: token
+data: {"text": "到"}
+
+event: token
+data: {"text": "针对"}
+
+event: token
+data: {"text": "半导体"}
+
+event: token
+data: {"text": "行业"}
+
+event: token
+data: {"text": "集中"}
+
+event: token
+data: {"text": "度"}
+
+event: token
+data: {"text": "风险"}
+
+event: token
+data: {"text": "的具体"}
+
+event: token
+data: {"text": "量化"}
+
+event: token
+data: {"text": "提示"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "现有"}
+
+event: token
+data: {"text": "资料"}
+
+event: token
+data: {"text": "中没有"}
+
+event: token
+data: {"text": "找到"}
+
+event: token
+data: {"text": "相关"}
+
+event: token
+data: {"text": "依据"}
+
+event: token
+data: {"text": "。\n\n"}
+
+event: token
+data: {"text": "**"}
+
+event: token
+data: {"text": "关于"}
+
+event: token
+data: {"text": "\""}
+
+event: token
+data: {"text": "要不要"}
+
+event: token
+data: {"text": "加"}
+
+event: token
+data: {"text": "仓"}
+
+event: token
+data: {"text": "\""}
+
+event: token
+data: {"text": "**\n\n"}
+
+event: token
+data: {"text": "这"}
+
+event: token
+data: {"text": "属于"}
+
+event: token
+data: {"text": "投资"}
+
+event: token
+data: {"text": "决策"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "我"}
+
+event: token
+data: {"text": "无法"}
+
+event: token
+data: {"text": "给出"}
+
+event: token
+data: {"text": "建议"}
+
+event: token
+data: {"text": "。"}
+
+event: token
+data: {"text": "如果你"}
+
+event: token
+data: {"text": "需要"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "我可以"}
+
+event: token
+data: {"text": "帮你"}
+
+event: token
+data: {"text": "查"}
+
+event: token
+data: {"text": "这些"}
+
+event: token
+data: {"text": "基金的"}
+
+event: token
+data: {"text": "费率"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "申购"}
+
+event: token
+data: {"text": "/"}
+
+event: token
+data: {"text": "赎回"}
+
+event: token
+data: {"text": "/"}
+
+event: token
+data: {"text": "管理"}
+
+event: token
+data: {"text": "费"}
+
+event: token
+data: {"text": "）、"}
+
+event: token
+data: {"text": "区间"}
+
+event: token
+data: {"text": "收益"}
+
+event: token
+data: {"text": "与"}
+
+event: token
+data: {"text": "最大"}
+
+event: token
+data: {"text": "回"}
+
+event: token
+data: {"text": "撤"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "前"}
+
+event: token
+data: {"text": "十大"}
+
+event: token
+data: {"text": "持仓"}
+
+event: token
+data: {"text": "等"}
+
+event: token
+data: {"text": "客观"}
+
+event: token
+data: {"text": "数据"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "供"}
+
+event: token
+data: {"text": "你自己"}
+
+event: token
+data: {"text": "判断"}
+
+event: token
+data: {"text": "。"}
+
+event: token
+data: {"text": "请"}
+
+event: token
+data: {"text": "告诉我"}
+
+event: token
+data: {"text": "具体"}
+
+event: token
+data: {"text": "想"}
+
+event: token
+data: {"text": "了解"}
+
+event: token
+data: {"text": "哪"}
+
+event: token
+data: {"text": "只"}
+
+event: token
+data: {"text": "基金"}
+
+event: token
+data: {"text": "、"}
+
+event: token
+data: {"text": "哪个"}
+
+event: token
+data: {"text": "份额"}
+
+event: token
+data: {"text": "（"}
+
+event: token
+data: {"text": "A"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "类"}
+
+event: token
+data: {"text": "还是"}
+
+event: token
+data: {"text": " C"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "类"}
+
+event: token
+data: {"text": "）。"}
+
+event: citations
+data: {"items": [{"id": 3, "kind": "document", "fund_code": "012650", "fund_name": "博时半导体主题混合", "doc_id": "012650_annual_report_2025", "doc_type": "annual_report", "doc_title": "2025年年度报告", "report_period": "2025", "page_start": 5, "page_end": 5, "section": "2.2 基金产品说明", "snippet": "| 投资目标 | 本基金主要投资于半导体主题上市公司股票。在严格控制风险的前提下，追求超越业绩比较基准的投资回报，力争实现基金资产的长期稳健增值。 |\n|---|---|\n| 投资策略 | 本基金为偏股混合型基金。投资策略主要包括主题投资策略、大类资产配置策略、其他资产投资策略三个部分内容。其中，主题投资策略主要是挖掘半导体产业内的优质证券作为重点投资标的。其次，大类资产配置策略主要是通过对宏观经济周期运行规律的研究，动态调整大类资产配置比例，以争取规避系统性风险。其他资产投资策略有股票投资策略、债券投资策略、资产支持证券投资策略、衍生品投资策略、参与融资业务的投资策略、流通受限证券投资策略等。 |\n| 业绩比较基准 | 中证全指半导体产品与设备指数收益率×60%+中证港股通综合指数（CNY）收益率×20%+中债综合财富（总值）指数收益率×20% |\n| 风险收益特征 | 本基金是混合型证"}, {"id": 4, "kind": "document", "fund_code": "013840", "fund_name": "银华集成电路混合", "doc_id": "013840_annual_report_2025", "doc_type": "annual_report", "doc_title": "2025年年度报告", "report_period": "2025", "page_start": 14, "page_end": 14, "section": "4.5 管理人对宏观经济、证券市场及行业走势的简要展望", "snippet": "4.5 管理人对宏观经济、证券市场及行业走势的简要展望\n我们判断，中国的科技股行情刚刚开始，半导体是科技股的中坚力量，当前国产化仍是国内半导体领域最确定的投资机会之一。展望2026年，我们仍将重仓合理估值、高成长、大空间和强确定性的半导体国产化标的。同时，我们密切关注，并积极配置基本面确定性受益于AI浪潮的相关芯片设计和制造公司。在高波动的市场中，本基金将保持定力，坚持基本面底线，持仓不跟随市场漂移。半导体行业是时间的朋友，看长做长才能不惧波动，才能把握住行业和优质公司的成长红利。在2026年，本基金将采取积极策略，力争在把握行业整体趋势的同时，为投资者创造超额收益。"}, {"id": 5, "kind": "document", "fund_code": "013840", "fund_name": "银华集成电路混合", "doc_id": "013840_annual_report_2025", "doc_type": "annual_report", "doc_title": "2025年年度报告", "report_period": "2025", "page_start": 13, "page_end": 14, "section": "4.4.1 报告期内基金投资策略和运作分析", "snippet": "分行业来看，有色金属、电子、通信、电力设备和机械设备涨幅居前，银行、交通运输、纺织服饰、公共事业和食品饮料涨幅靠后，科技类风险资产与防守类黄金有色资产共振。四季度，海外扰动相对较小，国内政策与经济基本面也较为平稳，产业政策和科技动向变动不大，大盘以震荡整理为主。四季度，Wind全A指数上涨0.97%，沪深300指数下跌-0.23%，中证800指数下跌-0.02%，各指数波动幅度适中。分行业来看，有色金属、石油石化、通信、国防军工和轻工制造涨幅居前，医药生物、房地产、美容护理、计算机和传媒跌幅靠前，结构分化不算严重，周期和主题投资占优，医药股回调幅度较大。\n银华集成电路基金专注于半导体产业投资，近些年来，一直重仓半导体国产化，以业绩确定的半导体设备公司为主，同时缓慢布局有竞争力的Fab厂和部分大芯片设计公司。2025年，本基金同期芯片产业（H30007）涨幅43.15%，本基金跑赢。期间，本"}, {"id": 6, "kind": "document", "fund_code": "012650", "fund_name": "博时半导体主题混合", "doc_id": "012650_annual_report_2025", "doc_type": "annual_report", "doc_title": "2025年年度报告", "report_period": "2025", "page_start": 46, "page_end": 46, "section": "7.4.13 金融工具风险及管理", "snippet": "7.4.13 金融工具风险及管理\n7.4.13.1 风险管理政策和组织架构本基金是混合型证券投资基金，其预期收益和预期风险水平高于债券型基金和货币市场基金，低于股票型基金。本基金如果投资港股通标的股票，需承担汇率风险以及境外市场的风险。本基金的投资范围为具有良好流动性的金融工具。本基金在日常经营活动中面临的与这些金融工具相关的风险主要包括信用风险、流动性风险及市场风险。本基金的基金管理人从事风险管理的主要目标是通过主要投资于半导体主题上市公司股票，在严格控制风险的前提下，追求超越业绩比较基准的投资回报，力争实现基金资产的长期稳健增值。"}]}
+
+event: disclaimer
+data: {"text": "以上内容基于公开披露信息整理，仅供学习研究，不构成投资建议。基金有风险，投资需谨慎。"}
+
+event: done
+data: {"request_id": "ad16b30276e6423a", "status": "ok", "request_model": "deepseek-flash", "timings_ms": {"total": 8927.7, "first_token": 990.6, "llm": 4605.4, "tools": 4318.4}, "response_models": ["deepseek-flash"], "usage": {"input_tokens": 10372, "output_tokens": 643, "total_tokens": 11015}, "tool_rounds": 1, "llm_calls": [{"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 2697, "output_tokens": 176, "total_tokens": 2873, "duration_ms": 1678.4, "first_token_ms": 989.8, "tool_calls": 2}, {"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 7675, "output_tokens": 467, "total_tokens": 8142, "duration_ms": 2927.0, "first_token_ms": 1063.5, "tool_calls": 0}], "tools": [{"name": "get_fund_db_schema", "status": "ok", "duration_ms": 198.7, "step": 1}, {"name": "search_fund_documents", "status": "ok", "duration_ms": 4119.7, "step": 1}], "compliance_flags": ["适合加仓"], "dropped_citations": [], "answer_chars": 882}
+

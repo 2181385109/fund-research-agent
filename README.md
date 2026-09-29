@@ -44,7 +44,7 @@
 | 阶段 | 内容 | 状态 |
 |---|---|---|
 | S0–S4 | 脚手架 → 数据采集 → 文档入库 → 评测集 v1 → 混合检索 + 重排 + 检索评测 | ✅ 完成（2026-09-29），证据见 PROGRESS |
-| S5 | MCP 工具 + LangGraph Agent + SSE | 进行中：mcp-tools 四个工具（[说明](mcp-tools/README.md)）已完成；文档 MCP、Agent、SSE 待做 |
+| S5 | MCP 工具 + LangGraph Agent + SSE | ✅ 完成（2026-09-29）：mcp-tools 四个工具（[说明](mcp-tools/README.md)）、文档 MCP `/mcp`、`POST /v1/chat/stream`（协议见 [docs/API.md](docs/API.md)），证据见 PROGRESS |
 | S6–S8 | Java 后端 → 前端 → 回答评测 | 未开始 |
 | S9–S13 | 第二期：gRPC → Redis → Kafka → 压测 → 优化 | 未开始 |
 

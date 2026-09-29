@@ -1,0 +1,78 @@
+event: meta
+data: {"request_id": "aa5142a21e534873", "model": "deepseek-flash", "max_steps": 6}
+
+event: tool_start
+data: {"call_id": "call_00_luOwVxwYFFt8BzJPvomF8614", "name": "run_fund_sql", "args": {"sql": "SELECT theme, COUNT(*) AS cnt FROM fund_basic_info GROUP BY theme"}, "step": 1}
+
+event: tool_end
+data: {"call_id": "call_00_luOwVxwYFFt8BzJPvomF8614", "name": "run_fund_sql", "duration_ms": 254.7, "status": "error", "error": "Error executing tool run_fund_sql: SQL 执行失败 (1146): Table 'fund_data.fund_basic_info' doesn't exist\n（第 1 次失败，还可以修改后重试 2 次）", "error_kind": "tool_error"}
+
+event: tool_start
+data: {"call_id": "call_00_fXtdUKdMr0ZnRUGXPfu41389", "name": "get_fund_db_schema", "args": {}, "step": 2}
+
+event: tool_end
+data: {"call_id": "call_00_fXtdUKdMr0ZnRUGXPfu41389", "name": "get_fund_db_schema", "duration_ms": 194.3, "status": "ok", "summary": "已返回表结构", "citation_ids": []}
+
+event: tool_start
+data: {"call_id": "call_00_6ZMz4WsH0Uif0cm7TUzI7410", "name": "run_fund_sql", "args": {"sql": "SELECT theme, COUNT(*) AS cnt FROM funds GROUP BY theme"}, "step": 3}
+
+event: tool_end
+data: {"call_id": "call_00_6ZMz4WsH0Uif0cm7TUzI7410", "name": "run_fund_sql", "duration_ms": 251.4, "status": "ok", "summary": "返回 2 行", "citation_ids": [1]}
+
+event: token
+data: {"text": "基金池共 20 只基金，两个主题各 10 只：\n\n| 主题 | 基金数量 |\n|---|---|\n| 医药医疗 | 10 只 |\n| 科技 | 10 只 |\n\n数据来源：fund_data 快照库 `fund"}
+
+event: token
+data: {"text": "s"}
+
+event: token
+data: {"text": "`"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "表"}
+
+event: token
+data: {"text": "，"}
+
+event: token
+data: {"text": "截至"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "202"}
+
+event: token
+data: {"text": "6"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "09"}
+
+event: token
+data: {"text": "-"}
+
+event: token
+data: {"text": "28"}
+
+event: token
+data: {"text": " "}
+
+event: token
+data: {"text": "[1]。"}
+
+event: citations
+data: {"items": [{"id": 1, "kind": "database", "tables": ["funds"], "source": "fund_data（MySQL 快照库）表 funds", "as_of": "2026-09-28", "sql": "SELECT theme, COUNT(*) AS cnt FROM funds GROUP BY theme LIMIT 201", "row_count": 2}]}
+
+event: disclaimer
+data: {"text": "以上内容基于公开披露信息整理，仅供学习研究，不构成投资建议。基金有风险，投资需谨慎。"}
+
+event: done
+data: {"request_id": "aa5142a21e534873", "status": "ok", "request_model": "deepseek-flash", "timings_ms": {"total": 5523.6, "first_token": 5518.4, "llm": 4816.5, "tools": 700.4}, "response_models": ["deepseek-flash"], "usage": {"input_tokens": 17924, "output_tokens": 203, "total_tokens": 18127}, "tool_rounds": 3, "llm_calls": [{"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 2723, "output_tokens": 54, "total_tokens": 2777, "duration_ms": 1009.4, "first_token_ms": null, "tool_calls": 1}, {"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 2842, "output_tokens": 25, "total_tokens": 2867, "duration_ms": 1473.9, "first_token_ms": null, "tool_calls": 1}, {"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 6116, "output_tokens": 51, "total_tokens": 6167, "duration_ms": 1106.6, "first_token_ms": null, "tool_calls": 1}, {"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 6243, "output_tokens": 73, "total_tokens": 6316, "duration_ms": 1226.6, "first_token_ms": 913.6, "tool_calls": 0}], "tools": [{"name": "run_fund_sql", "status": "error", "duration_ms": 254.7, "step": 1}, {"name": "get_fund_db_schema", "status": "ok", "duration_ms": 194.3, "step": 2}, {"name": "run_fund_sql", "status": "ok", "duration_ms": 251.4, "step": 3}], "compliance_flags": [], "dropped_citations": [], "answer_chars": 127, "preamble_dropped_chars": 0, "preamble_leaked_chars": 0}
+
