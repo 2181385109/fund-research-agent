@@ -594,7 +594,7 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 - S7 前端要注意：对话接口的错误（401 / 403 / 404 / 503）在流开始之前是普通 JSON，流开始之后的错误是 SSE 的 `error` 事件；`fetch` 解析 SSE 时先看 HTTP 状态码。
 
 ## S7 前端 + 一键启动 — 2026-09-29（B7）
-- commit 范围：`7f29714..d4de28b`（功能与证据）+ 文档提交；CI：[run 36583178684](https://github.com/2181385109/fund-research-agent/actions/runs/36583178684)（7 个 job 全绿）
+- commit 范围：`7f29714..9fb54b4`（功能与证据 `54a147b`、`d81a7fc`、`d4de28b`，文档 `9fb54b4`）；CI：[run 36583178684](https://github.com/2181385109/fund-research-agent/actions/runs/36583178684)（d4de28b，7 个 job 全绿）、[run 36583653895](https://github.com/2181385109/fund-research-agent/actions/runs/36583653895)（9fb54b4，7 个 job 全绿）
 - 统筹 / 用户对前端的补充要求已落实：**显示检索范围（公共库 / 私有库）、展示四类出处、风险提示固定显示不能折叠隐藏**（ADR-045）。
 
 ### 完成项
