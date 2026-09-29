@@ -3,13 +3,14 @@
 > 由执行者在每个阶段结束时按 CLAUDE.md §11 的模板追加一节，旧内容不删除。统筹审查后会在对应小节末尾追加「统筹审查结论」。
 
 ## 当前状态
-- 当前阶段：S0 已完成（2026-09-29），等待统筹审查；S1 未开始
-- 最近一次 CI：https://github.com/2181385109/fund-research-agent/actions/runs/36454732880 （首次 push，5 个 job 全绿）
-- 已完成的用户事项：`.env` 已由脚本生成（含 DeepSeek key）；`.wslconfig` 已设 `memory=10GB`、`swap=4GB` 并重启 WSL（用户授权执行者代办）
+- 当前阶段：批次 B1（S1 + S2）进行中；S1 已完成（2026-09-29），S2 进行中
+- 最近一次 CI：见 S1 小节
+- 已完成的用户事项：`.env` 已生成（含 DeepSeek key）；`.wslconfig` 已设 10GB/4GB；**基金池 v1 已于 2026-09-29 确认并冻结**
 - 待用户处理：
-  1. 决定是否停掉 ticket-qa 的容器（S0 实测合计约 844MiB，明细见 S0「需要用户做的事」）
-  2. （可选）用自己的浏览器打开 http://eid.csrc.gov.cn/fund/disclose/index.html，告诉统筹能否访问
-  3. S1 确认基金池；S3 抽检评测集；S8 盲标回答
+  1. 决定是否停掉 ticket-qa 的容器（S0 实测合计约 844MiB）
+  2. （可选）用自己的浏览器确认证监会披露网站能否访问
+  3. S3 抽检评测集；S8 盲标回答
+  4. universe.yaml 规模口径注释的更正是否批准（见 S1「给统筹的问题」1）
 
 ---
 
@@ -210,3 +211,54 @@ $ git check-ignore -v .env
 2. **S1 导入 fund_data 需要写账号**：现在 `fund_data` 只有 root（全部权限）和 `fund_reader`（只读）。S1 的 `fund_pipeline.load` 我打算新增一个 `fund_loader` 账号（只有 fund_data 的 DDL/DML 权限），密码由 gen_env 生成（登记 ADR）。可以吗，还是直接用 root？
 3. **`LLM_THINKING` 变量与 `JUDGE_MODEL=deepseek-v4-pro`**（偏差 1、2）是否同意？如同意，建议把 `LLM_THINKING` 补进 CLAUDE.md §5 的变量清单（执行者不改 CLAUDE.md）。
 4. **Docker 镜像加速顺序**：要不要请用户同意把 `/etc/docker/daemon.json` 的 `registry-mirrors` 改为 DaoCloud 优先？这会影响 ticket-qa 的拉取（大概率是变快），需要 `systemctl restart docker`，会重启所有容器。
+
+> 统筹答复（B1 提示词，2026-09-29）：1 → 1792m + MaxDirectMemorySize=256m；2 → 新增 fund_loader；3 → 维持；4 → 不改。已在 B1 落实，见 ADR-023～026 与 `reports/infra/20260928T174514Z/s0_followup.txt`。
+
+---
+
+## S1 基金池与数据采集 — 2026-09-29
+- commit 范围：`69c90d2`..本节所在提交；CI：见本批 HANDOFF（S1、S2 一起 push）
+- 用户关卡：基金池 v1 于 **2026-09-29** 经用户确认冻结（LOF 按场外份额收录、011832 保留，ADR-030）
+
+### 完成项
+- 先落实 S0 遗留决定（ADR-023～026）：ES 1792m + direct 256m；`fund_loader` 账号（`deploy/mysql/init/02-fund-loader.sh`，`gen_env.py --add-missing`）。
+- `fund_pipeline`：`net`（节流/缓存/UA）、`sources`（AkShare 1.18.97 + 缓存 + 临时错误重试）、`universe`（筛选/校验）、`docs`（公告匹配 + 断点续传下载 + 可提取性）、`structured`（9 张 AkShare 表 + 3 张 PDF 表）、`pdf_extract`/`pdf_tables`、`schema.sql`/`load`、`quality`。单测 83 个，全部离线（自造 reportlab PDF fixture）。
+- 数据：DATA_AS_OF = **2026-09-28**（下载时北京时间 09-29 上午，当日未收盘）；100 份 PDF（6834 页，约 93MB，不入库）；12 张表导入 `fund_data`。
+
+### 验收逐条
+1. 用户确认基金池（记录日期）；MANIFEST 中 PDF 数量 ≈ 基金数 × 5，每个缺口都有原因 — ✅ — 2026-09-29 确认；`data/MANIFEST.json`：期望 100，下载且可提取 100，`documents_missing` 为空（首次运行有 2 个下载失败：连接中断和读超时，都记进了 missing；续传后补齐）。可提取性：平均每页字符数最低 461.6，乱码率最高 0.0038。
+2. `fund_reader` 能查到所有表；各表行数原文 — ✅ — `reports/data_load/20260929T032617Z/summary.json`：12 张表 `fund_reader` COUNT(*) 与 CSV 完全一致（funds 20、share_classes 40、fees 40、purchase_fee_tiers 92、redemption_fee_tiers 137、nav_daily 72836、dividends 14、managers 24、fund_manager_tenures 34、holdings_top10 1200、fund_scale 40、period_returns 360）。
+3. 质量报告原文：持仓比对一致率（写明分母）；每处不一致都给出解释 — ✅ — `reports/data_quality/20260929T032645Z/report.md`：持仓 **200/202 一致（20 只基金，分母为 PDF 明细行）**，2 行差异是同一发行人的 A 股和 H 股在季报里共用一个序号（013840 华虹宏力、012650 中芯国际），逐条解释见报告 §3；现任经理 19/20 一致（012650 于 2026-07-15 换人，晚于季报期末）；净值缺口 451 天全部在成立后 3 个月的建仓封闭期内；区间收益按分红再投资口径自算，**276/276 在 ±0.01pp 内**。
+4. 爬取节流和缓存有测试或证据；重复执行不会重复下载 — ✅ — 单测：`test_throttle_enforces_min_interval`、`test_json_cache_second_call_does_not_fetch`、`test_akshare_source_throttles_and_caches`、`test_download_skips_existing_file_and_resumes_part`（Range 续传）。实跑证据：第三次 `docs fetch` 统计 `{'downloaded': 0, 'reused_local': 100, 'announcement_list_requests': 0, 'announcement_list_cache_hits': 40}`（写在 `data/MANIFEST.json` 的 `documents_fetch_stats`）；`structured fetch` 重跑 `AkShare 请求 0，缓存命中 283`。
+5. 单测：文档类型与报告期匹配、截断到 as_of、费率表解析（fixture） — ✅ — `tests/test_docs.py`（含中文数字年份「二0二五年」）、`tests/test_structured.py`（净值/分红/持仓截断）、`tests/test_pdf_extract.py`（reportlab 生成的招募说明书：养老金表与一般表、C 类不收申购费；合表与两列并列版式；正文退路）。
+6. CI 全绿；安全扫描确认仓库内没有真实 PDF 或快照 — ✅（安全扫描）/ CI 见 HANDOFF — `security_scan` tracked 与 `--history` 均 PASS（检查了 8 个密钥变量）；`git ls-files` 中没有 `.pdf`、`data/raw`、`data/snapshots`。
+
+### 实测数字
+| 指标 | 值 | n / 分母 | 结果文件 |
+|---|---|---|---|
+| 候选筛选 | 474 组 → 193 组通过（规模不足 159、成立不足 2 年 119、成立日缺失 3） | 474 组 | reports/universe/20260928T181640Z/summary.json |
+| PDF 匹配与可提取 | 100 / 100 | 20 只 × 5 份 | data/MANIFEST.json |
+| 持仓一致率 | 200/202（99.01%） | PDF 明细 202 行，20 只 | reports/data_quality/20260929T032645Z/summary.json |
+| 现任经理一致 | 19/20 | 20 只 | 同上 |
+| 区间收益（分红再投资口径）在 ±0.01pp 内 | 276/276 | 276 对 | 同上 |
+| 净值缺口（成立 3 个月后） | 0 天 | 40 个份额 | 同上 |
+| 耗时 | 未精确计时（PDF 下载受代理限速，约每秒十几 KB） | — | — |
+
+### 与计划的偏差（附理由和 ADR 编号）
+1. 申购费从招募说明书解析，没用 `fund_fee_em`（AkShare 缺陷，用户确认；ADR-027、LIMITATIONS）。
+2. 招募说明书和基金合同的公告列表直接调东方财富 JJGG 接口 type=1（AkShare 没封装；ADR-028）。
+3. 表结构细化：`tier_text`、`fixed_fee`、`source_page`；单位统一（ADR-029）。
+4. 新增 `fund_scale` 的来源是季报（各份额净值合计），不是 overview；`fund_manager_tenures` 另外用了经理变更公告（`data/raw/personnel/`，14 份，不入库，URL 和 sha256 记在 MANIFEST）。
+5. data-pipeline 的 E501 行宽上限改为 120（中文按双宽计），formatter 仍是 100。
+
+### 已知问题 / 技术债
+1. 4 份 2025 年报的经理简介表没有解析出来（006113、110023、014193、002236）；任职信息由季报和公告覆盖，006113 郑磊的任职起始日为 NULL（报告 §6）。
+2. PDF 表格解析依赖版式启发式规则（3 种申购费版式、跨页续表）；换一批基金可能遇到新版式，解析不出时会登记缺口，不会猜测。
+3. `fund_overview_em` 的规模只是 A 类份额（见给统筹的问题 1）。
+4. 早期的 3 次质量 run 保留在 `reports/data_quality/`（解析器修正过程），以最后一次为准。
+
+### 需要用户做的事
+- 无新增（基金池已确认）。
+
+### 给统筹的问题
+1. **universe.yaml 的规模口径注释**：注释写的是「全部份额合计」，实际是 A 类份额的规模（数值与入选结果不受影响，≥2 亿门槛仍然满足）。要不要批准只改这一行注释（按 §6 要写 CHANGELOG，已预登记）？不改也不影响后续阶段。

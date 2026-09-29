@@ -1,0 +1,505 @@
+{
+  "created_utc": "20260929T032143Z",
+  "git_commit": "16c8b8f24d835f42d034651b09b8eb2242ca879e",
+  "git_dirty": true,
+  "command": "python -m fund_pipeline.quality --as-of 2026-09-28",
+  "params": {
+    "as_of": "2026-09-28"
+  },
+  "manifest_sha256": "04107d595ae8e6ef915766c620a81f66d870ccf9bc1c03b1a80b44feff1d8b0d",
+  "akshare_version": "1.18.97",
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.3",
+    "processor": "AMD64 Family 25 Model 116 Stepping 1, AuthenticAMD"
+  },
+  "data_as_of": "2026-09-28",
+  "row_counts_by_fund": {
+    "003095": {
+      "dividends": 6,
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 4846,
+      "period_returns": 18,
+      "purchase_fee_tiers": 4,
+      "redemption_fee_tiers": 10,
+      "share_classes": 2
+    },
+    "007718": {
+      "dividends": 2,
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 3080,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 7,
+      "share_classes": 2
+    },
+    "161035": {
+      "dividends": 2,
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 3645,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 4,
+      "share_classes": 2
+    },
+    "001513": {
+      "dividends": 2,
+      "fees": 2,
+      "fund_manager_tenures": 1,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 3139,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 8,
+      "share_classes": 2
+    },
+    "040025": {
+      "dividends": 2,
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 4668,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 7,
+      "share_classes": 2
+    },
+    "006113": {
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 2277,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 7,
+      "share_classes": 2
+    },
+    "001717": {
+      "fees": 2,
+      "fund_manager_tenures": 1,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 4015,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 8,
+      "share_classes": 2
+    },
+    "004851": {
+      "fees": 2,
+      "fund_manager_tenures": 1,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 3798,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 8,
+      "share_classes": 2
+    },
+    "110023": {
+      "fees": 2,
+      "fund_manager_tenures": 1,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 4511,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 7,
+      "share_classes": 2
+    },
+    "000452": {
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 4189,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 8,
+      "share_classes": 2
+    },
+    "001550": {
+      "fees": 2,
+      "fund_manager_tenures": 1,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 5482,
+      "period_returns": 18,
+      "purchase_fee_tiers": 3,
+      "redemption_fee_tiers": 5,
+      "share_classes": 2
+    },
+    "160219": {
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 4308,
+      "period_returns": 18,
+      "purchase_fee_tiers": 4,
+      "redemption_fee_tiers": 6,
+      "share_classes": 2
+    },
+    "002692": {
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 3903,
+      "period_returns": 18,
+      "purchase_fee_tiers": 4,
+      "redemption_fee_tiers": 8,
+      "share_classes": 2
+    },
+    "013840": {
+      "fees": 2,
+      "fund_manager_tenures": 1,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 2266,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 8,
+      "share_classes": 2
+    },
+    "008919": {
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 3158,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 7,
+      "share_classes": 2
+    },
+    "012650": {
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 2438,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 7,
+      "share_classes": 2
+    },
+    "014193": {
+      "fees": 2,
+      "fund_manager_tenures": 1,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 2336,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 4,
+      "share_classes": 2
+    },
+    "008326": {
+      "fees": 2,
+      "fund_manager_tenures": 1,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 3246,
+      "period_returns": 18,
+      "purchase_fee_tiers": 3,
+      "redemption_fee_tiers": 4,
+      "share_classes": 2
+    },
+    "002236": {
+      "fees": 2,
+      "fund_manager_tenures": 1,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 4951,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 7,
+      "share_classes": 2
+    },
+    "011832": {
+      "fees": 2,
+      "fund_manager_tenures": 5,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 2580,
+      "period_returns": 18,
+      "purchase_fee_tiers": 4,
+      "redemption_fee_tiers": 7,
+      "share_classes": 2
+    },
+    "?": {
+      "managers": 24
+    }
+  },
+  "table_rows": {
+    "dividends": 14,
+    "fees": 40,
+    "fund_manager_tenures": 34,
+    "fund_scale": 40,
+    "funds": 20,
+    "holdings_top10": 1200,
+    "managers": 24,
+    "nav_daily": 72836,
+    "period_returns": 360,
+    "purchase_fee_tiers": 92,
+    "redemption_fee_tiers": 137,
+    "share_classes": 40
+  },
+  "nav_continuity": {
+    "shares": 40,
+    "shares_with_gaps": 28,
+    "total_gap_days": 451,
+    "total_gap_days_after_first_3_months": 0,
+    "shares_last_nav_not_as_of": [],
+    "detail": {
+      "000452": 36,
+      "001513": 16,
+      "001550": 2,
+      "001551": 2,
+      "001717": 1,
+      "002236": 4,
+      "002692": 3,
+      "003095": 12,
+      "003096": 12,
+      "004851": 16,
+      "006113": 29,
+      "007718": 31,
+      "008326": 2,
+      "008327": 2,
+      "008919": 31,
+      "008920": 31,
+      "011832": 2,
+      "011833": 2,
+      "012650": 44,
+      "012651": 44,
+      "013840": 36,
+      "013841": 36,
+      "014193": 5,
+      "014194": 5,
+      "040025": 10,
+      "110023": 25,
+      "160219": 5,
+      "161035": 7
+    }
+  },
+  "holdings_compare_2026Q2": {
+    "funds_compared": 18,
+    "funds_pdf_unparsed": [
+      "000452",
+      "014193"
+    ],
+    "rows_compared": 182,
+    "rows_consistent": 180,
+    "consistency_rate": 0.989,
+    "per_fund": {
+      "003095": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "006113": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "001717": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "004851": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "110023": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "007718": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "000452": {
+        "pdf_rows": 0,
+        "db_rows": 10,
+        "consistent": 0
+      },
+      "001550": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "160219": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "161035": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "002692": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "001513": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "013840": {
+        "pdf_rows": 11,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "008919": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "040025": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "012650": {
+        "pdf_rows": 11,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "014193": {
+        "pdf_rows": 0,
+        "db_rows": 10,
+        "consistent": 0
+      },
+      "008326": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "002236": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "011832": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      }
+    },
+    "inconsistent": [
+      {
+        "fund_code": "013840",
+        "pdf_rank": 7,
+        "db_rank": "",
+        "pdf_code": "688347",
+        "pdf_name": "华虹宏力",
+        "issues": "库中该报告期前十无此证券"
+      },
+      {
+        "fund_code": "012650",
+        "pdf_rank": 4,
+        "db_rank": "",
+        "pdf_code": "688981",
+        "pdf_name": "中芯国际",
+        "issues": "库中该报告期前十无此证券"
+      }
+    ]
+  },
+  "managers_compare": {
+    "funds": 20,
+    "match": 18,
+    "mismatch": [
+      {
+        "fund_code": "160219",
+        "db_current": "彭悦、梁杏",
+        "q2_report_current": "梁杏",
+        "match": false,
+        "q2_page": 6
+      },
+      {
+        "fund_code": "012650",
+        "db_current": "吴渭",
+        "q2_report_current": "肖瑞瑾",
+        "match": false,
+        "q2_page": 5
+      }
+    ]
+  },
+  "period_returns_compare": {
+    "pairs": 276,
+    "tolerance_pp": "0.01",
+    "note": "来源方区间收益保留两位百分数，容差取 0.01 个百分点",
+    "within_tol": {
+      "reinvest": 276,
+      "unit": 265,
+      "chain": 69
+    },
+    "max_abs_diff_pp": {
+      "reinvest": "0.005",
+      "unit": "13.821",
+      "chain": "0.466"
+    },
+    "pairs_with_dividends": 11,
+    "outside_tol_reinvest": []
+  },
+  "snapshot_sha256": {
+    "dividends": "43a0c5522fd1892db6cf43e7a0dceeaabb7ed66ad0e216776cc18c581df6c253",
+    "fees": "4d2db54881609cf58e7f56904403140b84a7cefc91d92acb811948ceed78beab",
+    "fund_manager_tenures": "26bbe2b3253d212873e444bbf576fd4248d0d8418a23516b250e8d873fad95c4",
+    "fund_scale": "c8870ddead8f8816d89505477559dc7c260461736358cf5ad01ec3efffc44990",
+    "funds": "dbfbc3cf2974761976585e6ea33d00423f840857a604e4d7deb1b6bfb36c475b",
+    "holdings_top10": "2ac1b5ae68bc29e9147b4e8060175ba42dd45c7ed39fc42733e19a45c5bab822",
+    "managers": "62db27c4027a0bf7a174ff9454bc4e47af5e3ba437ead91e8dbe4512c59a4104",
+    "nav_daily": "e1455425193e6c387b456a115ed7205d270be8511b23ae7285a91c7ae0484e86",
+    "period_returns": "9848a5af99ce0a77ec34a532331b4798298c2eea81c6f8687b0661a91a31e6ed",
+    "purchase_fee_tiers": "bee018ea2d8b489078a9b9546b0db61c3f4fe67515b4e592a7420c44b07ce8b9",
+    "redemption_fee_tiers": "d3e89ddc0143aeb37bf80201ab478c3295ff73f17f708f91563a646120df7def",
+    "share_classes": "98e67573b4f9e93a21cc9d2fd35c42c066d4cc54cb51249c2cdbf7e35985539b"
+  },
+  "pdf_extract_problems": [
+    "006113 006113_annual_report_2025 未解析出基金经理简介表",
+    "110023 110023_annual_report_2025 未解析出基金经理简介表",
+    "014193 014193_annual_report_2025 未解析出基金经理简介表",
+    "002236 002236_annual_report_2025 未解析出基金经理简介表"
+  ]
+}

@@ -1,0 +1,1321 @@
+{
+  "created_utc": "20260929T031631Z",
+  "git_commit": "16c8b8f24d835f42d034651b09b8eb2242ca879e",
+  "git_dirty": true,
+  "command": "python -m fund_pipeline.quality --as-of 2026-09-28",
+  "params": {
+    "as_of": "2026-09-28"
+  },
+  "manifest_sha256": "04107d595ae8e6ef915766c620a81f66d870ccf9bc1c03b1a80b44feff1d8b0d",
+  "akshare_version": "1.18.97",
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.3",
+    "processor": "AMD64 Family 25 Model 116 Stepping 1, AuthenticAMD"
+  },
+  "data_as_of": "2026-09-28",
+  "row_counts_by_fund": {
+    "003095": {
+      "dividends": 6,
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 4846,
+      "period_returns": 18,
+      "purchase_fee_tiers": 4,
+      "redemption_fee_tiers": 10,
+      "share_classes": 2
+    },
+    "007718": {
+      "dividends": 2,
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 3080,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 7,
+      "share_classes": 2
+    },
+    "161035": {
+      "dividends": 2,
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 3645,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 4,
+      "share_classes": 2
+    },
+    "001513": {
+      "dividends": 2,
+      "fees": 2,
+      "fund_manager_tenures": 1,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 3139,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 8,
+      "share_classes": 2
+    },
+    "040025": {
+      "dividends": 2,
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 4668,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 7,
+      "share_classes": 2
+    },
+    "006113": {
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 2277,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 7,
+      "share_classes": 2
+    },
+    "001717": {
+      "fees": 2,
+      "fund_manager_tenures": 1,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 4015,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 8,
+      "share_classes": 2
+    },
+    "004851": {
+      "fees": 2,
+      "fund_manager_tenures": 1,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 3798,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 8,
+      "share_classes": 2
+    },
+    "110023": {
+      "fees": 2,
+      "fund_manager_tenures": 1,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 4511,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 7,
+      "share_classes": 2
+    },
+    "000452": {
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 4189,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 8,
+      "share_classes": 2
+    },
+    "001550": {
+      "fees": 2,
+      "fund_manager_tenures": 1,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 5482,
+      "period_returns": 18,
+      "purchase_fee_tiers": 3,
+      "redemption_fee_tiers": 5,
+      "share_classes": 2
+    },
+    "160219": {
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 4308,
+      "period_returns": 18,
+      "purchase_fee_tiers": 4,
+      "redemption_fee_tiers": 6,
+      "share_classes": 2
+    },
+    "002692": {
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 3903,
+      "period_returns": 18,
+      "purchase_fee_tiers": 4,
+      "redemption_fee_tiers": 8,
+      "share_classes": 2
+    },
+    "013840": {
+      "fees": 2,
+      "fund_manager_tenures": 1,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 2266,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 8,
+      "share_classes": 2
+    },
+    "008919": {
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 3158,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 7,
+      "share_classes": 2
+    },
+    "012650": {
+      "fees": 2,
+      "fund_manager_tenures": 2,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 2438,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 7,
+      "share_classes": 2
+    },
+    "014193": {
+      "fees": 2,
+      "fund_manager_tenures": 1,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 2336,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 4,
+      "share_classes": 2
+    },
+    "008326": {
+      "fees": 2,
+      "fund_manager_tenures": 1,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 3246,
+      "period_returns": 18,
+      "purchase_fee_tiers": 3,
+      "redemption_fee_tiers": 4,
+      "share_classes": 2
+    },
+    "002236": {
+      "fees": 2,
+      "fund_manager_tenures": 1,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 4951,
+      "period_returns": 18,
+      "purchase_fee_tiers": 5,
+      "redemption_fee_tiers": 7,
+      "share_classes": 2
+    },
+    "011832": {
+      "fees": 2,
+      "fund_manager_tenures": 5,
+      "fund_scale": 2,
+      "funds": 1,
+      "holdings_top10": 60,
+      "nav_daily": 2580,
+      "period_returns": 18,
+      "purchase_fee_tiers": 4,
+      "redemption_fee_tiers": 7,
+      "share_classes": 2
+    },
+    "?": {
+      "managers": 24
+    }
+  },
+  "table_rows": {
+    "dividends": 14,
+    "fees": 40,
+    "fund_manager_tenures": 34,
+    "fund_scale": 40,
+    "funds": 20,
+    "holdings_top10": 1200,
+    "managers": 24,
+    "nav_daily": 72836,
+    "period_returns": 360,
+    "purchase_fee_tiers": 92,
+    "redemption_fee_tiers": 137,
+    "share_classes": 40
+  },
+  "nav_continuity": {
+    "shares": 40,
+    "shares_with_gaps": 28,
+    "total_gap_days": 451,
+    "shares_last_nav_not_as_of": [],
+    "detail": {
+      "000452": 36,
+      "001513": 16,
+      "001550": 2,
+      "001551": 2,
+      "001717": 1,
+      "002236": 4,
+      "002692": 3,
+      "003095": 12,
+      "003096": 12,
+      "004851": 16,
+      "006113": 29,
+      "007718": 31,
+      "008326": 2,
+      "008327": 2,
+      "008919": 31,
+      "008920": 31,
+      "011832": 2,
+      "011833": 2,
+      "012650": 44,
+      "012651": 44,
+      "013840": 36,
+      "013841": 36,
+      "014193": 5,
+      "014194": 5,
+      "040025": 10,
+      "110023": 25,
+      "160219": 5,
+      "161035": 7
+    }
+  },
+  "holdings_compare_2026Q2": {
+    "funds_compared": 16,
+    "funds_pdf_unparsed": [
+      "006113",
+      "000452",
+      "001550",
+      "014193"
+    ],
+    "rows_compared": 160,
+    "rows_consistent": 153,
+    "consistency_rate": 0.9563,
+    "per_fund": {
+      "003095": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "006113": {
+        "pdf_rows": 0,
+        "db_rows": 10,
+        "consistent": 0
+      },
+      "001717": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "004851": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "110023": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "007718": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "000452": {
+        "pdf_rows": 0,
+        "db_rows": 10,
+        "consistent": 0
+      },
+      "001550": {
+        "pdf_rows": 0,
+        "db_rows": 10,
+        "consistent": 0
+      },
+      "160219": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "161035": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "002692": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "001513": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "013840": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 6
+      },
+      "008919": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "040025": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "012650": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 7
+      },
+      "014193": {
+        "pdf_rows": 0,
+        "db_rows": 10,
+        "consistent": 0
+      },
+      "008326": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "002236": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      },
+      "011832": {
+        "pdf_rows": 10,
+        "db_rows": 10,
+        "consistent": 10
+      }
+    },
+    "inconsistent": [
+      {
+        "fund_code": "013840",
+        "rank": 7,
+        "pdf_code": "01347",
+        "pdf_name": "华虹宏力",
+        "issues": "代码 库688072≠PDF01347；占比 库0.0745≠PDF0.0488；持股 库2359700≠PDF7266000；市值 库2075439300≠PDF1358102301.36"
+      },
+      {
+        "fund_code": "013840",
+        "rank": 7,
+        "pdf_code": "688347",
+        "pdf_name": "华虹宏力",
+        "issues": "代码 库688072≠PDF688347；占比 库0.0745≠PDF0.0366；持股 库2359700≠PDF3033309；市值 库2075439300≠PDF1020101816.70"
+      },
+      {
+        "fund_code": "013840",
+        "rank": 8,
+        "pdf_code": "688072",
+        "pdf_name": "拓荆科技",
+        "issues": "代码 库688409≠PDF688072；占比 库0.0605≠PDF0.0745；持股 库5502800≠PDF2359714；市值 库1685232800≠PDF2075439254.42"
+      },
+      {
+        "fund_code": "013840",
+        "rank": 9,
+        "pdf_code": "688409",
+        "pdf_name": "富创精密",
+        "issues": "代码 库00981≠PDF688409；占比 库0.0536≠PDF0.0605；持股 库19215500≠PDF5502801；市值 库1492052300≠PDF1685232806.25"
+      },
+      {
+        "fund_code": "012650",
+        "rank": 1,
+        "pdf_code": "1347",
+        "pdf_name": "华虹宏力",
+        "issues": "代码 库01347≠PDF1347"
+      },
+      {
+        "fund_code": "012650",
+        "rank": 4,
+        "pdf_code": "0981",
+        "pdf_name": "中芯国际",
+        "issues": "代码 库00981≠PDF0981"
+      },
+      {
+        "fund_code": "012650",
+        "rank": 4,
+        "pdf_code": "688981",
+        "pdf_name": "中芯国际",
+        "issues": "代码 库00981≠PDF688981；占比 库0.0719≠PDF0.004；持股 库2440500≠PDF66602；市值 库189500800≠PDF10577729.64"
+      }
+    ]
+  },
+  "managers_compare": {
+    "funds": 20,
+    "match": 18,
+    "mismatch": [
+      {
+        "fund_code": "160219",
+        "db_current": "彭悦、梁杏",
+        "q2_report_current": "梁杏",
+        "match": false,
+        "q2_page": 6
+      },
+      {
+        "fund_code": "012650",
+        "db_current": "吴渭",
+        "q2_report_current": "肖瑞瑾",
+        "match": false,
+        "q2_page": 5
+      }
+    ]
+  },
+  "period_returns_compare": {
+    "pairs": 276,
+    "tolerance_pp": "0.05",
+    "within_tol_chain": 197,
+    "within_tol_unit": 265,
+    "max_abs_diff_chain_pp": "0.466",
+    "outside_tol_chain": [
+      {
+        "share_code": "000452",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "0.4156",
+        "self_chain": "0.414545",
+        "self_unit": "0.415557",
+        "diff_chain_pp": "-0.106",
+        "diff_unit_pp": "-0.004"
+      },
+      {
+        "share_code": "000452",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "0.2893",
+        "self_chain": "0.288293",
+        "self_unit": "0.289291",
+        "diff_chain_pp": "-0.101",
+        "diff_unit_pp": "-0.001"
+      },
+      {
+        "share_code": "001513",
+        "period": "1y",
+        "base_date": "2025-09-26",
+        "source_ret": "0.4816",
+        "self_chain": "0.482327",
+        "self_unit": "0.450058",
+        "diff_chain_pp": "0.073",
+        "diff_unit_pp": "-3.154"
+      },
+      {
+        "share_code": "001513",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "2.3969",
+        "self_chain": "2.398063",
+        "self_unit": "2.324492",
+        "diff_chain_pp": "0.116",
+        "diff_unit_pp": "-7.241"
+      },
+      {
+        "share_code": "001513",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "2.523",
+        "self_chain": "2.525039",
+        "self_unit": "2.447960",
+        "diff_chain_pp": "0.204",
+        "diff_unit_pp": "-7.504"
+      },
+      {
+        "share_code": "001550",
+        "period": "1y",
+        "base_date": "2025-09-26",
+        "source_ret": "-0.1194",
+        "self_chain": "-0.120155",
+        "self_unit": "-0.119405",
+        "diff_chain_pp": "-0.075",
+        "diff_unit_pp": "-0.000"
+      },
+      {
+        "share_code": "001550",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "0.0096",
+        "self_chain": "0.008785",
+        "self_unit": "0.009614",
+        "diff_chain_pp": "-0.082",
+        "diff_unit_pp": "0.001"
+      },
+      {
+        "share_code": "001550",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "-0.1058",
+        "self_chain": "-0.106797",
+        "self_unit": "-0.105781",
+        "diff_chain_pp": "-0.100",
+        "diff_unit_pp": "0.002"
+      },
+      {
+        "share_code": "001551",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "-0.1111",
+        "self_chain": "-0.111637",
+        "self_unit": "-0.111098",
+        "diff_chain_pp": "-0.054",
+        "diff_unit_pp": "0.000"
+      },
+      {
+        "share_code": "002236",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "0.6498",
+        "self_chain": "0.650464",
+        "self_unit": "0.649782",
+        "diff_chain_pp": "0.066",
+        "diff_unit_pp": "-0.002"
+      },
+      {
+        "share_code": "002692",
+        "period": "1y",
+        "base_date": "2025-09-26",
+        "source_ret": "0.6631",
+        "self_chain": "0.662540",
+        "self_unit": "0.663146",
+        "diff_chain_pp": "-0.056",
+        "diff_unit_pp": "0.005"
+      },
+      {
+        "share_code": "002692",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "2.5074",
+        "self_chain": "2.504828",
+        "self_unit": "2.507426",
+        "diff_chain_pp": "-0.257",
+        "diff_unit_pp": "0.003"
+      },
+      {
+        "share_code": "002692",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "2.1189",
+        "self_chain": "2.117443",
+        "self_unit": "2.118855",
+        "diff_chain_pp": "-0.146",
+        "diff_unit_pp": "-0.004"
+      },
+      {
+        "share_code": "003095",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "0.2365",
+        "self_chain": "0.235793",
+        "self_unit": "0.236457",
+        "diff_chain_pp": "-0.071",
+        "diff_unit_pp": "-0.004"
+      },
+      {
+        "share_code": "003095",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "-0.022",
+        "self_chain": "-0.023221",
+        "self_unit": "-0.022050",
+        "diff_chain_pp": "-0.122",
+        "diff_unit_pp": "-0.005"
+      },
+      {
+        "share_code": "003095",
+        "period": "ytd",
+        "base_date": "2025-12-31",
+        "source_ret": "0.1002",
+        "self_chain": "0.099614",
+        "self_unit": "0.100242",
+        "diff_chain_pp": "-0.059",
+        "diff_unit_pp": "0.004"
+      },
+      {
+        "share_code": "003096",
+        "period": "3m",
+        "base_date": "2026-06-26",
+        "source_ret": "0.1435",
+        "self_chain": "0.142746",
+        "self_unit": "0.143546",
+        "diff_chain_pp": "-0.075",
+        "diff_unit_pp": "0.005"
+      },
+      {
+        "share_code": "003096",
+        "period": "6m",
+        "base_date": "2026-03-27",
+        "source_ret": "0.1119",
+        "self_chain": "0.111168",
+        "self_unit": "0.111872",
+        "diff_chain_pp": "-0.073",
+        "diff_unit_pp": "-0.003"
+      },
+      {
+        "share_code": "003096",
+        "period": "1y",
+        "base_date": "2025-09-26",
+        "source_ret": "-0.0511",
+        "self_chain": "-0.052133",
+        "self_unit": "-0.051120",
+        "diff_chain_pp": "-0.103",
+        "diff_unit_pp": "-0.002"
+      },
+      {
+        "share_code": "003096",
+        "period": "ytd",
+        "base_date": "2025-12-31",
+        "source_ret": "0.0937",
+        "self_chain": "0.092826",
+        "self_unit": "0.093735",
+        "diff_chain_pp": "-0.087",
+        "diff_unit_pp": "0.004"
+      },
+      {
+        "share_code": "003359",
+        "period": "6m",
+        "base_date": "2026-03-27",
+        "source_ret": "0.0034",
+        "self_chain": "0.002875",
+        "self_unit": "0.003367",
+        "diff_chain_pp": "-0.053",
+        "diff_unit_pp": "-0.003"
+      },
+      {
+        "share_code": "003359",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "0.8062",
+        "self_chain": "0.805427",
+        "self_unit": "0.806173",
+        "diff_chain_pp": "-0.077",
+        "diff_unit_pp": "-0.003"
+      },
+      {
+        "share_code": "004851",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "0.1518",
+        "self_chain": "0.153058",
+        "self_unit": "0.151805",
+        "diff_chain_pp": "0.126",
+        "diff_unit_pp": "0.000"
+      },
+      {
+        "share_code": "004851",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "0.009",
+        "self_chain": "0.010578",
+        "self_unit": "0.009026",
+        "diff_chain_pp": "0.158",
+        "diff_unit_pp": "0.003"
+      },
+      {
+        "share_code": "005626",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "0.235",
+        "self_chain": "0.235714",
+        "self_unit": "0.234951",
+        "diff_chain_pp": "0.071",
+        "diff_unit_pp": "-0.005"
+      },
+      {
+        "share_code": "006113",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "0.2931",
+        "self_chain": "0.294434",
+        "self_unit": "0.293083",
+        "diff_chain_pp": "0.133",
+        "diff_unit_pp": "-0.002"
+      },
+      {
+        "share_code": "006113",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "-0.0285",
+        "self_chain": "-0.027635",
+        "self_unit": "-0.028514",
+        "diff_chain_pp": "0.087",
+        "diff_unit_pp": "-0.001"
+      },
+      {
+        "share_code": "008326",
+        "period": "1y",
+        "base_date": "2025-09-26",
+        "source_ret": "0.7259",
+        "self_chain": "0.725127",
+        "self_unit": "0.725944",
+        "diff_chain_pp": "-0.077",
+        "diff_unit_pp": "0.004"
+      },
+      {
+        "share_code": "008326",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "2.773",
+        "self_chain": "2.770304",
+        "self_unit": "2.772997",
+        "diff_chain_pp": "-0.270",
+        "diff_unit_pp": "-0.000"
+      },
+      {
+        "share_code": "008326",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "2.9733",
+        "self_chain": "2.971778",
+        "self_unit": "2.973270",
+        "diff_chain_pp": "-0.152",
+        "diff_unit_pp": "-0.003"
+      },
+      {
+        "share_code": "008326",
+        "period": "ytd",
+        "base_date": "2025-12-31",
+        "source_ret": "0.5061",
+        "self_chain": "0.505480",
+        "self_unit": "0.506108",
+        "diff_chain_pp": "-0.062",
+        "diff_unit_pp": "0.001"
+      },
+      {
+        "share_code": "008327",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "2.9436",
+        "self_chain": "2.942701",
+        "self_unit": "2.943557",
+        "diff_chain_pp": "-0.090",
+        "diff_unit_pp": "-0.004"
+      },
+      {
+        "share_code": "008919",
+        "period": "1y",
+        "base_date": "2025-09-26",
+        "source_ret": "0.5028",
+        "self_chain": "0.503867",
+        "self_unit": "0.502811",
+        "diff_chain_pp": "0.107",
+        "diff_unit_pp": "0.001"
+      },
+      {
+        "share_code": "008919",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "1.5821",
+        "self_chain": "1.585604",
+        "self_unit": "1.582102",
+        "diff_chain_pp": "0.350",
+        "diff_unit_pp": "0.000"
+      },
+      {
+        "share_code": "008919",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "1.4194",
+        "self_chain": "1.423208",
+        "self_unit": "1.419432",
+        "diff_chain_pp": "0.381",
+        "diff_unit_pp": "0.003"
+      },
+      {
+        "share_code": "008920",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "1.5719",
+        "self_chain": "1.570391",
+        "self_unit": "1.571920",
+        "diff_chain_pp": "-0.151",
+        "diff_unit_pp": "0.002"
+      },
+      {
+        "share_code": "009163",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "0.1426",
+        "self_chain": "0.143339",
+        "self_unit": "0.142594",
+        "diff_chain_pp": "0.074",
+        "diff_unit_pp": "-0.001"
+      },
+      {
+        "share_code": "009163",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "-0.003",
+        "self_chain": "-0.001932",
+        "self_unit": "-0.002996",
+        "diff_chain_pp": "0.107",
+        "diff_unit_pp": "0.000"
+      },
+      {
+        "share_code": "010144",
+        "period": "1y",
+        "base_date": "2025-09-26",
+        "source_ret": "-0.108",
+        "self_chain": "-0.108781",
+        "self_unit": "-0.108017",
+        "diff_chain_pp": "-0.078",
+        "diff_unit_pp": "-0.002"
+      },
+      {
+        "share_code": "010144",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "0.0599",
+        "self_chain": "0.059044",
+        "self_unit": "0.059870",
+        "diff_chain_pp": "-0.086",
+        "diff_unit_pp": "-0.003"
+      },
+      {
+        "share_code": "010144",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "-0.1047",
+        "self_chain": "-0.105280",
+        "self_unit": "-0.104702",
+        "diff_chain_pp": "-0.058",
+        "diff_unit_pp": "-0.000"
+      },
+      {
+        "share_code": "010144",
+        "period": "ytd",
+        "base_date": "2025-12-31",
+        "source_ret": "-0.0111",
+        "self_chain": "-0.012048",
+        "self_unit": "-0.011066",
+        "diff_chain_pp": "-0.095",
+        "diff_unit_pp": "0.003"
+      },
+      {
+        "share_code": "011120",
+        "period": "1y",
+        "base_date": "2025-09-26",
+        "source_ret": "0.6534",
+        "self_chain": "0.652833",
+        "self_unit": "0.653382",
+        "diff_chain_pp": "-0.057",
+        "diff_unit_pp": "-0.002"
+      },
+      {
+        "share_code": "011120",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "2.4658",
+        "self_chain": "2.464247",
+        "self_unit": "2.465823",
+        "diff_chain_pp": "-0.155",
+        "diff_unit_pp": "0.002"
+      },
+      {
+        "share_code": "011120",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "2.0649",
+        "self_chain": "2.064358",
+        "self_unit": "2.064925",
+        "diff_chain_pp": "-0.054",
+        "diff_unit_pp": "0.003"
+      },
+      {
+        "share_code": "011832",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "1.2972",
+        "self_chain": "1.297831",
+        "self_unit": "1.297232",
+        "diff_chain_pp": "0.063",
+        "diff_unit_pp": "0.003"
+      },
+      {
+        "share_code": "011832",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "1.1005",
+        "self_chain": "1.102893",
+        "self_unit": "1.100504",
+        "diff_chain_pp": "0.239",
+        "diff_unit_pp": "0.000"
+      },
+      {
+        "share_code": "011833",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "1.279",
+        "self_chain": "1.279784",
+        "self_unit": "1.278965",
+        "diff_chain_pp": "0.078",
+        "diff_unit_pp": "-0.003"
+      },
+      {
+        "share_code": "011833",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "1.0755",
+        "self_chain": "1.077199",
+        "self_unit": "1.075511",
+        "diff_chain_pp": "0.170",
+        "diff_unit_pp": "0.001"
+      },
+      {
+        "share_code": "012650",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "1.7247",
+        "self_chain": "1.726590",
+        "self_unit": "1.724749",
+        "diff_chain_pp": "0.189",
+        "diff_unit_pp": "0.005"
+      },
+      {
+        "share_code": "012650",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "1.3727",
+        "self_chain": "1.373548",
+        "self_unit": "1.372738",
+        "diff_chain_pp": "0.085",
+        "diff_unit_pp": "0.004"
+      },
+      {
+        "share_code": "012651",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "1.3306",
+        "self_chain": "1.329156",
+        "self_unit": "1.330628",
+        "diff_chain_pp": "-0.144",
+        "diff_unit_pp": "0.003"
+      },
+      {
+        "share_code": "013840",
+        "period": "1y",
+        "base_date": "2025-09-26",
+        "source_ret": "0.9996",
+        "self_chain": "1.000176",
+        "self_unit": "0.999592",
+        "diff_chain_pp": "0.058",
+        "diff_unit_pp": "-0.001"
+      },
+      {
+        "share_code": "013840",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "2.8979",
+        "self_chain": "2.896980",
+        "self_unit": "2.897932",
+        "diff_chain_pp": "-0.092",
+        "diff_unit_pp": "0.003"
+      },
+      {
+        "share_code": "013840",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "2.2328",
+        "self_chain": "2.230983",
+        "self_unit": "2.232850",
+        "diff_chain_pp": "-0.182",
+        "diff_unit_pp": "0.005"
+      },
+      {
+        "share_code": "013841",
+        "period": "1y",
+        "base_date": "2025-09-26",
+        "source_ret": "0.9955",
+        "self_chain": "0.996192",
+        "self_unit": "0.995478",
+        "diff_chain_pp": "0.069",
+        "diff_unit_pp": "-0.002"
+      },
+      {
+        "share_code": "013841",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "2.8822",
+        "self_chain": "2.880323",
+        "self_unit": "2.882165",
+        "diff_chain_pp": "-0.188",
+        "diff_unit_pp": "-0.004"
+      },
+      {
+        "share_code": "013841",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "2.2135",
+        "self_chain": "2.210388",
+        "self_unit": "2.213505",
+        "diff_chain_pp": "-0.311",
+        "diff_unit_pp": "0.001"
+      },
+      {
+        "share_code": "013841",
+        "period": "ytd",
+        "base_date": "2025-12-31",
+        "source_ret": "0.8815",
+        "self_chain": "0.882487",
+        "self_unit": "0.881517",
+        "diff_chain_pp": "0.099",
+        "diff_unit_pp": "0.002"
+      },
+      {
+        "share_code": "014193",
+        "period": "6m",
+        "base_date": "2026-03-27",
+        "source_ret": "0.3937",
+        "self_chain": "0.393109",
+        "self_unit": "0.393740",
+        "diff_chain_pp": "-0.059",
+        "diff_unit_pp": "0.004"
+      },
+      {
+        "share_code": "014193",
+        "period": "1y",
+        "base_date": "2025-09-26",
+        "source_ret": "0.3997",
+        "self_chain": "0.399115",
+        "self_unit": "0.399745",
+        "diff_chain_pp": "-0.059",
+        "diff_unit_pp": "0.004"
+      },
+      {
+        "share_code": "014193",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "1.8726",
+        "self_chain": "1.873451",
+        "self_unit": "1.872605",
+        "diff_chain_pp": "0.085",
+        "diff_unit_pp": "0.001"
+      },
+      {
+        "share_code": "014193",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "1.6873",
+        "self_chain": "1.688009",
+        "self_unit": "1.687347",
+        "diff_chain_pp": "0.071",
+        "diff_unit_pp": "0.005"
+      },
+      {
+        "share_code": "014193",
+        "period": "ytd",
+        "base_date": "2025-12-31",
+        "source_ret": "0.4209",
+        "self_chain": "0.419994",
+        "self_unit": "0.420946",
+        "diff_chain_pp": "-0.091",
+        "diff_unit_pp": "0.005"
+      },
+      {
+        "share_code": "014194",
+        "period": "1y",
+        "base_date": "2025-09-26",
+        "source_ret": "0.3954",
+        "self_chain": "0.396224",
+        "self_unit": "0.395400",
+        "diff_chain_pp": "0.082",
+        "diff_unit_pp": "-0.000"
+      },
+      {
+        "share_code": "014194",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "1.8549",
+        "self_chain": "1.854264",
+        "self_unit": "1.854855",
+        "diff_chain_pp": "-0.064",
+        "diff_unit_pp": "-0.005"
+      },
+      {
+        "share_code": "014194",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "1.6631",
+        "self_chain": "1.661874",
+        "self_unit": "1.663124",
+        "diff_chain_pp": "-0.123",
+        "diff_unit_pp": "0.002"
+      },
+      {
+        "share_code": "014975",
+        "period": "6m",
+        "base_date": "2026-03-27",
+        "source_ret": "0.2636",
+        "self_chain": "0.262678",
+        "self_unit": "0.263560",
+        "diff_chain_pp": "-0.092",
+        "diff_unit_pp": "-0.004"
+      },
+      {
+        "share_code": "014975",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "1.4127",
+        "self_chain": "1.414974",
+        "self_unit": "1.412688",
+        "diff_chain_pp": "0.227",
+        "diff_unit_pp": "-0.001"
+      },
+      {
+        "share_code": "014975",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "1.5361",
+        "self_chain": "1.537330",
+        "self_unit": "1.536051",
+        "diff_chain_pp": "0.123",
+        "diff_unit_pp": "-0.005"
+      },
+      {
+        "share_code": "014975",
+        "period": "ytd",
+        "base_date": "2025-12-31",
+        "source_ret": "0.3334",
+        "self_chain": "0.332627",
+        "self_unit": "0.333375",
+        "diff_chain_pp": "-0.077",
+        "diff_unit_pp": "-0.003"
+      },
+      {
+        "share_code": "019018",
+        "period": "1y",
+        "base_date": "2025-09-26",
+        "source_ret": "0.4742",
+        "self_chain": "0.473588",
+        "self_unit": "0.442454",
+        "diff_chain_pp": "-0.061",
+        "diff_unit_pp": "-3.175"
+      },
+      {
+        "share_code": "019018",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "2.363",
+        "self_chain": "2.358344",
+        "self_unit": "2.290538",
+        "diff_chain_pp": "-0.466",
+        "diff_unit_pp": "-7.246"
+      },
+      {
+        "share_code": "019020",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "0.3208",
+        "self_chain": "0.319850",
+        "self_unit": "0.320791",
+        "diff_chain_pp": "-0.095",
+        "diff_unit_pp": "-0.001"
+      },
+      {
+        "share_code": "040025",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "1.4425",
+        "self_chain": "1.439038",
+        "self_unit": "1.442529",
+        "diff_chain_pp": "-0.346",
+        "diff_unit_pp": "0.003"
+      },
+      {
+        "share_code": "040025",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "1.5824",
+        "self_chain": "1.580515",
+        "self_unit": "1.582379",
+        "diff_chain_pp": "-0.189",
+        "diff_unit_pp": "-0.002"
+      },
+      {
+        "share_code": "110023",
+        "period": "ytd",
+        "base_date": "2025-12-31",
+        "source_ret": "0.0879",
+        "self_chain": "0.088417",
+        "self_unit": "0.087941",
+        "diff_chain_pp": "0.052",
+        "diff_unit_pp": "0.004"
+      },
+      {
+        "share_code": "160219",
+        "period": "2y",
+        "base_date": "2024-09-27",
+        "source_ret": "0.0662",
+        "self_chain": "0.066895",
+        "self_unit": "0.066199",
+        "diff_chain_pp": "0.070",
+        "diff_unit_pp": "-0.000"
+      },
+      {
+        "share_code": "161035",
+        "period": "3y",
+        "base_date": "2023-09-28",
+        "source_ret": "0.0464",
+        "self_chain": "0.045867",
+        "self_unit": "-0.091808",
+        "diff_chain_pp": "-0.053",
+        "diff_unit_pp": "-13.821"
+      }
+    ]
+  },
+  "snapshot_sha256": {
+    "dividends": "43a0c5522fd1892db6cf43e7a0dceeaabb7ed66ad0e216776cc18c581df6c253",
+    "fees": "4d2db54881609cf58e7f56904403140b84a7cefc91d92acb811948ceed78beab",
+    "fund_manager_tenures": "26bbe2b3253d212873e444bbf576fd4248d0d8418a23516b250e8d873fad95c4",
+    "fund_scale": "c8870ddead8f8816d89505477559dc7c260461736358cf5ad01ec3efffc44990",
+    "funds": "dbfbc3cf2974761976585e6ea33d00423f840857a604e4d7deb1b6bfb36c475b",
+    "holdings_top10": "2ac1b5ae68bc29e9147b4e8060175ba42dd45c7ed39fc42733e19a45c5bab822",
+    "managers": "62db27c4027a0bf7a174ff9454bc4e47af5e3ba437ead91e8dbe4512c59a4104",
+    "nav_daily": "e1455425193e6c387b456a115ed7205d270be8511b23ae7285a91c7ae0484e86",
+    "period_returns": "9848a5af99ce0a77ec34a532331b4798298c2eea81c6f8687b0661a91a31e6ed",
+    "purchase_fee_tiers": "bee018ea2d8b489078a9b9546b0db61c3f4fe67515b4e592a7420c44b07ce8b9",
+    "redemption_fee_tiers": "d3e89ddc0143aeb37bf80201ab478c3295ff73f17f708f91563a646120df7def",
+    "share_classes": "98e67573b4f9e93a21cc9d2fd35c42c066d4cc54cb51249c2cdbf7e35985539b"
+  },
+  "pdf_extract_problems": [
+    "006113 006113_annual_report_2025 未解析出基金经理简介表",
+    "110023 110023_annual_report_2025 未解析出基金经理简介表",
+    "014193 014193_annual_report_2025 未解析出基金经理简介表",
+    "002236 002236_annual_report_2025 未解析出基金经理简介表"
+  ]
+}

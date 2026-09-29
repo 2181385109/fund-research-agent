@@ -4650,8 +4650,8 @@
   ],
   "documents_missing": [],
   "documents_fetch_stats": {
-    "downloaded": 2,
-    "reused_local": 98,
+    "downloaded": 0,
+    "reused_local": 100,
     "matched": 100,
     "announcement_list_requests": 0,
     "announcement_list_cache_hits": 40
