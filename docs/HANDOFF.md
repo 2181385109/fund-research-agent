@@ -1,49 +1,48 @@
-# HANDOFF — B1 结束（2026-09-29）
+# HANDOFF — B2 中途收尾（2026-09-29，上下文超限）
 
-写给下一个执行者对话（B2：S3 评测集 + S4 混合检索与检索评测）。已写进 CLAUDE.md / PLAN / DECISIONS 的内容只给指针。
+写给下一个执行者对话（继续 B2：S4 混合检索与检索评测）。已写进 CLAUDE.md / PLAN / DECISIONS / SCHEMA 的内容只给指针。
 
 ## 1. 当前进度
-- **B1 已全部完成**：S1 基金池与数据采集、S2 文档入库，两个阶段的验收都已满足（逐条证据见 `docs/PROGRESS.md` 的 S1、S2 两节）。
-- 最后一个 commit：见 `git log -1`（本文件所在提交），CI 结论见该提交的 GitHub Actions run（B1 收尾时已确认全绿；S1 的 run 为 36517568380）。
-- 当前的数据状态：
-  - MySQL `fund_data`：12 张表已导入（`reports/data_load/20260929T032617Z/`）。
-  - Milvus 集合与 ES 索引 `fund_chunks`：100 份文档，18353 个 chunk，两边一致（`reports/ingest/20260929T040733Z/`）。
-  - 这些数据都在本机 WSL 的 docker 卷里；`down -v` 会清空，需要按第 3 节重建。
+- **S3 已完成并冻结**：评测集 v1，用户抽检 27 条（通过 23 条，修改 4 条，判错 0 条），全量扫描另外修改 32 条。证据见 `docs/PROGRESS.md` S3 一节。冻结提交 c703800，CI run 36538515842 全绿。
+- **S4 进行中**：代码已完成并提交（671c858）。包括基金实体识别、RRF、Milvus/ES 两路召回、5 种模式的 `RetrievalService`、CrossEncoder/Noop 重排、`POST /v1/retrieve`、评测 runner `python -m fund_ai.eval.retrieval`（指标、配对 bootstrap、summary/per_query/report），单测 63 个全部通过。
+- dev 调参只跑了 run 1、run 2 就中止了，两次都标为「切块修复前」（`docs/tuning_log.md`）。**test 集没有跑过**。
+- 最后一个 commit：见 `git log -1`（本文件所在提交），CI 结论见该提交的 Actions run。
 
-## 2. 下一步（B2，从 S3 第一步开始）
-1. 读 PLAN §4.3（评测集契约）和 §5 的 S3、S4；CLAUDE.md §2 红线 2、3（标准答案由 `eval/reference/` 的独立参考脚本根据快照计算）。
-2. S3：先写 `eval/reference/`（pandas 读 `data/snapshots/2026-09-28/*.csv`，或用 `fund_reader` 直连 SQL），再出 `fund_qa_v1.jsonl`（≥100 题）和 `agent_tasks_v1.jsonl`（≥60 题）、`validate_dataset.py`、词面重叠报告、SCHEMA/MANIFEST/CHANGELOG。**用户关卡：抽检 ≥25 条后才能冻结**，冻结前不许跑任何检索或 Agent。
-3. S4：检索模式、实体识别、reranker、评测 runner。入库时已经为上下文头开关准备了两份数据（Milvus `embedding` / `embedding_ctx`，ES `text` / `text_ctx`，ADR-032），查询指令前缀是 `BgeEmbedder.query_instruction`，默认关闭。
-4. 可以直接复用的东西：`fund_ai.embedding.factory.build_embedder`、`fund_ai.stores.*`（计数、按 doc_id 删除）、evidence 的 quote 可以用 `char_start/char_end` 在规范文本里定位。
+## 2. 下一步（按顺序）
+1. **修 S2 切块碎片化（统筹决定，属于 S2 缺陷修复，不算调参）**。现状：18353 个 chunk 中，不足 50 字的有 2406 个（13.1%），不足 100 字的有 5110 个（27.8%），中位数 221 字；统计方法：`data/raw/_chunks.jsonl` 按 text 长度计数。修法：
+   - 设最小块长（例如不足 150 字的正文块与相邻块合并），标题块并入其后的正文，表格块不受影响；
+   - 参数可配（新 env，如 `CHUNK_MIN_CHARS`，要同步 `.env.example` 和 `config.py`），补单测；
+   - 维持 `text == canonical[char_start:char_end]` 这个约束（ADR-032）；
+   - 登记 ADR。
+2. **全量重新入库**：`cd ai-service && python -m fund_ai.ingest.cli`，约 25 分钟。然后更新 S2 的统计（chunk 总数、按 doc_type 分组、长度分布），写进 PROGRESS（S2 一节追加「切块修复」小节或新开一节）和 reports。
+3. **评测集不受影响**：证据不绑定 chunk_id。重新导出 chunk（`cd eval && python -m reference.export_chunks`）后，跑 `validate_dataset.py --chunks ../data/raw/_chunks.jsonl --out`，确认 152 条引文仍然全部可达。
+4. **按 `docs/tuning_log.md` 的协议从 dev run 1 重新开始**：实体过滤 → 上下文头 → 指令前缀 → 每路召回数，提升 ≥ 0.01 才改。每轮命令示例：
+   `cd ai-service && python -m fund_ai.eval.retrieval --split dev --modes vector,bm25,hybrid,vector_rerank,hybrid_rerank --label "dev#3 …" --entity-filter on --use-ctx on --query-instruction off --vector-k 50 --bm25-k 50 --rerank-candidates 20`
+5. 确定最终配置后，把它写进 `config.py` 的默认值（现在的默认值是基线，注释里说「调参后的最终配置」，要改成真实结论），同时更新 `.env.example`。然后在 **test 上只跑一次**：5 种模式，加 `--compare vector:hybrid_rerank`；实体过滤关的消融也只跑一次。登记到 tuning_log 和 PROGRESS。
+6. S4 收尾：更新 `docs/API.md`（`POST /v1/retrieve` 还没写进去）、`ai-service` 的 README 和各占位 README（rerank / retrieval / eval）、PROGRESS S4 一节（验收逐条）、安全扫描、push、CI 全绿。然后重写本文件，B2 结束。
 
 ## 3. 如何拉起环境
-- infra：按 SETUP §4 经 wsl 执行 `docker compose up -d`（命令原文在 SETUP 和 CLAUDE.md §8）。端口不通时先运行 keepalive 脚本（CLAUDE.md §8）。
-- Python：每个包有自己的 `.venv`；ai-service 用 `pip install -e ".[dev,model]"`（ADR-033）。BGE 模型已缓存在 `.cache/models/`，缓存存在时离线加载。
-- ai-service：`cd ai-service && .venv/Scripts/python -m uvicorn fund_ai.api.app:app --port 8001`。
-- 重建数据（卷被清空时）：`data-pipeline/README.md` 的流程（全部走本地缓存 `data/raw/_cache/`，不会重复抓取）→ `python -m fund_pipeline.load --as-of 2026-09-28` → `cd ai-service && python -m fund_ai.ingest.cli`（约 25 分钟）。
-- 已有 MySQL 数据卷缺 `fund_loader` 时：SETUP §3.1。
+- infra：CLAUDE.md §8；`wsl ... docker compose up -d`。本机访问 127.0.0.1 时带上 `NO_PROXY=127.0.0.1,localhost`。
+- ai-service venv：`pip install -e ".[dev,model]"`，本次新增了依赖 `pymysql`。模型缓存在 `.cache/models/`，包括 bge-small-zh-v1.5 和 **bge-reranker-base（本批下载，约 1.1GB）**。
+- eval venv：`cd eval && .venv/Scripts/python -m pip install -e ".[dev]"`（ADR-034）。PDF 逐页文本缓存在 `data/raw/_text/`（gitignore）。
 
-## 4. 会再踩的坑（新的；旧的见 CLAUDE.md §8、SETUP §7）
-- **ruff E501 与中文**：ruff 按显示宽度计算，中文字符算 2 列。data-pipeline 和 ai-service 已把 E501 放宽到 120（formatter 仍是 100）；scripts 还是 100。
-- **Bash heredoc 写 Python 替换脚本**：`\n`、`\s` 会被转义乱掉，写出坏文件。改代码用 Edit 工具，或者先用 Write 写 `.py` 文件再执行。
-- **wsl.exe 从 Git Bash 调用**：路径参数要加 `MSYS_NO_PATHCONV=1`，否则 WSL 侧的挂载路径会被 Git Bash 改写。
-- **AkShare 1.18.97**：`fund_fee_em` 取不到申购费；人事公告接口在 0 条结果时报错；持仓接口的「序号」是跨季度的流水号；部分网络错误被包成 `APIError`（ADR-027；`AkShareSource` 已处理）。
-- **东方财富 PDF 下载**：经代理只有每秒十几 KB，偶发断连；`docs fetch` 支持续传，重跑即可。
-- **季报 PDF 版式**：A 股和 H 股共用一个序号；表格经常跨页；标签被换行拆开。解析规则见 ADR-031、ADR-032。
-- **fund_overview_em 的规模只是 A 类份额**，基金合计规模看 `fund_data.fund_scale`。
-- **ES 内存**：入库后 1.531GiB / 1.75GiB（87.5%）。S4 的检索和评测要留意 `docker stats`。
-- 入库 CLI 启动约 20 秒（加载模型）；全量约 25 分钟，其中 embedding 约 17 分钟（正文和上下文头两组向量）。
+## 4. 会再踩的坑
+- **Bash heredoc 写 Python 补丁脚本**会把 `\u`、反斜杠弄坏。改用 Write 工具写到 scratchpad，再执行。
+- **pymilvus 2.5 的 search 结果**：主键在 `r["chunk_id"]`（也就是主键字段名），没有 `r["id"]`；其余字段在 `r["entity"]`。
+- **重排耗时**：CPU 上 20 个候选约 2.7–3 秒；dev 一轮 5 个模式约 4 分钟。首次加载 CrossEncoder 约 20 秒（已缓存时）。
+- `eval/reference/reporting.py` 的 `git_dirty` 只看已跟踪文件。ai-service runner 用的也是同一口径。
+- 收益口径是「遇非交易日取前一交易日净值」，周末季末净值不算交易日（ADR-036、SCHEMA.md「口径」）。**S5 的 calc_fund_return 必须照此实现**，并与 `eval/reference/gold.py` 逐位比对。
+- 证据命中规则在两处各实现一份，都必须通过 `eval/reference/evidence_cases.json`。
 
 ## 5. 已冻结的产物
 | 产物 | 版本 / 值 | sha256 |
 |---|---|---|
-| `data/universe.yaml` | v1，20 只，2026-09-29 用户确认 | `74d5e2086d90b61b52365c68e3eae70b2b1d6355f69e2481d6bd099683dc0c5c` |
-| DATA_AS_OF | 2026-09-28（理由见 `data/CHANGELOG.md`） | — |
-| 数据快照 `data/snapshots/2026-09-28/`（不入库） | 12 张表 | 各表 sha256 见 `data/MANIFEST.json` 的 `snapshots` 与 `reports/data_quality/20260929T032645Z/summary.json` 的 `snapshot_sha256` |
-| 披露 PDF `data/raw/pdf/`（不入库） | 100 份 | 每份 sha256 见 `data/MANIFEST.json` 的 `documents` |
-| 评测集 | 尚未建立（S3） | — |
+| `data/universe.yaml` | v1，20 只（本批只更正了注释，不算重新冻结） | `7539d874374167f4954fef4bad46eb8b2232654972a6ab472242325aeec8692f` |
+| DATA_AS_OF | 2026-09-28 | — |
+| 数据快照 / 披露 PDF（不入库） | 12 张表 / 100 份 | 见 `data/MANIFEST.json` |
+| `eval/datasets/fund_qa_v1.jsonl` | v1，112 题（dev 33 / test 79），2026-09-29 冻结 | `77fb06a9686ea195ef8813d192bc90ffceb05ffe0b1122864777dc026997e48d` |
+| `eval/datasets/agent_tasks_v1.jsonl` | v1，66 题（dev 21 / test 45） | `7d4c4fc3f4d6b63643fe608ca17c1ca07177257086253a1c878cf13bb33c3b77` |
 
 ## 6. 等用户 / 统筹处理的事
-1. 统筹：universe.yaml 规模口径注释要不要改（PROGRESS S1「给统筹的问题」1；已在 `data/CHANGELOG.md` 预登记）。
-2. 用户：是否停掉 ticket-qa 容器（S4 起 ES/Milvus 负载会上升）；可选：浏览器确认证监会披露网站能否访问。
-3. 用户关卡（B2 内）：S3 评测集抽检 ≥25 条。
+1. 用户：是否停掉 ticket-qa 容器（重新入库和重排评测时内存更紧）；可选：浏览器确认证监会披露网站能否访问。
+2. 数据质量登记：001551 销售服务费快照 0.20% 与招募说明书 0.25% 不一致（`reports/data_quality/20260929T045331Z/`），没有修改，只做了登记。
