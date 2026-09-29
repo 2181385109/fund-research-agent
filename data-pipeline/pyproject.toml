@@ -33,6 +33,7 @@ packages = ["src/fund_pipeline"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["tests"]
 addopts = "--strict-markers"
 markers = [
     "integration: 需要 docker compose 起的 infra",
@@ -46,3 +47,7 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.pycodestyle]
+# 中文按双宽计：formatter 仍按 100 排版，E501 只对中文注释/字符串放宽到 120
+max-line-length = 120

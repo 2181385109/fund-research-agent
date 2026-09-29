@@ -93,8 +93,15 @@ def parse_holding_period(text: str) -> DayRange:
     )
     if m:
         lo = _days(m.group(1), m.group(2))
-    m = re.search(rf"(?:小于|少于|不足|<){_NUM}{unit}", s) or re.search(rf"<N?<?{_NUM}{unit}", s)
-    if m:
+    elif m := re.search(rf"(?:大于|超过|>){_NUM}{unit}", s):
+        # 「大于 N 天」= 至少 N+1 天（按天计时才有意义）
+        lo = _days(m.group(1), m.group(2)) + (1 if m.group(2) in ("天", "日") else 0)
+    if m := re.search(rf"(?:小于等于|不超过|<=N?){_NUM}{unit}", s):
+        # 「小于等于 N 天」= 上限（不含）N+1 天
+        hi = _days(m.group(1), m.group(2)) + (1 if m.group(2) in ("天", "日") else 0)
+    elif m := re.search(rf"(?:小于|少于|不足|<)(?!=){_NUM}{unit}", s) or re.search(
+        rf"<N?<?{_NUM}{unit}", s
+    ):
         hi = _days(m.group(1), m.group(2))
     if lo == 0 and hi is None:
         raise ValueError(f"无法解析持有期限：{text!r}")
@@ -136,7 +143,7 @@ def parse_amount_range(text: str) -> AmountRange:
         raise ValueError(f"无法解析金额档位：{text!r}")
     if re.search(r"M<|M<=|以下|以内|不足|小于|少于", s) and len(nums) == 1:
         return AmountRange(Decimal(0), nums[0][0])
-    if re.search(r"M>=|M>|以上|大于|不低于|超过", s) and len(nums) == 1:
+    if re.search(r"M>=|M>|以上|大于|不低于|超过|元<=?M$|万<=?M$", s) and len(nums) == 1:
         return AmountRange(nums[0][0], None)
     if len(nums) >= 2:
         return AmountRange(nums[0][0], nums[1][0])

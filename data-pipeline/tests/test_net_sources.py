@@ -149,3 +149,14 @@ def test_akshare_source_does_not_retry_logic_errors(tmp_path: Path) -> None:
     with pytest.raises(KeyError):
         src.call("x")
     assert src.retried == 0
+
+
+def test_akshare_api_error_wrapping_network_failure_is_transient() -> None:
+    from fund_pipeline.sources import _is_transient
+
+    class APIError(Exception):
+        pass
+
+    assert _is_transient(APIError("API Error: FundArchivesDatas request failed: SSLError"))
+    assert not _is_transient(APIError("API Error: bad symbol"))
+    assert not _is_transient(KeyError("x"))

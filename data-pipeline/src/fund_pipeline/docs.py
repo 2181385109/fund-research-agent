@@ -65,7 +65,7 @@ DOC_SPECS: tuple[DocSpec, ...] = (
         None,
         TYPE_ISSUE,
         re.compile(r"招募说明书"),
-        re.compile(_COMMON_EXCLUDE + r"|更新.*说明|的公告"),
+        re.compile(_COMMON_EXCLUDE + r"|的公告"),
     ),
     DocSpec(
         "contract",
@@ -103,6 +103,15 @@ def make_doc_id(fund_code: str, doc_type: str, period: str) -> str:
     return f"{fund_code}_{doc_type}_{period}"
 
 
+_CN_DIGITS = str.maketrans("〇零一二三四五六七八九", "00123456789")
+_CN_YEAR = re.compile(r"[〇零一二三四五六七八九0-9]{4}(?=\s*年)")
+
+
+def normalize_title(title: str) -> str:
+    """把中文数字年份转成阿拉伯数字：'二0二五年年度报告' → '2025年年度报告'（富国等公司的写法）。"""
+    return _CN_YEAR.sub(lambda m: m.group(0).translate(_CN_DIGITS), title)
+
+
 def match_announcement(
     spec: DocSpec, anns: Iterable[Announcement], as_of: date
 ) -> tuple[Announcement | None, list[Announcement]]:
@@ -110,8 +119,8 @@ def match_announcement(
     hits = [
         a
         for a in anns
-        if spec.include.search(a.title)
-        and not spec.exclude.search(a.title)
+        if spec.include.search(normalize_title(a.title))
+        and not spec.exclude.search(normalize_title(a.title))
         and a.publish_date <= as_of.isoformat()
     ]
     hits.sort(key=lambda a: (a.publish_date, a.report_id))
@@ -386,9 +395,13 @@ def main(argv: list[str] | None = None) -> int:
         )
     stats["announcement_list_requests"] = cache.misses
     stats["announcement_list_cache_hits"] = cache.hits
+    # 写之前重新读一次：采集期间其他步骤（structured）可能已更新 MANIFEST 的 snapshots 部分
+    manifest = load_manifest(manifest_path)
     manifest.update(
         {
             "data_as_of": as_of.isoformat(),
+            "universe_version": universe.version,
+            "universe_sha256": sha256_file(settings.data_dir / "universe.yaml"),
             "documents_expected": len(universe.funds) * len(DOC_SPECS),
             "documents": [asdict(d) for d in docs],
             "documents_missing": [asdict(m) for m in missing],

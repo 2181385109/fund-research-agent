@@ -1,0 +1,4806 @@
+{
+  "data_as_of": "2026-09-28",
+  "universe_version": "v1",
+  "universe_sha256": "74d5e2086d90b61b52365c68e3eae70b2b1d6355f69e2481d6bd099683dc0c5c",
+  "documents_expected": 100,
+  "documents": [
+    {
+      "doc_id": "003095_prospectus_2026-09-21",
+      "fund_code": "003095",
+      "fund_name": "中欧医疗健康混合",
+      "doc_type": "prospectus",
+      "report_period": "2026-09-21",
+      "title": "中欧医疗健康混合型证券投资基金更新招募说明书(2026年9月)",
+      "publish_date": "2026-09-21",
+      "report_id": "AN202609211829694372",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202609211829694372_1.pdf",
+      "local_path": "data/raw/pdf/003095_prospectus_2026-09-21.pdf",
+      "sha256": "b20fef1df703cd944aa6d90b8371ed47228778e1bba6a270963bf0b31b954fb2",
+      "bytes": 577646,
+      "extract": {
+        "pages": 126,
+        "chars": 94797,
+        "chars_per_page": 752.4,
+        "garbled_ratio": 0.0005,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "中欧基金管理有限公司中欧医疗健康混合型证券投资基金招募说明书",
+          "publish_date": "2016-08-13",
+          "report_id": "AN201608130017073011"
+        },
+        {
+          "title": "中欧医疗健康混合型证券投资基金更新招募说明书",
+          "publish_date": "2017-05-12",
+          "report_id": "AN201705120573500849"
+        },
+        {
+          "title": "中欧基金管理有限公司中欧医疗健康混合型证券投资基金更新招募说明书",
+          "publish_date": "2017-11-11",
+          "report_id": "AN201711131034427798"
+        },
+        {
+          "title": "中欧医疗健康混合型证券投资基金更新招募说明书(2018年第1号)",
+          "publish_date": "2018-05-12",
+          "report_id": "AN201805121142622489"
+        },
+        {
+          "title": "中欧基金管理有限公司中欧医疗健康混合型证券投资基金更新招募说明书(2018年第2号)",
+          "publish_date": "2018-11-12",
+          "report_id": "AN201811121242850477"
+        },
+        {
+          "title": "中欧医疗健康混合型证券投资基金更新招募说明书(2019年第1号)",
+          "publish_date": "2019-05-11",
+          "report_id": "AN201905111328974896"
+        },
+        {
+          "title": "中欧基金管理有限公司中欧医疗健康混合型证券投资基金更新招募说明书(2019年第2号)",
+          "publish_date": "2019-12-28",
+          "report_id": "AN201912281372849160"
+        },
+        {
+          "title": "中欧基金管理有限公司中欧医疗健康混合型证券投资基金更新招募说明书",
+          "publish_date": "2020-11-04",
+          "report_id": "AN202011041426380903"
+        },
+        {
+          "title": "中欧基金管理有限公司中欧医疗健康混合型证券投资基金更新招募说明书",
+          "publish_date": "2020-12-24",
+          "report_id": "AN202012241443381318"
+        },
+        {
+          "title": "中欧医疗健康混合型证券投资基金更新招募说明书(2021年10月)",
+          "publish_date": "2021-10-22",
+          "report_id": "AN202110221524255572"
+        },
+        {
+          "title": "中欧医疗健康混合型证券投资基金招募说明书更新",
+          "publish_date": "2022-08-20",
+          "report_id": "AN202208201577408800"
+        },
+        {
+          "title": "中欧医疗健康混合型证券投资基金招募说明书更新",
+          "publish_date": "2022-11-14",
+          "report_id": "AN202211141580219913"
+        },
+        {
+          "title": "中欧医疗健康混合型证券投资基金招募说明书更新",
+          "publish_date": "2022-12-08",
+          "report_id": "AN202212081580918218"
+        },
+        {
+          "title": "中欧基金管理有限公司中欧医疗健康混合型证券投资基金更新招募说明书",
+          "publish_date": "2023-07-08",
+          "report_id": "AN202307081592119141"
+        },
+        {
+          "title": "中欧医疗健康混合型证券投资基金更新招募说明书",
+          "publish_date": "2023-12-20",
+          "report_id": "AN202312201614573671"
+        },
+        {
+          "title": "中欧医疗健康混合型证券投资基金更新招募说明书",
+          "publish_date": "2024-06-15",
+          "report_id": "AN202406151636436798"
+        },
+        {
+          "title": "中欧医疗健康混合型证券投资基金更新招募说明书(2025年7月)",
+          "publish_date": "2025-07-08",
+          "report_id": "AN202507081705006181"
+        },
+        {
+          "title": "中欧医疗健康混合型证券投资基金更新招募说明书(2026年7月)",
+          "publish_date": "2026-07-10",
+          "report_id": "AN202607101826860988"
+        }
+      ]
+    },
+    {
+      "doc_id": "003095_contract_2026-08-21",
+      "fund_code": "003095",
+      "fund_name": "中欧医疗健康混合",
+      "doc_type": "contract",
+      "report_period": "2026-08-21",
+      "title": "中欧医疗健康混合型证券投资基金基金合同(修订)",
+      "publish_date": "2026-08-21",
+      "report_id": "AN202608211828265978",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202608211828265978_1.pdf",
+      "local_path": "data/raw/pdf/003095_contract_2026-08-21.pdf",
+      "sha256": "21add0cb50391b6f3ff91dc2c100dac10dfac3feb1e682760440a12eefa7d0ee",
+      "bytes": 379415,
+      "extract": {
+        "pages": 78,
+        "chars": 53981,
+        "chars_per_page": 692.1,
+        "garbled_ratio": 0.0001,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "中欧基金管理有限公司中欧医疗健康混合型证券投资基金基金合同",
+          "publish_date": "2016-08-13",
+          "report_id": "AN201608150017087417"
+        },
+        {
+          "title": "中欧医疗健康混合型证券投资基金基金合同",
+          "publish_date": "2018-03-24",
+          "report_id": "AN201902281300911855"
+        },
+        {
+          "title": "中欧基金管理有限公司中欧医疗健康混合型证券投资基金基金合同",
+          "publish_date": "2019-12-28",
+          "report_id": "AN201912281372850688"
+        },
+        {
+          "title": "中欧基金管理有限公司中欧医疗健康混合型证券投资基金基金合同(修订)",
+          "publish_date": "2020-10-31",
+          "report_id": "AN202010311425207233"
+        },
+        {
+          "title": "中欧医疗健康混合型证券投资基金基金合同更新",
+          "publish_date": "2022-08-20",
+          "report_id": "AN202208201577408855"
+        },
+        {
+          "title": "中欧医疗健康混合型证券投资基金基金合同更新",
+          "publish_date": "2023-07-08",
+          "report_id": "AN202307081592117492"
+        }
+      ]
+    },
+    {
+      "doc_id": "003095_annual_report_2025",
+      "fund_code": "003095",
+      "fund_name": "中欧医疗健康混合",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "中欧医疗健康混合型证券投资基金2025年年度报告",
+      "publish_date": "2026-03-31",
+      "report_id": "AN202603311820900021",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603311820900021_1.pdf",
+      "local_path": "data/raw/pdf/003095_annual_report_2025.pdf",
+      "sha256": "d3720237f6777c4fba41bce093dfd743802d81fb2e8bf6852b5ce23cd5eb096c",
+      "bytes": 810786,
+      "extract": {
+        "pages": 72,
+        "chars": 69975,
+        "chars_per_page": 971.9,
+        "garbled_ratio": 0.0007,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "003095_quarterly_report_2026Q1",
+      "fund_code": "003095",
+      "fund_name": "中欧医疗健康混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "中欧医疗健康混合型证券投资基金2026年第1季度报告",
+      "publish_date": "2026-04-22",
+      "report_id": "AN202604221821421674",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604221821421674_1.pdf",
+      "local_path": "data/raw/pdf/003095_quarterly_report_2026Q1.pdf",
+      "sha256": "81291ec748c29cc7015efc8b7ed68c3dffe2bbcef887686601210473d76f783c",
+      "bytes": 318904,
+      "extract": {
+        "pages": 13,
+        "chars": 9442,
+        "chars_per_page": 726.3,
+        "garbled_ratio": 0.0029,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "003095_quarterly_report_2026Q2",
+      "fund_code": "003095",
+      "fund_name": "中欧医疗健康混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "中欧医疗健康混合型证券投资基金2026年第2季度报告",
+      "publish_date": "2026-07-21",
+      "report_id": "AN202607211827193222",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607211827193222_1.pdf",
+      "local_path": "data/raw/pdf/003095_quarterly_report_2026Q2.pdf",
+      "sha256": "075e81ea868bc69f9ede9a668118a736272262ee4fe7b64eb1ec6cb3a0c119af",
+      "bytes": 306792,
+      "extract": {
+        "pages": 13,
+        "chars": 9556,
+        "chars_per_page": 735.1,
+        "garbled_ratio": 0.003,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "006113_prospectus_2026-08-14",
+      "fund_code": "006113",
+      "fund_name": "汇添富创新医药混合",
+      "doc_type": "prospectus",
+      "report_period": "2026-08-14",
+      "title": "汇添富创新医药主题混合型证券投资基金更新招募说明书(2026年8月14日更新)",
+      "publish_date": "2026-08-14",
+      "report_id": "AN202608141827963365",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202608141827963365_1.pdf",
+      "local_path": "data/raw/pdf/006113_prospectus_2026-08-14.pdf",
+      "sha256": "ed4ec704bc4eef2a003a75a73fdefd3c4724f0c916adc859281e2261d54fa977",
+      "bytes": 1736050,
+      "extract": {
+        "pages": 147,
+        "chars": 122739,
+        "chars_per_page": 835.0,
+        "garbled_ratio": 0.0004,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金招募说明书",
+          "publish_date": "2018-06-20",
+          "report_id": "AN201806201157160033"
+        },
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金更新招募说明书(2019年第1号)",
+          "publish_date": "2019-03-20",
+          "report_id": "AN201903201307704880"
+        },
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金更新招募说明书(2020年4月14日更新)",
+          "publish_date": "2020-04-14",
+          "report_id": "AN202004141377947580"
+        },
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金更新招募说明书",
+          "publish_date": "2020-05-30",
+          "report_id": "AN202005301381003496"
+        },
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金更新招募说明书(2020年11月17日更新)",
+          "publish_date": "2020-11-17",
+          "report_id": "AN202011171430032998"
+        },
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金更新招募说明书(2021年4月21日更新)",
+          "publish_date": "2021-04-21",
+          "report_id": "AN202104211486836301"
+        },
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金更新招募说明书(2022年4月21日更新)",
+          "publish_date": "2022-04-21",
+          "report_id": "AN202204211560597974"
+        },
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金更新招募说明书(2022年8月17日更新)",
+          "publish_date": "2022-08-17",
+          "report_id": "AN202208171577290930"
+        },
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金更新招募说明书(2022年11月28日更新)",
+          "publish_date": "2022-11-28",
+          "report_id": "AN202211281580616651"
+        },
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金更新招募说明书(2023年7月13日更新)",
+          "publish_date": "2023-07-13",
+          "report_id": "AN202307131592231758"
+        },
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金更新招募说明书(2023年8月17日更新)",
+          "publish_date": "2023-08-17",
+          "report_id": "AN202308171594999925"
+        },
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金更新招募说明书(2024年8月16日更新)",
+          "publish_date": "2024-08-16",
+          "report_id": "AN202408161639302339"
+        },
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金更新招募说明书(2025年4月15日更新)",
+          "publish_date": "2025-04-15",
+          "report_id": "AN202504151656541961"
+        },
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金更新招募说明书(2025年5月26日更新)",
+          "publish_date": "2025-05-26",
+          "report_id": "AN202505261679102080"
+        },
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金更新招募说明书(2025年5月28日更新)",
+          "publish_date": "2025-05-28",
+          "report_id": "AN202505281680270325"
+        },
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金更新招募说明书(2025年8月15日更新)",
+          "publish_date": "2025-08-15",
+          "report_id": "AN202508151727827357"
+        }
+      ]
+    },
+    {
+      "doc_id": "006113_contract_2025-05-27",
+      "fund_code": "006113",
+      "fund_name": "汇添富创新医药混合",
+      "doc_type": "contract",
+      "report_period": "2025-05-27",
+      "title": "汇添富创新医药主题混合型证券投资基金基金合同",
+      "publish_date": "2025-05-27",
+      "report_id": "AN202505271679691762",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202505271679691762_1.pdf",
+      "local_path": "data/raw/pdf/006113_contract_2025-05-27.pdf",
+      "sha256": "7c855300418ca641e78953542553813d9a8dba1e3c972275e1b5d4fb57ac1485",
+      "bytes": 2066585,
+      "extract": {
+        "pages": 110,
+        "chars": 90812,
+        "chars_per_page": 825.6,
+        "garbled_ratio": 0.0001,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金基金合同",
+          "publish_date": "2018-06-20",
+          "report_id": "AN201806201157223685"
+        },
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金基金合同",
+          "publish_date": "2020-04-14",
+          "report_id": "AN202004141377948292"
+        },
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金基金合同",
+          "publish_date": "2020-11-13",
+          "report_id": "AN202011131428663823"
+        },
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金基金合同",
+          "publish_date": "2021-04-20",
+          "report_id": "AN202104201486578615"
+        },
+        {
+          "title": "汇添富创新医药主题混合型证券投资基金基金合同",
+          "publish_date": "2023-07-08",
+          "report_id": "AN202307081592117154"
+        }
+      ]
+    },
+    {
+      "doc_id": "006113_annual_report_2025",
+      "fund_code": "006113",
+      "fund_name": "汇添富创新医药混合",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "汇添富创新医药主题混合型证券投资基金2025年年度报告",
+      "publish_date": "2026-03-31",
+      "report_id": "AN202603311820898582",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603311820898582_1.pdf",
+      "local_path": "data/raw/pdf/006113_annual_report_2025.pdf",
+      "sha256": "04011cd122ca96ffbb837e867d44a9cae1a916a9fb431c1f2ad23dfefde6789d",
+      "bytes": 2295931,
+      "extract": {
+        "pages": 91,
+        "chars": 80015,
+        "chars_per_page": 879.3,
+        "garbled_ratio": 0.0006,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "006113_quarterly_report_2026Q1",
+      "fund_code": "006113",
+      "fund_name": "汇添富创新医药混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "汇添富创新医药主题混合型证券投资基金2026年第1季度报告",
+      "publish_date": "2026-04-22",
+      "report_id": "AN202604221821419547",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604221821419547_1.pdf",
+      "local_path": "data/raw/pdf/006113_quarterly_report_2026Q1.pdf",
+      "sha256": "5281fdcb474205dba156c6980aa7082310f2a5d1c70f6d162ff826ef80856724",
+      "bytes": 757961,
+      "extract": {
+        "pages": 17,
+        "chars": 10705,
+        "chars_per_page": 629.7,
+        "garbled_ratio": 0.0023,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "006113_quarterly_report_2026Q2",
+      "fund_code": "006113",
+      "fund_name": "汇添富创新医药混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "汇添富创新医药主题混合型证券投资基金2026年第2季度报告",
+      "publish_date": "2026-07-21",
+      "report_id": "AN202607211827185957",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607211827185957_1.pdf",
+      "local_path": "data/raw/pdf/006113_quarterly_report_2026Q2.pdf",
+      "sha256": "644d2f10c762b1c80a59011cdcd9c34201a2194f2e9de46728f5df9ae26041b1",
+      "bytes": 738605,
+      "extract": {
+        "pages": 16,
+        "chars": 10417,
+        "chars_per_page": 651.1,
+        "garbled_ratio": 0.0024,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "001717_prospectus_2026-07-27",
+      "fund_code": "001717",
+      "fund_name": "工银前沿医疗股票",
+      "doc_type": "prospectus",
+      "report_period": "2026-07-27",
+      "title": "工银瑞信前沿医疗股票型证券投资基金更新的招募说明书",
+      "publish_date": "2026-07-27",
+      "report_id": "AN202607271827358854",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607271827358854_1.pdf",
+      "local_path": "data/raw/pdf/001717_prospectus_2026-07-27.pdf",
+      "sha256": "39ed3ae9ca549f538b9c59cb93186eedce485559939419f8a88225e94e32aea4",
+      "bytes": 772250,
+      "extract": {
+        "pages": 95,
+        "chars": 96057,
+        "chars_per_page": 1011.1,
+        "garbled_ratio": 0.0005,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金招募说明书",
+          "publish_date": "2015-12-18",
+          "report_id": "AN201512180012180706"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金更新的招募说明书(2016年第1号)",
+          "publish_date": "2016-09-14",
+          "report_id": "AN201609200017674341"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金更新的招募说明书",
+          "publish_date": "2017-03-17",
+          "report_id": "AN201703170414425966"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金更新的招募说明书",
+          "publish_date": "2017-09-15",
+          "report_id": "AN201709150887412647"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金更新的招募说明书(2018年1号)",
+          "publish_date": "2018-03-19",
+          "report_id": "AN201803190013030370"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金更新的招募说明书(2018年2号)",
+          "publish_date": "2018-09-14",
+          "report_id": "AN201809141195457567"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金更新的招募说明书(2019年第1号)",
+          "publish_date": "2019-03-19",
+          "report_id": "AN201903191307091968"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金更新的招募说明书(2019年第2号)",
+          "publish_date": "2019-09-16",
+          "report_id": "AN201909161359908149"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金更新的招募说明书(2019年第3号)",
+          "publish_date": "2019-11-09",
+          "report_id": "AN201911091370605004"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金更新的招募说明书(2020年第1号)",
+          "publish_date": "2020-03-18",
+          "report_id": "AN202003181376590360"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金更新的招募说明书(2020年第2号)",
+          "publish_date": "2020-06-24",
+          "report_id": "AN202006241386979552"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金更新的招募说明书(2020年第3号)",
+          "publish_date": "2020-11-20",
+          "report_id": "AN202011201431307009"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金更新的招募说明书(2021年第1号)",
+          "publish_date": "2021-06-18",
+          "report_id": "AN202106181498487252"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金更新的招募说明书(2022年第1号)",
+          "publish_date": "2022-06-17",
+          "report_id": "AN202206171572706017"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金招募说明书更新",
+          "publish_date": "2023-06-16",
+          "report_id": "AN202306161591016747"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金招募说明书更新",
+          "publish_date": "2023-07-12",
+          "report_id": "AN202307121592200903"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金更新的招募说明书",
+          "publish_date": "2024-06-13",
+          "report_id": "AN202406131636077409"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金更新的招募说明书",
+          "publish_date": "2025-06-11",
+          "report_id": "AN202506111688683231"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金更新的招募说明书",
+          "publish_date": "2026-06-11",
+          "report_id": "AN202606111823435940"
+        }
+      ]
+    },
+    {
+      "doc_id": "001717_contract_2026-06-26",
+      "fund_code": "001717",
+      "fund_name": "工银前沿医疗股票",
+      "doc_type": "contract",
+      "report_period": "2026-06-26",
+      "title": "工银瑞信前沿医疗股票型证券投资基金基金合同",
+      "publish_date": "2026-06-26",
+      "report_id": "AN202606261824616835",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202606261824616835_1.pdf",
+      "local_path": "data/raw/pdf/001717_contract_2026-06-26.pdf",
+      "sha256": "fa2bf1e5a8ecf4edc8e174fe6ae620b9734dad51bff0bcedfc78dd1aa0b32be0",
+      "bytes": 441186,
+      "extract": {
+        "pages": 80,
+        "chars": 56211,
+        "chars_per_page": 702.6,
+        "garbled_ratio": 0.0003,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金基金合同",
+          "publish_date": "2015-12-18",
+          "report_id": "AN201512180012186277"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金基金合同",
+          "publish_date": "2018-03-24",
+          "report_id": "AN201803271111446785"
+        },
+        {
+          "title": "工银瑞信基金管理有限公司工银瑞信前沿医疗股票型证券投资基金基金合同",
+          "publish_date": "2019-11-09",
+          "report_id": "AN201911091370606024"
+        },
+        {
+          "title": "工银瑞信基金管理有限公司工银瑞信前沿医疗股票型证券投资基金基金合同",
+          "publish_date": "2020-11-20",
+          "report_id": "AN202011201431307006"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金基金合同更新",
+          "publish_date": "2023-07-08",
+          "report_id": "AN202307081592118688"
+        },
+        {
+          "title": "工银瑞信前沿医疗股票型证券投资基金基金合同",
+          "publish_date": "2025-09-13",
+          "report_id": "AN202509131742571569"
+        }
+      ]
+    },
+    {
+      "doc_id": "001717_annual_report_2025",
+      "fund_code": "001717",
+      "fund_name": "工银前沿医疗股票",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "工银瑞信前沿医疗股票型证券投资基金2025年年度报告",
+      "publish_date": "2026-03-31",
+      "report_id": "AN202603311820884872",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603311820884872_1.pdf",
+      "local_path": "data/raw/pdf/001717_annual_report_2025.pdf",
+      "sha256": "5f2b03bf5ba68a2433aeb5e74d365062f6229b48f723388bb18534cd7e56ec56",
+      "bytes": 819918,
+      "extract": {
+        "pages": 68,
+        "chars": 64383,
+        "chars_per_page": 946.8,
+        "garbled_ratio": 0.0008,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "001717_quarterly_report_2026Q1",
+      "fund_code": "001717",
+      "fund_name": "工银前沿医疗股票",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "工银瑞信前沿医疗股票型证券投资基金2026年第1季度报告",
+      "publish_date": "2026-04-22",
+      "report_id": "AN202604221821399078",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604221821399078_1.pdf",
+      "local_path": "data/raw/pdf/001717_quarterly_report_2026Q1.pdf",
+      "sha256": "7d383d48f5563d34979dfd603ed2a273fd18c1a802b70323d37420a51f9492aa",
+      "bytes": 369456,
+      "extract": {
+        "pages": 13,
+        "chars": 9465,
+        "chars_per_page": 728.1,
+        "garbled_ratio": 0.0029,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "001717_quarterly_report_2026Q2",
+      "fund_code": "001717",
+      "fund_name": "工银前沿医疗股票",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "工银瑞信前沿医疗股票型证券投资基金2026年第2季度报告",
+      "publish_date": "2026-07-21",
+      "report_id": "AN202607211827164739",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607211827164739_1.pdf",
+      "local_path": "data/raw/pdf/001717_quarterly_report_2026Q2.pdf",
+      "sha256": "a564ed47b753249fd068e965c7c7e5790274e2a9b4020e500dc030015b7fedfd",
+      "bytes": 373919,
+      "extract": {
+        "pages": 13,
+        "chars": 9707,
+        "chars_per_page": 746.7,
+        "garbled_ratio": 0.0028,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "004851_prospectus_2026-07-27",
+      "fund_code": "004851",
+      "fund_name": "广发医疗保健股票",
+      "doc_type": "prospectus",
+      "report_period": "2026-07-27",
+      "title": "广发医疗保健股票型证券投资基金更新的招募说明书",
+      "publish_date": "2026-07-27",
+      "report_id": "AN202607271827373503",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607271827373503_1.pdf",
+      "local_path": "data/raw/pdf/004851_prospectus_2026-07-27.pdf",
+      "sha256": "d889d53b53920492bce3f806d91d6b1433042f78789ab33701ba04082bcb8f7a",
+      "bytes": 1503390,
+      "extract": {
+        "pages": 110,
+        "chars": 86863,
+        "chars_per_page": 789.7,
+        "garbled_ratio": 0.0005,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "广发医疗保健股票型证券投资基金招募说明书",
+          "publish_date": "2017-07-06",
+          "report_id": "AN201707060697558362"
+        },
+        {
+          "title": "广发医疗保健股票型证券投资基金更新的招募说明书",
+          "publish_date": "2018-03-15",
+          "report_id": "AN201803150013027218"
+        },
+        {
+          "title": "广发医疗保健股票型证券投资基金更新的招募说明书",
+          "publish_date": "2018-09-19",
+          "report_id": "AN201809191198314000"
+        },
+        {
+          "title": "广发医疗保健股票型证券投资基金更新的招募说明书201901",
+          "publish_date": "2019-03-14",
+          "report_id": "AN201903141305791530"
+        },
+        {
+          "title": "广发医疗保健股票型证券投资基金更新的招募说明书",
+          "publish_date": "2019-09-21",
+          "report_id": "AN201909211362644353"
+        },
+        {
+          "title": "广发医疗保健股票型证券投资基金更新的招募说明书",
+          "publish_date": "2020-01-11",
+          "report_id": "AN202001111373876520"
+        },
+        {
+          "title": "广发医疗保健股票型证券投资基金更新的招募说明书",
+          "publish_date": "2020-03-20",
+          "report_id": "AN202003201376716074"
+        },
+        {
+          "title": "广发医疗保健股票型证券投资基金更新的招募说明书",
+          "publish_date": "2020-11-27",
+          "report_id": "AN202011271433589007"
+        },
+        {
+          "title": "广发医疗保健股票型证券投资基金更新的招募说明书",
+          "publish_date": "2020-12-25",
+          "report_id": "AN202012251443755991"
+        },
+        {
+          "title": "广发医疗保健股票型证券投资基金更新的招募说明书",
+          "publish_date": "2021-06-02",
+          "report_id": "AN202106021495477112"
+        },
+        {
+          "title": "广发医疗保健股票型证券投资基金招募说明书更新",
+          "publish_date": "2022-05-25",
+          "report_id": "AN202205251567741400"
+        },
+        {
+          "title": "广发医疗保健股票型证券投资基金招募说明书更新",
+          "publish_date": "2023-05-09",
+          "report_id": "AN202305091586391411"
+        },
+        {
+          "title": "广发医疗保健股票型证券投资基金招募说明书更新",
+          "publish_date": "2023-07-11",
+          "report_id": "AN202307111592166011"
+        },
+        {
+          "title": "广发医疗保健股票型证券投资基金更新的招募说明书",
+          "publish_date": "2024-06-07",
+          "report_id": "AN202406071635836552"
+        },
+        {
+          "title": "广发医疗保健股票型证券投资基金更新的招募说明书",
+          "publish_date": "2024-06-28",
+          "report_id": "AN202406281636991162"
+        },
+        {
+          "title": "广发医疗保健股票型证券投资基金更新的招募说明书",
+          "publish_date": "2025-05-26",
+          "report_id": "AN202505261679317009"
+        },
+        {
+          "title": "广发医疗保健股票型证券投资基金更新的招募说明书",
+          "publish_date": "2025-12-29",
+          "report_id": "AN202512291810411515"
+        },
+        {
+          "title": "广发医疗保健股票型证券投资基金更新的招募说明书",
+          "publish_date": "2026-06-22",
+          "report_id": "AN202606221823717330"
+        }
+      ]
+    },
+    {
+      "doc_id": "004851_contract_2026-06-26",
+      "fund_code": "004851",
+      "fund_name": "广发医疗保健股票",
+      "doc_type": "contract",
+      "report_period": "2026-06-26",
+      "title": "广发医疗保健股票型证券投资基金基金合同",
+      "publish_date": "2026-06-26",
+      "report_id": "AN202606261824676528",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202606261824676528_1.pdf",
+      "local_path": "data/raw/pdf/004851_contract_2026-06-26.pdf",
+      "sha256": "332c93c1192236191f22ca419b78dec6b8b4cb5a1445f87f6c214bfc64fc9d47",
+      "bytes": 1027731,
+      "extract": {
+        "pages": 102,
+        "chars": 72251,
+        "chars_per_page": 708.3,
+        "garbled_ratio": 0.0002,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "广发医疗保健股票型证券投资基金基金合同",
+          "publish_date": "2017-07-06",
+          "report_id": "AN201707060697555871"
+        },
+        {
+          "title": "广发医疗保健股票型证券投资基金基金合同",
+          "publish_date": "2018-03-22",
+          "report_id": "AN201803271111538224"
+        },
+        {
+          "title": "广发基金管理有限公司广发医疗保健股票型证券投资基金基金合同",
+          "publish_date": "2020-01-11",
+          "report_id": "AN202001111373874844"
+        },
+        {
+          "title": "广发基金管理有限公司广发医疗保健股票型证券投资基金基金合同",
+          "publish_date": "2020-03-18",
+          "report_id": "AN202003181376591572"
+        },
+        {
+          "title": "广发基金管理有限公司广发医疗保健股票型证券投资基金基金合同",
+          "publish_date": "2020-12-22",
+          "report_id": "AN202012221442593627"
+        },
+        {
+          "title": "广发医疗保健股票型证券投资基金基金合同更新",
+          "publish_date": "2023-07-08",
+          "report_id": "AN202307081592117244"
+        }
+      ]
+    },
+    {
+      "doc_id": "004851_annual_report_2025",
+      "fund_code": "004851",
+      "fund_name": "广发医疗保健股票",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "广发医疗保健股票型证券投资基金2025年年度报告",
+      "publish_date": "2026-03-30",
+      "report_id": "AN202603301820845124",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603301820845124_1.pdf",
+      "local_path": "data/raw/pdf/004851_annual_report_2025.pdf",
+      "sha256": "aae22ddc4be4753451440b33a2bfed717cad5f02daa9f3339b900113e3fc55db",
+      "bytes": 2052050,
+      "extract": {
+        "pages": 68,
+        "chars": 69894,
+        "chars_per_page": 1027.9,
+        "garbled_ratio": 0.0007,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "004851_quarterly_report_2026Q1",
+      "fund_code": "004851",
+      "fund_name": "广发医疗保健股票",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "广发医疗保健股票型证券投资基金2026年第1季度报告",
+      "publish_date": "2026-04-22",
+      "report_id": "AN202604221821412761",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604221821412761_1.pdf",
+      "local_path": "data/raw/pdf/004851_quarterly_report_2026Q1.pdf",
+      "sha256": "ba52c8c031d456ffe029cdd4e2e778262626728baaf1f3b97c91d4a4f142916c",
+      "bytes": 497339,
+      "extract": {
+        "pages": 13,
+        "chars": 8322,
+        "chars_per_page": 640.2,
+        "garbled_ratio": 0.0032,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "004851_quarterly_report_2026Q2",
+      "fund_code": "004851",
+      "fund_name": "广发医疗保健股票",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "广发医疗保健股票型证券投资基金2026年第2季度报告",
+      "publish_date": "2026-07-20",
+      "report_id": "AN202607201827126772",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607201827126772_1.pdf",
+      "local_path": "data/raw/pdf/004851_quarterly_report_2026Q2.pdf",
+      "sha256": "b6343e6c9be9446b2220b7a0a04663e7919f9941268d8f68b8373729c4f3fa7f",
+      "bytes": 488493,
+      "extract": {
+        "pages": 14,
+        "chars": 8729,
+        "chars_per_page": 623.5,
+        "garbled_ratio": 0.0031,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "110023_prospectus_2026-06-01",
+      "fund_code": "110023",
+      "fund_name": "易方达医疗保健行业混合",
+      "doc_type": "prospectus",
+      "report_period": "2026-06-01",
+      "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+      "publish_date": "2026-06-01",
+      "report_id": "AN202606011823112878",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202606011823112878_1.pdf",
+      "local_path": "data/raw/pdf/110023_prospectus_2026-06-01.pdf",
+      "sha256": "4d3c69b41fd1139aad3d6dc154a88cba42441bed54d5df2ca94e436fc73ddd48",
+      "bytes": 1346385,
+      "extract": {
+        "pages": 94,
+        "chars": 87646,
+        "chars_per_page": 932.4,
+        "garbled_ratio": 0.0004,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "易基医疗：更新招募说明书（2011年9月）",
+          "publish_date": "2011-09-09",
+          "report_id": "AN201203030004913803"
+        },
+        {
+          "title": "易基医疗：更新招募说明书（2012年3月）",
+          "publish_date": "2012-03-09",
+          "report_id": "AN201203130005034652"
+        },
+        {
+          "title": "易基医疗：更新招募说明书（2012年8月）",
+          "publish_date": "2012-08-30",
+          "report_id": "AN201208300005474879"
+        },
+        {
+          "title": "易基医疗：更新招募说明书（2013年3月）",
+          "publish_date": "2013-03-14",
+          "report_id": "AN201303140005779327"
+        },
+        {
+          "title": "易方达医疗保健行业股票型证券投资基金更新的招募说明书",
+          "publish_date": "2013-09-10",
+          "report_id": "AN201309100004348459"
+        },
+        {
+          "title": "易方达医疗保健行业股票型证券投资基金更新的招募说明书",
+          "publish_date": "2014-03-13",
+          "report_id": "AN201403130005248306"
+        },
+        {
+          "title": "易方达医疗保健行业股票型证券投资基金更新的招募说明书",
+          "publish_date": "2014-09-10",
+          "report_id": "AN201409100006950541"
+        },
+        {
+          "title": "易方达医疗保健行业股票型证券投资基金更新的招募说明书",
+          "publish_date": "2015-03-13",
+          "report_id": "AN201503130008752570"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2015-09-11",
+          "report_id": "AN201509110010769185"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2016-03-12",
+          "report_id": "AN201603140013871922"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2016-09-06",
+          "report_id": "AN201609060017503921"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2017-03-14",
+          "report_id": "AN201703140405926347"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2017-09-08",
+          "report_id": "AN201709080867929536"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2018-03-14",
+          "report_id": "AN201803140013025443"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2018-09-11",
+          "report_id": "AN201809111192943245"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2019-03-14",
+          "report_id": "AN201903141305791533"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2019-09-11",
+          "report_id": "AN201909111355192719"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2020-01-03",
+          "report_id": "AN202001031373415221"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2020-07-30",
+          "report_id": "AN202007301395213271"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2020-10-19",
+          "report_id": "AN202010191422261188"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2020-11-28",
+          "report_id": "AN202011281433984483"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金招募说明书更新",
+          "publish_date": "2021-10-29",
+          "report_id": "AN202110291525711220"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2022-09-29",
+          "report_id": "AN202209291578758401"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2023-07-11",
+          "report_id": "AN202307111592149907"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2023-08-31",
+          "report_id": "AN202308311596868258"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2023-10-16",
+          "report_id": "AN202310161601475850"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2024-07-31",
+          "report_id": "AN202407311638487658"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2024-12-07",
+          "report_id": "AN202412071641217889"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2025-06-27",
+          "report_id": "AN202506271698382230"
+        }
+      ]
+    },
+    {
+      "doc_id": "110023_contract_2023-10-14",
+      "fund_code": "110023",
+      "fund_name": "易方达医疗保健行业混合",
+      "doc_type": "contract",
+      "report_period": "2023-10-14",
+      "title": "易方达医疗保健行业混合型证券投资基金基金合同",
+      "publish_date": "2023-10-14",
+      "report_id": "AN202310141601458173",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202310141601458173_1.pdf",
+      "local_path": "data/raw/pdf/110023_contract_2023-10-14.pdf",
+      "sha256": "1db92f0584643b4b7a94d78ba26dc4cfe1fbdbe7ac7b8181f151417a4f53bdab",
+      "bytes": 670899,
+      "extract": {
+        "pages": 80,
+        "chars": 59105,
+        "chars_per_page": 738.8,
+        "garbled_ratio": 0.0002,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金基金合同",
+          "publish_date": "2018-03-22",
+          "report_id": "AN201803221108157714"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金基金合同",
+          "publish_date": "2019-12-31",
+          "report_id": "AN201912311373113291"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金基金合同",
+          "publish_date": "2020-10-14",
+          "report_id": "AN202010141421249090"
+        },
+        {
+          "title": "易方达医疗保健行业混合型证券投资基金基金合同",
+          "publish_date": "2023-07-08",
+          "report_id": "AN202307081592118560"
+        }
+      ]
+    },
+    {
+      "doc_id": "110023_annual_report_2025",
+      "fund_code": "110023",
+      "fund_name": "易方达医疗保健行业混合",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "易方达医疗保健行业混合型证券投资基金2025年年度报告",
+      "publish_date": "2026-03-31",
+      "report_id": "AN202603311820890042",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603311820890042_1.pdf",
+      "local_path": "data/raw/pdf/110023_annual_report_2025.pdf",
+      "sha256": "a64adc952f50afa2bc01ab442a70c6322738f238ad6d7c780ddee8a6c2b3a05a",
+      "bytes": 2122864,
+      "extract": {
+        "pages": 71,
+        "chars": 73055,
+        "chars_per_page": 1028.9,
+        "garbled_ratio": 0.0007,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "110023_quarterly_report_2026Q1",
+      "fund_code": "110023",
+      "fund_name": "易方达医疗保健行业混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "易方达医疗保健行业混合型证券投资基金2026年第1季度报告",
+      "publish_date": "2026-04-22",
+      "report_id": "AN202604221821399464",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604221821399464_1.pdf",
+      "local_path": "data/raw/pdf/110023_quarterly_report_2026Q1.pdf",
+      "sha256": "64900ac4261f8571283acb594ec551c250784d994c3c109034c691a1b0eb7c83",
+      "bytes": 501614,
+      "extract": {
+        "pages": 14,
+        "chars": 8909,
+        "chars_per_page": 636.4,
+        "garbled_ratio": 0.003,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "110023_quarterly_report_2026Q2",
+      "fund_code": "110023",
+      "fund_name": "易方达医疗保健行业混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "易方达医疗保健行业混合型证券投资基金2026年第2季度报告",
+      "publish_date": "2026-07-21",
+      "report_id": "AN202607211827164442",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607211827164442_1.pdf",
+      "local_path": "data/raw/pdf/110023_quarterly_report_2026Q2.pdf",
+      "sha256": "c3553c80ef18f70d387997dc7bcd26ffb5d859d15a4572ecbf80ab02cc929307",
+      "bytes": 491991,
+      "extract": {
+        "pages": 13,
+        "chars": 8417,
+        "chars_per_page": 647.5,
+        "garbled_ratio": 0.0032,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "007718_prospectus_2026-07-27",
+      "fund_code": "007718",
+      "fund_name": "中银创新医疗混合",
+      "doc_type": "prospectus",
+      "report_period": "2026-07-27",
+      "title": "中银创新医疗混合型证券投资基金更新招募说明书(2026年第4号)",
+      "publish_date": "2026-07-27",
+      "report_id": "AN202607271827365133",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607271827365133_1.pdf",
+      "local_path": "data/raw/pdf/007718_prospectus_2026-07-27.pdf",
+      "sha256": "88338a27b5d3d64a63e1716f7bba0a1cf90784e1c630c2e62d299251d1402603",
+      "bytes": 1518070,
+      "extract": {
+        "pages": 123,
+        "chars": 99172,
+        "chars_per_page": 806.3,
+        "garbled_ratio": 0.0005,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "中银创新医疗混合型证券投资基金招募说明书",
+          "publish_date": "2019-10-09",
+          "report_id": "AN201910091368298077"
+        },
+        {
+          "title": "中银创新医疗混合型证券投资基金更新招募说明书(2020年第1号)",
+          "publish_date": "2020-01-17",
+          "report_id": "AN202001171374275303"
+        },
+        {
+          "title": "中银创新医疗混合型证券投资基金更新招募说明书(2020年第2号)",
+          "publish_date": "2020-10-30",
+          "report_id": "AN202010301424836246"
+        },
+        {
+          "title": "中银创新医疗混合型证券投资基金更新招募说明书(2020年第3号)",
+          "publish_date": "2020-11-18",
+          "report_id": "AN202011181430520941"
+        },
+        {
+          "title": "中银创新医疗混合型证券投资基金更新招募说明书(2020年第4号)",
+          "publish_date": "2020-12-31",
+          "report_id": "AN202012311445788559"
+        },
+        {
+          "title": "中银创新医疗混合型证券投资基金更新招募说明书(2021年第1号)",
+          "publish_date": "2021-08-17",
+          "report_id": "AN202108171510611350"
+        },
+        {
+          "title": "中银创新医疗混合型证券投资基金招募说明书更新",
+          "publish_date": "2021-11-06",
+          "report_id": "AN202111061527368405"
+        },
+        {
+          "title": "中银创新医疗混合型证券投资基金招募说明书更新",
+          "publish_date": "2022-07-05",
+          "report_id": "AN202207051575806121"
+        },
+        {
+          "title": "中银创新医疗混合型证券投资基金招募说明书更新",
+          "publish_date": "2022-08-17",
+          "report_id": "AN202208171577290599"
+        },
+        {
+          "title": "中银创新医疗混合型证券投资基金更新招募说明书(2023年第1号)",
+          "publish_date": "2023-02-07",
+          "report_id": "AN202302071582841759"
+        },
+        {
+          "title": "中银创新医疗混合型证券投资基金招募说明书更新",
+          "publish_date": "2023-07-24",
+          "report_id": "AN202307241592562869"
+        },
+        {
+          "title": "中银创新医疗混合型证券投资基金招募说明书更新",
+          "publish_date": "2023-08-17",
+          "report_id": "AN202308171595000031"
+        },
+        {
+          "title": "中银创新医疗混合型证券投资基金更新招募说明书",
+          "publish_date": "2024-06-26",
+          "report_id": "AN202406261636898427"
+        },
+        {
+          "title": "中银创新医疗混合型证券投资基金更新招募说明书(2025年第1号)",
+          "publish_date": "2025-06-26",
+          "report_id": "AN202506261697797983"
+        },
+        {
+          "title": "中银创新医疗混合型证券投资基金更新招募说明书",
+          "publish_date": "2026-03-06",
+          "report_id": "AN202603061820328565"
+        },
+        {
+          "title": "中银创新医疗混合型证券投资基金更新招募说明书(2026年第2号)",
+          "publish_date": "2026-03-19",
+          "report_id": "AN202603191820637793"
+        },
+        {
+          "title": "中银创新医疗混合型证券投资基金更新招募说明书(2026年第3号)",
+          "publish_date": "2026-05-20",
+          "report_id": "AN202605201822474719"
+        }
+      ]
+    },
+    {
+      "doc_id": "007718_contract_2026-06-26",
+      "fund_code": "007718",
+      "fund_name": "中银创新医疗混合",
+      "doc_type": "contract",
+      "report_period": "2026-06-26",
+      "title": "中银创新医疗混合型证券投资基金基金合同更新",
+      "publish_date": "2026-06-26",
+      "report_id": "AN202606261824601848",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202606261824601848_1.pdf",
+      "local_path": "data/raw/pdf/007718_contract_2026-06-26.pdf",
+      "sha256": "ae0d8bf309c87cfdbb92123cc8d2f2e6beea7af12bea7b2fb86cc964000689bf",
+      "bytes": 991761,
+      "extract": {
+        "pages": 107,
+        "chars": 88524,
+        "chars_per_page": 827.3,
+        "garbled_ratio": 0.0002,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "中银创新医疗混合型证券投资基金基金合同",
+          "publish_date": "2019-10-09",
+          "report_id": "AN201910091368298075"
+        },
+        {
+          "title": "中银创新医疗混合型证券投资基金基金合同",
+          "publish_date": "2020-10-30",
+          "report_id": "AN202010301424836239"
+        },
+        {
+          "title": "中银创新医疗混合型证券投资基金基金合同",
+          "publish_date": "2020-11-18",
+          "report_id": "AN202011181430516268"
+        },
+        {
+          "title": "中银创新医疗混合型证券投资基金基金合同更新",
+          "publish_date": "2023-07-22",
+          "report_id": "AN202307221592557290"
+        }
+      ]
+    },
+    {
+      "doc_id": "007718_annual_report_2025",
+      "fund_code": "007718",
+      "fund_name": "中银创新医疗混合",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "中银创新医疗混合型证券投资基金2025年年度报告",
+      "publish_date": "2026-03-31",
+      "report_id": "AN202603311820902927",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603311820902927_1.pdf",
+      "local_path": "data/raw/pdf/007718_annual_report_2025.pdf",
+      "sha256": "7130d1c9ab130baecf40a2db12c76344068854073ca74b0c958bf19a10db8eea",
+      "bytes": 1683303,
+      "extract": {
+        "pages": 72,
+        "chars": 73383,
+        "chars_per_page": 1019.2,
+        "garbled_ratio": 0.0007,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "007718_quarterly_report_2026Q1",
+      "fund_code": "007718",
+      "fund_name": "中银创新医疗混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "中银创新医疗混合型证券投资基金2026年第1季度报告",
+      "publish_date": "2026-04-22",
+      "report_id": "AN202604221821413691",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604221821413691_1.pdf",
+      "local_path": "data/raw/pdf/007718_quarterly_report_2026Q1.pdf",
+      "sha256": "e31d8ed932032808e8a98537c77b3d43f5cf5bb6631a8754feb99d7dc05b20d3",
+      "bytes": 585391,
+      "extract": {
+        "pages": 14,
+        "chars": 11336,
+        "chars_per_page": 809.7,
+        "garbled_ratio": 0.0024,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "007718_quarterly_report_2026Q2",
+      "fund_code": "007718",
+      "fund_name": "中银创新医疗混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "中银创新医疗混合型证券投资基金2026年第2季度报告",
+      "publish_date": "2026-07-21",
+      "report_id": "AN202607211827182038",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607211827182038_1.pdf",
+      "local_path": "data/raw/pdf/007718_quarterly_report_2026Q2.pdf",
+      "sha256": "0609e836c4891677549c1f292f9b2cbd2884ca7f4613054e43f636cd28fe22ba",
+      "bytes": 576740,
+      "extract": {
+        "pages": 13,
+        "chars": 10976,
+        "chars_per_page": 844.3,
+        "garbled_ratio": 0.0025,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "000452_prospectus_2026-09-03",
+      "fund_code": "000452",
+      "fund_name": "南方医药保健混合",
+      "doc_type": "prospectus",
+      "report_period": "2026-09-03",
+      "title": "南方医药保健混合型证券投资基金招募说明书",
+      "publish_date": "2026-09-03",
+      "report_id": "AN202609031828944857",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202609031828944857_1.pdf",
+      "local_path": "data/raw/pdf/000452_prospectus_2026-09-03.pdf",
+      "sha256": "97b6aed770fe523c67c71a4a4f2258f4732e72671569f12930c9317babf0cb6f",
+      "bytes": 516223,
+      "extract": {
+        "pages": 114,
+        "chars": 102492,
+        "chars_per_page": 899.1,
+        "garbled_ratio": 0.0009,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(2013-12-16)",
+          "publish_date": "2013-12-16",
+          "report_id": "AN201312160004790898"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(2013-12-23)",
+          "publish_date": "2013-12-23",
+          "report_id": "AN201312230004818998"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型基金招募说明书(更新)",
+          "publish_date": "2014-09-01",
+          "report_id": "AN201409010006854466"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型基金招募说明书(更新)",
+          "publish_date": "2015-02-26",
+          "report_id": "AN201502260008593274"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(更新)",
+          "publish_date": "2015-08-27",
+          "report_id": "AN201602180013525933"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(更新)",
+          "publish_date": "2016-03-02",
+          "report_id": "AN201603020013710034"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(更新)",
+          "publish_date": "2016-08-26",
+          "report_id": "AN201608260017329944"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(更新)(2017年第1号)",
+          "publish_date": "2017-02-28",
+          "report_id": "AN201702280368981885"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(更新)(2017年第2号)",
+          "publish_date": "2017-08-25",
+          "report_id": "AN201708250826935795"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(更新)(2018年第1号)",
+          "publish_date": "2018-02-28",
+          "report_id": "AN201802280013014960"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(更新)(2018年第2号)",
+          "publish_date": "2018-08-24",
+          "report_id": "AN201808241182508823"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(更新)(2019年第1号)",
+          "publish_date": "2019-02-28",
+          "report_id": "AN201902281300886290"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(更新)(2019年第2号)",
+          "publish_date": "2019-08-29",
+          "report_id": "AN201908291345305066"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(2019年12月更新)",
+          "publish_date": "2019-12-20",
+          "report_id": "AN201912201372096639"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(更新)",
+          "publish_date": "2020-02-21",
+          "report_id": "AN202002211375328556"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(20200414更新)",
+          "publish_date": "2020-04-14",
+          "report_id": "AN202004141377945129"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(2020年10月更新)",
+          "publish_date": "2020-10-19",
+          "report_id": "AN202010191422254462"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(2020年12月更新)",
+          "publish_date": "2020-12-29",
+          "report_id": "AN202012291444674208"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(更新)",
+          "publish_date": "2021-02-19",
+          "report_id": "AN202102191463403601"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(2022年1月更新)",
+          "publish_date": "2022-01-27",
+          "report_id": "AN202201271542906555"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(更新)",
+          "publish_date": "2022-02-18",
+          "report_id": "AN202202181547697543"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(2022年3月更新)",
+          "publish_date": "2022-03-18",
+          "report_id": "AN202203181553344636"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(2022年8月更新)",
+          "publish_date": "2022-08-17",
+          "report_id": "AN202208171577291152"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(更新)",
+          "publish_date": "2023-01-17",
+          "report_id": "AN202301171582068134"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(2023年7月更新)",
+          "publish_date": "2023-07-12",
+          "report_id": "AN202307121592202154"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(更新)",
+          "publish_date": "2024-01-16",
+          "report_id": "AN202401161617506952"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(2024年4月更新)",
+          "publish_date": "2024-04-12",
+          "report_id": "AN202404121630173368"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(更新)",
+          "publish_date": "2025-01-15",
+          "report_id": "AN202501151641928355"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(20251022更新)",
+          "publish_date": "2025-10-22",
+          "report_id": "AN202510221766703960"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金招募说明书(更新)",
+          "publish_date": "2026-01-14",
+          "report_id": "AN202601141816999903"
+        }
+      ]
+    },
+    {
+      "doc_id": "000452_contract_2026-09-03",
+      "fund_code": "000452",
+      "fund_name": "南方医药保健混合",
+      "doc_type": "contract",
+      "report_period": "2026-09-03",
+      "title": "南方医药保健混合型证券投资基金基金合同",
+      "publish_date": "2026-09-03",
+      "report_id": "AN202609031828944856",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202609031828944856_1.pdf",
+      "local_path": "data/raw/pdf/000452_contract_2026-09-03.pdf",
+      "sha256": "6716a631c22df9496cc25031231d2bd6a51499b608661672624a13eda04a8d89",
+      "bytes": 348045,
+      "extract": {
+        "pages": 89,
+        "chars": 74722,
+        "chars_per_page": 839.6,
+        "garbled_ratio": 0.0002,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金基金合同",
+          "publish_date": "2013-12-16",
+          "report_id": "AN201312160004791421"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金基金合同",
+          "publish_date": "2018-03-23",
+          "report_id": "AN201803231109023335"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金基金合同",
+          "publish_date": "2019-12-20",
+          "report_id": "AN201912201372096609"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金基金合同",
+          "publish_date": "2020-10-15",
+          "report_id": "AN202010151421466930"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金基金合同",
+          "publish_date": "2020-12-29",
+          "report_id": "AN202012291444674243"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金基金合同",
+          "publish_date": "2022-01-27",
+          "report_id": "AN202201271542906547"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金基金合同",
+          "publish_date": "2022-08-17",
+          "report_id": "AN202208171577290830"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金基金合同",
+          "publish_date": "2023-07-08",
+          "report_id": "AN202307081592118834"
+        },
+        {
+          "title": "南方医药保健灵活配置混合型证券投资基金基金合同",
+          "publish_date": "2024-04-12",
+          "report_id": "AN202404121630173293"
+        }
+      ]
+    },
+    {
+      "doc_id": "000452_annual_report_2025",
+      "fund_code": "000452",
+      "fund_name": "南方医药保健混合",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "南方医药保健灵活配置混合型证券投资基金2025年年度报告",
+      "publish_date": "2026-03-31",
+      "report_id": "AN202603311820890336",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603311820890336_1.pdf",
+      "local_path": "data/raw/pdf/000452_annual_report_2025.pdf",
+      "sha256": "6490b41b8636da719d64577de77e8bd291841c9ee5812c54d8e1840a02c71abf",
+      "bytes": 635663,
+      "extract": {
+        "pages": 73,
+        "chars": 72100,
+        "chars_per_page": 987.7,
+        "garbled_ratio": 0.0007,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "000452_quarterly_report_2026Q1",
+      "fund_code": "000452",
+      "fund_name": "南方医药保健混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "南方医药保健灵活配置混合型证券投资基金2026年第1季度报告",
+      "publish_date": "2026-04-22",
+      "report_id": "AN202604221821411045",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604221821411045_1.pdf",
+      "local_path": "data/raw/pdf/000452_quarterly_report_2026Q1.pdf",
+      "sha256": "2b3d0422db02979cff0ccd78979c48a1151375b8bc36f8d4ffafd141aca0316a",
+      "bytes": 292781,
+      "extract": {
+        "pages": 12,
+        "chars": 8613,
+        "chars_per_page": 717.8,
+        "garbled_ratio": 0.0031,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "000452_quarterly_report_2026Q2",
+      "fund_code": "000452",
+      "fund_name": "南方医药保健混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "南方医药保健灵活配置混合型证券投资基金2026年第2季度报告",
+      "publish_date": "2026-07-21",
+      "report_id": "AN202607211827180125",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607211827180125_1.pdf",
+      "local_path": "data/raw/pdf/000452_quarterly_report_2026Q2.pdf",
+      "sha256": "94e922b363e3cacb4c5f04cfc7bd160bc4b2be81f84f4c336ebafe2138f414ba",
+      "bytes": 291955,
+      "extract": {
+        "pages": 12,
+        "chars": 8681,
+        "chars_per_page": 723.4,
+        "garbled_ratio": 0.0032,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "001550_prospectus_2025-10-21",
+      "fund_code": "001550",
+      "fund_name": "天弘中证医药100",
+      "doc_type": "prospectus",
+      "report_period": "2025-10-21",
+      "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+      "publish_date": "2025-10-21",
+      "report_id": "AN202510211766111808",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202510211766111808_1.pdf",
+      "local_path": "data/raw/pdf/001550_prospectus_2025-10-21.pdf",
+      "sha256": "f8d997bab5f201e789ba36511a8fdab1d7fcab2211d1b6e6584cfdf1c57bd5d7",
+      "bytes": 1339266,
+      "extract": {
+        "pages": 124,
+        "chars": 92676,
+        "chars_per_page": 747.4,
+        "garbled_ratio": 0.0004,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书",
+          "publish_date": "2015-06-25",
+          "report_id": "AN201506250010013352"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2016-02-05",
+          "report_id": "AN201602050013410956"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2016-08-12",
+          "report_id": "AN201608120017048692"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2017-02-10",
+          "report_id": "AN201702100333767649"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2017-08-11",
+          "report_id": "AN201708110790860373"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2018-02-13",
+          "report_id": "AN201802130013008753"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2018-08-13",
+          "report_id": "AN201808131177550431"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2019-02-13",
+          "report_id": "AN201902131295520191"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2019-08-13",
+          "report_id": "AN201908131343042440"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2019-10-18",
+          "report_id": "AN201910181369129568"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2019-11-01",
+          "report_id": "AN201911011370135785"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2019-11-14",
+          "report_id": "AN201911141370734656"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2019-12-14",
+          "report_id": "AN201912141371848657"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2020-04-21",
+          "report_id": "AN202004211378307137"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2020-10-22",
+          "report_id": "AN202010221422922229"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书更新",
+          "publish_date": "2021-03-31",
+          "report_id": "AN202103311479740582"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2021-04-14",
+          "report_id": "AN202104141484673837"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2021-07-03",
+          "report_id": "AN202107031501487236"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2021-10-22",
+          "report_id": "AN202110221524255296"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2021-11-09",
+          "report_id": "AN202111091527957592"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书更新",
+          "publish_date": "2022-04-20",
+          "report_id": "AN202204201560383957"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2022-10-21",
+          "report_id": "AN202210211579330858"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书更新",
+          "publish_date": "2022-12-12",
+          "report_id": "AN202212121581009058"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2023-10-21",
+          "report_id": "AN202310211602703930"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2024-10-21",
+          "report_id": "AN202410211640377006"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2025-03-21",
+          "report_id": "AN202503211645420757"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金招募说明书(更新)",
+          "publish_date": "2025-04-09",
+          "report_id": "AN202504091653609055"
+        }
+      ]
+    },
+    {
+      "doc_id": "001550_contract_2025-04-04",
+      "fund_code": "001550",
+      "fund_name": "天弘中证医药100",
+      "doc_type": "contract",
+      "report_period": "2025-04-04",
+      "title": "天弘中证医药100指数型发起式证券投资基金基金合同",
+      "publish_date": "2025-04-04",
+      "report_id": "AN202504041651186280",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202504041651186280_1.pdf",
+      "local_path": "data/raw/pdf/001550_contract_2025-04-04.pdf",
+      "sha256": "0e43cf67e58687267f96be17db08c8f6b510679a62f8ded454cfc1ec66dd29da",
+      "bytes": 1256895,
+      "extract": {
+        "pages": 105,
+        "chars": 79710,
+        "chars_per_page": 759.1,
+        "garbled_ratio": 0.0002,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金基金合同",
+          "publish_date": "2015-06-25",
+          "report_id": "AN201506250010011918"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金基金合同",
+          "publish_date": "2018-03-30",
+          "report_id": "AN201803301115275480"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金基金合同",
+          "publish_date": "2019-12-14",
+          "report_id": "AN201912141371848658"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金基金合同",
+          "publish_date": "2021-03-31",
+          "report_id": "AN202103311479741496"
+        },
+        {
+          "title": "天弘中证医药100指数型发起式证券投资基金基金合同",
+          "publish_date": "2025-03-21",
+          "report_id": "AN202503211645419744"
+        }
+      ]
+    },
+    {
+      "doc_id": "001550_annual_report_2025",
+      "fund_code": "001550",
+      "fund_name": "天弘中证医药100",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "天弘中证医药100指数型发起式证券投资基金2025年年度报告",
+      "publish_date": "2026-03-31",
+      "report_id": "AN202603311820897669",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603311820897669_1.pdf",
+      "local_path": "data/raw/pdf/001550_annual_report_2025.pdf",
+      "sha256": "6d4a846a901c4b81c07d3adbf4ecb272d91c8e23bce89f7c69f99603c0f0a7e7",
+      "bytes": 1684672,
+      "extract": {
+        "pages": 85,
+        "chars": 75785,
+        "chars_per_page": 891.6,
+        "garbled_ratio": 0.0006,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "001550_quarterly_report_2026Q1",
+      "fund_code": "001550",
+      "fund_name": "天弘中证医药100",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "天弘中证医药100指数型发起式证券投资基金2026年第1季度报告",
+      "publish_date": "2026-04-22",
+      "report_id": "AN202604221821415682",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604221821415682_1.pdf",
+      "local_path": "data/raw/pdf/001550_quarterly_report_2026Q1.pdf",
+      "sha256": "ee525a193be5503e8cb646b6d0c70da4bc07c0520acc30b6c026fa628186f753",
+      "bytes": 697773,
+      "extract": {
+        "pages": 13,
+        "chars": 8488,
+        "chars_per_page": 652.9,
+        "garbled_ratio": 0.0033,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "001550_quarterly_report_2026Q2",
+      "fund_code": "001550",
+      "fund_name": "天弘中证医药100",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "天弘中证医药100指数型发起式证券投资基金2026年第2季度报告",
+      "publish_date": "2026-07-21",
+      "report_id": "AN202607211827184117",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607211827184117_1.pdf",
+      "local_path": "data/raw/pdf/001550_quarterly_report_2026Q2.pdf",
+      "sha256": "4f04f8d76f120df8a61bba1a57b84c448b31589dc6af8d551472a23c59123fed",
+      "bytes": 705383,
+      "extract": {
+        "pages": 13,
+        "chars": 8876,
+        "chars_per_page": 682.8,
+        "garbled_ratio": 0.0032,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "160219_prospectus_2026-09-21",
+      "fund_code": "160219",
+      "fund_name": "国泰国证医药卫生行业指数",
+      "doc_type": "prospectus",
+      "report_period": "2026-09-21",
+      "title": "国泰国证医药卫生行业指数证券投资基金更新招募说明书(2026年第一号)",
+      "publish_date": "2026-09-21",
+      "report_id": "AN202609201829669162",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202609201829669162_1.pdf",
+      "local_path": "data/raw/pdf/160219_prospectus_2026-09-21.pdf",
+      "sha256": "8d7df0cf2272ef2d43021fbe8b9d3467ac1e1fdc2b5f14035b922fe22530bd58",
+      "bytes": 1390243,
+      "extract": {
+        "pages": 123,
+        "chars": 96154,
+        "chars_per_page": 781.7,
+        "garbled_ratio": 0.0005,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金招募说明书",
+          "publish_date": "2013-07-26",
+          "report_id": "AN201307260003717485"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金更新招募说明书",
+          "publish_date": "2014-04-12",
+          "report_id": "AN201602180013534888"
+        },
+        {
+          "title": "国泰医药:更新招募说明书(2014年第一号)",
+          "publish_date": "2014-04-18",
+          "report_id": "AN201404180005458336"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金更新招募说明书",
+          "publish_date": "2014-10-13",
+          "report_id": "AN201410130007277591"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金更新招募说明书",
+          "publish_date": "2015-04-13",
+          "report_id": "AN201602180013529598"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金更新招募说明书",
+          "publish_date": "2015-10-10",
+          "report_id": "AN201510120011016895"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金更新招募说明书",
+          "publish_date": "2016-04-13",
+          "report_id": "AN201604130014335865"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金更新招募说明书",
+          "publish_date": "2016-10-11",
+          "report_id": "AN201610120021815252"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金更新招募说明书(2017年第一号)",
+          "publish_date": "2017-04-13",
+          "report_id": "AN201704130501173696"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金更新招募说明书(2017年第二号)",
+          "publish_date": "2017-10-11",
+          "report_id": "AN201710120946811366"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金更新招募说明书",
+          "publish_date": "2018-04-12",
+          "report_id": "AN201804131122660324"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金更新招募说明书(2018年第二号)",
+          "publish_date": "2018-10-12",
+          "report_id": "AN201810121212197824"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金更新招募说明书(2019年第一号)",
+          "publish_date": "2019-04-13",
+          "report_id": "AN201904151319312512"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金更新招募说明书(2019年第二号)",
+          "publish_date": "2019-10-12",
+          "report_id": "AN201910111368521481"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金更新招募说明书(2019年第三号)",
+          "publish_date": "2019-12-31",
+          "report_id": "AN201912311373161864"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金更新招募说明书(2020年第一号)",
+          "publish_date": "2020-10-20",
+          "report_id": "AN202010201422480519"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金更新招募说明书(2020年第二号)",
+          "publish_date": "2020-11-19",
+          "report_id": "AN202011191430908758"
+        },
+        {
+          "title": "国泰基金管理有限公司国泰国证医药卫生行业指数证券投资基金招募说明书",
+          "publish_date": "2020-12-02",
+          "report_id": "AN202012021435134994"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金更新招募说明书(2020年第三号)",
+          "publish_date": "2020-12-14",
+          "report_id": "AN202012141439787917"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数证券投资基金更新招募说明书(2021年第一号)",
+          "publish_date": "2021-01-04",
+          "report_id": "AN202101041446866407"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数证券投资基金更新招募说明书(2021年第二号)",
+          "publish_date": "2021-04-02",
+          "report_id": "AN202104021480671159"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数证券投资基金更新招募说明书(2021年第三号)",
+          "publish_date": "2021-07-30",
+          "report_id": "AN202107301506953849"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数证券投资基金更新招募说明书(2021年第四号)",
+          "publish_date": "2021-11-11",
+          "report_id": "AN202111111528351237"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数证券投资基金更新招募说明书(2022年第一号)",
+          "publish_date": "2022-02-16",
+          "report_id": "AN202202161547311973"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数证券投资基金更新招募说明书(2022年第二号)",
+          "publish_date": "2022-12-12",
+          "report_id": "AN202212121581009011"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数证券投资基金更新招募说明书(2023年第一号)",
+          "publish_date": "2023-11-21",
+          "report_id": "AN202311201611695096"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数证券投资基金更新招募说明书(2024年第一号)",
+          "publish_date": "2024-12-03",
+          "report_id": "AN202412021641140566"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数证券投资基金更新招募说明书(2025年第一号)",
+          "publish_date": "2025-03-21",
+          "report_id": "AN202503201645126014"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数证券投资基金更新招募说明书(2025年第二号)",
+          "publish_date": "2025-08-14",
+          "report_id": "AN202508131726798369"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数证券投资基金更新招募说明书(2025年第三号)",
+          "publish_date": "2025-10-15",
+          "report_id": "AN202510141762015817"
+        }
+      ]
+    },
+    {
+      "doc_id": "160219_contract_2025-03-19",
+      "fund_code": "160219",
+      "fund_name": "国泰国证医药卫生行业指数",
+      "doc_type": "contract",
+      "report_period": "2025-03-19",
+      "title": "国泰国证医药卫生行业指数证券投资基金基金合同",
+      "publish_date": "2025-03-19",
+      "report_id": "AN202503191644729934",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202503191644729934_1.pdf",
+      "local_path": "data/raw/pdf/160219_contract_2025-03-19.pdf",
+      "sha256": "7ee8d860261174c53db3d2b4e3decbbf4f89024c06b478e886ee1ab96b478e6a",
+      "bytes": 434381,
+      "extract": {
+        "pages": 86,
+        "chars": 63001,
+        "chars_per_page": 732.6,
+        "garbled_ratio": 0.0002,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金基金合同",
+          "publish_date": "2013-07-26",
+          "report_id": "AN201307260003723025"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金基金合同",
+          "publish_date": "2019-12-31",
+          "report_id": "AN201912311373119964"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数分级证券投资基金基金合同",
+          "publish_date": "2020-11-18",
+          "report_id": "AN202011181430516574"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数证券投资基金基金合同(由国泰国证医药卫生行业指数分级证券投资基金终止分级运作变更而来)",
+          "publish_date": "2020-12-02",
+          "report_id": "AN202012021435134873"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数证券投资基金基金合同(由国泰国证医药卫生行业指数分级证券投资基金终止分级运作变更而来)",
+          "publish_date": "2021-03-31",
+          "report_id": "AN202103311479780507"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数证券投资基金基金合同(由国泰国证医药卫生行业国泰国证医药卫生行业指数分级证券投资基金终止分级运作变更而来)",
+          "publish_date": "2021-07-28",
+          "report_id": "AN202107281506557419"
+        },
+        {
+          "title": "国泰国证医药卫生行业指数证券投资基金基金合同",
+          "publish_date": "2022-02-16",
+          "report_id": "AN202202161547311974"
+        }
+      ]
+    },
+    {
+      "doc_id": "160219_annual_report_2025",
+      "fund_code": "160219",
+      "fund_name": "国泰国证医药卫生行业指数",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "国泰国证医药卫生行业指数证券投资基金2025年年度报告",
+      "publish_date": "2026-03-30",
+      "report_id": "AN202603291820838502",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603291820838502_1.pdf",
+      "local_path": "data/raw/pdf/160219_annual_report_2025.pdf",
+      "sha256": "8baa9486013e98fb2647210974d6e8e0ebfd3834b11490f8c232684cd094e681",
+      "bytes": 685192,
+      "extract": {
+        "pages": 71,
+        "chars": 69499,
+        "chars_per_page": 978.9,
+        "garbled_ratio": 0.0006,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "160219_quarterly_report_2026Q1",
+      "fund_code": "160219",
+      "fund_name": "国泰国证医药卫生行业指数",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "国泰国证医药卫生行业指数证券投资基金2026年第1季度报告",
+      "publish_date": "2026-04-22",
+      "report_id": "AN202604211821382463",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604211821382463_1.pdf",
+      "local_path": "data/raw/pdf/160219_quarterly_report_2026Q1.pdf",
+      "sha256": "338ee01c2d41742ae2be5a50da811dd8589c39e7afe8decb425aac4a9b6a7835",
+      "bytes": 315303,
+      "extract": {
+        "pages": 19,
+        "chars": 11599,
+        "chars_per_page": 610.5,
+        "garbled_ratio": 0.0023,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "160219_quarterly_report_2026Q2",
+      "fund_code": "160219",
+      "fund_name": "国泰国证医药卫生行业指数",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "国泰国证医药卫生行业指数证券投资基金2026年第2季度报告",
+      "publish_date": "2026-07-21",
+      "report_id": "AN202607201827152500",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607201827152500_1.pdf",
+      "local_path": "data/raw/pdf/160219_quarterly_report_2026Q2.pdf",
+      "sha256": "3c96c9b85b61e925d7ef858a525c9fa9c14ce5fe3b79188603e7fc6702cfa290",
+      "bytes": 513597,
+      "extract": {
+        "pages": 19,
+        "chars": 12616,
+        "chars_per_page": 664.0,
+        "garbled_ratio": 0.0021,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "161035_prospectus_2026-03-19",
+      "fund_code": "161035",
+      "fund_name": "富国中证医药主题指数增强",
+      "doc_type": "prospectus",
+      "report_period": "2026-03-19",
+      "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书(更新)(二0二六年第一号)",
+      "publish_date": "2026-03-19",
+      "report_id": "AN202603181820625479",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603181820625479_1.pdf",
+      "local_path": "data/raw/pdf/161035_prospectus_2026-03-19.pdf",
+      "sha256": "75ef347b7614c419a3b58783e7ce47f500bf6d55a38f6fe07d65df86975a9b72",
+      "bytes": 1779071,
+      "extract": {
+        "pages": 161,
+        "chars": 119943,
+        "chars_per_page": 745.0,
+        "garbled_ratio": 0.0006,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书",
+          "publish_date": "2016-09-28",
+          "report_id": "AN201609280017761991"
+        },
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书(更新)(正文)",
+          "publish_date": "2017-06-07",
+          "report_id": "AN201706070630987042"
+        },
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书(更新)",
+          "publish_date": "2017-12-06",
+          "report_id": "AN201712061063076459"
+        },
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书(更新)",
+          "publish_date": "2018-12-12",
+          "report_id": "AN201812121267662292"
+        },
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书(更新)(二0一九年第一号)",
+          "publish_date": "2019-06-25",
+          "report_id": "AN201906241336229802"
+        },
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书(更新)(二0二0年第一号)",
+          "publish_date": "2020-01-15",
+          "report_id": "AN202001151374190277"
+        },
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书(更新)(二0二0年第二号)",
+          "publish_date": "2020-01-20",
+          "report_id": "AN202001201374357739"
+        },
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书(更新)(二0二0年第三号)",
+          "publish_date": "2020-05-18",
+          "report_id": "AN202005181379867276"
+        },
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书(更新)(二0二一年第一号)",
+          "publish_date": "2021-03-06",
+          "report_id": "AN202103061469186171"
+        },
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书(更新)(2021年第2号)",
+          "publish_date": "2021-03-30",
+          "report_id": "AN202103301478572204"
+        },
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书(更新)(二0二一年第三号)",
+          "publish_date": "2021-06-02",
+          "report_id": "AN202106021495477752"
+        },
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书(更新)(二0二一年第四号)",
+          "publish_date": "2021-08-13",
+          "report_id": "AN202108131509737959"
+        },
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书(更新)(2021年第5号)",
+          "publish_date": "2021-10-20",
+          "report_id": "AN202110201523864261"
+        },
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书(更新)(2022年第1号)",
+          "publish_date": "2022-02-18",
+          "report_id": "AN202202181547697488"
+        },
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书(更新)(2023年第1号)",
+          "publish_date": "2023-02-17",
+          "report_id": "AN202302171583276880"
+        },
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书(更新)(二0二四年第一号)",
+          "publish_date": "2024-02-08",
+          "report_id": "AN202402071621031538"
+        },
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书(更新)(二0二五年第一号)",
+          "publish_date": "2025-02-17",
+          "report_id": "AN202502161643143079"
+        },
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书(更新)(二0二五年第二号)",
+          "publish_date": "2025-03-20",
+          "report_id": "AN202503191644753211"
+        },
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)招募说明书(更新)(二0二五年第三号)",
+          "publish_date": "2025-12-17",
+          "report_id": "AN202512161801770182"
+        }
+      ]
+    },
+    {
+      "doc_id": "161035_contract_2025-03-20",
+      "fund_code": "161035",
+      "fund_name": "富国中证医药主题指数增强",
+      "doc_type": "contract",
+      "report_period": "2025-03-20",
+      "title": "富国中证医药主题指数增强型证券投资基金(LOF)基金合同",
+      "publish_date": "2025-03-20",
+      "report_id": "AN202503191644753256",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202503191644753256_1.pdf",
+      "local_path": "data/raw/pdf/161035_contract_2025-03-20.pdf",
+      "sha256": "b510823bc95028c7d45423c7383222fa510836530f87f110fd31faa84136d6c8",
+      "bytes": 890710,
+      "extract": {
+        "pages": 85,
+        "chars": 63658,
+        "chars_per_page": 748.9,
+        "garbled_ratio": 0.0002,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)基金合同",
+          "publish_date": "2016-09-28",
+          "report_id": "AN201609280017763814"
+        },
+        {
+          "title": "富国中证医药主题指数增强型证券投资基金(LOF)基金合同",
+          "publish_date": "2018-03-24",
+          "report_id": "AN201803271111536655"
+        },
+        {
+          "title": "富国基金管理有限公司富国中证医药主题指数增强型证券投资基金(LOF)基金合同",
+          "publish_date": "2020-01-20",
+          "report_id": "AN202001201374355142"
+        },
+        {
+          "title": "富国基金管理有限公司富国中证医药主题指数增强型证券投资基金(LOF)基金合同",
+          "publish_date": "2021-03-06",
+          "report_id": "AN202103061469187940"
+        },
+        {
+          "title": "富国基金管理有限公司富国中证医药主题指数增强型证券投资基金(LOF)基金合同",
+          "publish_date": "2021-03-30",
+          "report_id": "AN202103301478560539"
+        },
+        {
+          "title": "富国基金管理有限公司富国中证医药主题指数增强型证券投资基金(LOF)基金合同",
+          "publish_date": "2021-08-13",
+          "report_id": "AN202108131509737961"
+        },
+        {
+          "title": "富国基金管理有限公司富国中证医药主题指数增强型证券投资基金(LOF)基金合同",
+          "publish_date": "2021-10-20",
+          "report_id": "AN202110201523864212"
+        }
+      ]
+    },
+    {
+      "doc_id": "161035_annual_report_2025",
+      "fund_code": "161035",
+      "fund_name": "富国中证医药主题指数增强",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "富国中证医药主题指数增强型证券投资基金(LOF)二0二五年年度报告",
+      "publish_date": "2026-03-31",
+      "report_id": "AN202603301820876927",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603301820876927_1.pdf",
+      "local_path": "data/raw/pdf/161035_annual_report_2025.pdf",
+      "sha256": "d8ae294265c1bc146287c2f67169202fe1e138a7bc95581e0e9e1fe133fdd24f",
+      "bytes": 1765271,
+      "extract": {
+        "pages": 85,
+        "chars": 75066,
+        "chars_per_page": 883.1,
+        "garbled_ratio": 0.0003,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "161035_quarterly_report_2026Q1",
+      "fund_code": "161035",
+      "fund_name": "富国中证医药主题指数增强",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "富国中证医药主题指数增强型证券投资基金(LOF)二0二六年第1季度报告",
+      "publish_date": "2026-04-22",
+      "report_id": "AN202604211821395147",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604211821395147_1.pdf",
+      "local_path": "data/raw/pdf/161035_quarterly_report_2026Q1.pdf",
+      "sha256": "d838d947635d89d6aec83a8ef6cb8418169f320c1cf2e13c5c8ff2554968d109",
+      "bytes": 442017,
+      "extract": {
+        "pages": 21,
+        "chars": 10850,
+        "chars_per_page": 516.7,
+        "garbled_ratio": 0.0025,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "161035_quarterly_report_2026Q2",
+      "fund_code": "161035",
+      "fund_name": "富国中证医药主题指数增强",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "富国中证医药主题指数增强型证券投资基金(LOF)二0二六年第2季度报告",
+      "publish_date": "2026-07-21",
+      "report_id": "AN202607201827157419",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607201827157419_1.pdf",
+      "local_path": "data/raw/pdf/161035_quarterly_report_2026Q2.pdf",
+      "sha256": "f01fef8dd787b8e556b8fb014bab73756f3a99c13e8140e0f676eb9230218202",
+      "bytes": 492340,
+      "extract": {
+        "pages": 21,
+        "chars": 11112,
+        "chars_per_page": 529.1,
+        "garbled_ratio": 0.0024,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "002692_prospectus_2026-06-11",
+      "fund_code": "002692",
+      "fund_name": "富国创新科技混合",
+      "doc_type": "prospectus",
+      "report_period": "2026-06-11",
+      "title": "富国创新科技混合型证券投资基金招募说明书(更新)(二0二六年第一号)",
+      "publish_date": "2026-06-11",
+      "report_id": "AN202606111823444529",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202606111823444529_1.pdf",
+      "local_path": "data/raw/pdf/002692_prospectus_2026-06-11.pdf",
+      "sha256": "1bb022ffcc0afe4f0cff0e35f971174e81142cfd20da102aa0748d1d5dc09c9b",
+      "bytes": 2120873,
+      "extract": {
+        "pages": 163,
+        "chars": 117402,
+        "chars_per_page": 720.3,
+        "garbled_ratio": 0.0004,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "富国创新科技混合型证券投资基金招募说明书",
+          "publish_date": "2016-05-16",
+          "report_id": "AN201605160014850996"
+        },
+        {
+          "title": "富国创新科技混合型证券投资基金招募说明书更新(2016年第1号)",
+          "publish_date": "2017-01-07",
+          "report_id": "AN201701090254798676"
+        },
+        {
+          "title": "富国创新科技混合型证券投资基金招募说明书(更新)",
+          "publish_date": "2017-07-17",
+          "report_id": "AN201707180726506879"
+        },
+        {
+          "title": "富国创新科技混合型证券投资基金招募说明书(更新)(二0一七年第二号)",
+          "publish_date": "2018-01-23",
+          "report_id": "AN201801230012989875"
+        },
+        {
+          "title": "富国创新科技混合型证券投资基金招募说明书(更新)(二〇一八年第一号)",
+          "publish_date": "2018-07-20",
+          "report_id": "AN201807201168482048"
+        },
+        {
+          "title": "富国创新科技混合型证券投资基金招募说明书(更新)",
+          "publish_date": "2019-01-10",
+          "report_id": "AN201901101283672745"
+        },
+        {
+          "title": "富国创新科技混合型证券投资基金招募说明书(更新)(2019年第1号)",
+          "publish_date": "2019-07-17",
+          "report_id": "AN201907171339162629"
+        },
+        {
+          "title": "富国创新科技混合型证券投资基金招募说明书(更新)(二0二0年第一号)",
+          "publish_date": "2020-01-20",
+          "report_id": "AN202001201374365059"
+        },
+        {
+          "title": "富国创新科技混合型证券投资基金招募说明书(更新)(二0二0年第二号)",
+          "publish_date": "2020-06-13",
+          "report_id": "AN202006131384584230"
+        },
+        {
+          "title": "富国创新科技混合型证券投资基金招募说明书(更新)(二0二0年第三号)",
+          "publish_date": "2020-12-30",
+          "report_id": "AN202012301445102959"
+        },
+        {
+          "title": "富国创新科技混合型证券投资基金招募说明书(更新)(二0二一年第一号)",
+          "publish_date": "2021-06-24",
+          "report_id": "AN202106241499687229"
+        },
+        {
+          "title": "富国创新科技混合型证券投资基金招募说明书(更新)(2022年第1号)",
+          "publish_date": "2022-06-29",
+          "report_id": "AN202206291575502865"
+        },
+        {
+          "title": "富国创新科技混合型证券投资基金招募说明书(更新)(2023年第1号)",
+          "publish_date": "2023-05-24",
+          "report_id": "AN202305241587128745"
+        },
+        {
+          "title": "富国创新科技混合型证券投资基金招募说明书(更新)(二0二三年第二号)",
+          "publish_date": "2023-07-11",
+          "report_id": "AN202307111592166170"
+        },
+        {
+          "title": "富国创新科技混合型证券投资基金招募说明书更新二0二四年第一号",
+          "publish_date": "2024-05-10",
+          "report_id": "AN202405101632805326"
+        },
+        {
+          "title": "富国创新科技混合型证券投资基金招募说明书(更新)(二0二五年第一号)",
+          "publish_date": "2025-05-29",
+          "report_id": "AN202505291681063458"
+        },
+        {
+          "title": "富国创新科技混合型证券投资基金招募说明书(更新)(二0二五年第二号)",
+          "publish_date": "2025-07-17",
+          "report_id": "AN202507171710417190"
+        }
+      ]
+    },
+    {
+      "doc_id": "002692_contract_2023-07-08",
+      "fund_code": "002692",
+      "fund_name": "富国创新科技混合",
+      "doc_type": "contract",
+      "report_period": "2023-07-08",
+      "title": "富国创新科技混合型证券投资基金基金合同",
+      "publish_date": "2023-07-08",
+      "report_id": "AN202307081592118070",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202307081592118070_1.pdf",
+      "local_path": "data/raw/pdf/002692_contract_2023-07-08.pdf",
+      "sha256": "877b2349719f61d2d1a9de237bf2c1ef5dff140ec7cfaa9936e708c5c52b0a5b",
+      "bytes": 1160062,
+      "extract": {
+        "pages": 103,
+        "chars": 81509,
+        "chars_per_page": 791.3,
+        "garbled_ratio": 0.0001,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "富国创新科技混合型证券投资基金基金合同",
+          "publish_date": "2016-05-16",
+          "report_id": "AN201605160014852620"
+        },
+        {
+          "title": "富国创新科技混合型证券投资基金-基金合同",
+          "publish_date": "2018-03-24",
+          "report_id": "AN201803271111536703"
+        },
+        {
+          "title": "富国基金管理有限公司富国创新科技混合型证券投资基金基金合同",
+          "publish_date": "2020-01-20",
+          "report_id": "AN202001201374363283"
+        },
+        {
+          "title": "富国基金管理有限公司富国创新科技混合型证券投资基金基金合同",
+          "publish_date": "2020-12-26",
+          "report_id": "AN202012261443947203"
+        }
+      ]
+    },
+    {
+      "doc_id": "002692_annual_report_2025",
+      "fund_code": "002692",
+      "fund_name": "富国创新科技混合",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "富国创新科技混合型证券投资基金二0二五年年度报告",
+      "publish_date": "2026-03-31",
+      "report_id": "AN202603311820906078",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603311820906078_1.pdf",
+      "local_path": "data/raw/pdf/002692_annual_report_2025.pdf",
+      "sha256": "c557f4761486c21f4e9aff0bf43294bb538e819f70f17f9a6a9557b7794da2fe",
+      "bytes": 1619995,
+      "extract": {
+        "pages": 78,
+        "chars": 68555,
+        "chars_per_page": 878.9,
+        "garbled_ratio": 0.0004,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "002692_quarterly_report_2026Q1",
+      "fund_code": "002692",
+      "fund_name": "富国创新科技混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "富国创新科技混合型证券投资基金二0二六年第1季度报告",
+      "publish_date": "2026-04-22",
+      "report_id": "AN202604221821425689",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604221821425689_1.pdf",
+      "local_path": "data/raw/pdf/002692_quarterly_report_2026Q1.pdf",
+      "sha256": "09f1c21521cf7be0ec0344eb8b1c30e399c047048fa85cb74a697bae5c74b679",
+      "bytes": 380313,
+      "extract": {
+        "pages": 18,
+        "chars": 8308,
+        "chars_per_page": 461.6,
+        "garbled_ratio": 0.003,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "002692_quarterly_report_2026Q2",
+      "fund_code": "002692",
+      "fund_name": "富国创新科技混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "富国创新科技混合型证券投资基金二0二六年第2季度报告",
+      "publish_date": "2026-07-21",
+      "report_id": "AN202607211827191781",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607211827191781_1.pdf",
+      "local_path": "data/raw/pdf/002692_quarterly_report_2026Q2.pdf",
+      "sha256": "8a32249f54e6017f9e29ff940ced2be919e0e9e421e1798e5eaa1a7245e1a0cc",
+      "bytes": 424675,
+      "extract": {
+        "pages": 18,
+        "chars": 8562,
+        "chars_per_page": 475.7,
+        "garbled_ratio": 0.0029,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "001513_prospectus_2026-06-01",
+      "fund_code": "001513",
+      "fund_name": "易方达信息产业混合",
+      "doc_type": "prospectus",
+      "report_period": "2026-06-01",
+      "title": "易方达信息产业混合型证券投资基金更新的招募说明书",
+      "publish_date": "2026-06-01",
+      "report_id": "AN202606011823113027",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202606011823113027_1.pdf",
+      "local_path": "data/raw/pdf/001513_prospectus_2026-06-01.pdf",
+      "sha256": "21e8586f5764f16625236a00041a1c8347df15c590f8846b787b5938fe2dcbd7",
+      "bytes": 1034070,
+      "extract": {
+        "pages": 121,
+        "chars": 97101,
+        "chars_per_page": 802.5,
+        "garbled_ratio": 0.0005,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "易方达信息产业混合型证券投资基金招募说明书",
+          "publish_date": "2016-08-26",
+          "report_id": "AN201608260017329083"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2017-05-10",
+          "report_id": "AN201705100567658011"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资更新的基金招募说明书",
+          "publish_date": "2017-11-10",
+          "report_id": "AN201711100012977408"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金更新的基金招募说明书",
+          "publish_date": "2018-05-11",
+          "report_id": "AN201805111141696878"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金更新的基金招募说明书",
+          "publish_date": "2018-11-09",
+          "report_id": "AN201811091241640172"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2019-05-10",
+          "report_id": "AN201905101328479366"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2020-01-03",
+          "report_id": "AN202001031373415527"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2020-02-29",
+          "report_id": "AN202002291375659690"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2020-09-26",
+          "report_id": "AN202009261417455911"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2020-10-19",
+          "report_id": "AN202010191422324050"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2021-03-31",
+          "report_id": "AN202103311479774832"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2021-08-27",
+          "report_id": "AN202108271512667569"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2022-07-30",
+          "report_id": "AN202207301576710190"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2023-06-30",
+          "report_id": "AN202306301591919575"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2023-07-11",
+          "report_id": "AN202307111592150362"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2023-10-16",
+          "report_id": "AN202310161601475851"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2024-05-28",
+          "report_id": "AN202405281634728661"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2024-12-07",
+          "report_id": "AN202412071641217995"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2025-04-30",
+          "report_id": "AN202504301664880447"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2025-06-27",
+          "report_id": "AN202506271698382374"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金更新的招募说明书",
+          "publish_date": "2026-03-28",
+          "report_id": "AN202603281820827268"
+        }
+      ]
+    },
+    {
+      "doc_id": "001513_contract_2026-04-30",
+      "fund_code": "001513",
+      "fund_name": "易方达信息产业混合",
+      "doc_type": "contract",
+      "report_period": "2026-04-30",
+      "title": "易方达信息产业混合型证券投资基金基金合同",
+      "publish_date": "2026-04-30",
+      "report_id": "AN202604301821846540",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604301821846540_1.pdf",
+      "local_path": "data/raw/pdf/001513_contract_2026-04-30.pdf",
+      "sha256": "a0c8a7618ddb81989fb6c9f2ba7159ef69720fa749adef604c00c3fbc0c5088e",
+      "bytes": 972965,
+      "extract": {
+        "pages": 99,
+        "chars": 70015,
+        "chars_per_page": 707.2,
+        "garbled_ratio": 0.0003,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "易方达信息产业混合型证券投资基金基金合同",
+          "publish_date": "2016-08-26",
+          "report_id": "AN201608260017329668"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金基金合同",
+          "publish_date": "2018-03-22",
+          "report_id": "AN201803221108157708"
+        },
+        {
+          "title": "易方达基金管理有限公司易方达信息产业混合型证券投资基金基金合同",
+          "publish_date": "2019-12-31",
+          "report_id": "AN201912311373112706"
+        },
+        {
+          "title": "易方达基金管理有限公司易方达信息产业混合型证券投资基金基金合同",
+          "publish_date": "2020-10-14",
+          "report_id": "AN202010141421248887"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金基金合同",
+          "publish_date": "2023-07-08",
+          "report_id": "AN202307081592118465"
+        },
+        {
+          "title": "易方达信息产业混合型证券投资基金基金合同",
+          "publish_date": "2023-10-14",
+          "report_id": "AN202310141601458168"
+        }
+      ]
+    },
+    {
+      "doc_id": "001513_annual_report_2025",
+      "fund_code": "001513",
+      "fund_name": "易方达信息产业混合",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "易方达信息产业混合型证券投资基金2025年年度报告",
+      "publish_date": "2026-03-31",
+      "report_id": "AN202603311820890862",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603311820890862_1.pdf",
+      "local_path": "data/raw/pdf/001513_annual_report_2025.pdf",
+      "sha256": "d575b074b123850bad8534ca91c101700ee8bc1ff66774a67745985f8dc50717",
+      "bytes": 2415057,
+      "extract": {
+        "pages": 77,
+        "chars": 82650,
+        "chars_per_page": 1073.4,
+        "garbled_ratio": 0.0006,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "001513_quarterly_report_2026Q1",
+      "fund_code": "001513",
+      "fund_name": "易方达信息产业混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "易方达信息产业混合型证券投资基金2026年第1季度报告",
+      "publish_date": "2026-04-22",
+      "report_id": "AN202604221821399864",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604221821399864_1.pdf",
+      "local_path": "data/raw/pdf/001513_quarterly_report_2026Q1.pdf",
+      "sha256": "78f26eea7335b6805aeea7f248288549e9dd648f76e6593232b5682e5f124024",
+      "bytes": 501330,
+      "extract": {
+        "pages": 14,
+        "chars": 9031,
+        "chars_per_page": 645.1,
+        "garbled_ratio": 0.003,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "001513_quarterly_report_2026Q2",
+      "fund_code": "001513",
+      "fund_name": "易方达信息产业混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "易方达信息产业混合型证券投资基金2026年第2季度报告",
+      "publish_date": "2026-07-21",
+      "report_id": "AN202607211827164081",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607211827164081_1.pdf",
+      "local_path": "data/raw/pdf/001513_quarterly_report_2026Q2.pdf",
+      "sha256": "9a614e1bf8bdb7bebcc0a95aa25d53df6d25b75761f9f188d3e45fdcd47e5add",
+      "bytes": 557787,
+      "extract": {
+        "pages": 15,
+        "chars": 10294,
+        "chars_per_page": 686.3,
+        "garbled_ratio": 0.0038,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "013840_prospectus_2025-11-07",
+      "fund_code": "013840",
+      "fund_name": "银华集成电路混合",
+      "doc_type": "prospectus",
+      "report_period": "2025-11-07",
+      "title": "银华集成电路混合型证券投资基金招募说明书更新(2025年第1号)",
+      "publish_date": "2025-11-07",
+      "report_id": "AN202511071776688269",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202511071776688269_1.pdf",
+      "local_path": "data/raw/pdf/013840_prospectus_2025-11-07.pdf",
+      "sha256": "ec6dc8657e27ed84de76b7b057020f30071df6dab09fb58a0da118027aecb022",
+      "bytes": 3865960,
+      "extract": {
+        "pages": 165,
+        "chars": 135223,
+        "chars_per_page": 819.5,
+        "garbled_ratio": 0.0003,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "银华集成电路混合型证券投资基金招募说明书",
+          "publish_date": "2021-11-09",
+          "report_id": "AN202111091527957647"
+        },
+        {
+          "title": "银华集成电路混合型证券投资基金招募说明书更新(2021年第1号)",
+          "publish_date": "2021-12-10",
+          "report_id": "AN202112101533725442"
+        },
+        {
+          "title": "银华集成电路混合型证券投资基金招募说明书更新(2021年第2号)",
+          "publish_date": "2021-12-31",
+          "report_id": "AN202112311537642096"
+        },
+        {
+          "title": "银华集成电路混合型证券投资基金招募说明书更新(2022年第1号)",
+          "publish_date": "2022-11-09",
+          "report_id": "AN202211091580077338"
+        },
+        {
+          "title": "银华集成电路混合型证券投资基金招募说明书更新(2023年第1号)",
+          "publish_date": "2023-07-12",
+          "report_id": "AN202307121592202668"
+        },
+        {
+          "title": "银华集成电路混合型证券投资基金招募说明书更新(2023年第2号)",
+          "publish_date": "2023-11-09",
+          "report_id": "AN202311091609772709"
+        },
+        {
+          "title": "银华集成电路混合型证券投资基金招募说明书更新(2024年第1号)",
+          "publish_date": "2024-11-08",
+          "report_id": "AN202411081640779858"
+        }
+      ]
+    },
+    {
+      "doc_id": "013840_contract_2023-07-08",
+      "fund_code": "013840",
+      "fund_name": "银华集成电路混合",
+      "doc_type": "contract",
+      "report_period": "2023-07-08",
+      "title": "银华集成电路混合型证券投资基金基金合同(2023年7月修订)",
+      "publish_date": "2023-07-08",
+      "report_id": "AN202307081592119430",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202307081592119430_1.pdf",
+      "local_path": "data/raw/pdf/013840_contract_2023-07-08.pdf",
+      "sha256": "1d7dcbb6f230884dc41b456e1c8b848a663747393e740d51a99aaa2387e6a66f",
+      "bytes": 978843,
+      "extract": {
+        "pages": 115,
+        "chars": 88575,
+        "chars_per_page": 770.2,
+        "garbled_ratio": 0.0001,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "银华集成电路混合型证券投资基金基金合同",
+          "publish_date": "2021-11-09",
+          "report_id": "AN202111091527957598"
+        }
+      ]
+    },
+    {
+      "doc_id": "013840_annual_report_2025",
+      "fund_code": "013840",
+      "fund_name": "银华集成电路混合",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "银华集成电路混合型证券投资基金2025年年度报告",
+      "publish_date": "2026-03-28",
+      "report_id": "AN202603281820829802",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603281820829802_1.pdf",
+      "local_path": "data/raw/pdf/013840_annual_report_2025.pdf",
+      "sha256": "26e380ebf68eba63229e7d5fdaaa3b26d734c301b504294d5e76537b360f494a",
+      "bytes": 2032602,
+      "extract": {
+        "pages": 73,
+        "chars": 73199,
+        "chars_per_page": 1002.7,
+        "garbled_ratio": 0.0006,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "013840_quarterly_report_2026Q1",
+      "fund_code": "013840",
+      "fund_name": "银华集成电路混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "银华集成电路混合型证券投资基金2026年第1季度报告",
+      "publish_date": "2026-04-21",
+      "report_id": "AN202604211821364755",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604211821364755_1.pdf",
+      "local_path": "data/raw/pdf/013840_quarterly_report_2026Q1.pdf",
+      "sha256": "19f203f7992abff38843f1182ba5f33bb2796b2d4452e357f6b1d8cc659a205a",
+      "bytes": 494069,
+      "extract": {
+        "pages": 14,
+        "chars": 11680,
+        "chars_per_page": 834.3,
+        "garbled_ratio": 0.0021,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "013840_quarterly_report_2026Q2",
+      "fund_code": "013840",
+      "fund_name": "银华集成电路混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "银华集成电路混合型证券投资基金2026年第2季度报告",
+      "publish_date": "2026-07-20",
+      "report_id": "AN202607201827128470",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607201827128470_1.pdf",
+      "local_path": "data/raw/pdf/013840_quarterly_report_2026Q2.pdf",
+      "sha256": "c5255edd9348c526162742c2950d2f24598d2829dca1f0949600a32851b3808b",
+      "bytes": 481624,
+      "extract": {
+        "pages": 14,
+        "chars": 11842,
+        "chars_per_page": 845.9,
+        "garbled_ratio": 0.0021,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "008919_prospectus_2026-09-21",
+      "fund_code": "008919",
+      "fund_name": "永赢科技驱动混合",
+      "doc_type": "prospectus",
+      "report_period": "2026-09-21",
+      "title": "永赢科技驱动混合型证券投资基金更新招募说明书(2026年第2号)",
+      "publish_date": "2026-09-21",
+      "report_id": "AN202609211829695063",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202609211829695063_1.pdf",
+      "local_path": "data/raw/pdf/008919_prospectus_2026-09-21.pdf",
+      "sha256": "62474c380b06913365728adfc40966d72a298aa210d1d96ebbbef5804157714e",
+      "bytes": 1449503,
+      "extract": {
+        "pages": 126,
+        "chars": 101098,
+        "chars_per_page": 802.4,
+        "garbled_ratio": 0.0005,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "永赢基金管理有限公司永赢科技驱动混合型证券投资基金招募说明书",
+          "publish_date": "2020-01-15",
+          "report_id": "AN202001151374187003"
+        },
+        {
+          "title": "永赢基金管理有限公司永赢科技驱动混合型证券投资基金更新招募说明书(2020年第1号)",
+          "publish_date": "2020-12-03",
+          "report_id": "AN202012031435752263"
+        },
+        {
+          "title": "永赢基金管理有限公司永赢科技驱动混合型证券投资基金更新招募说明书(2021年第1号)",
+          "publish_date": "2021-02-27",
+          "report_id": "AN202102271466195327"
+        },
+        {
+          "title": "永赢基金管理有限公司永赢科技驱动混合型证券投资基金更新招募说明书(2021年第2号)",
+          "publish_date": "2021-03-06",
+          "report_id": "AN202103061469186034"
+        },
+        {
+          "title": "永赢科技驱动混合型证券投资基金招募说明书更新(2021年第3号)",
+          "publish_date": "2021-11-27",
+          "report_id": "AN202111271531374449"
+        },
+        {
+          "title": "永赢科技驱动混合型证券投资基金招募说明书更新(2022年第1号)",
+          "publish_date": "2022-11-30",
+          "report_id": "AN202211301580682158"
+        },
+        {
+          "title": "永赢基金管理有限公司永赢科技驱动混合型证券投资基金更新招募说明书(2023年第1号)",
+          "publish_date": "2023-07-22",
+          "report_id": "AN202307221592557720"
+        },
+        {
+          "title": "永赢科技驱动混合型证券投资基金更新招募说明书(2023年第2号)",
+          "publish_date": "2023-11-30",
+          "report_id": "AN202311301612974218"
+        },
+        {
+          "title": "永赢科技驱动混合型证券投资基金更新招募说明书(2024年第1号)",
+          "publish_date": "2024-07-02",
+          "report_id": "AN202407021637452153"
+        },
+        {
+          "title": "永赢科技驱动混合型证券投资基金更新招募说明书(2024年第2号)",
+          "publish_date": "2024-09-09",
+          "report_id": "AN202409091639788565"
+        },
+        {
+          "title": "永赢科技驱动混合型证券投资基金更新招募说明书(2024年第3号)",
+          "publish_date": "2024-11-30",
+          "report_id": "AN202411301641127896"
+        },
+        {
+          "title": "永赢科技驱动混合型证券投资基金更新招募说明书(2025年第1号)",
+          "publish_date": "2025-08-23",
+          "report_id": "AN202508231732766959"
+        },
+        {
+          "title": "永赢科技驱动混合型证券投资基金更新招募说明书(2025年第2号)",
+          "publish_date": "2025-09-27",
+          "report_id": "AN202509271751405577"
+        },
+        {
+          "title": "永赢科技驱动混合型证券投资基金更新招募说明书(2026年第1号)",
+          "publish_date": "2026-05-30",
+          "report_id": "AN202605301823072104"
+        }
+      ]
+    },
+    {
+      "doc_id": "008919_contract_2026-08-21",
+      "fund_code": "008919",
+      "fund_name": "永赢科技驱动混合",
+      "doc_type": "contract",
+      "report_period": "2026-08-21",
+      "title": "永赢科技驱动混合型证券投资基金基金合同",
+      "publish_date": "2026-08-21",
+      "report_id": "AN202608211828264768",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202608211828264768_1.pdf",
+      "local_path": "data/raw/pdf/008919_contract_2026-08-21.pdf",
+      "sha256": "aeaab494c1d02f74f8c4f6ff85f7e240b9f815f0c5ac11cc2629430d30f3ea7b",
+      "bytes": 1273021,
+      "extract": {
+        "pages": 117,
+        "chars": 96572,
+        "chars_per_page": 825.4,
+        "garbled_ratio": 0.0001,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "永赢基金管理有限公司永赢科技驱动混合型证券投资基金基金合同",
+          "publish_date": "2020-01-15",
+          "report_id": "AN202001151374187007"
+        },
+        {
+          "title": "永赢基金管理有限公司永赢科技驱动混合型证券投资基金基金合同",
+          "publish_date": "2020-11-30",
+          "report_id": "AN202011301434417763"
+        },
+        {
+          "title": "永赢科技驱动混合型证券投资基金基金合同",
+          "publish_date": "2023-07-22",
+          "report_id": "AN202307221592557677"
+        }
+      ]
+    },
+    {
+      "doc_id": "008919_annual_report_2025",
+      "fund_code": "008919",
+      "fund_name": "永赢科技驱动混合",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "永赢科技驱动混合型证券投资基金2025年年度报告",
+      "publish_date": "2026-03-31",
+      "report_id": "AN202603311820910879",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603311820910879_1.pdf",
+      "local_path": "data/raw/pdf/008919_annual_report_2025.pdf",
+      "sha256": "90f913e3bb979d855ccb7468b753a14a55314cf0b44fd2b1b212f354f07dae13",
+      "bytes": 2104283,
+      "extract": {
+        "pages": 71,
+        "chars": 79475,
+        "chars_per_page": 1119.4,
+        "garbled_ratio": 0.0006,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "008919_quarterly_report_2026Q1",
+      "fund_code": "008919",
+      "fund_name": "永赢科技驱动混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "永赢科技驱动混合型证券投资基金2026年第1季度报告",
+      "publish_date": "2026-04-22",
+      "report_id": "AN202604221821417757",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604221821417757_1.pdf",
+      "local_path": "data/raw/pdf/008919_quarterly_report_2026Q1.pdf",
+      "sha256": "827c68a1b4b64012f32bc277dfccfc0e9fe934d468fc216fa9421c394ea56549",
+      "bytes": 424292,
+      "extract": {
+        "pages": 12,
+        "chars": 8495,
+        "chars_per_page": 707.9,
+        "garbled_ratio": 0.0032,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "008919_quarterly_report_2026Q2",
+      "fund_code": "008919",
+      "fund_name": "永赢科技驱动混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "永赢科技驱动混合型证券投资基金2026年第2季度报告",
+      "publish_date": "2026-07-21",
+      "report_id": "AN202607211827192896",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607211827192896_1.pdf",
+      "local_path": "data/raw/pdf/008919_quarterly_report_2026Q2.pdf",
+      "sha256": "f1b9f3153f38e475bcd4297fba276682c2fdbcff13dde1c2e839311db80bd187",
+      "bytes": 409270,
+      "extract": {
+        "pages": 12,
+        "chars": 8321,
+        "chars_per_page": 693.4,
+        "garbled_ratio": 0.0032,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "040025_prospectus_2026-07-27",
+      "fund_code": "040025",
+      "fund_name": "华安科技动力混合",
+      "doc_type": "prospectus",
+      "report_period": "2026-07-27",
+      "title": "华安科技动力混合型证券投资基金更新的招募说明书(2026年第2号)",
+      "publish_date": "2026-07-27",
+      "report_id": "AN202607271827370655",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607271827370655_1.pdf",
+      "local_path": "data/raw/pdf/040025_prospectus_2026-07-27.pdf",
+      "sha256": "40e044c3e44d3cdc07f16f75b97e6ed5494bb90a2ad8b40ea262ddf1b825353f",
+      "bytes": 1572939,
+      "extract": {
+        "pages": 176,
+        "chars": 126800,
+        "chars_per_page": 720.5,
+        "garbled_ratio": 0.0005,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "华安科技：招募说明书",
+          "publish_date": "2011-11-16",
+          "report_id": "AN201203030004947838"
+        },
+        {
+          "title": "华安科技：更新招募说明书（2012年第1号）",
+          "publish_date": "2012-08-03",
+          "report_id": "AN201208030005406736"
+        },
+        {
+          "title": "华安科技：更新招募说明书（2013年第1号）",
+          "publish_date": "2013-02-01",
+          "report_id": "AN201302010005722804"
+        },
+        {
+          "title": "华安科技动力股票型证券投资基金更新的招募说明书",
+          "publish_date": "2013-08-02",
+          "report_id": "AN201308020003984531"
+        },
+        {
+          "title": "华安科技动力股票型证券投资基金更新的招募说明书",
+          "publish_date": "2014-01-29",
+          "report_id": "AN201401290005053130"
+        },
+        {
+          "title": "华安科技动力股票型证券投资基金更新的招募说明书",
+          "publish_date": "2014-08-05",
+          "report_id": "AN201408050006536442"
+        },
+        {
+          "title": "华安科技动力股票型证券投资基金更新的招募说明书",
+          "publish_date": "2015-02-02",
+          "report_id": "AN201502020008268042"
+        },
+        {
+          "title": "华安科技动力股票型证券投资基金更新的招募说明书(2015年第2号)",
+          "publish_date": "2015-08-04",
+          "report_id": "AN201508040010387393"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金更新的招募说明书",
+          "publish_date": "2016-02-03",
+          "report_id": "AN201602030013376466"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金更新的招募说明书",
+          "publish_date": "2016-08-04",
+          "report_id": "AN201608040016910860"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金更新的招募说明书",
+          "publish_date": "2017-01-26",
+          "report_id": "AN201701260294894485"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金更新的招募说明书",
+          "publish_date": "2017-08-04",
+          "report_id": "AN201708040772006925"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金更新的招募说明书",
+          "publish_date": "2018-02-03",
+          "report_id": "AN201802050013000400"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金更新的招募说明书(2018年第2号)",
+          "publish_date": "2018-08-04",
+          "report_id": "AN201808061174973592"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金更新的招募说明书(2019年第1号)",
+          "publish_date": "2019-02-02",
+          "report_id": "AN201902021291713301"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金更新的招募说明书(2019年第2号)",
+          "publish_date": "2019-08-03",
+          "report_id": "AN201908051342346644"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金更新的招募说明书(2019年第3号)",
+          "publish_date": "2019-11-13",
+          "report_id": "AN201911131370690134"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金更新的招募说明书(2020年第1号)",
+          "publish_date": "2020-03-07",
+          "report_id": "AN202003071375984186"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金更新的招募说明书(2020年第2号)",
+          "publish_date": "2020-11-03",
+          "report_id": "AN202011031426006228"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金更新的招募说明书(2021年第1号)",
+          "publish_date": "2021-05-31",
+          "report_id": "AN202105311495065875"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金招募说明书更新",
+          "publish_date": "2022-04-27",
+          "report_id": "AN202204271561886862"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金招募说明书更新",
+          "publish_date": "2022-05-30",
+          "report_id": "AN202205301568798913"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金招募说明书更新",
+          "publish_date": "2023-05-29",
+          "report_id": "AN202305291587328255"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金招募说明书更新",
+          "publish_date": "2023-07-12",
+          "report_id": "AN202307121592200751"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金更新的招募说明书(2024年第1号)",
+          "publish_date": "2024-03-01",
+          "report_id": "AN202403011624793777"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金更新的招募说明书(2025年第1号)",
+          "publish_date": "2025-02-28",
+          "report_id": "AN202502281643595299"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金更新的招募说明书(2025年第2号)",
+          "publish_date": "2025-05-07",
+          "report_id": "AN202505071668745015"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金更新的招募说明书(2026年第1号)",
+          "publish_date": "2026-02-27",
+          "report_id": "AN202602271820087032"
+        }
+      ]
+    },
+    {
+      "doc_id": "040025_contract_2026-06-26",
+      "fund_code": "040025",
+      "fund_name": "华安科技动力混合",
+      "doc_type": "contract",
+      "report_period": "2026-06-26",
+      "title": "华安科技动力混合型证券投资基金基金合同更新",
+      "publish_date": "2026-06-26",
+      "report_id": "AN202606261824658009",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202606261824658009_1.pdf",
+      "local_path": "data/raw/pdf/040025_contract_2026-06-26.pdf",
+      "sha256": "ed908a9b0805c6446b4b7aa83688737717068f968e7f718d30c34e8206a6ce22",
+      "bytes": 1216893,
+      "extract": {
+        "pages": 89,
+        "chars": 69368,
+        "chars_per_page": 779.4,
+        "garbled_ratio": 0.0003,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "华安科技：基金合同",
+          "publish_date": "2011-11-16",
+          "report_id": "AN201203030004947836"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金基金合同",
+          "publish_date": "2015-08-06",
+          "report_id": "AN201508060010416722"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金基金合同",
+          "publish_date": "2020-03-07",
+          "report_id": "AN202003071375985593"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金基金合同",
+          "publish_date": "2020-10-29",
+          "report_id": "AN202010291424515658"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金基金合同更新",
+          "publish_date": "2022-04-28",
+          "report_id": "AN202204281562150522"
+        },
+        {
+          "title": "华安科技动力混合型证券投资基金基金合同更新",
+          "publish_date": "2023-07-08",
+          "report_id": "AN202307081592118096"
+        }
+      ]
+    },
+    {
+      "doc_id": "040025_annual_report_2025",
+      "fund_code": "040025",
+      "fund_name": "华安科技动力混合",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "华安科技动力混合型证券投资基金2025年年度报告",
+      "publish_date": "2026-03-31",
+      "report_id": "AN202603311820901291",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603311820901291_1.pdf",
+      "local_path": "data/raw/pdf/040025_annual_report_2025.pdf",
+      "sha256": "532e030e0fef83d5ff8267e9843279f5b3d27bb1b3592c8f92cfc5e22cd947f2",
+      "bytes": 2432885,
+      "extract": {
+        "pages": 71,
+        "chars": 71454,
+        "chars_per_page": 1006.4,
+        "garbled_ratio": 0.0007,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "040025_quarterly_report_2026Q1",
+      "fund_code": "040025",
+      "fund_name": "华安科技动力混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "华安科技动力混合型证券投资基金2026年第1季度报告",
+      "publish_date": "2026-04-22",
+      "report_id": "AN202604221821419697",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604221821419697_1.pdf",
+      "local_path": "data/raw/pdf/040025_quarterly_report_2026Q1.pdf",
+      "sha256": "d3b80b989dd907686667b52a86968bfdb39c665efb9986115e647d44d319e1ff",
+      "bytes": 568199,
+      "extract": {
+        "pages": 11,
+        "chars": 8301,
+        "chars_per_page": 754.6,
+        "garbled_ratio": 0.0033,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "040025_quarterly_report_2026Q2",
+      "fund_code": "040025",
+      "fund_name": "华安科技动力混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "华安科技动力混合型证券投资基金2026年第2季度报告",
+      "publish_date": "2026-07-21",
+      "report_id": "AN202607211827189534",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607211827189534_1.pdf",
+      "local_path": "data/raw/pdf/040025_quarterly_report_2026Q2.pdf",
+      "sha256": "a01dc3197d82a230c15cbecb4a6658a2df45519e39c33ba69e9d2c30cfc38029",
+      "bytes": 564706,
+      "extract": {
+        "pages": 11,
+        "chars": 8462,
+        "chars_per_page": 769.3,
+        "garbled_ratio": 0.0032,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "012650_prospectus_2026-09-21",
+      "fund_code": "012650",
+      "fund_name": "博时半导体主题混合",
+      "doc_type": "prospectus",
+      "report_period": "2026-09-21",
+      "title": "博时半导体主题混合型证券投资基金更新招募说明书",
+      "publish_date": "2026-09-21",
+      "report_id": "AN202609211829696324",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202609211829696324_1.pdf",
+      "local_path": "data/raw/pdf/012650_prospectus_2026-09-21.pdf",
+      "sha256": "ac71e9d4cbad1bad3e8b0ba2bcd3c8323417f049cf8895d55974b87fc765aed1",
+      "bytes": 840807,
+      "extract": {
+        "pages": 160,
+        "chars": 133040,
+        "chars_per_page": 831.5,
+        "garbled_ratio": 0.0004,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "博时半导体主题混合型证券投资基金招募说明书",
+          "publish_date": "2021-06-18",
+          "report_id": "AN202106181498476908"
+        },
+        {
+          "title": "博时半导体主题混合型证券投资基金更新招募说明书",
+          "publish_date": "2021-11-30",
+          "report_id": "AN202111301531974706"
+        },
+        {
+          "title": "博时半导体主题混合型证券投资基金更新招募说明书",
+          "publish_date": "2022-09-30",
+          "report_id": "AN202209301578788946"
+        },
+        {
+          "title": "博时半导体主题混合型证券投资基金更新招募说明书",
+          "publish_date": "2023-07-10",
+          "report_id": "AN202307101592124983"
+        },
+        {
+          "title": "博时半导体主题混合型证券投资基金更新招募说明书",
+          "publish_date": "2023-09-28",
+          "report_id": "AN202309281600186731"
+        },
+        {
+          "title": "博时半导体主题混合型证券投资基金更新招募说明书",
+          "publish_date": "2024-07-03",
+          "report_id": "AN202407031637495424"
+        },
+        {
+          "title": "博时半导体主题混合型证券投资基金更新招募说明书",
+          "publish_date": "2024-09-30",
+          "report_id": "AN202409301640097459"
+        },
+        {
+          "title": "博时半导体主题混合型证券投资基金更新招募说明书",
+          "publish_date": "2025-09-30",
+          "report_id": "AN202509301753245272"
+        },
+        {
+          "title": "博时半导体主题混合型证券投资基金更新招募说明书",
+          "publish_date": "2026-07-15",
+          "report_id": "AN202607151826977081"
+        }
+      ]
+    },
+    {
+      "doc_id": "012650_contract_2026-08-21",
+      "fund_code": "012650",
+      "fund_name": "博时半导体主题混合",
+      "doc_type": "contract",
+      "report_period": "2026-08-21",
+      "title": "博时半导体主题混合型证券投资基金基金合同",
+      "publish_date": "2026-08-21",
+      "report_id": "AN202608211828266053",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202608211828266053_1.pdf",
+      "local_path": "data/raw/pdf/012650_contract_2026-08-21.pdf",
+      "sha256": "c6a7dc72bcbc98a1d63879612f2b17a194c08e6497cfc717b4eb9c8eb947d8fd",
+      "bytes": 466282,
+      "extract": {
+        "pages": 116,
+        "chars": 84214,
+        "chars_per_page": 726.0,
+        "garbled_ratio": 0.0001,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "博时半导体主题混合型证券投资基金基金合同",
+          "publish_date": "2021-06-18",
+          "report_id": "AN202106181498476909"
+        },
+        {
+          "title": "博时半导体主题混合型证券投资基金基金合同",
+          "publish_date": "2023-07-10",
+          "report_id": "AN202307101592125251"
+        }
+      ]
+    },
+    {
+      "doc_id": "012650_annual_report_2025",
+      "fund_code": "012650",
+      "fund_name": "博时半导体主题混合",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "博时半导体主题混合型证券投资基金2025年年度报告",
+      "publish_date": "2026-03-31",
+      "report_id": "AN202603311820895842",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603311820895842_1.pdf",
+      "local_path": "data/raw/pdf/012650_annual_report_2025.pdf",
+      "sha256": "b8d84949f7853526cdcd0ed9347344e23af7573bac2c485b680bf5f18849cbf0",
+      "bytes": 756526,
+      "extract": {
+        "pages": 69,
+        "chars": 70307,
+        "chars_per_page": 1018.9,
+        "garbled_ratio": 0.0008,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "012650_quarterly_report_2026Q1",
+      "fund_code": "012650",
+      "fund_name": "博时半导体主题混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "博时半导体主题混合型证券投资基金2026年第1季度报告",
+      "publish_date": "2026-04-22",
+      "report_id": "AN202604221821416146",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604221821416146_1.pdf",
+      "local_path": "data/raw/pdf/012650_quarterly_report_2026Q1.pdf",
+      "sha256": "bfbef63cc0255ccf829e5618c0dd5465ced789e8505d67e60beb18f5989da9ec",
+      "bytes": 349107,
+      "extract": {
+        "pages": 12,
+        "chars": 9891,
+        "chars_per_page": 824.2,
+        "garbled_ratio": 0.0028,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "012650_quarterly_report_2026Q2",
+      "fund_code": "012650",
+      "fund_name": "博时半导体主题混合",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "博时半导体主题混合型证券投资基金2026年第2季度报告",
+      "publish_date": "2026-07-21",
+      "report_id": "AN202607211827184987",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607211827184987_1.pdf",
+      "local_path": "data/raw/pdf/012650_quarterly_report_2026Q2.pdf",
+      "sha256": "93919b8110b2b5c7c8773ccdac48dd60217574ac4e3ace55fe99e950f5819b0c",
+      "bytes": 373141,
+      "extract": {
+        "pages": 15,
+        "chars": 10329,
+        "chars_per_page": 688.6,
+        "garbled_ratio": 0.0027,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "014193_prospectus_2025-12-19",
+      "fund_code": "014193",
+      "fund_name": "汇添富中证芯片产业指数增强发起式",
+      "doc_type": "prospectus",
+      "report_period": "2025-12-19",
+      "title": "汇添富中证芯片产业指数增强型发起式证券投资基金更新招募说明书(2025年12月19日更新)",
+      "publish_date": "2025-12-19",
+      "report_id": "AN202512191803583924",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202512191803583924_1.pdf",
+      "local_path": "data/raw/pdf/014193_prospectus_2025-12-19.pdf",
+      "sha256": "1998ce67ccc6b7e15102fb756251c097db2425daf12312be864b472262134275",
+      "bytes": 986906,
+      "extract": {
+        "pages": 205,
+        "chars": 122702,
+        "chars_per_page": 598.5,
+        "garbled_ratio": 0.0005,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "汇添富中证芯片产业指数增强型发起式证券投资基金招募说明书",
+          "publish_date": "2021-11-11",
+          "report_id": "AN202111111528351332"
+        },
+        {
+          "title": "汇添富中证芯片产业指数增强型发起式证券投资基金更新招募说明书(2022年5月27日更新)",
+          "publish_date": "2022-05-27",
+          "report_id": "AN202205271568157206"
+        },
+        {
+          "title": "汇添富中证芯片产业指数增强型发起式证券投资基金更新招募说明书(2022年12月19日更新)",
+          "publish_date": "2022-12-19",
+          "report_id": "AN202212191581193984"
+        },
+        {
+          "title": "汇添富中证芯片产业指数增强型发起式证券投资基金更新招募说明书(2023年8月10日更新)",
+          "publish_date": "2023-08-10",
+          "report_id": "AN202308101593751068"
+        },
+        {
+          "title": "汇添富中证芯片产业指数增强型发起式证券投资基金更新招募说明书(2023年12月19日更新)",
+          "publish_date": "2023-12-19",
+          "report_id": "AN202312191614506483"
+        },
+        {
+          "title": "汇添富中证芯片产业指数增强型发起式证券投资基金更新招募说明书(2024年7月16日更新)",
+          "publish_date": "2024-07-16",
+          "report_id": "AN202407161637949973"
+        },
+        {
+          "title": "汇添富中证芯片产业指数增强型发起式证券投资基金更新招募说明书(2024年10月23日更新)",
+          "publish_date": "2024-10-23",
+          "report_id": "AN202410231640427853"
+        },
+        {
+          "title": "汇添富中证芯片产业指数增强型发起式证券投资基金更新招募说明书(2024年12月19日更新)",
+          "publish_date": "2024-12-19",
+          "report_id": "AN202412191641355658"
+        }
+      ]
+    },
+    {
+      "doc_id": "014193_contract_2021-11-11",
+      "fund_code": "014193",
+      "fund_name": "汇添富中证芯片产业指数增强发起式",
+      "doc_type": "contract",
+      "report_period": "2021-11-11",
+      "title": "汇添富中证芯片产业指数增强型发起式证券投资基金基金合同",
+      "publish_date": "2021-11-11",
+      "report_id": "AN202111111528351538",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202111111528351538_1.pdf",
+      "local_path": "data/raw/pdf/014193_contract_2021-11-11.pdf",
+      "sha256": "d1f1868ff637c2478b9f645419c23f67397cf25c5c8bf693f15a3ca398a0e491",
+      "bytes": 1175678,
+      "extract": {
+        "pages": 119,
+        "chars": 95467,
+        "chars_per_page": 802.2,
+        "garbled_ratio": 0.0002,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "014193_annual_report_2025",
+      "fund_code": "014193",
+      "fund_name": "汇添富中证芯片产业指数增强发起式",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "汇添富中证芯片产业指数增强型发起式证券投资基金2025年年度报告",
+      "publish_date": "2026-03-31",
+      "report_id": "AN202603311820908504",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603311820908504_1.pdf",
+      "local_path": "data/raw/pdf/014193_annual_report_2025.pdf",
+      "sha256": "97637c2bb3ef45cf5d873ba4e1f41382b48b33e0fdda07ca8841aa2503ac90dc",
+      "bytes": 2216468,
+      "extract": {
+        "pages": 85,
+        "chars": 79313,
+        "chars_per_page": 933.1,
+        "garbled_ratio": 0.0007,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "014193_quarterly_report_2026Q1",
+      "fund_code": "014193",
+      "fund_name": "汇添富中证芯片产业指数增强发起式",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "汇添富中证芯片产业指数增强型发起式证券投资基金2026年第1季度报告",
+      "publish_date": "2026-04-22",
+      "report_id": "AN202604221821418752",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604221821418752_1.pdf",
+      "local_path": "data/raw/pdf/014193_quarterly_report_2026Q1.pdf",
+      "sha256": "bbf7640945a6e2a05d2b672e16f47f837453b181afb45a77d1191602fba25a67",
+      "bytes": 829535,
+      "extract": {
+        "pages": 20,
+        "chars": 13596,
+        "chars_per_page": 679.8,
+        "garbled_ratio": 0.0021,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "014193_quarterly_report_2026Q2",
+      "fund_code": "014193",
+      "fund_name": "汇添富中证芯片产业指数增强发起式",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "汇添富中证芯片产业指数增强型发起式证券投资基金2026年第2季度报告",
+      "publish_date": "2026-07-21",
+      "report_id": "AN202607211827187043",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607211827187043_1.pdf",
+      "local_path": "data/raw/pdf/014193_quarterly_report_2026Q2.pdf",
+      "sha256": "91e1e030098983796c113f2f26a9551051147349da5c94ef31844d509cc6a8ed",
+      "bytes": 822912,
+      "extract": {
+        "pages": 20,
+        "chars": 13832,
+        "chars_per_page": 691.6,
+        "garbled_ratio": 0.002,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "008326_prospectus_2026-06-27",
+      "fund_code": "008326",
+      "fund_name": "东财中证通信技术主题指数",
+      "doc_type": "prospectus",
+      "report_period": "2026-06-27",
+      "title": "东财中证通信技术主题指数型发起式证券投资基金更新招募说明书",
+      "publish_date": "2026-06-27",
+      "report_id": "AN202606271826284633",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202606271826284633_1.pdf",
+      "local_path": "data/raw/pdf/008326_prospectus_2026-06-27.pdf",
+      "sha256": "659d0786fc08c230b37689b003762478ea9d3ef7afaea7ebfe33fe749729227c",
+      "bytes": 794828,
+      "extract": {
+        "pages": 129,
+        "chars": 106991,
+        "chars_per_page": 829.4,
+        "garbled_ratio": 0.0004,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "西藏东财中证通信技术主题指数型发起式证券投资基金招募说明书",
+          "publish_date": "2019-12-27",
+          "report_id": "AN201912271372694404"
+        },
+        {
+          "title": "西藏东财中证通信技术主题指数型发起式证券投资基金更新招募说明书(2020年第1号)",
+          "publish_date": "2020-12-25",
+          "report_id": "AN202012251443755986"
+        },
+        {
+          "title": "西藏东财中证通信技术主题指数型发起式证券投资基金更新招募说明书(2021年第1号)",
+          "publish_date": "2021-03-31",
+          "report_id": "AN202103311479777938"
+        },
+        {
+          "title": "西藏东财中证通信技术主题指数型发起式证券投资基金更新招募说明书(2021年第2号)",
+          "publish_date": "2021-12-23",
+          "report_id": "AN202112231536208618"
+        },
+        {
+          "title": "西藏东财中证通信技术主题指数型发起式证券投资基金招募说明书更新",
+          "publish_date": "2022-11-02",
+          "report_id": "AN202211021579783224"
+        },
+        {
+          "title": "西藏东财中证通信技术主题指数型发起式证券投资基金招募说明书更新",
+          "publish_date": "2022-12-23",
+          "report_id": "AN202212231581315821"
+        },
+        {
+          "title": "西藏东财中证通信技术主题指数型发起式证券投资基金招募说明书更新",
+          "publish_date": "2023-01-18",
+          "report_id": "AN202301181582107213"
+        },
+        {
+          "title": "西藏东财中证通信技术主题指数型发起式证券投资基金更新招募说明书(2023年第2号)",
+          "publish_date": "2023-12-21",
+          "report_id": "AN202312211614641468"
+        },
+        {
+          "title": "西藏东财中证通信技术主题指数型发起式证券投资基金更新招募说明书",
+          "publish_date": "2024-06-28",
+          "report_id": "AN202406281636987315"
+        },
+        {
+          "title": "西藏东财中证通信技术主题指数型发起式证券投资基金更新招募说明书",
+          "publish_date": "2024-07-19",
+          "report_id": "AN202407191638079973"
+        },
+        {
+          "title": "西藏东财中证通信技术主题指数型发起式证券投资基金更新招募说明书",
+          "publish_date": "2025-03-19",
+          "report_id": "AN202503191644729858"
+        },
+        {
+          "title": "西藏东财中证通信技术主题指数型发起式证券投资基金更新招募说明书",
+          "publish_date": "2025-06-28",
+          "report_id": "AN202506281699023178"
+        },
+        {
+          "title": "西藏东财中证通信技术主题指数型发起式证券投资基金更新招募说明书",
+          "publish_date": "2025-09-18",
+          "report_id": "AN202509181745855981"
+        },
+        {
+          "title": "东财中证通信技术主题指数型发起式证券投资基金更新招募说明书",
+          "publish_date": "2026-04-03",
+          "report_id": "AN202604031821004856"
+        }
+      ]
+    },
+    {
+      "doc_id": "008326_contract_2026-04-03",
+      "fund_code": "008326",
+      "fund_name": "东财中证通信技术主题指数",
+      "doc_type": "contract",
+      "report_period": "2026-04-03",
+      "title": "东财中证通信技术主题指数型发起式证券投资基金基金合同",
+      "publish_date": "2026-04-03",
+      "report_id": "AN202604031821004481",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604031821004481_1.pdf",
+      "local_path": "data/raw/pdf/008326_contract_2026-04-03.pdf",
+      "sha256": "5cc90b1120f39663bb010c4ac08156dabff949e09bca5d12cf1d9b1aed2c3ef8",
+      "bytes": 621412,
+      "extract": {
+        "pages": 116,
+        "chars": 92068,
+        "chars_per_page": 793.7,
+        "garbled_ratio": 0.0002,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "西藏东财基金管理有限公司西藏东财中证通信技术主题指数型发起式证券投资基金基金合同",
+          "publish_date": "2019-12-27",
+          "report_id": "AN201912271372694391"
+        },
+        {
+          "title": "西藏东财基金管理有限公司西藏东财中证通信技术主题指数型发起式证券投资基金基金合同",
+          "publish_date": "2021-03-31",
+          "report_id": "AN202103311479775170"
+        },
+        {
+          "title": "西藏东财中证通信技术主题指数型发起式证券投资基金基金合同",
+          "publish_date": "2025-03-19",
+          "report_id": "AN202503191644730469"
+        }
+      ]
+    },
+    {
+      "doc_id": "008326_annual_report_2025",
+      "fund_code": "008326",
+      "fund_name": "东财中证通信技术主题指数",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "西藏东财中证通信技术主题指数型发起式证券投资基金2025年年度报告",
+      "publish_date": "2026-03-31",
+      "report_id": "AN202603311820895132",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603311820895132_1.pdf",
+      "local_path": "data/raw/pdf/008326_annual_report_2025.pdf",
+      "sha256": "d059679df99f784a945fe04a46cb5c9c06c70b5bdc0cf7e22870e478c57f1052",
+      "bytes": 1093570,
+      "extract": {
+        "pages": 73,
+        "chars": 67855,
+        "chars_per_page": 929.5,
+        "garbled_ratio": 0.0008,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "008326_quarterly_report_2026Q1",
+      "fund_code": "008326",
+      "fund_name": "东财中证通信技术主题指数",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "东财中证通信技术主题指数型发起式证券投资基金2026年第1季度报告",
+      "publish_date": "2026-04-22",
+      "report_id": "AN202604211821372087",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604211821372087_1.pdf",
+      "local_path": "data/raw/pdf/008326_quarterly_report_2026Q1.pdf",
+      "sha256": "9543a5220374482a1fcb1d36f982df96d8c0ba024db566d5d2088e9fac056305",
+      "bytes": 332005,
+      "extract": {
+        "pages": 13,
+        "chars": 8656,
+        "chars_per_page": 665.8,
+        "garbled_ratio": 0.0032,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "008326_quarterly_report_2026Q2",
+      "fund_code": "008326",
+      "fund_name": "东财中证通信技术主题指数",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "东财中证通信技术主题指数型发起式证券投资基金2026年第2季度报告",
+      "publish_date": "2026-07-21",
+      "report_id": "AN202607211827187037",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607211827187037_1.pdf",
+      "local_path": "data/raw/pdf/008326_quarterly_report_2026Q2.pdf",
+      "sha256": "bb3450de3ff4f36adef16539c70b648e72835668c58c3c0efddadfa7018526ff",
+      "bytes": 330895,
+      "extract": {
+        "pages": 13,
+        "chars": 8703,
+        "chars_per_page": 669.5,
+        "garbled_ratio": 0.0032,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "002236_prospectus_2026-03-03",
+      "fund_code": "002236",
+      "fund_name": "大成中证360互联网+大数据100指数",
+      "doc_type": "prospectus",
+      "report_period": "2026-03-03",
+      "title": "大成中证360互联网+大数据100指数型证券投资基金更新招募说明书",
+      "publish_date": "2026-03-03",
+      "report_id": "AN202603031820212509",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603031820212509_1.pdf",
+      "local_path": "data/raw/pdf/002236_prospectus_2026-03-03.pdf",
+      "sha256": "97fc69e2a0392b7df30c8f8c55833d1d42c9a3e01616ff12dabb51f73948a5cb",
+      "bytes": 1118998,
+      "extract": {
+        "pages": 154,
+        "chars": 122498,
+        "chars_per_page": 795.4,
+        "garbled_ratio": 0.0003,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "大成基金管理有限公司大成中证360互联网+大数据100指数型证券投资基金招募说明书",
+          "publish_date": "2016-01-05",
+          "report_id": "AN201601050012699425"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金更新招募说明书(2016年1期)",
+          "publish_date": "2016-09-14",
+          "report_id": "AN201609140017625669"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金更新招募说明书",
+          "publish_date": "2017-03-18",
+          "report_id": "AN201703180417653845"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金更新招募说明书",
+          "publish_date": "2017-09-18",
+          "report_id": "AN201709180895254268"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金更新招募说明书(2018年第1期)",
+          "publish_date": "2018-03-16",
+          "report_id": "AN201803160013029022"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金更新招募说明书(2018年2期)",
+          "publish_date": "2018-09-18",
+          "report_id": "AN201809181197271087"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金更新招募说明书(2019年1期)",
+          "publish_date": "2019-03-15",
+          "report_id": "AN201903151306098818"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金更新招募说明书(2019年2期)",
+          "publish_date": "2019-09-18",
+          "report_id": "AN201909181362314712"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金更新招募说明书",
+          "publish_date": "2019-12-17",
+          "report_id": "AN201912171371884866"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金更新招募说明书",
+          "publish_date": "2020-03-03",
+          "report_id": "AN202003031375753216"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金更新招募说明书",
+          "publish_date": "2020-12-02",
+          "report_id": "AN202012021435133363"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金更新招募说明书",
+          "publish_date": "2021-03-03",
+          "report_id": "AN202103031467806995"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金更新招募说明书",
+          "publish_date": "2021-03-30",
+          "report_id": "AN202103301478572450"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金更新招募说明书",
+          "publish_date": "2022-03-03",
+          "report_id": "AN202203031550264119"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金更新招募说明书",
+          "publish_date": "2023-03-03",
+          "report_id": "AN202303031583995784"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金更新招募说明书",
+          "publish_date": "2024-03-02",
+          "report_id": "AN202403021625173502"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金更新招募说明书",
+          "publish_date": "2024-03-15",
+          "report_id": "AN202403151626820823"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金更新招募说明书",
+          "publish_date": "2025-03-03",
+          "report_id": "AN202503031643671016"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金更新招募说明书",
+          "publish_date": "2025-03-21",
+          "report_id": "AN202503211645422035"
+        }
+      ]
+    },
+    {
+      "doc_id": "002236_contract_2025-03-20",
+      "fund_code": "002236",
+      "fund_name": "大成中证360互联网+大数据100指数",
+      "doc_type": "contract",
+      "report_period": "2025-03-20",
+      "title": "大成中证360互联网+大数据100指数型证券投资基金基金合同",
+      "publish_date": "2025-03-20",
+      "report_id": "AN202503201644974906",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202503201644974906_1.pdf",
+      "local_path": "data/raw/pdf/002236_contract_2025-03-20.pdf",
+      "sha256": "0334228c7421165d08286661022f4d724cd390b6b1cde5dd6c07ed982d2716d8",
+      "bytes": 508249,
+      "extract": {
+        "pages": 77,
+        "chars": 49741,
+        "chars_per_page": 646.0,
+        "garbled_ratio": 0.0002,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金基金合同",
+          "publish_date": "2016-01-05",
+          "report_id": "AN201601050012706084"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金基金合同",
+          "publish_date": "2017-01-18",
+          "report_id": "AN201701180275404091"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金基金合同",
+          "publish_date": "2018-03-27",
+          "report_id": "AN201903011301350576"
+        },
+        {
+          "title": "大成基金管理有限公司大成中证360互联网+大数据100指数型证券投资基金基金合同",
+          "publish_date": "2019-12-17",
+          "report_id": "AN201912171371885201"
+        },
+        {
+          "title": "大成基金管理有限公司大成中证360互联网+大数据100指数型证券投资基金基金合同",
+          "publish_date": "2020-12-02",
+          "report_id": "AN202012021435135429"
+        },
+        {
+          "title": "大成基金管理有限公司大成中证360互联网+大数据100指数型证券投资基金基金合同",
+          "publish_date": "2021-03-30",
+          "report_id": "AN202103301478266906"
+        },
+        {
+          "title": "大成中证360互联网+大数据100指数型证券投资基金基金合同",
+          "publish_date": "2024-03-13",
+          "report_id": "AN202403131626545728"
+        }
+      ]
+    },
+    {
+      "doc_id": "002236_annual_report_2025",
+      "fund_code": "002236",
+      "fund_name": "大成中证360互联网+大数据100指数",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "大成中证360互联网+大数据100指数型证券投资基金2025年年度报告",
+      "publish_date": "2026-03-31",
+      "report_id": "AN202603311820900456",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603311820900456_1.pdf",
+      "local_path": "data/raw/pdf/002236_annual_report_2025.pdf",
+      "sha256": "be27c9d64e3c777a3f0192ae5db92daaa42e19f5047e02ebb1e70262b9809aeb",
+      "bytes": 2753850,
+      "extract": {
+        "pages": 72,
+        "chars": 78177,
+        "chars_per_page": 1085.8,
+        "garbled_ratio": 0.0006,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "002236_quarterly_report_2026Q1",
+      "fund_code": "002236",
+      "fund_name": "大成中证360互联网+大数据100指数",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "大成中证360互联网+大数据100指数型证券投资基金2026年第1季度报告",
+      "publish_date": "2026-04-22",
+      "report_id": "AN202604221821422692",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604221821422692_1.pdf",
+      "local_path": "data/raw/pdf/002236_quarterly_report_2026Q1.pdf",
+      "sha256": "06d3b92e4d5ba82ce1d94d0b3cca5ebcf84c33e95dcb83e5efacc288c26145c8",
+      "bytes": 529424,
+      "extract": {
+        "pages": 13,
+        "chars": 10019,
+        "chars_per_page": 770.7,
+        "garbled_ratio": 0.0027,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "002236_quarterly_report_2026Q2",
+      "fund_code": "002236",
+      "fund_name": "大成中证360互联网+大数据100指数",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "大成中证360互联网+大数据100指数型证券投资基金2026年第2季度报告",
+      "publish_date": "2026-07-21",
+      "report_id": "AN202607211827193781",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607211827193781_1.pdf",
+      "local_path": "data/raw/pdf/002236_quarterly_report_2026Q2.pdf",
+      "sha256": "be03d4a9771de0e474322964c2f9178faf39a6c1da8b6e2e43ecae7ebe8a0678",
+      "bytes": 638234,
+      "extract": {
+        "pages": 13,
+        "chars": 10300,
+        "chars_per_page": 792.3,
+        "garbled_ratio": 0.0026,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "011832_prospectus_2026-06-18",
+      "fund_code": "011832",
+      "fund_name": "西部利得中证人工智能主题指数增强",
+      "doc_type": "prospectus",
+      "report_period": "2026-06-18",
+      "title": "西部利得中证人工智能主题指数增强型证券投资基金招募说明书(更新)",
+      "publish_date": "2026-06-18",
+      "report_id": "AN202606181823654210",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202606181823654210_1.pdf",
+      "local_path": "data/raw/pdf/011832_prospectus_2026-06-18.pdf",
+      "sha256": "2cfb6856c49981b6eba0383f744f15f99a14730f4241daff99070f5415f63794",
+      "bytes": 1966703,
+      "extract": {
+        "pages": 162,
+        "chars": 121832,
+        "chars_per_page": 752.0,
+        "garbled_ratio": 0.0003,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": [
+        {
+          "title": "西部利得中证人工智能主题指数增强型证券投资基金招募说明书",
+          "publish_date": "2021-04-19",
+          "report_id": "AN202104191486344014"
+        },
+        {
+          "title": "西部利得中证人工智能主题指数增强型证券投资基金招募说明书更新(2021年6月)",
+          "publish_date": "2021-06-30",
+          "report_id": "AN202106301500894253"
+        },
+        {
+          "title": "西部利得中证人工智能主题指数增强型证券投资基金招募说明书更新(2021年8月)",
+          "publish_date": "2021-08-31",
+          "report_id": "AN202108311513447295"
+        },
+        {
+          "title": "西部利得中证人工智能主题指数增强型证券投资基金招募说明书更新",
+          "publish_date": "2022-08-31",
+          "report_id": "AN202208311577879961"
+        },
+        {
+          "title": "西部利得中证人工智能主题指数增强型证券投资基金招募说明书更新",
+          "publish_date": "2023-08-31",
+          "report_id": "AN202308311596891383"
+        },
+        {
+          "title": "西部利得中证人工智能主题指数增强型证券投资基金招募说明书(更新)",
+          "publish_date": "2024-06-27",
+          "report_id": "AN202406271636941927"
+        },
+        {
+          "title": "西部利得中证人工智能主题指数增强型证券投资基金招募说明书(更新)(2024年12月)",
+          "publish_date": "2024-12-04",
+          "report_id": "AN202412041641171775"
+        },
+        {
+          "title": "西部利得中证人工智能主题指数增强型证券投资基金招募说明书(更新)(2025年1月)",
+          "publish_date": "2025-01-07",
+          "report_id": "AN202501071641831948"
+        },
+        {
+          "title": "西部利得中证人工智能主题指数增强型证券投资基金招募说明书(更新)",
+          "publish_date": "2025-06-27",
+          "report_id": "AN202506271698412588"
+        },
+        {
+          "title": "西部利得中证人工智能主题指数增强型证券投资基金招募说明书(更新)",
+          "publish_date": "2026-02-04",
+          "report_id": "AN202602041819760802"
+        }
+      ]
+    },
+    {
+      "doc_id": "011832_contract_2021-04-19",
+      "fund_code": "011832",
+      "fund_name": "西部利得中证人工智能主题指数增强",
+      "doc_type": "contract",
+      "report_period": "2021-04-19",
+      "title": "西部利得中证人工智能主题指数增强型证券投资基金基金合同",
+      "publish_date": "2021-04-19",
+      "report_id": "AN202104191486344018",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202104191486344018_1.pdf",
+      "local_path": "data/raw/pdf/011832_contract_2021-04-19.pdf",
+      "sha256": "1182ed34ab3508766b42a0d647c6f593480ee5b1d902d51746ee527cacc2c099",
+      "bytes": 965951,
+      "extract": {
+        "pages": 110,
+        "chars": 89870,
+        "chars_per_page": 817.0,
+        "garbled_ratio": 0.0001,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "011832_annual_report_2025",
+      "fund_code": "011832",
+      "fund_name": "西部利得中证人工智能主题指数增强",
+      "doc_type": "annual_report",
+      "report_period": "2025",
+      "title": "西部利得中证人工智能主题指数增强型证券投资基金2025年年度报告",
+      "publish_date": "2026-03-30",
+      "report_id": "AN202603301820846640",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603301820846640_1.pdf",
+      "local_path": "data/raw/pdf/011832_annual_report_2025.pdf",
+      "sha256": "028cecdefd208d40f418f11270b0a75da651f30c11988dda1aa6df34fe7ee02c",
+      "bytes": 790825,
+      "extract": {
+        "pages": 68,
+        "chars": 66196,
+        "chars_per_page": 973.5,
+        "garbled_ratio": 0.0007,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "011832_quarterly_report_2026Q1",
+      "fund_code": "011832",
+      "fund_name": "西部利得中证人工智能主题指数增强",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q1",
+      "title": "西部利得中证人工智能主题指数增强型证券投资基金2026年第1季度报告",
+      "publish_date": "2026-04-21",
+      "report_id": "AN202604211821364534",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202604211821364534_1.pdf",
+      "local_path": "data/raw/pdf/011832_quarterly_report_2026Q1.pdf",
+      "sha256": "6d78c2d79bd9b5e5d794d5700d81c2f5d3cf9d9b355b8cfe1af97af088e74833",
+      "bytes": 355083,
+      "extract": {
+        "pages": 13,
+        "chars": 9014,
+        "chars_per_page": 693.4,
+        "garbled_ratio": 0.0028,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    },
+    {
+      "doc_id": "011832_quarterly_report_2026Q2",
+      "fund_code": "011832",
+      "fund_name": "西部利得中证人工智能主题指数增强",
+      "doc_type": "quarterly_report",
+      "report_period": "2026Q2",
+      "title": "西部利得中证人工智能主题指数增强型证券投资基金2026年第2季度报告",
+      "publish_date": "2026-07-20",
+      "report_id": "AN202607201827117436",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607201827117436_1.pdf",
+      "local_path": "data/raw/pdf/011832_quarterly_report_2026Q2.pdf",
+      "sha256": "dd966cb9698bec7952ac86b96c066eca4b815f6e7c86bd67f07f403744ac1f1e",
+      "bytes": 336300,
+      "extract": {
+        "pages": 13,
+        "chars": 8926,
+        "chars_per_page": 686.6,
+        "garbled_ratio": 0.0028,
+        "ok": true,
+        "reason": ""
+      },
+      "alternatives": []
+    }
+  ],
+  "documents_missing": [],
+  "documents_fetch_stats": {
+    "downloaded": 2,
+    "reused_local": 98,
+    "matched": 100,
+    "announcement_list_requests": 0,
+    "announcement_list_cache_hits": 40
+  },
+  "personnel_announcements": [
+    {
+      "fund_code": "000452",
+      "publish_date": "2025-10-18",
+      "title": "关于南方医药保健灵活配置混合型证券投资基金变更基金经理的公告",
+      "report_id": "AN202510181764253662",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202510181764253662_1.pdf",
+      "sha256": "d1856bf0195aa61f31877618b3f6024c5f177368c118301bf36a1fc3bfb91da7",
+      "bytes": 47540
+    },
+    {
+      "fund_code": "002692",
+      "publish_date": "2025-07-16",
+      "title": "富国基金管理有限公司关于富国创新科技混合型证券投资基金基金经理变更的公告",
+      "report_id": "AN202507161709812307",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202507161709812307_1.pdf",
+      "sha256": "732a0ccc16e1336870ecb1e44b1366f827612c855096207413ea6106da7726bf",
+      "bytes": 99594
+    },
+    {
+      "fund_code": "003095",
+      "publish_date": "2025-07-04",
+      "title": "中欧医疗健康混合型证券投资基金基金经理变更公告",
+      "report_id": "AN202507041702860948",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202507041702860948_1.pdf",
+      "sha256": "2a1d433b7dc207804e6c18f15556d7d212357358f1362245cef1d87f5fa3bda9",
+      "bytes": 45846
+    },
+    {
+      "fund_code": "006113",
+      "publish_date": "2025-04-10",
+      "title": "汇添富创新医药主题混合型证券投资基金基金经理变更公告",
+      "report_id": "AN202504101653969389",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202504101653969389_1.pdf",
+      "sha256": "0fe6e8f59b498d54e3a5b407ac6e8badab44b222a1ac8a030249f1dff2cca564",
+      "bytes": 65697
+    },
+    {
+      "fund_code": "006113",
+      "publish_date": "2025-05-24",
+      "title": "汇添富创新医药主题混合型证券投资基金基金经理变更公告",
+      "report_id": "AN202505241677961327",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202505241677961327_1.pdf",
+      "sha256": "dfc6a3f4e7a4232cf8b08bd15fb31f43ade9534052cd08119ab397ca35cb6b6e",
+      "bytes": 96991
+    },
+    {
+      "fund_code": "007718",
+      "publish_date": "2026-03-06",
+      "title": "中银创新医疗混合型证券投资基金基金经理变更公告",
+      "report_id": "AN202603061820328371",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603061820328371_1.pdf",
+      "sha256": "73606823b72c4e5d8a40bff09681498d0343a36fba0733021b16f5edda0d0c3f",
+      "bytes": 93882
+    },
+    {
+      "fund_code": "007718",
+      "publish_date": "2026-03-19",
+      "title": "中银创新医疗混合型证券投资基金基金经理变更公告",
+      "report_id": "AN202603191820637456",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202603191820637456_1.pdf",
+      "sha256": "3ea1c584c169dbfd970a31aa8654ca41ba5a83d9cbe8bb4e69d8764dcca50da6",
+      "bytes": 50202
+    },
+    {
+      "fund_code": "008919",
+      "publish_date": "2025-08-23",
+      "title": "永赢科技驱动混合型证券投资基金的基金经理变更公告",
+      "report_id": "AN202508231732742077",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202508231732742077_1.pdf",
+      "sha256": "eaef82528df0e4dbdc98a0c22a31035ab93f5b38353c9860ad571f360ecddc6a",
+      "bytes": 210903
+    },
+    {
+      "fund_code": "011832",
+      "publish_date": "2024-11-30",
+      "title": "西部利得中证人工智能主题指数增强型证券投资基金基金经理变更公告",
+      "report_id": "AN202411301641127339",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202411301641127339_1.pdf",
+      "sha256": "4a607bc54014171ef766b43a30f2c57a08ac05dba541448e5db69c98f62cf8cb",
+      "bytes": 126483
+    },
+    {
+      "fund_code": "011832",
+      "publish_date": "2025-01-02",
+      "title": "西部利得中证人工智能主题指数增强型证券投资基金基金经理变更公告",
+      "report_id": "AN202501021641502818",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202501021641502818_1.pdf",
+      "sha256": "dd5b9708523e2098faf4afdfc7081d634ad8a98cfb46dd7d7f4ae7c9f0a1744e",
+      "bytes": 126684
+    },
+    {
+      "fund_code": "011832",
+      "publish_date": "2026-01-30",
+      "title": "西部利得中证人工智能主题指数增强型证券投资基金基金经理变更公告",
+      "report_id": "AN202601301818566763",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202601301818566763_1.pdf",
+      "sha256": "f3964ccd92a82ce234a2ac3a126dbd853e0aa8d1574a28a0f8c7f88fa84302b8",
+      "bytes": 186344
+    },
+    {
+      "fund_code": "012650",
+      "publish_date": "2026-07-15",
+      "title": "博时基金管理有限公司关于博时半导体主题混合型证券投资基金的基金经理变更的公告",
+      "report_id": "AN202607151826976872",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202607151826976872_1.pdf",
+      "sha256": "d972bee3cb8ab26d816fefba2d880b972234d15855b902f49c35c8c09dbb27c1",
+      "bytes": 73933
+    },
+    {
+      "fund_code": "040025",
+      "publish_date": "2025-04-30",
+      "title": "华安科技动力混合型证券投资基金基金经理变更公告",
+      "report_id": "AN202504301664876973",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202504301664876973_1.pdf",
+      "sha256": "2524283a9116f51fdc4a7f72c1aeaaa727d8f707a65e2bd0215beb4d7d5b7c7f",
+      "bytes": 126765
+    },
+    {
+      "fund_code": "160219",
+      "publish_date": "2025-08-14",
+      "title": "国泰国证医药卫生行业指数证券投资基金基金经理变更公告",
+      "report_id": "AN202508131726798376",
+      "url": "https://pdf.dfcfw.com/pdf/H2_AN202508131726798376_1.pdf",
+      "sha256": "c7361c6c57d93ca029ea40ff1959cdc05b20f28190d97268169bbba87ead8206",
+      "bytes": 88145
+    }
+  ],
+  "snapshots": {
+    "2026-09-28": {
+      "fund_manager_tenures": {
+        "file": "fund_manager_tenures.csv",
+        "rows": 34,
+        "sha256": "f1d4d3a663cd503d26273fc9b64525bfc07e979d6e140cf48c5856a3bed2310d"
+      },
+      "fund_scale": {
+        "file": "fund_scale.csv",
+        "rows": 40,
+        "sha256": "c8870ddead8f8816d89505477559dc7c260461736358cf5ad01ec3efffc44990"
+      },
+      "purchase_fee_tiers": {
+        "file": "purchase_fee_tiers.csv",
+        "rows": 92,
+        "sha256": "bee018ea2d8b489078a9b9546b0db61c3f4fe67515b4e592a7420c44b07ce8b9"
+      }
+    }
+  }
+}

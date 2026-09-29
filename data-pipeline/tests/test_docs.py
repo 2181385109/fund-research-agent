@@ -36,10 +36,12 @@ PERIODIC = [
 ]
 ISSUE = [
     A("假想医疗混合型证券投资基金招募说明书（更新）", "2025-06-10", "AN_P1"),
-    A("假想医疗混合型证券投资基金招募说明书（更新）", "2026-07-01", "AN_P2"),
+    A("假想医疗混合型证券投资基金更新招募说明书(2026年7月)", "2026-07-01", "AN_P2"),
     A("假想医疗混合型证券投资基金招募说明书（更新）摘要", "2026-07-01", "AN_P2S"),
     A("关于假想医疗混合型证券投资基金更新招募说明书的提示性公告", "2026-07-01", "AN_PT"),
-    A("假想医疗混合型证券投资基金基金合同", "2024-12-20", "AN_C1"),
+    A("假想医疗混合型证券投资基金基金合同", "2023-12-20", "AN_C0"),
+    A("假想医疗混合型证券投资基金基金合同(修订)", "2024-12-20", "AN_C1"),
+    A("关于旗下部分基金修改基金合同和托管协议的公告", "2024-12-20", "AN_CX"),
     A("假想医疗混合型证券投资基金基金合同摘要", "2024-12-20", "AN_C1S"),
     A("关于修订假想医疗混合型证券投资基金基金合同的公告", "2024-12-20", "AN_CN"),
     A("假想医疗混合型证券投资基金托管协议", "2024-12-20", "AN_T"),
@@ -171,3 +173,13 @@ def test_collect_records_every_gap(tmp_path: Path) -> None:
     assert "不可提取" in reasons[("900001", "annual_report", "2025")]
     assert sum(1 for m in missing if m.fund_code == "900002") == 5
     assert stats["reused_local"] == 1 and stats["downloaded"] == 3
+
+
+def test_chinese_numeral_years_are_normalized() -> None:
+    from fund_pipeline.docs import normalize_title
+
+    assert normalize_title("某基金二0二五年年度报告") == "某基金2025年年度报告"
+    assert normalize_title("某基金二〇二六年第2季度报告") == "某基金2026年第2季度报告"
+    pool = [A("富国假想基金(LOF)二0二六年第2季度报告", "2026-07-21", "AN_F2")]
+    ann, _ = match_announcement(SPEC[("quarterly_report", "2026Q2")], pool, AS_OF)
+    assert ann is not None and ann.report_id == "AN_F2"

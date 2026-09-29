@@ -41,23 +41,23 @@ def test_dividends_truncated_by_ex_date() -> None:
             "年份": ["2025年", "2026年"],
             "权益登记日": ["2025-06-10", "2026-09-28"],
             "除息日": ["2025-06-10", "2026-09-29"],
-            "每份分红": ["每份派现金0.2400元", "每份派现金0.1000元"],
+            "每10份分红": ["每10份派现金2.4000元", "每10份派现金1.0000元"],
             "分红发放日": ["2025-06-12", "2026-10-09"],
         }
     )
     rows = build_dividends("900001", df, AS_OF)
-    assert len(rows) == 1 and rows[0]["cash_per_unit"] == Decimal("0.2400")
+    assert len(rows) == 1 and rows[0]["cash_per_unit"] == Decimal("0.24")
 
 
 def test_holdings_top10_units_and_truncation() -> None:
     df = pd.DataFrame(
         {
-            "序号": [1, 11, 1],
-            "股票代码": ["600001", "600011", "600002"],
-            "股票名称": ["甲", "乙", "丙"],
-            "占净值比例": [9.87, 1.0, 5.0],
-            "持股数": [123.45, 1, 1],
-            "持仓市值": [6789.1, 1, 1],
+            "序号": [25, 26, 27],
+            "股票代码": ["600011", "600001", "600002"],
+            "股票名称": ["乙", "甲", "丙"],
+            "占净值比例": [1.0, 9.87, 5.0],
+            "持股数": [1, 123.45, 1],
+            "持仓市值": [1, 6789.1, 1],
             "季度": [
                 "2026年2季度股票投资明细",
                 "2026年2季度股票投资明细",
@@ -66,7 +66,8 @@ def test_holdings_top10_units_and_truncation() -> None:
         }
     )
     rows = build_holdings("900001", [df], AS_OF)
-    assert len(rows) == 1  # 第 11 名丢弃；2026Q3 期末在 as_of 之后
+    # 序号是跨季度流水号，按比例重排：甲第 1、乙第 2；2026Q3 期末在 as_of 之后被截掉
+    assert [(r["stock_name"], r["rank_no"]) for r in rows] == [("甲", 1), ("乙", 2)]
     r = rows[0]
     assert r["report_period"] == "2026Q2" and r["weight"] == Decimal("0.0987")
     assert r["shares"] == Decimal("1234500.00") and r["market_value"] == Decimal("67891000.0")
@@ -167,3 +168,19 @@ def test_write_table_matches_schema_header(tmp_path: Path) -> None:
     with (tmp_path / "fees.csv").open(encoding="utf-8") as f:
         rows = list(csv.reader(f))
     assert rows[0] == cols and rows[1] == ["900001", "0.012", "0.002", "0", "s", "2026-09-28"]
+
+
+def test_holdings_keep_only_top10_per_period() -> None:
+    df = pd.DataFrame(
+        {
+            "序号": list(range(40, 52)),
+            "股票代码": [f"6000{i:02d}" for i in range(12)],
+            "股票名称": [f"股{i}" for i in range(12)],
+            "占净值比例": [float(i) for i in range(12)],
+            "持股数": [1.0] * 12,
+            "持仓市值": [1.0] * 12,
+            "季度": ["2025年4季度股票投资明细"] * 12,
+        }
+    )
+    rows = build_holdings("900001", [df], AS_OF)
+    assert len(rows) == 10 and rows[0]["stock_name"] == "股11" and rows[-1]["rank_no"] == 10

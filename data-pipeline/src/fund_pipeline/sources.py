@@ -98,7 +98,10 @@ def _is_transient(e: Exception) -> bool:
         import requests
     except ImportError:  # pragma: no cover
         return isinstance(e, OSError)
-    return isinstance(e, (requests.RequestException, OSError))
+    if isinstance(e, (requests.RequestException, OSError)):
+        return True
+    # AkShare 1.18.97 把部分网络错误（如 SSL EOF）包成 akshare.exceptions.APIError("... request failed ...")
+    return type(e).__name__ == "APIError" and "request failed" in str(e)
 
 
 class FakeSource:

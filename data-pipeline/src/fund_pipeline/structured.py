@@ -180,7 +180,7 @@ def build_nav(share_code: str, unit: pd.DataFrame, accum: pd.DataFrame, as_of: d
 def build_dividends(share_code: str, df: pd.DataFrame, as_of: date) -> list[Row]:
     rows = []
     for r in df.to_dict("records"):
-        cash = to_decimal(_first_number(str(r.get("每份分红", ""))))
+        cash = _cash_per_unit(r)
         ex = parse_date(r.get("除息日"))
         if ex is None or cash is None:
             raise ValueError(f"{share_code} 分红记录无法解析：{r}")
@@ -198,21 +198,37 @@ def build_dividends(share_code: str, df: pd.DataFrame, as_of: date) -> list[Row]
     return truncate_dividends(rows, as_of)
 
 
-def _first_number(s: str) -> str | None:
+def _cash_per_unit(r: dict[str, Any]) -> Decimal | None:
+    """来源列为「每10份分红」（值如「每10份派现金1.2739元」）→ 除以 10 得每份；也兼容「每份分红」。"""
     import re
 
-    m = re.search(r"\d+(?:\.\d+)?", s)
-    return m.group(0) if m else None
+    for col in r:
+        text = str(r[col] or "")
+        m = re.search(r"每\s*(\d*)\s*份派现金\s*(\d+(?:\.\d+)?)\s*元", text)
+        if m:
+            per = Decimal(m.group(1) or "1")
+            return Decimal(m.group(2)) / per
+    return None
 
 
 def build_holdings(fund_code: str, frames: Iterable[pd.DataFrame], as_of: date) -> list[Row]:
-    rows = []
+    """每个报告期按「占净值比例」降序（同比例保持来源顺序）重新排名，取前 10。
+
+    AkShare 1.18.97 的「序号」是跨季度的流水号（2026Q2 从 25 开始），不能当排名用；
+    Q2/Q4 来源给的是中报/年报的全部持仓，也要截取前 10。
+    """
+    by_period: dict[str, list[dict[str, Any]]] = {}
     for df in frames:
         for r in df.to_dict("records"):
             period = quarter_label(str(r["季度"]))
-            rank = int(r["序号"])
-            if period is None or rank > 10:
-                continue
+            if period is not None:
+                by_period.setdefault(period, []).append(r)
+    rows = []
+    for period, recs in by_period.items():
+        ordered = sorted(
+            enumerate(recs), key=lambda x: (-(pct_to_decimal(x[1]["占净值比例"]) or 0), x[0])
+        )
+        for rank, (_, r) in enumerate(ordered[:10], 1):
             shares = to_decimal(r.get("持股数"))
             mv = to_decimal(r.get("持仓市值"))
             rows.append(
@@ -366,18 +382,52 @@ def fetch_all(
     )
     tables["period_returns"] = rows
     extra["problems"] += problems
-    extra["overview_scale"] = {
+    # 注意：fund_overview_em 的「净资产规模」是主代码（A 类）份额的规模，不是全部份额合计（B1 用季报核对）
+    extra["overview_scale_primary_share"] = {
         f.code: str(overviews[f.code].iloc[0]["净资产规模"]) for f in u.funds
     }
+    # 基金经理变更公告列表（as_of 前两年），供 pdf 步骤下载并解析任职/离任日期
+    start = as_of.replace(year=as_of.year - 2)
+    anns = []
+    for f in u.funds:
+        df = source.call("fund_announcement_personnel_em", symbol=f.code)
+        for r in df.to_dict("records"):
+            d = parse_date(r.get("公告日期"))
+            if d and start <= d <= as_of and "基金经理" in str(r.get("公告标题", "")):
+                anns.append(
+                    {
+                        "fund_code": f.code,
+                        "publish_date": d.isoformat(),
+                        "title": str(r["公告标题"]),
+                        "report_id": str(r["报告ID"]),
+                    }
+                )
+    extra["personnel_announcements"] = sorted(
+        anns, key=lambda a: (a["fund_code"], a["publish_date"])
+    )
     return tables, extra
+
+
+def update_manifest_snapshots(manifest_path: Path, as_of: date, written: dict[str, Any]) -> None:
+    manifest = (
+        json.loads(manifest_path.read_text(encoding="utf-8")) if manifest_path.exists() else {}
+    )
+    snaps = manifest.setdefault("snapshots", {}).setdefault(as_of.isoformat(), {})
+    snaps.update(written)
+    manifest["snapshots"][as_of.isoformat()] = dict(sorted(snaps.items()))
+    with manifest_path.open("w", encoding="utf-8", newline="\n") as f:
+        json.dump(manifest, f, ensure_ascii=False, indent=2)
+        f.write("\n")
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m fund_pipeline.structured")
     sub = parser.add_subparsers(dest="cmd", required=True)
-    p = sub.add_parser("fetch")
+    p = sub.add_parser("fetch", help="AkShare 各接口 → 9 张表")
     p.add_argument("--as-of", type=date.fromisoformat, required=True)
     p.add_argument("--cache-tag", default=None, help="AkShare 缓存标签，默认等于 as_of")
+    p2 = sub.add_parser("pdf", help="从已下载的披露 PDF 和经理变更公告 → 申购费/任职/规模 3 张表")
+    p2.add_argument("--as-of", type=date.fromisoformat, required=True)
     args = parser.parse_args(argv)
 
     settings = get_settings()
@@ -386,6 +436,10 @@ def main(argv: list[str] | None = None) -> int:
         print("universe.yaml 尚未冻结", file=sys.stderr)
         return 2
     as_of: date = args.as_of
+    if args.cmd == "pdf":
+        from fund_pipeline.pdf_tables import run_pdf_step
+
+        return run_pdf_step(settings, u, as_of)
     source = AkShareSource(
         settings.raw_dir / "_cache" / "akshare", tag=f"asof-{args.cache_tag or as_of}"
     )
