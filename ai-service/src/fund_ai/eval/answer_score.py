@@ -146,7 +146,8 @@ def tool_metrics(item: dict, rec: dict) -> dict:
         "expected": expected,
         "required_hit": set(expected) <= set(called),
         "exact": set(expected) == set(called),
-        "overcall": bool(called) if not expected else None,
+        # 只有 no_tool 类题「不该调工具」；advice_request 可以调工具陈述客观事实
+        "overcall": bool(called) if item.get("topic") == "no_tool" else None,
     }
     if "run_fund_sql" in expected:
         out["sql_exec_ok"] = any(
@@ -291,6 +292,7 @@ def aggregate(scores: list[dict], recs: dict[str, dict]) -> dict:
         return {k: _acc(v) for (kk, k), v in sorted(by.items()) if kk == kind}
 
     numeric = [s for s in scores if s["answer_type"] == "numeric" and s["method"] == "numeric_any"]
+    lists = [s for s in scores if s["method"] == "list"]
     return {
         "n_questions": len(scores),
         "n_run_failed": len(scores) - len(ok_scores),
@@ -306,6 +308,13 @@ def aggregate(scores: list[dict], recs: dict[str, dict]) -> dict:
             else None,
             "distribution": dist,
         },
+        "list_sensitivity": {
+            "n": len(lists),
+            "all_present": _rate([s["correct"] for s in lists]),
+            "strict_no_extra_funds": _rate(
+                [bool(s["detail"].get("strict_correct")) for s in lists]
+            ),
+        },
         "numeric_sensitivity": {
             "n": len(numeric),
             "any": _rate([s["correct"] for s in numeric]),
@@ -318,7 +327,7 @@ def aggregate(scores: list[dict], recs: dict[str, dict]) -> dict:
                 [bool(t["overcall"]) for t in tl if t["overcall"] is not None]
             ),
             "denominator": "run 成功且 expected_tools 非空的题（required_recall / exact_set）；"
-            "expected_tools 为空的题（overcall）",
+            "no_tool 类题（overcall）",
         },
         "sql": {
             "exec_ok": _rate([t["sql_exec_ok"] for t in sql]),

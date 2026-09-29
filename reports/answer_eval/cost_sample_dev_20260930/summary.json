@@ -1,0 +1,559 @@
+{
+  "label": "S8 费用小样（dev，每类 2 题，hybrid_rerank；用于估算费用与检查判分器，不是评测结果）",
+  "env": {
+    "git_commit": "a5b05feac224d58014051d53c4874203a27a325c",
+    "git_dirty": true,
+    "data_as_of": "2026-09-28",
+    "data_manifest_sha256": "b5df59cb954c170e44071fb38603f57eff401863656912e410a96a721d49e127",
+    "models": {
+      "embedding": "BAAI/bge-small-zh-v1.5",
+      "reranker": "cross_encoder:BAAI/bge-reranker-base",
+      "llm_requested": [
+        "deepseek-flash"
+      ],
+      "llm_response": [
+        "deepseek-flash"
+      ],
+      "judge_requested": "deepseek-v4-pro",
+      "judge_response": [
+        "deepseek-v4-pro"
+      ]
+    },
+    "index": {
+      "milvus_collection": "fund_chunks",
+      "es_index": "fund_chunks",
+      "ingest_run": "20260929T141806Z"
+    },
+    "machine": {
+      "platform": "Windows-11-10.0.26200-SP0",
+      "python": "3.12.3",
+      "cpu_count": 16
+    },
+    "command": "cd ai-service && python -m fund_ai.eval.retrieval score --rescore --dir ..\\reports\\answer_eval\\cost_sample_dev_20260930 --label S8 费用小样（dev，每类 2 题，hybrid_rerank；用于估算费用与检查判分器，不是评测结果）",
+    "dataset_sha256": {
+      "fund_qa_v1.jsonl": "77fb06a9686ea195ef8813d192bc90ffceb05ffe0b1122864777dc026997e48d",
+      "agent_tasks_v1.jsonl": "7d4c4fc3f4d6b63643fe608ca17c1ca07177257086253a1c878cf13bb33c3b77"
+    }
+  },
+  "params": {
+    "agent_max_steps": 6,
+    "agent_sql_retries": 2,
+    "llm_thinking": "disabled",
+    "api_retries_max": 2,
+    "numeric_rule": "见 fund_ai/eval/scoring.py 文件头",
+    "prices": {
+      "source": "https://api-docs.deepseek.com/quick_start/pricing",
+      "checked_on": "2026-09-30",
+      "usd_per_1m_tokens": {
+        "deepseek-flash": {
+          "peak": {
+            "input_cache_hit": 0.006,
+            "input_cache_miss": 0.3,
+            "output": 1.2
+          },
+          "off_peak": {
+            "input_cache_hit": 0.003,
+            "input_cache_miss": 0.15,
+            "output": 0.6
+          }
+        },
+        "deepseek-v4-pro": {
+          "peak": {
+            "input_cache_hit": 0.044,
+            "input_cache_miss": 1.32,
+            "output": 3.96
+          },
+          "off_peak": {
+            "input_cache_hit": 0.022,
+            "input_cache_miss": 0.66,
+            "output": 1.98
+          }
+        }
+      }
+    }
+  },
+  "runs": {
+    "hybrid_rerank": {
+      "config": "hybrid_rerank",
+      "service_url": "http://127.0.0.1:8011",
+      "split": "dev",
+      "sample_per_topic": 2,
+      "n_items": 29,
+      "concurrency": 3,
+      "command": "cd ai-service && python -m fund_ai.eval.answer run --config hybrid_rerank --url http://127.0.0.1:8011 --split dev --sample-per-topic 2 --out ../reports/answer_eval/cost_sample_dev_20260930 --concurrency 3",
+      "finished_utc": "20260929T165635Z"
+    }
+  },
+  "results": {
+    "hybrid_rerank": {
+      "n_questions": 29,
+      "n_run_failed": 0,
+      "n_judge_failed": 0,
+      "overall": {
+        "n_total": 29,
+        "n_run_failed": 0,
+        "n_judge_failed": 0,
+        "acc_all": {
+          "n": 29,
+          "value": 0.9655
+        },
+        "acc_completed": {
+          "n": 29,
+          "value": 0.9655
+        }
+      },
+      "by_answer_type": {
+        "entity": {
+          "n_total": 5,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 5,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 5,
+            "value": 1.0
+          }
+        },
+        "list": {
+          "n_total": 1,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 1,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 1,
+            "value": 1.0
+          }
+        },
+        "numeric": {
+          "n_total": 12,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 12,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 12,
+            "value": 1.0
+          }
+        },
+        "refusal": {
+          "n_total": 4,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 4,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 4,
+            "value": 1.0
+          }
+        },
+        "text": {
+          "n_total": 7,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 7,
+            "value": 0.8571
+          },
+          "acc_completed": {
+            "n": 7,
+            "value": 0.8571
+          }
+        }
+      },
+      "by_topic": {
+        "advice_request": {
+          "n_total": 2,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 2,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 2,
+            "value": 1.0
+          }
+        },
+        "calc_return": {
+          "n_total": 2,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 2,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 2,
+            "value": 1.0
+          }
+        },
+        "commentary": {
+          "n_total": 2,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 2,
+            "value": 0.5
+          },
+          "acc_completed": {
+            "n": 2,
+            "value": 0.5
+          }
+        },
+        "contract_clause": {
+          "n_total": 2,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 2,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 2,
+            "value": 1.0
+          }
+        },
+        "cross_doc": {
+          "n_total": 2,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 2,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 2,
+            "value": 1.0
+          }
+        },
+        "doc_db": {
+          "n_total": 2,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 2,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 2,
+            "value": 1.0
+          }
+        },
+        "doc_only": {
+          "n_total": 2,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 2,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 2,
+            "value": 1.0
+          }
+        },
+        "fee": {
+          "n_total": 2,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 2,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 2,
+            "value": 1.0
+          }
+        },
+        "holdings": {
+          "n_total": 2,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 2,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 2,
+            "value": 1.0
+          }
+        },
+        "latest_nav": {
+          "n_total": 2,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 2,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 2,
+            "value": 1.0
+          }
+        },
+        "manager": {
+          "n_total": 2,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 2,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 2,
+            "value": 1.0
+          }
+        },
+        "no_tool": {
+          "n_total": 1,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 1,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 1,
+            "value": 1.0
+          }
+        },
+        "performance": {
+          "n_total": 2,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 2,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 2,
+            "value": 1.0
+          }
+        },
+        "tool_sql": {
+          "n_total": 2,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 2,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 2,
+            "value": 1.0
+          }
+        },
+        "unanswerable": {
+          "n_total": 2,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 2,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 2,
+            "value": 1.0
+          }
+        }
+      },
+      "by_dataset": {
+        "agent": {
+          "n_total": 13,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 13,
+            "value": 1.0
+          },
+          "acc_completed": {
+            "n": 13,
+            "value": 1.0
+          }
+        },
+        "qa": {
+          "n_total": 16,
+          "n_run_failed": 0,
+          "n_judge_failed": 0,
+          "acc_all": {
+            "n": 16,
+            "value": 0.9375
+          },
+          "acc_completed": {
+            "n": 16,
+            "value": 0.9375
+          }
+        }
+      },
+      "text_judge": {
+        "n": 7,
+        "mean_score_0_2": 1.7143,
+        "distribution": {
+          "0": 1,
+          "1": 0,
+          "2": 6
+        }
+      },
+      "list_sensitivity": {
+        "n": 1,
+        "all_present": {
+          "n": 1,
+          "k": 1,
+          "rate": 1.0
+        },
+        "strict_no_extra_funds": {
+          "n": 1,
+          "k": 0,
+          "rate": 0.0
+        }
+      },
+      "numeric_sensitivity": {
+        "n": 10,
+        "any": {
+          "n": 10,
+          "k": 10,
+          "rate": 1.0
+        },
+        "first": {
+          "n": 10,
+          "k": 7,
+          "rate": 0.7
+        }
+      },
+      "tool_selection": {
+        "required_recall": {
+          "n": 26,
+          "k": 22,
+          "rate": 0.8462
+        },
+        "exact_set": {
+          "n": 26,
+          "k": 22,
+          "rate": 0.8462
+        },
+        "overcall_on_no_tool_items": {
+          "n": 1,
+          "k": 0,
+          "rate": 0.0
+        },
+        "denominator": "run 成功且 expected_tools 非空的题（required_recall / exact_set）；no_tool 类题（overcall）"
+      },
+      "sql": {
+        "exec_ok": {
+          "n": 4,
+          "k": 4,
+          "rate": 1.0
+        },
+        "end_to_end_correct": {
+          "n": 2,
+          "k": 2,
+          "rate": 1.0
+        }
+      },
+      "calc_return_correct": {
+        "n": 2,
+        "k": 2,
+        "rate": 1.0
+      },
+      "latest_nav_correct": {
+        "n": 2,
+        "k": 2,
+        "rate": 1.0
+      },
+      "citation_accuracy": {
+        "overall": {
+          "n": 24,
+          "k": 17,
+          "rate": 0.7083
+        },
+        "by_component": {
+          "api": {
+            "n": 2,
+            "k": 2,
+            "rate": 1.0
+          },
+          "computation": {
+            "n": 2,
+            "k": 2,
+            "rate": 1.0
+          },
+          "db": {
+            "n": 4,
+            "k": 4,
+            "rate": 1.0
+          },
+          "docs": {
+            "n": 18,
+            "k": 11,
+            "rate": 0.6111
+          }
+        },
+        "denominator": "run 成功且有可核对出处的题（有 evidence / gold_sql / 收益计算 / 最新净值）；失败 run 不计入"
+      },
+      "disclaimer_coverage": {
+        "n": 29,
+        "k": 29,
+        "rate": 1.0
+      },
+      "disclaimer_coverage_denominator": "全部 run（含失败的）",
+      "compliance": {
+        "server_guard_flagged": {
+          "n": 29,
+          "k": 0,
+          "rate": 0.0
+        },
+        "advice_request_correct": {
+          "n": 2,
+          "k": 2,
+          "rate": 1.0
+        }
+      },
+      "latency_ms": {
+        "first_token": {
+          "p50": 9558.9,
+          "p95": 37332.3,
+          "n": 29
+        },
+        "total": {
+          "p50": 10179.1,
+          "p95": 37563.5,
+          "n": 29
+        }
+      },
+      "tokens_and_cost": {
+        "agent_input_tokens": 316303,
+        "agent_output_tokens": 13385,
+        "judge_input_tokens": 7938,
+        "judge_output_tokens": 543,
+        "n_runs_counted": 29,
+        "cost_usd_upper_bound": {
+          "peak": 0.1236,
+          "off_peak": 0.0618
+        },
+        "note": "只统计 run 成功的题的 token（失败 run 的用量未被服务端上报）；费用按全部输入为缓存未命中计的上界"
+      }
+    }
+  },
+  "comparison_vector_to_hybrid_rerank": {},
+  "api_error_retries": {
+    "hybrid_rerank": []
+  },
+  "failed_runs": {
+    "hybrid_rerank": []
+  },
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.3"
+  },
+  "scored_at_utc": "20260929T170120Z",
+  "score_command": "cd ai-service && python -m fund_ai.eval.answer score --rescore --dir ..\\reports\\answer_eval\\cost_sample_dev_20260930 --label S8 费用小样（dev，每类 2 题，hybrid_rerank；用于估算费用与检查判分器，不是评测结果）"
+}

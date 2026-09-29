@@ -51,7 +51,7 @@ def render(s: dict) -> str:
         ("工具选择：必需工具全部调用", lambda r: _rate(r["tool_selection"]["required_recall"])),
         ("工具选择：工具集合完全一致", lambda r: _rate(r["tool_selection"]["exact_set"])),
         (
-            "无需工具的题调用了工具",
+            "no_tool 类题调用了工具",
             lambda r: _rate(r["tool_selection"]["overcall_on_no_tool_items"]),
         ),
         ("SQL 执行成功（有 run_fund_sql 的题）", lambda r: _rate(r["sql"]["exec_ok"])),
@@ -151,6 +151,16 @@ def render(s: dict) -> str:
     for c in cfgs:
         ns = res[c]["numeric_sensitivity"]
         L.append(f"| {c} | {_rate(ns['any'])} | {_rate(ns['first'])} |")
+    L += [
+        "",
+        "## list 判分灵敏度（list 题）",
+        "",
+        "| 配置 | 标准项全部出现（主判分） | 另要求没有多出的基金名（严格） |",
+        "|---|---|---|",
+    ]
+    for c in cfgs:
+        ls = res[c]["list_sensitivity"]
+        L.append(f"| {c} | {_rate(ls['all_present'])} | {_rate(ls['strict_no_extra_funds'])} |")
     L += ["", "## 失败的 run 与 API 报错重试", ""]
     for c in cfgs:
         L.append(

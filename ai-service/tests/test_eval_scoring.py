@@ -80,7 +80,9 @@ def test_list_all_present_and_extras():
     miss = S.score_list("只有中欧医疗健康混合。", gold, q)
     assert not miss.correct and miss.detail["recall"] == 0.5
     extra = S.score_list("中欧医疗健康混合、国泰国证医药卫生行业指数、银华集成电路混合。", gold, q)
-    assert not extra.correct and extra.detail["extra_funds"] == ["银华集成电路混合"]
+    # 正文里顺带提到别的基金：主判分仍为对，严格版为错
+    assert extra.correct and not extra.detail["strict_correct"]
+    assert extra.detail["extra_funds"] == ["银华集成电路混合"]
 
 
 def test_latest_nav():
@@ -189,8 +191,9 @@ def test_disclaimer_and_tool_metrics():
     }
     m = A.tool_metrics(it, rec)
     assert m["required_hit"] and m["exact"] and m["sql_exec_ok"] is False
-    none = A.tool_metrics(_item(), {"tools": [{"name": "search_fund_documents", "status": "ok"}]})
-    assert none["overcall"] is True
+    rec_doc = {"tools": [{"name": "search_fund_documents", "status": "ok"}]}
+    assert A.tool_metrics(_item(topic="no_tool"), rec_doc)["overcall"] is True
+    assert A.tool_metrics(_item(topic="advice_request"), rec_doc)["overcall"] is None
 
 
 def test_api_error_classification():

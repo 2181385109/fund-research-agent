@@ -1,0 +1,227 @@
+{
+  "sample_dir": "reports\\answer_eval\\cost_sample_dev_20260930",
+  "n_sample_runs": 29,
+  "n_sample_failed": 0,
+  "n_test_questions": 124,
+  "configs": 2,
+  "agent_runs_total": 248,
+  "per_topic": [
+    {
+      "dataset": "agent",
+      "topic": "advice_request",
+      "n_test": 4,
+      "n_sample": 2,
+      "mean_in": 18712,
+      "mean_out": 1023,
+      "max_in": 28115,
+      "max_out": 1583
+    },
+    {
+      "dataset": "agent",
+      "topic": "calc_return",
+      "n_test": 6,
+      "n_sample": 2,
+      "mean_in": 5881,
+      "mean_out": 279,
+      "max_in": 5881,
+      "max_out": 304
+    },
+    {
+      "dataset": "agent",
+      "topic": "doc_db",
+      "n_test": 9,
+      "n_sample": 2,
+      "mean_in": 16315,
+      "mean_out": 512,
+      "max_in": 17191,
+      "max_out": 614
+    },
+    {
+      "dataset": "agent",
+      "topic": "doc_only",
+      "n_test": 6,
+      "n_sample": 2,
+      "mean_in": 8306,
+      "mean_out": 497,
+      "max_in": 8461,
+      "max_out": 606
+    },
+    {
+      "dataset": "agent",
+      "topic": "latest_nav",
+      "n_test": 3,
+      "n_sample": 2,
+      "mean_in": 5648,
+      "mean_out": 95,
+      "max_in": 5649,
+      "max_out": 100
+    },
+    {
+      "dataset": "agent",
+      "topic": "no_tool",
+      "n_test": 2,
+      "n_sample": 1,
+      "mean_in": 2717,
+      "mean_out": 305,
+      "max_in": 2717,
+      "max_out": 305
+    },
+    {
+      "dataset": "agent",
+      "topic": "tool_sql",
+      "n_test": 15,
+      "n_sample": 2,
+      "mean_in": 15411,
+      "mean_out": 454,
+      "max_in": 15643,
+      "max_out": 508
+    },
+    {
+      "dataset": "qa",
+      "topic": "commentary",
+      "n_test": 13,
+      "n_sample": 2,
+      "mean_in": 12016,
+      "mean_out": 886,
+      "max_in": 15582,
+      "max_out": 1252
+    },
+    {
+      "dataset": "qa",
+      "topic": "contract_clause",
+      "n_test": 12,
+      "n_sample": 2,
+      "mean_in": 9542,
+      "mean_out": 422,
+      "max_in": 10836,
+      "max_out": 506
+    },
+    {
+      "dataset": "qa",
+      "topic": "cross_doc",
+      "n_test": 8,
+      "n_sample": 2,
+      "mean_in": 11757,
+      "mean_out": 438,
+      "max_in": 15113,
+      "max_out": 492
+    },
+    {
+      "dataset": "qa",
+      "topic": "fee",
+      "n_test": 12,
+      "n_sample": 2,
+      "mean_in": 9051,
+      "mean_out": 324,
+      "max_in": 10019,
+      "max_out": 346
+    },
+    {
+      "dataset": "qa",
+      "topic": "holdings",
+      "n_test": 11,
+      "n_sample": 2,
+      "mean_in": 15459,
+      "mean_out": 597,
+      "max_in": 15466,
+      "max_out": 618
+    },
+    {
+      "dataset": "qa",
+      "topic": "manager",
+      "n_test": 8,
+      "n_sample": 2,
+      "mean_in": 10162,
+      "mean_out": 312,
+      "max_in": 10333,
+      "max_out": 376
+    },
+    {
+      "dataset": "qa",
+      "topic": "performance",
+      "n_test": 8,
+      "n_sample": 2,
+      "mean_in": 7236,
+      "mean_out": 272,
+      "max_in": 7398,
+      "max_out": 349
+    },
+    {
+      "dataset": "qa",
+      "topic": "unanswerable",
+      "n_test": 7,
+      "n_sample": 2,
+      "mean_in": 11295,
+      "mean_out": 426,
+      "max_in": 11612,
+      "max_out": 457
+    }
+  ],
+  "agent_tokens_per_config": {
+    "in_mean": 1422044,
+    "out_mean": 59284,
+    "in_max": 1577245,
+    "out_max": 72081
+  },
+  "agent_tokens_both_configs_point": {
+    "input": 2844087,
+    "output": 118569
+  },
+  "judge": {
+    "calls_per_config": 47,
+    "sample_calls": 11,
+    "mean_in": 722,
+    "mean_out": 49
+  },
+  "prices": {
+    "source": "https://api-docs.deepseek.com/quick_start/pricing",
+    "checked_on": "2026-09-30",
+    "usd_per_1m_tokens": {
+      "deepseek-flash": {
+        "peak": {
+          "input_cache_hit": 0.006,
+          "input_cache_miss": 0.3,
+          "output": 1.2
+        },
+        "off_peak": {
+          "input_cache_hit": 0.003,
+          "input_cache_miss": 0.15,
+          "output": 0.6
+        }
+      },
+      "deepseek-v4-pro": {
+        "peak": {
+          "input_cache_hit": 0.044,
+          "input_cache_miss": 1.32,
+          "output": 3.96
+        },
+        "off_peak": {
+          "input_cache_hit": 0.022,
+          "input_cache_miss": 0.66,
+          "output": 1.98
+        }
+      }
+    }
+  },
+  "estimate_usd": {
+    "peak": {
+      "agent_usd_point": 0.996,
+      "agent_usd_upper": 1.119,
+      "judge_usd": 0.108,
+      "total_usd_point": 1.104,
+      "total_usd_upper": 1.227
+    },
+    "off_peak": {
+      "agent_usd_point": 0.498,
+      "agent_usd_upper": 0.56,
+      "judge_usd": 0.054,
+      "total_usd_point": 0.552,
+      "total_usd_upper": 0.614
+    }
+  },
+  "assumptions": [
+    "小样每个 (数据集, topic) ≤2 题，用量均值 / 最大值按 test 题数放大",
+    "vector 配置的 Agent 用量按与 hybrid_rerank 相同估计",
+    "输入 token 全部按缓存未命中计价（上界）；不含 API 报错重试"
+  ]
+}

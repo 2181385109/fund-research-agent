@@ -11,6 +11,13 @@
 - 主判分 ``any``：回答里有任一相容数字落在容差内即判对；灵敏度检查 ``first``：只看回答里第一个相容数字。
   ``any`` 偏宽松（回答里罗列很多数字时可能碰巧命中），所以两个都报。
 - 负号：显式的 ``-`` / ``−`` / ``负``，或数字前 5 个字内出现 亏 / 跌 / 下降 / 回撤 / 减少 / 缩水（且前面不是「不」）。
+
+entity：标准答案出现在回答里（日期归一化）；标准答案是基金简称且题面里还有别的候选基金时，要求它先于别的候选出现。
+list：主判分 = 所有标准项都出现；严格版另要求回答里没有多出的基金池内基金名（正文里顺带提到别的基金很常见，
+所以严格版只作灵敏度单列，见 ``strict_correct``）。
+
+2026-09-30 费用小样（dev，见 reports/answer_eval/cost_sample_dev_20260930）之后、跑 test 之前做过一次修订：
+list 的主判分由「严格」改为「全部出现」。修订依据是 dev 小样里 agent-0003 的正确回答被误判；test 尚未跑过。
 """
 
 from __future__ import annotations
@@ -201,12 +208,14 @@ def score_list(answer: str, gold: list[str], question: str = "") -> Score:
         for n in pos
         if n not in qn and not any(n in g or g in n for g in gold_n)  # 不在题面、也不是标准答案之一
     ]
+    all_present = len(present) == len(gold)
     return Score(
-        len(present) == len(gold) and not extras,
+        all_present,  # 主判分：标准项全部出现（正文里顺带提到别的基金很常见，不因此判错）
         "list",
         {
             "recall": len(present) / len(gold) if gold else 1.0,
-            "all_present": len(present) == len(gold),
+            "all_present": all_present,
+            "strict_correct": all_present and not extras,  # 灵敏度：另要求没有多出的池内基金名
             "extra_funds": extras[:8],
             "n_gold": len(gold),
         },

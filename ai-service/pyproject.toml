@@ -28,6 +28,10 @@ dependencies = [
 model = [
     "sentence-transformers>=3",
 ]
+# S8 人工盲标表（.xlsx）；缺少时 `eval.answer blind` 退回 CSV
+eval = [
+    "openpyxl>=3.1",
+]
 dev = [
     "pytest>=8.3",
     "pytest-asyncio>=0.24",
