@@ -92,7 +92,9 @@ class BackendIntegrationTest {
         r.add("fra.security.internal-secret", () -> INTERNAL_SECRET);
         r.add("fra.upload.dir", () -> uploadDir.toString());
         r.add("fra.chat.heartbeat", () -> "200ms");
+        // 集成测试不需要 Redis（CI 里也没有）：指向一个不通的端口，证明启动和这些流程都不依赖它
         r.add("spring.data.redis.host", () -> "127.0.0.1");
+        r.add("spring.data.redis.port", () -> "1");
     }
 
     @LocalServerPort

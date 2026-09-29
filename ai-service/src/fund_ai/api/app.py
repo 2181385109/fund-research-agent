@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 import secrets
+import sys
 from collections.abc import AsyncIterator, Awaitable, Callable, Sequence
 from contextlib import AsyncExitStack, asynccontextmanager
 from typing import Any
@@ -50,6 +52,17 @@ def build_pipeline(settings: Settings) -> IngestPipeline:
     return pipeline
 
 
+def _configure_logging() -> None:
+    """让 fund_ai.* 的 INFO 日志（如 chat_stream_cancelled）在 uvicorn 下也能看到；不重复添加处理器。"""
+    log = logging.getLogger("fund_ai")
+    if log.handlers:
+        return
+    handler = logging.StreamHandler(sys.stderr)
+    handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(name)s %(message)s"))
+    log.addHandler(handler)
+    log.setLevel(logging.INFO)
+
+
 def build_user_pipeline(settings: Settings) -> IngestPipeline:
     """私有库（user_chunks）入库流水线，首次入库私有文档时才构造。"""
     embedder = build_embedder(settings)
@@ -89,6 +102,7 @@ def create_app(
 ) -> FastAPI:
     """``checkers`` / ``pipeline_factory`` 为 None 时按配置构造真实依赖；测试时传入 fake。"""
     settings = settings or get_settings()
+    _configure_logging()
     # 检索范围令牌的签名 / 校验（ADR-043）：Agent 签、文档 MCP 验。密钥未配置时进程内随机生成（单 worker）
     codec = scope_codec or ScopeCodec(
         settings.kb_scope_secret.get_secret_value() or secrets.token_hex(32)
