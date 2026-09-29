@@ -58,14 +58,16 @@ class Settings(BaseSettings):
     reranker_max_length: int = 512
     reranker_batch_size: int = 16
 
-    # 检索（S4）：默认值为 dev 集调参后的最终配置（docs/tuning_log.md）
+    # 检索（S4）：默认值为 dev 集调参后的最终配置（docs/tuning_log.md 「dev 调参结论」）
     retrieval_mode: str = "hybrid_rerank"  # vector | bm25 | hybrid | vector_rerank | hybrid_rerank
-    retrieval_vector_k: int = 50  # 向量路召回数
-    retrieval_bm25_k: int = 50  # BM25 路召回数
+    retrieval_vector_k: int = 20  # 向量路召回数
+    retrieval_bm25_k: int = 20  # BM25 路召回数
     retrieval_rrf_k: int = 60  # RRF 常数（PLAN 固定 60）
     retrieval_rerank_candidates: int = 20  # 送入重排的候选数
     retrieval_top_n: int = 10
-    retrieval_entity_filter: bool = True  # 识别出基金时按 fund_code 过滤；识别不到不过滤
+    retrieval_entity_filter: bool = (
+        False  # 识别出基金时按 fund_code 过滤（dev 上关更好，见 tuning_log run 4）
+    )
     retrieval_use_ctx: bool = True  # 用带上下文头的向量字段 / BM25 字段
     retrieval_query_instruction: bool = False  # 查询侧 BGE 指令前缀
 

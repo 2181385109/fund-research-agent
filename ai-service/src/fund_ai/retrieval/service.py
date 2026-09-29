@@ -34,12 +34,12 @@ MODES = ("vector", "bm25", "hybrid", "vector_rerank", "hybrid_rerank")
 @dataclass(frozen=True)
 class RetrievalConfig:
     mode: str = "hybrid_rerank"
-    vector_k: int = 50
-    bm25_k: int = 50
+    vector_k: int = 20
+    bm25_k: int = 20
     rrf_k: int = 60
     rerank_candidates: int = 20
     top_n: int = 10
-    entity_filter: bool = True
+    entity_filter: bool = False
     use_ctx: bool = True
     query_instruction: bool = False
 

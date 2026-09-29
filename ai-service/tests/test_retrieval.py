@@ -168,7 +168,9 @@ def _svc(reranker=None) -> RetrievalService:
 @pytest.mark.parametrize("mode", ["vector", "bm25", "hybrid", "vector_rerank", "hybrid_rerank"])
 def test_all_modes_return_stage_scores(mode):
     svc = _svc()
-    r = svc.retrieve("永赢科技驱动混合的管理费", svc.defaults.with_overrides(mode=mode))
+    r = svc.retrieve(
+        "永赢科技驱动混合的管理费", svc.defaults.with_overrides(mode=mode, entity_filter=True)
+    )
     assert r.entity_fund_codes == ["008919"]
     assert r.filter_fund_codes == ["008919"]
     assert r.hits and all(h.fund_code == "008919" for h in r.hits)

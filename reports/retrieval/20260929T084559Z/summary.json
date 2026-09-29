@@ -1,0 +1,679 @@
+{
+  "label": "dev#5 实体过滤关+上下文头关",
+  "env": {
+    "git_commit": "018bf82065b4753633c52c3d868b8b457bbc4f95",
+    "git_dirty": false,
+    "data_as_of": "2026-09-28",
+    "data_manifest_sha256": "b5df59cb954c170e44071fb38603f57eff401863656912e410a96a721d49e127",
+    "models": {
+      "embedding": "BAAI/bge-small-zh-v1.5",
+      "reranker": "cross_encoder:BAAI/bge-reranker-base",
+      "llm_requested": null,
+      "llm_response": null
+    },
+    "index": {
+      "milvus_collection": "fund_chunks",
+      "es_index": "fund_chunks"
+    },
+    "machine": {
+      "platform": "Windows-11-10.0.26200-SP0",
+      "python": "3.12.3",
+      "cpu_count": 16
+    },
+    "command": "cd ai-service && python -m fund_ai.eval.retrieval --split dev --modes vector,bm25,hybrid,vector_rerank,hybrid_rerank --label dev#5 实体过滤关+上下文头关 --entity-filter off --use-ctx off --query-instruction off --vector-k 50 --bm25-k 50 --rerank-candidates 20"
+  },
+  "dataset": {
+    "split": "dev",
+    "n_split": 33,
+    "n_evaluated": 30,
+    "n_excluded_unanswerable_or_no_evidence": 3,
+    "dataset_sha256": {
+      "fund_qa_v1.jsonl": "77fb06a9686ea195ef8813d192bc90ffceb05ffe0b1122864777dc026997e48d"
+    }
+  },
+  "config": {
+    "vector_k": 50,
+    "bm25_k": 50,
+    "rrf_k": 60,
+    "rerank_candidates": 20,
+    "top_n": 10,
+    "entity_filter": false,
+    "use_ctx": false,
+    "query_instruction": false
+  },
+  "modes": [
+    "vector",
+    "bm25",
+    "hybrid",
+    "vector_rerank",
+    "hybrid_rerank"
+  ],
+  "results": {
+    "vector": {
+      "overall": {
+        "n": 30,
+        "hit@1": 0.0,
+        "hit@3": 0.0333,
+        "hit@5": 0.0333,
+        "hit@10": 0.1,
+        "recall@5": 0.0333,
+        "recall@10": 0.1,
+        "mrr@10": 0.019,
+        "ndcg@10": 0.0372
+      },
+      "by_topic": {
+        "commentary": {
+          "n": 5,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.2,
+          "recall@5": 0.0,
+          "recall@10": 0.2,
+          "mrr@10": 0.025,
+          "ndcg@10": 0.0631
+        },
+        "contract_clause": {
+          "n": 5,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "mrr@10": 0.0,
+          "ndcg@10": 0.0
+        },
+        "cross_doc": {
+          "n": 3,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "mrr@10": 0.0,
+          "ndcg@10": 0.0
+        },
+        "fee": {
+          "n": 5,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "mrr@10": 0.0,
+          "ndcg@10": 0.0
+        },
+        "holdings": {
+          "n": 5,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "mrr@10": 0.0,
+          "ndcg@10": 0.0
+        },
+        "manager": {
+          "n": 3,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.3333,
+          "recall@5": 0.0,
+          "recall@10": 0.3333,
+          "mrr@10": 0.037,
+          "ndcg@10": 0.1003
+        },
+        "performance": {
+          "n": 4,
+          "hit@1": 0.0,
+          "hit@3": 0.25,
+          "hit@5": 0.25,
+          "hit@10": 0.25,
+          "recall@5": 0.25,
+          "recall@10": 0.25,
+          "mrr@10": 0.0833,
+          "ndcg@10": 0.125
+        }
+      },
+      "by_style": {
+        "keyword": {
+          "n": 14,
+          "hit@1": 0.0,
+          "hit@3": 0.0714,
+          "hit@5": 0.0714,
+          "hit@10": 0.1429,
+          "recall@5": 0.0714,
+          "recall@10": 0.1429,
+          "mrr@10": 0.0317,
+          "ndcg@10": 0.0572
+        },
+        "paraphrase": {
+          "n": 16,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.0625,
+          "recall@5": 0.0,
+          "recall@10": 0.0625,
+          "mrr@10": 0.0078,
+          "ndcg@10": 0.0197
+        }
+      },
+      "latency_ms": {
+        "p50": 12.03,
+        "p95": 13.13,
+        "n": 30
+      },
+      "entity_recognition": {
+        "covers_gold": 30,
+        "n": 30
+      }
+    },
+    "bm25": {
+      "overall": {
+        "n": 30,
+        "hit@1": 0.0333,
+        "hit@3": 0.1333,
+        "hit@5": 0.1667,
+        "hit@10": 0.2,
+        "recall@5": 0.1667,
+        "recall@10": 0.2,
+        "mrr@10": 0.0972,
+        "ndcg@10": 0.1227
+      },
+      "by_topic": {
+        "commentary": {
+          "n": 5,
+          "hit@1": 0.2,
+          "hit@3": 0.2,
+          "hit@5": 0.4,
+          "hit@10": 0.4,
+          "recall@5": 0.4,
+          "recall@10": 0.4,
+          "mrr@10": 0.25,
+          "ndcg@10": 0.2861
+        },
+        "contract_clause": {
+          "n": 5,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "mrr@10": 0.0,
+          "ndcg@10": 0.0
+        },
+        "cross_doc": {
+          "n": 3,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "mrr@10": 0.0,
+          "ndcg@10": 0.0
+        },
+        "fee": {
+          "n": 5,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "mrr@10": 0.0,
+          "ndcg@10": 0.0
+        },
+        "holdings": {
+          "n": 5,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "mrr@10": 0.0,
+          "ndcg@10": 0.0
+        },
+        "manager": {
+          "n": 3,
+          "hit@1": 0.0,
+          "hit@3": 1.0,
+          "hit@5": 1.0,
+          "hit@10": 1.0,
+          "recall@5": 1.0,
+          "recall@10": 1.0,
+          "mrr@10": 0.5,
+          "ndcg@10": 0.6309
+        },
+        "performance": {
+          "n": 4,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.25,
+          "recall@5": 0.0,
+          "recall@10": 0.25,
+          "mrr@10": 0.0417,
+          "ndcg@10": 0.0891
+        }
+      },
+      "by_style": {
+        "keyword": {
+          "n": 14,
+          "hit@1": 0.0,
+          "hit@3": 0.0714,
+          "hit@5": 0.0714,
+          "hit@10": 0.1429,
+          "recall@5": 0.0714,
+          "recall@10": 0.1429,
+          "mrr@10": 0.0476,
+          "ndcg@10": 0.0705
+        },
+        "paraphrase": {
+          "n": 16,
+          "hit@1": 0.0625,
+          "hit@3": 0.1875,
+          "hit@5": 0.25,
+          "hit@10": 0.25,
+          "recall@5": 0.25,
+          "recall@10": 0.25,
+          "mrr@10": 0.1406,
+          "ndcg@10": 0.1683
+        }
+      },
+      "latency_ms": {
+        "p50": 51.27,
+        "p95": 56.65,
+        "n": 30
+      },
+      "entity_recognition": {
+        "covers_gold": 30,
+        "n": 30
+      }
+    },
+    "hybrid": {
+      "overall": {
+        "n": 30,
+        "hit@1": 0.0333,
+        "hit@3": 0.1,
+        "hit@5": 0.1333,
+        "hit@10": 0.1667,
+        "recall@5": 0.1333,
+        "recall@10": 0.15,
+        "mrr@10": 0.0728,
+        "ndcg@10": 0.0913
+      },
+      "by_topic": {
+        "commentary": {
+          "n": 5,
+          "hit@1": 0.2,
+          "hit@3": 0.2,
+          "hit@5": 0.2,
+          "hit@10": 0.2,
+          "recall@5": 0.2,
+          "recall@10": 0.2,
+          "mrr@10": 0.2,
+          "ndcg@10": 0.2
+        },
+        "contract_clause": {
+          "n": 5,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "mrr@10": 0.0,
+          "ndcg@10": 0.0
+        },
+        "cross_doc": {
+          "n": 3,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.3333,
+          "recall@5": 0.0,
+          "recall@10": 0.1667,
+          "mrr@10": 0.0333,
+          "ndcg@10": 0.0591
+        },
+        "fee": {
+          "n": 5,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "mrr@10": 0.0,
+          "ndcg@10": 0.0
+        },
+        "holdings": {
+          "n": 5,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "mrr@10": 0.0,
+          "ndcg@10": 0.0
+        },
+        "manager": {
+          "n": 3,
+          "hit@1": 0.0,
+          "hit@3": 0.6667,
+          "hit@5": 0.6667,
+          "hit@10": 0.6667,
+          "recall@5": 0.6667,
+          "recall@10": 0.6667,
+          "mrr@10": 0.2778,
+          "ndcg@10": 0.377
+        },
+        "performance": {
+          "n": 4,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.25,
+          "hit@10": 0.25,
+          "recall@5": 0.25,
+          "recall@10": 0.25,
+          "mrr@10": 0.0625,
+          "ndcg@10": 0.1077
+        }
+      },
+      "by_style": {
+        "keyword": {
+          "n": 14,
+          "hit@1": 0.0,
+          "hit@3": 0.0714,
+          "hit@5": 0.1429,
+          "hit@10": 0.1429,
+          "recall@5": 0.1429,
+          "recall@10": 0.1429,
+          "mrr@10": 0.0417,
+          "ndcg@10": 0.0665
+        },
+        "paraphrase": {
+          "n": 16,
+          "hit@1": 0.0625,
+          "hit@3": 0.125,
+          "hit@5": 0.125,
+          "hit@10": 0.1875,
+          "recall@5": 0.125,
+          "recall@10": 0.1562,
+          "mrr@10": 0.1,
+          "ndcg@10": 0.113
+        }
+      },
+      "latency_ms": {
+        "p50": 68.54,
+        "p95": 76.93,
+        "n": 30
+      },
+      "entity_recognition": {
+        "covers_gold": 30,
+        "n": 30
+      }
+    },
+    "vector_rerank": {
+      "overall": {
+        "n": 30,
+        "hit@1": 0.0333,
+        "hit@3": 0.0667,
+        "hit@5": 0.1,
+        "hit@10": 0.1333,
+        "recall@5": 0.0833,
+        "recall@10": 0.1167,
+        "mrr@10": 0.0631,
+        "ndcg@10": 0.0669
+      },
+      "by_topic": {
+        "commentary": {
+          "n": 5,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.2,
+          "hit@10": 0.2,
+          "recall@5": 0.2,
+          "recall@10": 0.2,
+          "mrr@10": 0.05,
+          "ndcg@10": 0.0861
+        },
+        "contract_clause": {
+          "n": 5,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "mrr@10": 0.0,
+          "ndcg@10": 0.0
+        },
+        "cross_doc": {
+          "n": 3,
+          "hit@1": 0.3333,
+          "hit@3": 0.3333,
+          "hit@5": 0.3333,
+          "hit@10": 0.3333,
+          "recall@5": 0.1667,
+          "recall@10": 0.1667,
+          "mrr@10": 0.3333,
+          "ndcg@10": 0.2044
+        },
+        "fee": {
+          "n": 5,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "mrr@10": 0.0,
+          "ndcg@10": 0.0
+        },
+        "holdings": {
+          "n": 5,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "mrr@10": 0.0,
+          "ndcg@10": 0.0
+        },
+        "manager": {
+          "n": 3,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.3333,
+          "recall@5": 0.0,
+          "recall@10": 0.3333,
+          "mrr@10": 0.0476,
+          "ndcg@10": 0.1111
+        },
+        "performance": {
+          "n": 4,
+          "hit@1": 0.0,
+          "hit@3": 0.25,
+          "hit@5": 0.25,
+          "hit@10": 0.25,
+          "recall@5": 0.25,
+          "recall@10": 0.25,
+          "mrr@10": 0.125,
+          "ndcg@10": 0.1577
+        }
+      },
+      "by_style": {
+        "keyword": {
+          "n": 14,
+          "hit@1": 0.0,
+          "hit@3": 0.0714,
+          "hit@5": 0.0714,
+          "hit@10": 0.1429,
+          "recall@5": 0.0714,
+          "recall@10": 0.1429,
+          "mrr@10": 0.0459,
+          "ndcg@10": 0.0689
+        },
+        "paraphrase": {
+          "n": 16,
+          "hit@1": 0.0625,
+          "hit@3": 0.0625,
+          "hit@5": 0.125,
+          "hit@10": 0.125,
+          "recall@5": 0.0938,
+          "recall@10": 0.0938,
+          "mrr@10": 0.0781,
+          "ndcg@10": 0.0652
+        }
+      },
+      "latency_ms": {
+        "p50": 3634.44,
+        "p95": 4164.83,
+        "n": 30
+      },
+      "entity_recognition": {
+        "covers_gold": 30,
+        "n": 30
+      }
+    },
+    "hybrid_rerank": {
+      "overall": {
+        "n": 30,
+        "hit@1": 0.0333,
+        "hit@3": 0.1333,
+        "hit@5": 0.1333,
+        "hit@10": 0.1667,
+        "recall@5": 0.1167,
+        "recall@10": 0.15,
+        "mrr@10": 0.0756,
+        "ndcg@10": 0.0844
+      },
+      "by_topic": {
+        "commentary": {
+          "n": 5,
+          "hit@1": 0.0,
+          "hit@3": 0.2,
+          "hit@5": 0.2,
+          "hit@10": 0.2,
+          "recall@5": 0.2,
+          "recall@10": 0.2,
+          "mrr@10": 0.0667,
+          "ndcg@10": 0.1
+        },
+        "contract_clause": {
+          "n": 5,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "mrr@10": 0.0,
+          "ndcg@10": 0.0
+        },
+        "cross_doc": {
+          "n": 3,
+          "hit@1": 0.3333,
+          "hit@3": 0.3333,
+          "hit@5": 0.3333,
+          "hit@10": 0.3333,
+          "recall@5": 0.1667,
+          "recall@10": 0.1667,
+          "mrr@10": 0.3333,
+          "ndcg@10": 0.2044
+        },
+        "fee": {
+          "n": 5,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "mrr@10": 0.0,
+          "ndcg@10": 0.0
+        },
+        "holdings": {
+          "n": 5,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.0,
+          "hit@10": 0.0,
+          "recall@5": 0.0,
+          "recall@10": 0.0,
+          "mrr@10": 0.0,
+          "ndcg@10": 0.0
+        },
+        "manager": {
+          "n": 3,
+          "hit@1": 0.0,
+          "hit@3": 0.3333,
+          "hit@5": 0.3333,
+          "hit@10": 0.6667,
+          "recall@5": 0.3333,
+          "recall@10": 0.6667,
+          "mrr@10": 0.1444,
+          "ndcg@10": 0.263
+        },
+        "performance": {
+          "n": 4,
+          "hit@1": 0.0,
+          "hit@3": 0.25,
+          "hit@5": 0.25,
+          "hit@10": 0.25,
+          "recall@5": 0.25,
+          "recall@10": 0.25,
+          "mrr@10": 0.125,
+          "ndcg@10": 0.1577
+        }
+      },
+      "by_style": {
+        "keyword": {
+          "n": 14,
+          "hit@1": 0.0,
+          "hit@3": 0.0714,
+          "hit@5": 0.0714,
+          "hit@10": 0.1429,
+          "recall@5": 0.0714,
+          "recall@10": 0.1429,
+          "mrr@10": 0.0429,
+          "ndcg@10": 0.0657
+        },
+        "paraphrase": {
+          "n": 16,
+          "hit@1": 0.0625,
+          "hit@3": 0.1875,
+          "hit@5": 0.1875,
+          "hit@10": 0.1875,
+          "recall@5": 0.1562,
+          "recall@10": 0.1562,
+          "mrr@10": 0.1042,
+          "ndcg@10": 0.1008
+        }
+      },
+      "latency_ms": {
+        "p50": 3828.33,
+        "p95": 4494.92,
+        "n": 30
+      },
+      "entity_recognition": {
+        "covers_gold": 30,
+        "n": 30
+      }
+    }
+  },
+  "comparisons": {}
+}
