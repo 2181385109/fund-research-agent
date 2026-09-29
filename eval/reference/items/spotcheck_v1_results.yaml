@@ -1,0 +1,12 @@
+# 用户抽检结论（S3 验收 2）。抽检表：eval/datasets/review/spotcheck_v1.md（按 reference/spotcheck.py 的固定规则抽样）。
+# build_datasets 据此写 verified_by，并把被抽中的 llm_draft 题标为 llm_draft_human_verified。
+date: "2026-09-29"
+reviewer: user
+passed: [qa-0003, qa-0015, qa-0021, qa-0028, qa-0035, qa-0037, qa-0046, qa-0048, qa-0060, qa-0061, qa-0083,
+         qa-0096, qa-0101, qa-0110, qa-0111, agent-0003, agent-0006, agent-0011, agent-0030, agent-0035,
+         agent-0055, agent-0059, agent-0064]
+modified:
+  qa-0091: "补引文（第 6 页）「投资策略上，本基金始终维持高股票仓位，行业配置以及个股权重参考中证人工智能指数」"
+  agent-0049: "补新易盛持仓行引文（季报第 11 页）；gold_sql 同时查出占净值比例"
+  agent-0047: "核实 008920 为 C 类（share_classes + 2026Q2 季报交易代码）；gold_sql 限定 share_class='C'；核实结果写入 notes"
+  agent-0029: "结束日改为交易日 2026-09-24，题面写明年化口径"

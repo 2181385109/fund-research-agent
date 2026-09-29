@@ -142,6 +142,25 @@ def assign_splits_and_ids(
     return ordered
 
 
+def apply_spotcheck(items: list[dict]) -> None:
+    """按 items/spotcheck_v1_results.yaml 写 verified_by；被抽中的 llm_draft 升为 llm_draft_human_verified。"""
+    path = ITEMS_DIR / "spotcheck_v1_results.yaml"
+    if not path.exists():
+        return
+    res = yaml.safe_load(path.read_text(encoding="utf-8"))
+    by_id = {it["id"]: it for it in items}
+    marks = {i: "抽检通过" for i in res.get("passed", [])}
+    marks |= {i: "抽检后按意见修改" for i in res.get("modified", {})}
+    missing = [i for i in marks if i not in by_id]
+    if missing:
+        raise BuildError(f"抽检结论里的 id 不存在：{missing}")
+    for i, verdict in marks.items():
+        it = by_id[i]
+        it["verified_by"] = f"{res['reviewer']}@{res['date']} {verdict}"
+        if it["provenance"] == "llm_draft":
+            it["provenance"] = "llm_draft_human_verified"
+
+
 def build() -> tuple[list[dict], list[dict], list[str]]:
     from reference import templates
     from reference.schema import AGENT_TOPICS, QA_TOPICS
@@ -158,6 +177,7 @@ def build() -> tuple[list[dict], list[dict], list[str]]:
                 errors.append(f"[{kind}] {r.get('question', '?')[:40]}: {type(e).__name__}: {e}")
     qa = assign_splits_and_ids(qa, "qa", QA_TOPICS)
     agent = assign_splits_and_ids(agent, "agent", AGENT_TOPICS)
+    apply_spotcheck(qa + agent)
     for it in qa + agent:
         try:
             Item.model_validate(it)

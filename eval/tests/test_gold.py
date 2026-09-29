@@ -10,6 +10,7 @@ from reference import gold as G
 SHARE = "999999"
 NAV = [
     ("2026-01-02", 1.00),
+    ("2026-01-03", 1.07),  # 周六披露的净值（类比季末 / 年末），不算交易日，必须被忽略
     ("2026-01-05", 1.10),
     ("2026-01-06", 1.05),  # 除息日，每份分红 0.10
     ("2026-01-07", 0.90),
@@ -99,3 +100,10 @@ def test_no_nav_before_start():
 def test_fees_need_amount():
     with pytest.raises(ValueError):
         G.calc_return(SHARE, "2026-01-02", "2026-01-08", include_fees=True)
+
+
+def test_trading_day_calendar():
+    assert G.is_trading_day("2026-01-02")  # 周五，有净值
+    assert not G.is_trading_day("2026-01-03")  # 周六，虽有净值也不算
+    assert not G.is_trading_day("2026-01-09")  # 周五但没有净值（节假日）
+    assert G.nav_on_or_before(SHARE, "2026-01-04") == ("2026-01-02", 1.00)

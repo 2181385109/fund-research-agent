@@ -110,7 +110,7 @@
   expected_tools: ["search_fund_documents"]
   evidence:
     - doc: contract
-      quote: "其中投资于科技驱动主题相关证券的比例不低于非现金基金资产的80%"
+      quote: "本基金投资于股票资产占基金资产的比例为60%-95%，其中投资于科技驱动主题相关证券的比例不低于非现金基金资产的80%"
 - topic: doc_only
   style: keyword
   fund: "001513"
@@ -134,6 +134,9 @@
     - doc: quarterly_report
       period: 2026Q2
       quote: "我们认为A股市场有望延续震荡上行格局，但行业分化程度相比二季度可能收敛"
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "但由于海外流动性环境三季度可能边际收紧，市场整体波动性可能加大"
 - topic: doc_only
   style: paraphrase
   fund: "013840"
@@ -146,6 +149,9 @@
     - doc: quarterly_report
       period: 2026Q2
       quote: "我们仍将重仓低估值、高成长、大空间和强确定性的半导体国产化标的"
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "并积极配置基本面确定性受益于AI浪潮的相关芯片设计和制造公司"
 
 # ------------------------------------------------------------------ no_tool（通用知识，不需要调用工具）
 - topic: no_tool

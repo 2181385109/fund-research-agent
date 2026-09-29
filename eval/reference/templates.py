@@ -12,6 +12,7 @@ import re
 import pandas as pd
 
 from reference import gold as G
+from reference import rules
 from reference.common import norm, page_texts, pct, raw_span, table
 from reference.doc_facts import doc_id_of, fee_fact, pct_str_to_float
 
@@ -117,9 +118,11 @@ def holding_quote(doc_id: str, rank: int, code: str, stock: str, weight: float) 
     )
     q = _search_norm(doc_id, pat)
     if q is None:
-        # 公允价值单元格折行时占比不紧跟在后面：退到「序号 代码 名称 持股数（千分位）」
+        # 公允价值单元格折行时，pdfplumber 文本里占比紧跟持股数（「22,298,323 9.78」）：
+        # 退到「序号 代码 名称 持股数 占比」，保证占比仍在引文里（S3 抽检后规则 a）
         q = _search_norm(
-            doc_id, rf"{rank}0*{code.lstrip('0')}{re.escape(stock)}\d{{1,3}}(?:,\d{{3}})+"
+            doc_id,
+            rf"{rank}0*{code.lstrip('0')}{re.escape(stock)}\d{{1,3}}(?:,\d{{3}})+{re.escape(w)}",
         )
     if q is None:
         raise TemplateError(f"{doc_id}: 找不到持仓行 {rank} {code} {stock} {w}")
@@ -458,7 +461,7 @@ def tool_sql_items() -> list[dict]:
             "基金池里管理费率最低的是哪些基金（按A类份额）？",
             "list",
             low,
-            """SELECT f.fund_name FROM funds f JOIN share_classes s ON s.fund_code=f.fund_code AND s.share_class='A'
+            """SELECT f.fund_name, e.management_fee FROM funds f JOIN share_classes s ON s.fund_code=f.fund_code AND s.share_class='A'
                JOIN fees e ON e.share_code=s.share_code
                WHERE e.management_fee=(SELECT MIN(e2.management_fee) FROM fees e2
                JOIN share_classes s2 ON s2.share_code=e2.share_code AND s2.share_class='A')""",
@@ -476,7 +479,7 @@ def tool_sql_items() -> list[dict]:
             "截至2026年6月30日，科技主题基金中哪只的基金资产净值最大？",
             "entity",
             fname[top.fund_code],
-            """SELECT f.fund_name FROM fund_scale s JOIN funds f ON f.fund_code=s.fund_code
+            """SELECT f.fund_name, s.net_assets FROM fund_scale s JOIN funds f ON f.fund_code=s.fund_code
                WHERE f.theme='科技' AND s.report_date='2026-06-30' ORDER BY s.net_assets DESC LIMIT 1""",
             "fund_scale ⋈ funds（theme=科技, 2026-06-30 最大 net_assets）",
             funds=[top.fund_code],
@@ -531,10 +534,10 @@ def tool_sql_items() -> list[dict]:
     best = prm.sort_values("ret").iloc[-1]
     out.append(
         _sql_item(
-            "截至2026年9月28日，医药医疗主题基金的A类份额里，近一年收益率最高的是哪只基金？",
+            "截至2026年9月28日，医药医疗主题基金的A类份额里，近一年收益率（来源方口径）最高的是哪只基金？",
             "entity",
             fname[best.fund_code],
-            """SELECT f.fund_name FROM period_returns p JOIN share_classes s ON s.share_code=p.share_code AND s.share_class='A'
+            """SELECT f.fund_name, p.ret FROM period_returns p JOIN share_classes s ON s.share_code=p.share_code AND s.share_class='A'
                JOIN funds f ON f.fund_code=s.fund_code WHERE f.theme='医药医疗' AND p.period='1y'
                ORDER BY p.ret DESC LIMIT 1""",
             "period_returns ⋈ share_classes ⋈ funds（1y 最大）",
@@ -576,7 +579,7 @@ def tool_sql_items() -> list[dict]:
             "2026年二季度，哪只基金的基金资产净值比一季度末增加得最多？",
             "entity",
             fname[gcode],
-            """SELECT f.fund_name FROM fund_scale a JOIN fund_scale b ON a.fund_code=b.fund_code
+            """SELECT f.fund_name, b.net_assets-a.net_assets AS growth FROM fund_scale a JOIN fund_scale b ON a.fund_code=b.fund_code
                JOIN funds f ON f.fund_code=a.fund_code
                WHERE a.report_date='2026-03-31' AND b.report_date='2026-06-30'
                ORDER BY b.net_assets-a.net_assets DESC LIMIT 1""",
@@ -592,7 +595,7 @@ def tool_sql_items() -> list[dict]:
             "基金池里成立最早的是哪只基金？",
             "entity",
             earliest.fund_name,
-            "SELECT fund_name FROM funds ORDER BY established ASC LIMIT 1",
+            "SELECT fund_name, established FROM funds ORDER BY established ASC LIMIT 1",
             "funds.established 最小",
             funds=[earliest.fund_code],
             reference_answer=f"{earliest.fund_name}，成立于{earliest.established}。",
@@ -606,7 +609,7 @@ def tool_sql_items() -> list[dict]:
             "2026年9月28日，基金池各基金的A类份额中单位净值最高的是哪只基金？",
             "entity",
             fname[top_nav.fund_code],
-            """SELECT f.fund_name FROM nav_daily n JOIN share_classes s ON s.share_code=n.share_code AND s.share_class='A'
+            """SELECT f.fund_name, n.unit_nav FROM nav_daily n JOIN share_classes s ON s.share_code=n.share_code AND s.share_class='A'
                JOIN funds f ON f.fund_code=s.fund_code WHERE n.nav_date='2026-09-28' ORDER BY n.unit_nav DESC LIMIT 1""",
             "nav_daily ⋈ share_classes（2026-09-28 A 类最大 unit_nav）",
             funds=[top_nav.fund_code],
@@ -634,7 +637,7 @@ def tool_sql_items() -> list[dict]:
             "2026年二季度末前十大重仓股里有寒武纪的基金中，哪只基金持有寒武纪的占比最高？",
             "entity",
             fname[cam_top.fund_code],
-            """SELECT f.fund_name FROM holdings_top10 h JOIN funds f ON f.fund_code=h.fund_code
+            """SELECT f.fund_name, h.weight FROM holdings_top10 h JOIN funds f ON f.fund_code=h.fund_code
                WHERE h.report_period='2026Q2' AND h.stock_name='寒武纪' ORDER BY h.weight DESC LIMIT 1""",
             "holdings_top10 ⋈ funds（寒武纪 weight 最大）",
             funds=[cam_top.fund_code],
@@ -719,7 +722,6 @@ def tool_sql_items() -> list[dict]:
             funds=sorted(r1q[r1q.weight.astype(float) > 0.10].fund_code),
         )
     )
-    med_codes = set(f[f.theme == "医药医疗"].fund_code)
     q2m = q2.merge(f[["fund_code", "theme"]], on="fund_code")
     med_stocks = q2m[q2m.theme == "医药医疗"].stock_name.value_counts()
     top_stock = med_stocks.index[0]
@@ -729,7 +731,7 @@ def tool_sql_items() -> list[dict]:
             "2026年二季度末，被最多只医药医疗主题基金列入前十大重仓股的是哪只股票？",
             "entity",
             top_stock,
-            """SELECT h.stock_name FROM holdings_top10 h JOIN funds f ON f.fund_code=h.fund_code
+            """SELECT h.stock_name, COUNT(DISTINCT h.fund_code) AS n_funds FROM holdings_top10 h JOIN funds f ON f.fund_code=h.fund_code
                WHERE h.report_period='2026Q2' AND f.theme='医药医疗'
                GROUP BY h.stock_name ORDER BY COUNT(DISTINCT h.fund_code) DESC LIMIT 1""",
             "holdings_top10 ⋈ funds 分组计数",
@@ -737,8 +739,23 @@ def tool_sql_items() -> list[dict]:
             funds=[],
         )
     )
-    _ = med_codes
     return out
+
+
+def _calc_caliber(metric: str, nontrading: bool) -> str:
+    """收益计算题题面里的口径说明（SCHEMA.md「口径」一节；规则 d / c 校验）。"""
+    parts = ["分红按再投资计"]
+    if metric == "annualized":
+        parts.append(
+            f"年化口径：(1+区间收益率)^({rules.ANNUAL_MARK})−1，自然日天数按实际使用的起止交易日计算"
+        )
+    if metric == "max_drawdown":
+        parts.append("最大回撤按复权净值计算")
+    if metric == "net_ret_with_fees":
+        parts.append("申购费外扣、赎回费按持有自然日数落档，不考虑销售平台折扣")
+    if nontrading:
+        parts.append(rules.NONTRADING_RULE)
+    return "（" + "；".join(parts) + "）"
 
 
 def calc_items() -> list[dict]:
@@ -749,7 +766,7 @@ def calc_items() -> list[dict]:
         ("110023", "2025-09-28", "2026-09-28", "ret", False, None, "paraphrase"),
         ("161035", "2023-01-01", "2023-12-31", "ret", False, None, "keyword"),
         ("040025", "2026-01-05", "2026-09-28", "max_drawdown", False, None, "keyword"),
-        ("014193", "2024-09-27", "2026-09-25", "annualized", False, None, "keyword"),
+        ("014193", "2024-09-27", "2026-09-24", "annualized", False, None, "keyword"),
         ("003095", "2026-01-05", "2026-06-30", "net_ret_with_fees", True, 10000.0, "paraphrase"),
         ("001717", "2025-06-30", "2026-06-30", "net_ret_with_fees", True, 2000000.0, "keyword"),
     ]
@@ -765,20 +782,22 @@ def calc_items() -> list[dict]:
         r = G.calc_return(code, start, end, include_fees=fees_on, amount=amount)
         val = getattr(r, metric)
         g = pct(val)
+        nontrading = not (G.is_trading_day(start) and G.is_trading_day(end))
+        cal = _calc_caliber(metric, nontrading)
         if metric == "ret" and style == "paraphrase":
-            q = f"如果在{start}买入{n}并一直持有到{end}，分红再投资的话，这段时间大概赚了或亏了百分之多少？"
+            q = f"如果在{start}买入{n}并一直持有到{end}，这段时间大概赚了或亏了百分之多少？{cal}"
         elif metric == "net_ret_with_fees":
             q = (
-                f"{start}用{amount:,.0f}元申购{n}，{end}全部赎回，按招募说明书的申购费和赎回费标准"
-                f"（不考虑销售平台折扣），扣费后的收益率是多少？"
+                f"{start}用{amount:,.0f}元申购{n}，{end}全部赎回，按招募说明书的申购费和赎回费标准，"
+                f"扣费后的收益率是多少？{cal}"
             )
         else:
-            q = f"计算{n}从{start}到{end}的{label[metric]}（分红按再投资计）。"
+            q = f"计算{n}从{start}到{end}的{label[metric]}{cal}。"
         notes = (
             f"实际使用净值日 {r.start_used} → {r.end_used}；区间内除息 {r.dividends_in_range} 次"
         )
-        if start != r.start_used or end != r.end_used:
-            notes += "（起止日含非净值日，按前一净值日取值）"
+        if nontrading:
+            notes += f"（起止日含非交易日，{rules.NONTRADING_RULE}；专门考非交易日取值）"
         out.append(
             {
                 "topic": "calc_return",
@@ -861,7 +880,9 @@ def _docdb(
     sql: str,
     source: str,
     style: str = "keyword",
+    notes: str = "",
 ) -> dict:
+    """doc 可以是一条证据或证据列表。"""
     return {
         "topic": "doc_db",
         "style": style,
@@ -870,7 +891,8 @@ def _docdb(
         "answer_type": "text",
         "reference_answer": "；".join(doc_points + db_points) + "。",
         "answer_points": doc_points + db_points,
-        "evidence": [doc],
+        "evidence": doc if isinstance(doc, list) else [doc],
+        "notes": notes,
         "expected_tools": ["search_fund_documents", "run_fund_sql"],
         "gold_sql": " ".join(sql.split()),
         "gold_source": f"文档部分：原文 quote；数据库部分：{source}（pandas 计算，gold_sql 复核）",
@@ -974,7 +996,7 @@ def doc_db_items() -> list[dict]:
     out.append(
         _docdb(
             "160219",
-            "国泰国证医药卫生行业指数的管理费年费率是多少？截至2026年9月28日它近一年的收益率是多少？",
+            "国泰国证医药卫生行业指数的管理费年费率是多少？截至2026年9月28日它A类份额近一年的收益率（来源方口径）是多少？",
             {"doc_id": fact.doc_id, "quote": fact.quote},
             [f"管理费年费率{fact.value}"],
             [f"近一年收益率{pct(r1)}（来源方口径，截至2026-09-28）"],
@@ -1016,7 +1038,7 @@ def doc_db_items() -> list[dict]:
     out.append(
         _docdb(
             "040025",
-            "华安科技动力混合A在2026年二季度的净值增长率是多少？到2026年9月28日它的单位净值是多少？",
+            "华安科技动力混合A在2026年二季度的净值增长率（以季报披露为准）是多少？到2026年9月28日它的单位净值是多少？",
             {
                 "doc": "quarterly_report",
                 "period": "2026Q2",
@@ -1028,20 +1050,42 @@ def doc_db_items() -> list[dict]:
             "nav_daily（040025, 2026-09-28）",
         )
     )
-    sf = G.fee(G.share_codes("008919")["C"], "sales_service_fee")
+    c_code = G.share_codes("008919")["C"]
+    sc_row = table("share_classes").set_index("share_code").loc[c_code]
+    if c_code != "008920" or sc_row.share_class != "C" or not str(sc_row.share_name).endswith("C"):
+        raise TemplateError(f"008919 的 C 类份额核实失败：{c_code} {sc_row.to_dict()}")
+    sf = G.fee(c_code, "sales_service_fee")
+    sf_fact = fee_fact("008919", "sales_service_fee")
+    if sf_fact is None or abs(pct_str_to_float(sf_fact.value) - sf) > 1e-9:
+        raise TemplateError("008919 C 类销售服务费：招募说明书与快照不一致或未找到")
     out.append(
         _docdb(
             "008919",
             "在代销平台第一次买永赢科技驱动混合最少要多少钱？如果买C类份额，每年的销售服务费率是多少？",
-            {
-                "doc": "prospectus",
-                "quote": "通过基金管理人直销线上渠道或基金管理人指定的其他销售机构申购，首次申购的单笔最低金额为人民币1元（含申购费）",
-            },
+            [
+                {
+                    "doc": "prospectus",
+                    "quote": "通过基金管理人直销线上渠道或基金管理人指定的其他销售机构申购，首次申购的单笔最低金额为人民币1元（含申购费）",
+                },
+                {"doc_id": sf_fact.doc_id, "quote": sf_fact.quote},
+                {
+                    "doc": "quarterly_report",
+                    "period": "2026Q2",
+                    "quote": "下属分级基金的基金简称 永赢科技驱动A 永赢科技驱动C 下属分级基金的交易代码 008919 008920",
+                },
+            ],
             ["代销及直销线上渠道首次申购最低1元"],
-            [f"C类销售服务费年费率{pct(sf)}"],
-            f"SELECT sales_service_fee FROM fees WHERE share_code='{G.share_codes('008919')['C']}'",
-            "fees（008919 C 类）",
+            [f"C类（{c_code}）销售服务费年费率{pct(sf)}"],
+            """SELECT s.share_code, s.share_name, e.sales_service_fee FROM fees e
+               JOIN share_classes s ON s.share_code=e.share_code
+               WHERE s.fund_code='008919' AND s.share_class='C'""",
+            "fees ⋈ share_classes（008919 C 类）",
             style="paraphrase",
+            notes=(
+                f"份额核实：share_classes 中 {c_code} 的 share_class=C、简称「{sc_row.share_name}」；"
+                "2026年第2季度报告第3页「下属分级基金的交易代码」列出永赢科技驱动A 008919、永赢科技驱动C 008920；"
+                f"招募说明书第{sf_fact.page}页写明C类销售服务费年费率{sf_fact.value}，与 fees 表一致"
+            ),
         )
     )
     dv = G.dividends("161035")
@@ -1062,14 +1106,17 @@ def doc_db_items() -> list[dict]:
         _docdb(
             "001513",
             "易方达信息产业混合二季度加仓了哪些方向？二季度末它的第一大重仓股是什么？",
-            {
-                "doc": "quarterly_report",
-                "period": "2026Q2",
-                "quote": "提升了 AI 算力、半导体晶圆以及半导体设备产业链配置比例",
-            },
+            [
+                {
+                    "doc": "quarterly_report",
+                    "period": "2026Q2",
+                    "quote": "提升了 AI 算力、半导体晶圆以及半导体设备产业链配置比例",
+                },
+                _hevidence("001513", "2026Q2", t0),
+            ],
             ["二季度提升了AI算力、半导体晶圆及半导体设备产业链配置"],
             [f"二季度末第一大重仓股{t0.stock_name}（占净值{pct(float(t0.weight))}）"],
-            "SELECT stock_name FROM holdings_top10 WHERE fund_code='001513' AND report_period='2026Q2' AND rank_no=1",
+            "SELECT stock_name, weight FROM holdings_top10 WHERE fund_code='001513' AND report_period='2026Q2' AND rank_no=1",
             "holdings_top10（001513, 2026Q2, rank 1）",
             style="paraphrase",
         )

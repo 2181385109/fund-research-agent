@@ -21,7 +21,15 @@ from pathlib import Path
 
 import yaml
 
-from reference.common import DATA_DIR, DATASETS_DIR, documents, find_quote_pages, norm, page_texts
+from reference.common import (
+    DATA_DIR,
+    DATASETS_DIR,
+    documents,
+    find_quote_pages,
+    norm,
+    page_texts,
+    snapshot_dir,
+)
 from reference.schema import (
     AGENT_MIN,
     AGENT_MIN_TOTAL,
@@ -175,8 +183,9 @@ def _cmp_sql(it: Item, rows: list[tuple]) -> str | None:
     from reference.db import cell_str
 
     if it.answer_type == "numeric":
-        if len(rows) != 1 or len(rows[0]) != 1 or rows[0][0] is None:
-            return f"期望 1×1 数值，实际 {len(rows)} 行"
+        # 第一列是答案；其余列是支撑 answer_points / reference_answer 的附带事实
+        if len(rows) != 1 or rows[0][0] is None:
+            return f"期望 1 行、第一列为数值，实际 {len(rows)} 行"
         got = Decimal(str(rows[0][0]))
         want, _ = parse_numeric(it.gold_value)  # type: ignore[arg-type]
         tol = tolerance_base(it.gold_value, it.tolerance)  # type: ignore[arg-type]
@@ -184,8 +193,8 @@ def _cmp_sql(it: Item, rows: list[tuple]) -> str | None:
             return f"SQL={got} gold={it.gold_value}（基本单位 {want}，容差 {tol}）"
         return None
     if it.answer_type == "entity":
-        if len(rows) != 1 or len(rows[0]) != 1:
-            return f"期望 1×1，实际 {len(rows)} 行"
+        if len(rows) != 1:
+            return f"期望 1 行（第一列为答案），实际 {len(rows)} 行"
         got_s = cell_str(rows[0][0])
         return None if got_s == it.gold_value else f"SQL={got_s!r} gold={it.gold_value!r}"
     if it.answer_type == "text":
@@ -200,13 +209,17 @@ def _cmp_sql(it: Item, rows: list[tuple]) -> str | None:
     return None
 
 
-def check_sql(items: list[Item]) -> tuple[list[str], int]:
+def check_sql(
+    items: list[Item], results: dict[str, list[tuple]] | None = None
+) -> tuple[list[str], int]:
+    """执行 gold_sql 并比对；执行结果写进 results（供 rules.support_check 使用）。"""
     from reference.db import connect, run_sql
 
     todo = [it for it in items if it.gold_sql]
     if not todo:
         return [], 0
     errors: list[str] = []
+    results = results if results is not None else {}
     conn = connect()
     try:
         for it in todo:
@@ -215,12 +228,38 @@ def check_sql(items: list[Item]) -> tuple[list[str], int]:
             except Exception as e:  # SQL 错误原文上报
                 errors.append(f"{it.id}: gold_sql 执行失败：{e}")
                 continue
+            results[it.id] = rows
             msg = _cmp_sql(it, rows)
             if msg:
                 errors.append(f"{it.id}: gold_sql 结果与 gold_value 不符：{msg}")
     finally:
         conn.close()
     return errors, len(todo)
+
+
+def check_rules(
+    items: list[Item], sql_rows: dict[str, list[tuple]] | None
+) -> tuple[list[str], list[str], int]:
+    """a–d 内容规则（reference.rules）。sql_rows=None（--no-sql）时，带 gold_sql 的题跳过支撑检查。"""
+    from reference.common import data_as_of, snapshot_dir
+    from reference.rules import caliber_errors, date_errors, share_scope_errors, support_check
+
+    errs: list[str] = []
+    warns: list[str] = []
+    skipped = 0
+    as_of = data_as_of()
+    has_snapshot = (snapshot_dir() / "nav_daily.csv").exists()  # CI 没有快照：跳过交易日检查
+    for it in items:
+        errs += share_scope_errors(it) + caliber_errors(it)
+        if has_snapshot:
+            errs += date_errors(it, as_of)
+        if it.gold_sql and sql_rows is None:
+            skipped += 1
+            continue
+        e, w = support_check(it, (sql_rows or {}).get(it.id) if it.gold_sql else [])
+        errs += e
+        warns += w
+    return errs, warns, skipped
 
 
 def check_reachability(items: list[Item], chunks_path: Path) -> dict:
@@ -302,12 +341,24 @@ def validate(
         result["checks"]["quotes_checked"] = n
     else:
         result["checks"]["quotes_checked"] = "skipped(--no-pdf)"
+    sql_rows: dict[str, list[tuple]] = {}
     if sql:
-        errs, n = check_sql(all_items)
+        errs, n = check_sql(all_items, sql_rows)
         result["errors"] += errs
         result["checks"]["gold_sql_checked"] = n
     else:
         result["checks"]["gold_sql_checked"] = "skipped(--no-sql)"
+    errs, warns, skipped = check_rules(all_items, sql_rows if sql else None)
+    result["errors"] += errs
+    result["checks"]["content_rules"] = {
+        "errors": len(errs),
+        "support_skipped_no_sql": skipped,
+        "text_points_to_review": len(warns),
+        "date_rule": "checked"
+        if (snapshot_dir() / "nav_daily.csv").exists()
+        else "skipped(无快照)",
+    }
+    result["warnings"] = warns
     if chunks:
         result["checks"]["reachability"] = check_reachability(all_items, chunks)
     result["ok"] = not result["errors"]
@@ -355,6 +406,9 @@ def _md(result: dict, env: dict) -> str:
         ]
     if result["errors"]:
         lines += ["## 错误", ""] + [f"- {e}" for e in result["errors"]] + [""]
+    if result.get("warnings"):
+        lines += ["## 待人工复核（文字要点与引文词面覆盖低，不算错误）", ""]
+        lines += [f"- {w}" for w in result["warnings"]] + [""]
     return "\n".join(lines)
 
 

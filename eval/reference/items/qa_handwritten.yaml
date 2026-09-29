@@ -63,7 +63,7 @@
 - topic: performance
   style: paraphrase
   fund: "003095"
-  question: "2026年二季度，中欧医疗健康混合拿来对标的业绩基准本身涨跌了多少？"
+  question: "2026年二季度，中欧医疗健康混合拿来对标的业绩基准本身涨跌了多少？（以2026年第2季度报告披露为准）"
   answer_type: numeric
   gold_value: "-4.48%"
   tolerance: 0.01
@@ -90,7 +90,7 @@
 - topic: performance
   style: paraphrase
   fund: "001717"
-  question: "2026年二季度，工银前沿医疗股票A类份额的净值涨了多少？"
+  question: "2026年二季度，工银前沿医疗股票A类份额的净值涨了多少？（以季报披露的净值增长率为准）"
   answer_type: numeric
   gold_value: "1.46%"
   tolerance: 0.01
@@ -127,12 +127,12 @@
   evidence:
     - doc: quarterly_report
       period: 2026Q2
-      quote: "截至报告期末永赢科技驱动A基金份额净值为3.9352元，本报告期内，该类基金份额净值增长率为67.85%"
+      quote: "截至报告期末永赢科技驱动A基金份额净值为3.9352元，本报告期内，该类基金份额净值增长率为67.85%，同期业绩比较基准收益率为41.26%"
   nav_check: {share: "008919", start: "2026-03-31", end: "2026-06-30"}
 - topic: performance
   style: paraphrase
   fund: "040025"
-  question: "华安科技动力混合A在2026年4月到6月这个季度里净值涨了多少？"
+  question: "华安科技动力混合A在2026年4月到6月这个季度里净值涨了多少？（以季报披露的净值增长率为准）"
   answer_type: numeric
   gold_value: "74.72%"
   tolerance: 0.01
@@ -169,7 +169,7 @@
   evidence:
     - doc: quarterly_report
       period: 2026Q2
-      quote: "本报告期汇添富创新医药混合C类份额净值增长率为-8.90%"
+      quote: "本报告期汇添富创新医药混合C类份额净值增长率为-8.90%，同期业绩比较基准收益率为-6.76%"
   nav_check: {share: "024344", start: "2026-03-31", end: "2026-06-30"}
 - topic: performance
   style: keyword
@@ -202,7 +202,7 @@
 - topic: performance
   style: paraphrase
   fund: "013840"
-  question: "银华集成电路混合A在2026年二季度一个季度里净值涨了百分之多少？"
+  question: "银华集成电路混合A在2026年二季度一个季度里净值涨了百分之多少？（以季报披露的净值增长率为准）"
   answer_type: numeric
   gold_value: "138.35%"
   tolerance: 0.01
@@ -211,7 +211,7 @@
   evidence:
     - doc: quarterly_report
       period: 2026Q2
-      quote: "截至本报告期末银华集成电路混合A基金份额净值为4.0259元，本报告期基金份额净值增长率为138.35%"
+      quote: "截至本报告期末银华集成电路混合A基金份额净值为4.0259元，本报告期基金份额净值增长率为138.35%；截至本报告期末银华集成电路混合C基金份额净值为3.9892元，本报告期基金份额净值增长率为138.22%；业绩比较基准收益率为55.52%"
   nav_check: {share: "013840", start: "2026-03-31", end: "2026-06-30"}
 
 # ------------------------------------------------------------------ contract_clause
@@ -336,7 +336,7 @@
   answer_type: numeric
   gold_value: "6次"
   tolerance: 0
-  reference_answer: "每年收益分配次数最多为6次；基金合同生效不满3个月可不分配。"
+  reference_answer: "每年收益分配次数最多为6次。"
   answer_points: ["6次"]
   evidence:
     - doc: contract
@@ -407,6 +407,8 @@
   evidence:
     - doc: prospectus
       quote: "通过基金管理人直销线上渠道或基金管理人指定的其他销售机构申购，首次申购的单笔最低金额为人民币1元（含申购费）"
+    - doc: prospectus
+      quote: "投资人通过基金管理人的直销机构（直销线上渠道除外）申购，首次申购的单笔最低金额为人民币10,000元（含申购费）"
 
 # ------------------------------------------------------------------ commentary（季报「投资策略和运作分析」，全部改写问法）
 - topic: commentary
@@ -503,6 +505,9 @@
     - doc: quarterly_report
       period: 2026Q2
       quote: "组合提高了部分具备明确产品兑现能力、全球化潜力和产业链景气修复弹性的标的配置，同时增加了对 CXO 及相关研发服务环节的关注"
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "对于部分前期权重较高、短期事件兑现后预期回报率下降或基本面边际变化不够理想的标的，组合进行了适度调整"
 - topic: commentary
   style: paraphrase
   fund: "002692"
@@ -586,7 +591,7 @@
 - topic: commentary
   style: paraphrase
   fund: "004851"
-  question: "广发医疗保健股票的基金经理认为CRO股票阶段性的涨跌主要跟什么节奏有关？"
+  question: "广发医疗保健股票的基金经理认为CRO股票阶段性的涨跌主要跟什么节奏有关？（以2026年第2季度报告为准）"
   answer_type: text
   reference_answer: "认为CRO的中周期逻辑与创新药类似，阶段性股价表现更与季报、年报时间节点前后的订单收入驱动节奏相关。"
   answer_points: ["中周期逻辑与创新药类似", "阶段性表现与季报年报前后的订单收入节奏相关"]
@@ -616,6 +621,9 @@
     - doc: quarterly_report
       period: 2026Q2
       quote: "本基金策略的特点是量化基于人工智能的多因子策略结合主观基于基本面精选具备核心竞争力的优质上市公司"
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "投资策略上，本基金始终维持高股票仓位，行业配置以及个股权重参考中证人工智能指数"
 
 # ------------------------------------------------------------------ cross_doc（跨文档或跨报告期）
 - topic: cross_doc
@@ -635,7 +643,7 @@
 - topic: cross_doc
   style: paraphrase
   fund: "001513"
-  question: "易方达信息产业混合A在2026年一季度和二季度的表现差别有多大？"
+  question: "易方达信息产业混合A在2026年一季度和二季度的表现差别有多大？（以季报披露的净值增长率为准）"
   answer_type: text
   reference_answer: "一季度A类份额净值增长率3.52%，二季度96.00%。"
   answer_points: ["一季度净值增长率3.52%", "二季度净值增长率96.00%"]
@@ -678,7 +686,7 @@
 - topic: cross_doc
   style: paraphrase
   funds: ["008919", "040025"]
-  question: "2026年二季度，永赢科技驱动混合A和华安科技动力混合A谁涨得更多？"
+  question: "2026年二季度，永赢科技驱动混合A和华安科技动力混合A谁涨得更多？（以季报披露的净值增长率为准）"
   answer_type: entity
   gold_value: "华安科技动力混合"
   reference_answer: "华安科技动力混合A二季度净值增长74.72%，高于永赢科技驱动混合A的67.85%。"

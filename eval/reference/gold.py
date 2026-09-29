@@ -3,11 +3,12 @@
 与被测系统独立：S5 的 ``calc_fund_return`` / ``run_fund_sql`` 以后要与这里的结果逐位比对，
 这里不 import 它们。比率全部是小数（0.012 = 1.20%）；金额单位元。
 
-收益口径（calc_return）：
-- 起止日不是净值日时，取该日之前（含当日）最近的净值日；返回实际使用的起止日。
+收益口径（calc_return；与 eval/datasets/SCHEMA.md「口径」一节一致，S5 calc_fund_return 须照此实现）：
+- 交易日 = 周一至周五且有净值的日子；周末披露的季末 / 年末净值不算交易日，也不进入净值序列。
+- 遇非交易日取前一交易日净值：起止日不是交易日时，取该日之前最近的交易日；返回实际使用的起止日。
 - 分红按除息日单位净值再投资（复权）：跨过除息日 t 的一步收益 = (nav_t + 每份分红) / nav_{t-1}。
   这与来源方「日增长率」的口径一致（例：001513 2026-03-09 除息 0.12 元，(5.513+0.12)/5.801−1=−2.90%）。
-- 年化：(1 + r) ** (365 / 实际起止日自然日数) − 1。
+- 年化：(1 + 区间收益率) ** (365 / 自然日天数) − 1，自然日天数 = 实际使用的止日 − 起日。
 - 最大回撤：区间内复权净值相对此前最高点的最大跌幅（≤ 0，用负数表示）。
 - 含费（include_fees）：申购费外扣法——净申购金额 = 金额 / (1 + 费率)，固定费用档直接扣固定金额；
   赎回费 = 赎回金额 × 费率，按持有自然日数（实际止日 − 实际起日）落档。不考虑销售平台折扣。
@@ -79,15 +80,35 @@ def period_return(share_code: str, period: str) -> float:
     return float(p[(p.share_code == share_code) & (p.period == period)].iloc[0].ret)
 
 
+def _is_weekday(iso: str) -> bool:
+    return date.fromisoformat(iso).weekday() < 5
+
+
+def is_trading_day(day: str) -> bool:
+    """交易日 = 周一至周五，且快照里至少有一个份额在当天有净值（节假日没有净值）。
+
+    季末 / 年末落在周末时基金也会披露净值（如 2023-12-31 周日），这些日子不算交易日。
+    只对快照覆盖的日期范围有意义。
+    """
+    return _is_weekday(day) and day in _nav_dates()
+
+
+def _nav_dates() -> frozenset[str]:
+    return frozenset(table("nav_daily").nav_date)
+
+
 def nav_series(share_code: str) -> pd.DataFrame:
+    """某份额的交易日净值序列（剔除周末披露的季末 / 年末净值）。"""
     n = table("nav_daily")
     n = n[n.share_code == share_code][["nav_date", "unit_nav", "accum_nav"]].copy()
+    n = n[n.nav_date.map(_is_weekday)]
     n["unit_nav"] = n["unit_nav"].astype(float)
     n["accum_nav"] = n["accum_nav"].astype(float)
     return n.sort_values("nav_date").reset_index(drop=True)
 
 
 def nav_on_or_before(share_code: str, day: str) -> tuple[str, float]:
+    """day 是交易日取当日净值，否则取此前最近一个交易日的净值（遇非交易日取前一交易日净值）。"""
     n = nav_series(share_code)
     n = n[n.nav_date <= day]
     if n.empty:
