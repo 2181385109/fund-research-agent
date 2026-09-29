@@ -4,7 +4,7 @@
 
 ## 1. 当前进度
 - **B1（S1+S2）、B2（S3）、B3（S4 收尾）都已完成。** B3 做了：S2 切块修复并全量重新入库（ADR-037）、dev 调参（run 3–8）、test 评测各一次（run 9、10）。证据与数字见 `docs/PROGRESS.md` 的「S2 补记」和「S4」两节，调参全过程见 `docs/tuning_log.md`。
-- 最后一个 commit：见 `git log -1`（本文件所在提交）；CI 结论见该提交的 Actions run（本文件写于 push 之前，结论没有写死；开工先 `gh run list -L 3` 确认）。
+- 代码提交 6cd2d83，CI run 36548686046 全绿（6 个 job 全部 success）；其后只有本文件的这一行文档提交。
 - 最终检索配置（已写入 `config.py` 默认值和 `.env.example`）：模式 hybrid_rerank，实体过滤**关**、上下文头**开**、指令前缀**关**、每路召回 20、重排候选 20、top_n 10、RRF k=60。
 - test（n=72）hybrid_rerank：hit@5 0.653，nDCG@10 0.532；相对 vector 的 nDCG@10 +0.332，95% CI [+0.240, +0.428]。
 
