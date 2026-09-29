@@ -23,6 +23,11 @@ spring:
       password: ${REDIS_PASSWORD:}
       timeout: ${HEALTH_TIMEOUT_SECONDS:2}s
       connect-timeout: ${HEALTH_TIMEOUT_SECONDS:2}s
+  servlet:
+    multipart:
+      # 上传上限 20MB（PLAN S6）；UploadValidator 再按 fra.upload.max-size 校验一次
+      max-file-size: 21MB
+      max-request-size: 22MB
   flyway:
     enabled: true
     locations: classpath:db/migration
@@ -34,6 +39,25 @@ server:
 fra:
   health:
     timeout: ${HEALTH_TIMEOUT_SECONDS:2}s
+  security:
+    jwt-secret: ${JWT_SECRET:}
+    jwt-ttl: ${JWT_TTL:12h}
+    internal-secret: ${INTERNAL_CALLBACK_SECRET:}
+  upload:
+    # 必须在 ai-service 的 DATA_DIR 之下；留空 = ../data/uploads（相对 backend/ 目录）
+    dir: ${UPLOAD_DIR:../data/uploads}
+    max-size: 20MB
+    stale-after: ${UPLOAD_STALE_AFTER:15m}
+    sweep-interval: 60s
+  ai:
+    base-url: ${AI_SERVICE_BASE_URL:http://127.0.0.1:8001}
+    connect-timeout: 3s
+    request-timeout: 15s
+    chat-idle-timeout: ${AI_CHAT_IDLE_TIMEOUT:120s}
+  chat:
+    history-rounds: ${CHAT_HISTORY_ROUNDS:6}
+    heartbeat: ${CHAT_HEARTBEAT:5s}
+    emitter-timeout: 5m
 
 springdoc:
   api-docs:
