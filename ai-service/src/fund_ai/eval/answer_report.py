@@ -139,6 +139,12 @@ def render(s: dict) -> str:
         L.append(
             row("任一配置调用了文档检索的题", cmp_["questions_where_docs_tool_used_in_either_run"])
         )
+        L.append(
+            row(
+                "（仅供参考）全部题，numeric 按 any 判",
+                cmp_["reference_only_numeric_any_all_questions"],
+            )
+        )
         for t, b in cmp_["by_topic"].items():
             L.append(row(f"topic={t}", b))
     L += [

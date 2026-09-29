@@ -400,6 +400,14 @@ def compare_configs(per_cfg: dict[str, dict]) -> dict:
         )
 
     docs_ids = [i for i in ids if used_docs(i, "vector") or used_docs(i, "hybrid_rerank")]
+
+    def value_any(s: dict) -> float:
+        """参考口径：numeric 题按 any 判（其余不变）。仅用于说明 first 口径的噪声，不作对外准确率。"""
+        if s["method"] == "numeric_first":
+            return float(bool(s["detail"].get("any_correct")))
+        return s["value"]
+
+    ref_any = paired_bootstrap([value_any(a[i]) for i in ids], [value_any(b[i]) for i in ids])
     by_topic = {}
     for t in sorted({a[i]["topic"] for i in ids}):
         sel = [i for i in ids if a[i]["topic"] == t]
@@ -407,6 +415,7 @@ def compare_configs(per_cfg: dict[str, dict]) -> dict:
     return {
         "unit": "逐题统一得分 value（规则类 0/1，text 类裁判分/2，refusal 类 0/1）；差 = hybrid_rerank − vector",
         "all_questions": boot(ids),
+        "reference_only_numeric_any_all_questions": ref_any,
         "questions_where_docs_tool_used_in_either_run": boot(docs_ids),
         "by_topic": by_topic,
     }
