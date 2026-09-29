@@ -205,3 +205,17 @@
 - **背景**：Linux 上 `pip install sentence-transformers` 默认带 CUDA 版 torch（数 GB）；CI 不下载模型、测试只用 FakeEmbedder。
 - **决定**：ai-service 的 `pyproject.toml` 把 `sentence-transformers` 放进 `[model]` extra，CI 只装 `.[dev]`；`BgeEmbedder` 在第一次用时才 import。本机：`pip install -e ".[dev,model]"`（Windows 上 PyPI 的 torch 就是 CPU 版，实装 torch 2.14.0+cpu、sentence-transformers 6.1.0）。S7 做镜像时用 CPU 版 torch 的 index。
 - **后果**：模型首次加载要从 hf-mirror 下载约 95MB 到 `MODEL_CACHE_DIR`（`.cache/` 已 gitignore）。
+
+## ADR-034 评测工具独立成包 `eval/`（S3）
+- **背景**：红线 3 要求标准答案来自独立参考脚本；校验器还要读 PDF、连 fund_data。若放进 ai-service，参考脚本和被测代码会共享依赖与实现（例如 PDF 解析器），独立性说不清。
+- **决定**：`eval/pyproject.toml`（包名 `reference`，本地 `eval/.venv`），依赖只有 pandas、pdfplumber、pymysql、pyyaml、pydantic；不 import ai-service / mcp-tools 的任何代码。CI 矩阵加一个 `eval` 包：ruff + pytest，pytest 里包含对仓库内评测集的离线校验（schema、题数、分层、基金 / 文档引用）。PDF 逐字校验和 gold_sql 校验需要本机数据，在本机运行并把结果写进 `reports/dataset_validation/`。
+- **备选**：放在 ai-service 的 `fund_ai.eval`（独立性弱）；做成 `scripts/` 下的单文件（测试和 CI 不好组织）。
+- **后果**：多一个 venv。S4 的检索评测 runner 仍按 PLAN 放在 `fund_ai.eval`（它要调用被测检索服务）；证据命中规则两边各实现一份，用共享测试向量 `eval/reference/evidence_cases.json` 钉住一致性。
+
+## ADR-035 评测集的 quote 口径与出题方式（S3）
+- **quote 比对口径**：去掉全部空白和表格竖线 `|` 后逐字比较（`reference.common.norm`）。这样 PDF 换行、pdfplumber 表格单元格之间的空格、ai-service 规范文本里的 markdown 竖线都不影响比对；quote 本身按 PDF 原文片段保存（保留空格，方便人工对照）。校验用 pdfplumber `extract_text` 直接提取的页面文本，不经过 ai-service 的解析器；页码是 PDF 物理页。
+- **命中规则的实现细节**：「50% 连续片段」取归一化后的最长公共子串，阈值 ⌈0.5×len⌉，并要求 doc_id 相同；为避免偶然重合，quote 归一化后至少 10 个字。
+- **出题**：费率、持仓、经理、SQL、收益计算、最新净值、综合题的数据库部分用模板生成，gold 由参考脚本从快照计算（`provenance=template_reference_script`）；合同条款、业绩、季报观点、跨文档、不可回答、荐基请求、纯文档、通用题由执行者阅读原文手写（`llm_draft`），数值必须逐字出现在 quote 里。所有 quote 在构建时逐字定位页码，定位不到就报错。
+- **冻结前的可达性诊断**：从 ES 导出入库 chunk 的文本（只读，不做检索），检查每条 quote 能否按命中规则被某个 chunk 命中。这一步只用来发现「quote 格式导致永远无法命中」的问题（例如跨越 markdown 表格的 `|---|` 分隔行），不依据检索结果改题。
+- **没有采用的做法**：让 DeepSeek 批量起草题目（需要额外费用，而且起草的问题仍要逐条对原文核对，并不省事）；quote 绑定 chunk_id（PLAN §0 要求证据不绑定 chunk，以便更换切块方式后仍可复用）。
+- **已知局限**：部分季报的经理表、持仓表在 pdfplumber 文本里单元格串行（例如「海光信 / 息」「2021 / 年07 / 月01 / 日」），这些基金没有出对应的模板题（经理题 11 道只来自 6 只基金），覆盖不均衡在 PROGRESS 中说明。

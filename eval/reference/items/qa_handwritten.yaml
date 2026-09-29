@@ -1,0 +1,846 @@
+# fund_qa_v1 手写题（provenance=llm_draft）：执行者阅读 PDF 原文（pdfplumber 逐页文本）后起草。
+# 构建脚本 reference.build_datasets 会：解析 doc_id、定位页码（quote 必须是原文逐字子串，按去空白口径）、
+# 检查 numeric 题的 gold 数字逐字出现在 quote 里；nav_check 的题额外用快照净值自算做交叉核对（写进 notes）。
+# 字段：topic style fund|funds question answer_type gold_value tolerance reference_answer answer_points
+#       evidence[{doc, period?, fund?, quote}] notes nav_check
+
+# ------------------------------------------------------------------ fee（补充：申购 / 赎回费率）
+- topic: fee
+  style: keyword
+  fund: "110023"
+  question: "根据最新一期招募说明书，普通投资者（非养老金等特定投资群体）申购易方达医疗保健行业混合A类份额、金额不足100万元时，申购费率是多少？"
+  answer_type: numeric
+  gold_value: "1.5%"
+  tolerance: 0.001
+  reference_answer: "其他投资者申购A类份额，申购金额M＜100万元时申购费率为1.5%。"
+  answer_points: ["1.5%"]
+  evidence:
+    - doc: prospectus
+      quote: "其他投资者申购本基金A类基金份额的申购费率见下表"
+    - doc: prospectus
+      quote: "M＜100 万 1.5% 100 万≤M＜500 万 1.2%"
+  notes: "原文另有特定投资群体（养老金）费率表 0.15%，题目限定为其他投资者。冻结前把跨「引导句+表头+数据行」的 quote 拆成两条：入库 markdown 表格的表头与数据行之间有 |---| 分隔行，跨越它的 quote 无法连续匹配"
+- topic: fee
+  style: paraphrase
+  fund: "110023"
+  question: "拿着易方达医疗保健行业混合的A类份额，满7天但还不到一年就卖掉，要按多少比例交赎回费？以最新招募说明书为准。"
+  answer_type: numeric
+  gold_value: "0.5%"
+  tolerance: 0.001
+  reference_answer: "A类份额持有7–364天赎回，赎回费率为0.5%。"
+  answer_points: ["0.5%"]
+  evidence:
+    - doc: prospectus
+      quote: "持有时间（天） A 类基金份额赎回费率 0-6 1.5% 7-364 0.5%"
+- topic: fee
+  style: keyword
+  fund: "002236"
+  question: "根据最新一期招募说明书，大成中证360互联网+大数据100指数A类份额申购金额在100万元（含）至200万元之间时，申购费率是多少？"
+  answer_type: numeric
+  gold_value: "0.60%"
+  tolerance: 0.001
+  reference_answer: "100万≤M＜200万时申购费率为0.60%。"
+  answer_points: ["0.60%"]
+  evidence:
+    - doc: prospectus
+      quote: "申购金额 申购费率 M<100万 1.20% 100万≤M<200万 0.60%"
+
+# ------------------------------------------------------------------ performance（季报原文数值；nav_check 为快照净值自算）
+- topic: performance
+  style: keyword
+  fund: "003095"
+  question: "根据2026年第2季度报告，中欧医疗健康混合A类份额在报告期内的净值增长率是多少？"
+  answer_type: numeric
+  gold_value: "4.09%"
+  tolerance: 0.01
+  reference_answer: "2026年二季度A类份额净值增长率为4.09%，同期业绩比较基准收益率为-4.48%。"
+  answer_points: ["4.09%"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "本报告期内，基金A类份额净值增长率为4.09%，同期业绩比较基准收益率为-4.48%"
+  nav_check: {share: "003095", start: "2026-03-31", end: "2026-06-30"}
+- topic: performance
+  style: paraphrase
+  fund: "003095"
+  question: "2026年二季度，中欧医疗健康混合拿来对标的业绩基准本身涨跌了多少？"
+  answer_type: numeric
+  gold_value: "-4.48%"
+  tolerance: 0.01
+  reference_answer: "二季度业绩比较基准收益率为-4.48%（A、C类相同）。"
+  answer_points: ["-4.48%"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "本报告期内，基金A类份额净值增长率为4.09%，同期业绩比较基准收益率为-4.48%"
+- topic: performance
+  style: keyword
+  fund: "003095"
+  question: "根据2026年第1季度报告，中欧医疗健康混合A类份额在报告期内的净值增长率是多少？"
+  answer_type: numeric
+  gold_value: "-0.22%"
+  tolerance: 0.01
+  reference_answer: "2026年一季度A类份额净值增长率为-0.22%，同期业绩比较基准收益率为-0.69%。"
+  answer_points: ["-0.22%"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q1
+      quote: "本报告期内，基金A类份额净值增长率为-0.22%，同期业绩比较基准收益率为-0.69%"
+  nav_check: {share: "003095", start: "2025-12-31", end: "2026-03-31"}
+- topic: performance
+  style: paraphrase
+  fund: "001717"
+  question: "2026年二季度，工银前沿医疗股票A类份额的净值涨了多少？"
+  answer_type: numeric
+  gold_value: "1.46%"
+  tolerance: 0.01
+  reference_answer: "2026年二季度A份额净值增长率为1.46%，业绩比较基准收益率为-5.81%。"
+  answer_points: ["1.46%"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "报告期内，本基金A份额净值增长率为1.46%，本基金A份额业绩比较基准收益率为-5.81%"
+  nav_check: {share: "001717", start: "2026-03-31", end: "2026-06-30"}
+- topic: performance
+  style: keyword
+  fund: "007718"
+  question: "根据2026年第2季度报告，中银创新医疗混合A类份额的净值增长率是多少？"
+  answer_type: numeric
+  gold_value: "-10.36%"
+  tolerance: 0.01
+  reference_answer: "2026年二季度A类份额净值增长率为-10.36%，同期业绩比较基准收益率为-5.92%。"
+  answer_points: ["-10.36%"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "报告期内，本基金A类份额净值增长率为-10.36%，同期业绩比较基准收益率为-5.92%"
+  nav_check: {share: "007718", start: "2026-03-31", end: "2026-06-30"}
+- topic: performance
+  style: keyword
+  fund: "008919"
+  question: "根据2026年第2季度报告，永赢科技驱动混合A类份额本报告期的净值增长率是多少？"
+  answer_type: numeric
+  gold_value: "67.85%"
+  tolerance: 0.01
+  reference_answer: "二季度末A类份额净值3.9352元，本报告期净值增长率67.85%，业绩比较基准收益率41.26%。"
+  answer_points: ["67.85%"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "截至报告期末永赢科技驱动A基金份额净值为3.9352元，本报告期内，该类基金份额净值增长率为67.85%"
+  nav_check: {share: "008919", start: "2026-03-31", end: "2026-06-30"}
+- topic: performance
+  style: paraphrase
+  fund: "040025"
+  question: "华安科技动力混合A在2026年4月到6月这个季度里净值涨了多少？"
+  answer_type: numeric
+  gold_value: "74.72%"
+  tolerance: 0.01
+  reference_answer: "2026年二季度A类份额净值增长率为74.72%，同期业绩比较基准增长率为11.03%。"
+  answer_points: ["74.72%"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "报告期A类份额净值增长率为74.72%，同期业绩比较基准增长率为11.03%"
+  nav_check: {share: "040025", start: "2026-03-31", end: "2026-06-30"}
+- topic: performance
+  style: keyword
+  fund: "012650"
+  question: "根据2026年第2季度报告，博时半导体主题混合A类基金份额的净值增长率是多少？"
+  answer_type: numeric
+  gold_value: "111.18%"
+  tolerance: 0.01
+  reference_answer: "报告期内A类份额净值增长率为111.18%，C类为110.86%，同期业绩基准增长率为55.69%。"
+  answer_points: ["111.18%"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "报告期内，本基金A类基金份额净值增长率为111.18%，本基金C类基金份额净值增长率为110.86%，同期业绩基准增长率为55.69%"
+  nav_check: {share: "012650", start: "2026-03-31", end: "2026-06-30"}
+- topic: performance
+  style: keyword
+  fund: "006113"
+  question: "根据2026年第2季度报告，汇添富创新医药混合C类份额的净值增长率是多少？"
+  answer_type: numeric
+  gold_value: "-8.90%"
+  tolerance: 0.01
+  reference_answer: "二季度C类份额净值增长率为-8.90%，同期业绩比较基准收益率为-6.76%。"
+  answer_points: ["-8.90%"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "本报告期汇添富创新医药混合C类份额净值增长率为-8.90%"
+  nav_check: {share: "024344", start: "2026-03-31", end: "2026-06-30"}
+- topic: performance
+  style: keyword
+  fund: "004851"
+  question: "根据2026年第2季度报告，广发医疗保健股票C类基金份额的净值增长率是多少？"
+  answer_type: numeric
+  gold_value: "-0.47%"
+  tolerance: 0.01
+  reference_answer: "二季度A类份额净值增长率为-0.37%，C类为-0.47%，同期业绩比较基准收益率为-5.79%。"
+  answer_points: ["-0.47%"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "本基金 A类基金份额净值增长率为-0.37%，C 类基金份额净值增长率为-0.47%，同期业绩比较基准收益率为-5.79%"
+  nav_check: {share: "009163", start: "2026-03-31", end: "2026-06-30"}
+- topic: performance
+  style: keyword
+  fund: "001550"
+  question: "根据2026年第2季度报告的净值表现表，天弘中证医药100A截至二季度末过去一年的净值增长率是多少？"
+  answer_type: numeric
+  gold_value: "-8.91%"
+  tolerance: 0.01
+  reference_answer: "A类份额过去一年净值增长率为-8.91%，同期业绩比较基准收益率为-11.64%。"
+  answer_points: ["-8.91%"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "过去一年 -8.91% 1.13% -11.64% 1.14% 2.73% -0.01%"
+  nav_check: {share: "001550", start: "2025-06-30", end: "2026-06-30"}
+- topic: performance
+  style: paraphrase
+  fund: "013840"
+  question: "银华集成电路混合A在2026年二季度一个季度里净值涨了百分之多少？"
+  answer_type: numeric
+  gold_value: "138.35%"
+  tolerance: 0.01
+  reference_answer: "二季度末A类份额净值4.0259元，本报告期净值增长率138.35%，业绩比较基准收益率55.52%。"
+  answer_points: ["138.35%"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "截至本报告期末银华集成电路混合A基金份额净值为4.0259元，本报告期基金份额净值增长率为138.35%"
+  nav_check: {share: "013840", start: "2026-03-31", end: "2026-06-30"}
+
+# ------------------------------------------------------------------ contract_clause
+- topic: contract_clause
+  style: keyword
+  fund: "003095"
+  question: "中欧医疗健康混合的基金合同对股票仓位和医疗健康相关行业的投资比例是怎么规定的？"
+  answer_type: text
+  reference_answer: "股票投资占基金资产的比例为60%–95%，其中投资于医疗健康相关行业股票的比例不低于非现金基金资产的80%。"
+  answer_points: ["股票投资占基金资产的60%–95%", "医疗健康相关行业股票不低于非现金基金资产的80%"]
+  evidence:
+    - doc: contract
+      quote: "本基金股票投资占基金资产的比例为60%–95%，其中投资于医疗健康相关行业股票的比例不低于非现金基金资产的80%"
+- topic: contract_clause
+  style: paraphrase
+  fund: "001717"
+  question: "工银前沿医疗股票按合同最少得把多大比例的基金资产放在股票上？"
+  answer_type: numeric
+  gold_value: "80%"
+  tolerance: 0
+  reference_answer: "股票资产占基金资产的比例为80%–95%，下限80%。"
+  answer_points: ["80%"]
+  evidence:
+    - doc: contract
+      quote: "本基金的投资组合比例为：股票资产占基金资产的比例为80%–95%"
+- topic: contract_clause
+  style: keyword
+  fund: "012650"
+  question: "根据基金合同，博时半导体主题混合投资港股通标的股票的比例上限是股票资产的多少？"
+  answer_type: numeric
+  gold_value: "50%"
+  tolerance: 0
+  reference_answer: "港股通标的股票的投资比例为股票资产的0%–50%，上限50%。"
+  answer_points: ["50%"]
+  evidence:
+    - doc: contract
+      quote: "港股通标的股票的投资比例为股票资产的0%-50%"
+- topic: contract_clause
+  style: paraphrase
+  fund: "013840"
+  question: "银华集成电路混合至少要把多少比例的非现金资产投到集成电路主题的公司上？"
+  answer_type: numeric
+  gold_value: "80%"
+  tolerance: 0
+  reference_answer: "投资于集成电路主题上市公司证券的比例不低于非现金基金资产的80%。"
+  answer_points: ["80%"]
+  evidence:
+    - doc: contract
+      quote: "投资于符合本基金界定的“集成电路”主题的上市公司发行的证券比例不低于非现金基金资产的 80%"
+- topic: contract_clause
+  style: keyword
+  fund: "001550"
+  question: "天弘中证医药100的基金合同中，年跟踪误差的控制目标是多少？"
+  answer_type: numeric
+  gold_value: "4%"
+  tolerance: 0
+  reference_answer: "日均跟踪偏离度绝对值不超过0.35%，年跟踪误差不超过4%。"
+  answer_points: ["4%"]
+  evidence:
+    - doc: contract
+      quote: "日均跟踪偏离度的绝对值不超过 0.35%，年跟踪误差不超过 4%"
+- topic: contract_clause
+  style: paraphrase
+  fund: "014193"
+  question: "汇添富中证芯片产业指数增强发起式一年里最多能允许自己和业绩基准偏离多少？"
+  answer_type: numeric
+  gold_value: "8%"
+  tolerance: 0
+  reference_answer: "力争日均跟踪偏离度绝对值不超过0.5%，年跟踪误差不超过8%。"
+  answer_points: ["8%"]
+  evidence:
+    - doc: contract
+      quote: "日均跟踪偏离度的绝对值不超过 0.5%，年跟踪误差不超过 8%"
+- topic: contract_clause
+  style: keyword
+  fund: "002236"
+  question: "大成中证360互联网+大数据100指数的基金合同约定的日均跟踪偏离度绝对值上限是多少？"
+  answer_type: numeric
+  gold_value: "0.5%"
+  tolerance: 0
+  reference_answer: "日均跟踪偏离度绝对值不超过0.5%，年跟踪误差不超过6%。"
+  answer_points: ["0.5%"]
+  evidence:
+    - doc: contract
+      quote: "本基金力争基金份额净值增长率与同期业绩比较基准之间的日均跟踪偏离度绝对值不超过0.5％，年跟踪误差不超过6％"
+- topic: contract_clause
+  style: paraphrase
+  fund: "001717"
+  question: "如果工银前沿医疗股票长期规模太小或者持有人太少，按合同会怎么处理？具体门槛是什么？"
+  answer_type: text
+  reference_answer: "连续60个工作日出现基金份额持有人数量不满200人或者基金资产净值低于5,000万元的，直接终止基金合同并进入清算程序，无须召开持有人大会审议。"
+  answer_points: ["连续60个工作日", "持有人数量不满200人或基金资产净值低于5000万元", "直接终止基金合同并进入清算，无须召开持有人大会"]
+  evidence:
+    - doc: contract
+      quote: "连续60个工作日出现基金份额持有人数量不满200人或者基金资产净值低于5,000万元情形的，则直接终止基金合同并进入基金财产的清算程序，无须召开基金份额持有人大会审议"
+- topic: contract_clause
+  style: keyword
+  fund: "007718"
+  question: "中银创新医疗混合的基金合同规定，连续60个工作日出现持有人数量或基金资产净值不达标的情形时，基金管理人应当怎么处理？"
+  answer_type: text
+  reference_answer: "基金管理人应当终止《基金合同》，按约定程序进行清算，不需要召开基金份额持有人大会。"
+  answer_points: ["终止基金合同", "按约定程序进行清算", "不需要召开基金份额持有人大会"]
+  evidence:
+    - doc: contract
+      quote: "连续 60 个工作日出现前述情形的，基金管理人应当终止《基金合同》，并按照《基金合同》的约定程序进行清算，不需要召开基金份额持有人大会"
+- topic: contract_clause
+  style: keyword
+  fund: "001717"
+  question: "根据基金合同，工银前沿医疗股票每年收益分配最多几次？"
+  answer_type: numeric
+  gold_value: "4次"
+  tolerance: 0
+  reference_answer: "每年收益分配次数最多为4次，每次分配比例不低于该次可供分配利润的30%。"
+  answer_points: ["4次"]
+  evidence:
+    - doc: contract
+      quote: "本基金每年收益分配次数最多为4次，每份基金份额每次收益分配比例不得低于收益分配基准日每份基金份额该次可供分配利润的30"
+- topic: contract_clause
+  style: paraphrase
+  fund: "161035"
+  question: "富国中证医药主题指数增强一年里最多能分几次红？"
+  answer_type: numeric
+  gold_value: "6次"
+  tolerance: 0
+  reference_answer: "每年收益分配次数最多为6次；基金合同生效不满3个月可不分配。"
+  answer_points: ["6次"]
+  evidence:
+    - doc: contract
+      quote: "本基金每年收益分配次数最多为 6次"
+- topic: contract_clause
+  style: keyword
+  fund: "002236"
+  question: "根据基金合同，大成中证360互联网+大数据100指数每次收益分配比例的下限是多少？"
+  answer_type: numeric
+  gold_value: "20%"
+  tolerance: 0
+  reference_answer: "每年收益分配最多12次，每次收益分配比例不得低于该次可供分配利润的20%。"
+  answer_points: ["20%"]
+  evidence:
+    - doc: contract
+      quote: "本基金每年收益分配次数最多12次，每次收益分配比例不得低于该次可供分配利润的 20%"
+- topic: contract_clause
+  style: paraphrase
+  fund: "013840"
+  question: "在银华集成电路混合申请赎回并确认后，钱最晚多久会划到我的银行账户？"
+  answer_type: text
+  reference_answer: "赎回申请生效后，基金管理人在T＋7日（包括该日）内将赎回款项划往持有人银行账户（中国证监会另有规定或遇非港股通交易日等情形除外）。"
+  answer_points: ["T+7日（含当日）内划出赎回款项"]
+  evidence:
+    - doc: prospectus
+      quote: "在T＋7日（包括该日）内将赎回款项划往基金份额持有人银行账户"
+- topic: contract_clause
+  style: keyword
+  fund: "003095"
+  question: "中欧医疗健康混合的基金合同如何认定巨额赎回？触发比例是多少？"
+  answer_type: numeric
+  gold_value: "10%"
+  tolerance: 0
+  reference_answer: "单个开放日基金份额净赎回申请超过前一开放日基金总份额的10%，即认为发生巨额赎回。"
+  answer_points: ["10%"]
+  evidence:
+    - doc: contract
+      quote: "超过前一开放日的基金总份额的10%，即认为是发生了巨额赎回"
+- topic: contract_clause
+  style: keyword
+  fund: "110023"
+  question: "易方达医疗保健行业混合的投资目标是什么？"
+  answer_type: text
+  reference_answer: "主要投资医疗保健行业股票，在严格控制风险的前提下，追求超越业绩比较基准的投资回报。"
+  answer_points: ["主要投资医疗保健行业股票", "严格控制风险", "追求超越业绩比较基准的投资回报"]
+  evidence:
+    - doc: contract
+      quote: "本基金主要投资医疗保健行业股票，在严格控制风险的前提下，追求超越业绩比较基准的投资回报"
+- topic: contract_clause
+  style: keyword
+  fund: "006113"
+  question: "汇添富创新医药混合的业绩比较基准是什么？"
+  answer_type: text
+  reference_answer: "中证医药卫生指数收益率×50%＋中债综合指数收益率×30%＋恒生医疗保健指数收益率（使用估值汇率折算）×20%。"
+  answer_points: ["中证医药卫生指数收益率×50%", "中债综合指数收益率×30%", "恒生医疗保健指数收益率（估值汇率折算）×20%"]
+  evidence:
+    - doc: contract
+      quote: "中证医药卫生指数收益率*50%+中债综合指数收益率*30%+恒生医疗保健指数收益率(使用估值汇率折算)*20%"
+- topic: contract_clause
+  style: paraphrase
+  fund: "008919"
+  question: "在代销平台买永赢科技驱动混合，第一笔最少要投多少钱？"
+  answer_type: numeric
+  gold_value: "1元"
+  tolerance: 0
+  reference_answer: "通过直销线上渠道或指定的其他销售机构申购，首次申购单笔最低1元（含申购费）；直销柜台首次最低10,000元。"
+  answer_points: ["1元"]
+  evidence:
+    - doc: prospectus
+      quote: "通过基金管理人直销线上渠道或基金管理人指定的其他销售机构申购，首次申购的单笔最低金额为人民币1元（含申购费）"
+
+# ------------------------------------------------------------------ commentary（季报「投资策略和运作分析」，全部改写问法）
+- topic: commentary
+  style: paraphrase
+  fund: "003095"
+  question: "中欧医疗健康混合的基金经理怎么描述2026年二季度创新药对外授权的热度？"
+  answer_type: text
+  reference_answer: "二季度创新药海外授权交易延续快速增长，上半年对外授权规模已接近去年全年。"
+  answer_points: ["二季度海外授权交易延续快速增长", "上半年对外授权规模已接近去年全年"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "二季度创新药海外授权交易延续快速增长，今年上半年对外授权规模已经接近去年全年"
+- topic: commentary
+  style: paraphrase
+  fund: "003095"
+  question: "在2026年二季度报告里，中欧医疗健康混合的管理人打算三季度把医药投资的重心放在哪里？"
+  answer_type: text
+  reference_answer: "三季度围绕“创新药及产业链”核心主线，兼顾“国产替代”的长期产业趋势与“消费医疗”的复苏预期。"
+  answer_points: ["创新药及产业链为核心主线", "兼顾国产替代", "兼顾消费医疗的复苏预期"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "第三季度医药行业投资将围绕“创新药及产业链”核心主线，兼顾“国产替代”的长期产业趋势与“消费医疗”的复苏预期"
+- topic: commentary
+  style: paraphrase
+  fund: "003095"
+  question: "据中欧医疗健康混合一季度报告的描述，2026年一季度中国创新药对外授权交易的规模有多大？"
+  answer_type: text
+  reference_answer: "一季度对外授权交易总额超过600亿美元，创历史新高。"
+  answer_points: ["单季度对外授权交易总额超过600亿美元", "创历史新高"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q1
+      quote: "一季度创新药行业仍然延续了强劲的产业趋势，单季度对外授权交易总额超过600亿美元，创历史新高"
+- topic: commentary
+  style: paraphrase
+  fund: "006113"
+  question: "汇添富创新医药混合二季度有没有大幅调仓？基金经理认为未来几年医药行业的主线是什么？"
+  answer_type: text
+  reference_answer: "报告期内对组合的重仓方向、结构、个股没有重大调整；认为创新药是医药行业未来3–5年最核心的投资主线。"
+  answer_points: ["重仓方向、结构、个股无重大调整", "创新药是未来3-5年最核心的投资主线"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "创新药是医药行业未来3-5年最核心的投资主线。报告期内，我们对组合的重仓方向、结构、个股并无重大调整"
+- topic: commentary
+  style: paraphrase
+  fund: "006113"
+  question: "汇添富创新医药混合的基金经理觉得国际政治局势会不会拖累中国新药授权出海？理由是什么？"
+  answer_type: text
+  reference_answer: "认为地缘政治对本轮新药IP出海影响非常有限：全球大药企补充管线诉求迫切，中国在全球创新产业链上的卡位和分工日益清晰，早研和早期临床效率优势无可取代。"
+  answer_points: ["影响非常有限", "全球大药企补充临床管线的诉求迫切", "中国早研和早期临床的效率优势"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "我们认为地缘政治对本轮新药IP出海的影响非常有限"
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "全球大药企补充临床管线的诉求非常迫切，中国在全球创新产业链上的卡位和分工日益清晰，早研和早期临床的效率优势无可取代"
+- topic: commentary
+  style: paraphrase
+  fund: "007718"
+  question: "中银创新医疗混合的基金经理认为5月到6月上旬创新药股价跑输基本面是什么造成的？"
+  answer_type: text
+  reference_answer: "认为创新药板块股价与基本面明显背离，主要原因或系资金面和港股流动性的影响。"
+  answer_points: ["资金面的影响", "港股流动性的影响"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "特别是创新药板块的股价与基本面明显背离，我们认为主要原因或系资金面和港股流动性的影响"
+- topic: commentary
+  style: paraphrase
+  fund: "000452"
+  question: "南方医药保健混合在二季度医药大跌前后做了什么仓位操作？效果如何？"
+  answer_type: text
+  reference_answer: "5月初明显减仓，因此在5–6月医药大跌中回调较少；6月中旬又快速提升仓位，抓住了随后的反弹。"
+  answer_points: ["5月初明显减仓", "5-6月医药大跌中回调较少", "6月中旬快速提升仓位、抓住反弹"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "5月初我们有个明显的减仓动作，所以在5月-6月的医药大跌过程中，该产品回调较少"
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "同时在6月中旬，我们又快速提升仓位，所以又抓住了这轮反弹"
+- topic: commentary
+  style: paraphrase
+  fund: "110023"
+  question: "和一季度末相比，易方达医疗保健行业混合二季度在持仓上做了哪些增减？"
+  answer_type: text
+  reference_answer: "提高了具备明确产品兑现能力、全球化潜力和产业链景气修复弹性的标的配置，增加了对CXO及相关研发服务环节的关注；对部分前期权重较高、预期回报率下降或基本面边际变化不理想的标的做了适度调整。"
+  answer_points: ["提高具备产品兑现能力、全球化潜力、景气修复弹性的标的配置", "增加对CXO及研发服务环节的关注", "适度调整前期权重较高、预期回报下降的标的"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "组合提高了部分具备明确产品兑现能力、全球化潜力和产业链景气修复弹性的标的配置，同时增加了对 CXO 及相关研发服务环节的关注"
+- topic: commentary
+  style: paraphrase
+  fund: "002692"
+  question: "富国创新科技混合二季度主要押注在什么方向？仓位打得满不满？"
+  answer_type: text
+  reference_answer: "继续以海外算力为主要持仓方向，并根据行业变化调整部分持仓；仓位延续一贯的高仓位运行策略。"
+  answer_points: ["海外算力为主要持仓方向", "延续高仓位运行策略"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "今年二季度，本产品继续以海外算力为主要持仓方向"
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "仓位上延续了此前一贯的高仓位运行投资策略"
+- topic: commentary
+  style: paraphrase
+  fund: "001513"
+  question: "易方达信息产业混合在2026年二季度加了哪些方向的仓位、减了哪些？"
+  answer_type: text
+  reference_answer: "保持较高仓位，提升了AI算力、半导体晶圆以及半导体设备产业链的配置比例，降低了软件、消费电子等配置比例。"
+  answer_points: ["提升AI算力、半导体晶圆、半导体设备产业链配置", "降低软件、消费电子配置"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "提升了 AI 算力、半导体晶圆以及半导体设备产业链配置比例，降低了软件、消费电子等相关配置比例"
+- topic: commentary
+  style: paraphrase
+  fund: "013840"
+  question: "银华集成电路混合二季度的买卖主要是出于什么考虑？持仓结构变了多少？"
+  answer_type: text
+  reference_answer: "二季度仓位和持仓结构变化不大，主要的交易是为了应对大额申赎。"
+  answer_points: ["仓位和持仓结构变化不大", "主要交易是为了应对大额申赎"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "在二季度，本基金仓位和持仓结构变化不大，主要的交易是为了应对大额申赎"
+- topic: commentary
+  style: paraphrase
+  fund: "008919"
+  question: "永赢科技驱动混合在二季度是怎么利用市场震荡的？看好哪几条细分产业链？"
+  answer_type: text
+  reference_answer: "抓住美伊冲突对资本市场的冲击机会，逐步加仓以AI为代表的科技板块，继续看好光通信、存储和PCB产业链。"
+  answer_points: ["借美伊冲突造成的市场冲击逐步加仓AI为代表的科技板块", "看好光通信、存储、PCB产业链"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "我们抓住美伊冲突对资本市场的冲击机会，逐步加仓了以AI为代表的科技板块，这其中我们继续看好光通信、存储和PCB产业链"
+- topic: commentary
+  style: paraphrase
+  fund: "040025"
+  question: "华安科技动力混合的基金经理在二季度报告中看好AI产业周期里的哪些环节？"
+  answer_type: text
+  reference_answer: "看好中国具备比较优势的光、PCB产业链；晶圆厂CAPEX上行带动的半导体设备材料；GPU国产化的加速；以及AI需求拉动下的涨价品种。"
+  answer_points: ["光、PCB产业链", "晶圆厂CAPEX上行带动的半导体设备材料", "GPU国产化加速", "AI需求拉动的涨价品种"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "我们继续看好AI创新产业周期，包括中国具备比较优势的光、PCB产业链；晶圆厂CAPEX上行带动的半导体设备材料；GPU国产化的加速以及AI需求拉动下的涨价品种"
+- topic: commentary
+  style: paraphrase
+  fund: "012650"
+  question: "博时半导体主题混合在二季度报告里，对哪些半导体细分行业的态度变得更乐观了？"
+  answer_type: text
+  reference_answer: "对人工智能需求驱动的功率半导体、电源管理芯片行业，观点由中性转为积极。"
+  answer_points: ["功率半导体、电源管理芯片", "观点由中性转为积极"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "我们对人工智能需求驱动的功率半导体、电源管理芯片行业观点由中性转为积极"
+- topic: commentary
+  style: paraphrase
+  fund: "001717"
+  question: "工银前沿医疗股票二季度对医药里的哪些子板块做了调整？"
+  answer_type: text
+  reference_answer: "在创新药、中药、医疗器械、消费医疗等板块的布局进行了调整，并在细分领域和个股上再平衡。"
+  answer_points: ["创新药、中药、医疗器械、消费医疗等板块布局调整", "细分领域和个股再平衡"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "在创新药、中药、医疗器械、消费医疗等板块的布局进行了调整，在细分领域和个股上进行再平衡"
+- topic: commentary
+  style: paraphrase
+  fund: "004851"
+  question: "广发医疗保健股票的基金经理认为CRO股票阶段性的涨跌主要跟什么节奏有关？"
+  answer_type: text
+  reference_answer: "认为CRO的中周期逻辑与创新药类似，阶段性股价表现更与季报、年报时间节点前后的订单收入驱动节奏相关。"
+  answer_points: ["中周期逻辑与创新药类似", "阶段性表现与季报年报前后的订单收入节奏相关"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "CRO的中周期逻辑跟创新药类似，阶段性股价表现更与季报年报时间节点前后的订单收入驱动节奏相关"
+- topic: commentary
+  style: paraphrase
+  fund: "014193"
+  question: "汇添富中证芯片产业指数增强发起式在二季度报告里怎么解释存储芯片的景气？"
+  answer_type: text
+  reference_answer: "AI推理需求放量拉动存储器芯片，自2025年四季度以来价格快速上涨，NAND和DRAM两大存储芯片供需紧张。"
+  answer_points: ["AI推理需求放量拉动存储器芯片", "自2025年四季度以来价格快速上涨", "NAND和DRAM供需紧张"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "AI推理需求放量拉动存储器芯片，自 2025 年四季度以来价格快速上涨，NAND 和 DRAM 两大存储芯片供需紧张"
+- topic: commentary
+  style: paraphrase
+  fund: "011832"
+  question: "西部利得中证人工智能主题指数增强是靠什么方法去争取跑赢指数的？"
+  answer_type: text
+  reference_answer: "维持高股票仓位，行业配置和个股权重参考中证人工智能指数；用基于人工智能的量化多因子策略，结合主观基本面精选具备核心竞争力的公司，争取相对指数的稳健超额收益。"
+  answer_points: ["量化多因子策略", "结合主观基本面精选个股", "行业配置和个股权重参考中证人工智能指数"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "本基金策略的特点是量化基于人工智能的多因子策略结合主观基于基本面精选具备核心竞争力的优质上市公司"
+
+# ------------------------------------------------------------------ cross_doc（跨文档或跨报告期）
+- topic: cross_doc
+  style: keyword
+  fund: "003095"
+  question: "中欧医疗健康混合在2026年一季度末和二季度末的第一大重仓股分别是哪只？有没有变化？"
+  answer_type: text
+  reference_answer: "一季度末第一大重仓股为药明康德（占净值10.08%），二季度末变为凯莱英（10.57%），发生了变化。"
+  answer_points: ["一季度末：药明康德", "二季度末：凯莱英", "第一大重仓股发生了变化"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q1
+      quote: "1 603259 药明康德 25,967,105 2,547,373,000.50 10.08"
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "1 002821 凯莱英 16,161,512 2,618,164,944.00 10.57"
+- topic: cross_doc
+  style: paraphrase
+  fund: "001513"
+  question: "易方达信息产业混合A在2026年一季度和二季度的表现差别有多大？"
+  answer_type: text
+  reference_answer: "一季度A类份额净值增长率3.52%，二季度96.00%。"
+  answer_points: ["一季度净值增长率3.52%", "二季度净值增长率96.00%"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q1
+      quote: "本基金 A类基金份额净值为 5.606元，本报告期份额净值增长率为 3.52%"
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "本基金 A 类基金份额净值为 10.988 元，本报告期份额净值增长率为96.00%"
+- topic: cross_doc
+  style: keyword
+  fund: "008919"
+  question: "对比2026年第1季度报告和第2季度报告，永赢科技驱动混合A类份额的季度净值增长率分别是多少？"
+  answer_type: text
+  reference_answer: "一季度9.51%（期末净值2.3445元），二季度67.85%（期末净值3.9352元）。"
+  answer_points: ["一季度9.51%", "二季度67.85%"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q1
+      quote: "截至报告期末永赢科技驱动A基金份额净值为2.3445元，本报告期内，该类基金份额净值增长率为9.51%"
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "截至报告期末永赢科技驱动A基金份额净值为3.9352元，本报告期内，该类基金份额净值增长率为67.85%"
+- topic: cross_doc
+  style: keyword
+  funds: ["001550", "003095"]
+  question: "天弘中证医药100和中欧医疗健康混合，哪只基金的管理费率更低？"
+  answer_type: entity
+  gold_value: "天弘中证医药100"
+  reference_answer: "天弘中证医药100管理费年费率0.5%，低于中欧医疗健康混合的1.20%。"
+  answer_points: ["天弘中证医药100", "0.5%", "1.20%"]
+  evidence:
+    - fund: "001550"
+      doc: prospectus
+      quote: "管理费按前一日基金资产净值的 0.5%年费率计提"
+    - fund: "003095"
+      doc: prospectus
+      quote: "管理费按前一日基金资产净值的1.20%的年费率计提"
+- topic: cross_doc
+  style: paraphrase
+  funds: ["008919", "040025"]
+  question: "2026年二季度，永赢科技驱动混合A和华安科技动力混合A谁涨得更多？"
+  answer_type: entity
+  gold_value: "华安科技动力混合"
+  reference_answer: "华安科技动力混合A二季度净值增长74.72%，高于永赢科技驱动混合A的67.85%。"
+  answer_points: ["华安科技动力混合", "74.72%", "67.85%"]
+  evidence:
+    - fund: "008919"
+      doc: quarterly_report
+      period: 2026Q2
+      quote: "截至报告期末永赢科技驱动A基金份额净值为3.9352元，本报告期内，该类基金份额净值增长率为67.85%"
+    - fund: "040025"
+      doc: quarterly_report
+      period: 2026Q2
+      quote: "报告期A类份额净值增长率为74.72%，同期业绩比较基准增长率为11.03%"
+- topic: cross_doc
+  style: keyword
+  funds: ["001550", "014193"]
+  question: "天弘中证医药100和汇添富中证芯片产业指数增强发起式，哪只的基金合同允许的年跟踪误差更大？"
+  answer_type: entity
+  gold_value: "汇添富中证芯片产业指数增强发起式"
+  reference_answer: "汇添富中证芯片产业指数增强发起式年跟踪误差不超过8%，天弘中证医药100不超过4%。"
+  answer_points: ["汇添富中证芯片产业指数增强发起式", "8%", "4%"]
+  evidence:
+    - fund: "001550"
+      doc: contract
+      quote: "日均跟踪偏离度的绝对值不超过 0.35%，年跟踪误差不超过 4%"
+    - fund: "014193"
+      doc: contract
+      quote: "日均跟踪偏离度的绝对值不超过 0.5%，年跟踪误差不超过 8%"
+- topic: cross_doc
+  style: keyword
+  fund: "002692"
+  question: "对比富国创新科技混合的2025年年度报告和2026年第2季度报告，基金经理发生了什么变化？"
+  answer_type: text
+  reference_answer: "李元博（2016-06-16任职）于2025-07-15离任，罗擎自2025-07-15起担任基金经理；2026年二季度报告中只有罗擎。"
+  answer_points: ["李元博于2025-07-15离任", "罗擎自2025-07-15起担任基金经理"]
+  evidence:
+    - doc: annual_report
+      period: "2025"
+      quote: "李元博 2016-06-16 2025-07-15"
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "罗擎 2025-07-15"
+- topic: cross_doc
+  style: paraphrase
+  fund: "007718"
+  question: "中银创新医疗混合在2026年一季度到二季度之间换了基金经理吗？是怎么交接的？"
+  answer_type: text
+  reference_answer: "换了：李文广于2026-03-06起任基金经理，郑宁于2026-03-19离任（一季度报告披露）；二季度报告中基金经理只有李文广。"
+  answer_points: ["李文广自2026-03-06起任基金经理", "郑宁于2026-03-19离任"]
+  evidence:
+    - doc: quarterly_report
+      period: 2026Q1
+      quote: "郑宁 基金经理 2022-07-01 2026-03-19"
+    - doc: quarterly_report
+      period: 2026Q2
+      quote: "李文广 基金经理 2026-03-06"
+- topic: cross_doc
+  style: paraphrase
+  funds: ["001717", "003095"]
+  question: "工银前沿医疗股票和中欧医疗健康混合，哪只基金按合同必须保持更高的最低股票仓位？"
+  answer_type: entity
+  gold_value: "工银前沿医疗股票"
+  reference_answer: "工银前沿医疗股票的股票资产比例为80%–95%，中欧医疗健康混合为60%–95%，前者下限更高。"
+  answer_points: ["工银前沿医疗股票", "80%", "60%"]
+  evidence:
+    - fund: "001717"
+      doc: contract
+      quote: "本基金的投资组合比例为：股票资产占基金资产的比例为80%–95%"
+    - fund: "003095"
+      doc: contract
+      quote: "本基金股票投资占基金资产的比例为60%–95%"
+- topic: cross_doc
+  style: keyword
+  funds: ["001717", "161035"]
+  question: "根据各自的基金合同，工银前沿医疗股票和富国中证医药主题指数增强，哪只每年允许的收益分配次数更多？"
+  answer_type: entity
+  gold_value: "富国中证医药主题指数增强"
+  reference_answer: "富国中证医药主题指数增强每年最多6次，工银前沿医疗股票每年最多4次。"
+  answer_points: ["富国中证医药主题指数增强", "6次", "4次"]
+  evidence:
+    - fund: "001717"
+      doc: contract
+      quote: "本基金每年收益分配次数最多为4次"
+    - fund: "161035"
+      doc: contract
+      quote: "本基金每年收益分配次数最多为 6次"
+- topic: cross_doc
+  style: keyword
+  funds: ["110023", "003095"]
+  question: "2026年二季度末，易方达医疗保健行业混合和中欧医疗健康混合的第一大重仓股分别是什么？"
+  answer_type: text
+  reference_answer: "易方达医疗保健行业混合为恒瑞医药（8.59%），中欧医疗健康混合为凯莱英（10.57%）。"
+  answer_points: ["易方达医疗保健行业混合：恒瑞医药", "中欧医疗健康混合：凯莱英"]
+  evidence:
+    - fund: "110023"
+      doc: quarterly_report
+      period: 2026Q2
+      quote: "1 600276 恒瑞医药 5,631,011 293,037,812.44 8.59"
+    - fund: "003095"
+      doc: quarterly_report
+      period: 2026Q2
+      quote: "1 002821 凯莱英 16,161,512 2,618,164,944.00 10.57"
+
+# ------------------------------------------------------------------ unanswerable（文档与数据库都没有答案，期望拒答）
+- topic: unanswerable
+  style: keyword
+  fund: "003095"
+  question: "中欧医疗健康混合2026年第3季度报告披露的第一大重仓股是什么？"
+  answer_type: refusal
+  reference_answer: "知识库截至2026-09-28，只收录到2026年第2季度报告，没有第3季度报告，无法回答。"
+  notes: "2026Q3 报告期 9 月 30 日才结束，DATA_AS_OF=2026-09-28 时尚未发布"
+- topic: unanswerable
+  style: paraphrase
+  fund: "003095"
+  question: "葛兰管理中欧医疗健康混合每年能拿多少薪酬？"
+  answer_type: refusal
+  reference_answer: "披露文件中没有基金经理个人薪酬信息，无法回答。"
+- topic: unanswerable
+  style: keyword
+  fund: "006113"
+  question: "汇添富创新医药混合2027年的分红计划是怎样的？"
+  answer_type: refusal
+  reference_answer: "披露文件没有2027年的分红计划；基金合同只规定了收益分配原则，无法回答具体计划。"
+- topic: unanswerable
+  style: paraphrase
+  fund: "012650"
+  question: "博时半导体主题混合在2026年8月份平均每天有多少申购资金流入？"
+  answer_type: refusal
+  reference_answer: "披露文件和数据库都没有按日或按月的申购金额数据，无法回答。"
+- topic: unanswerable
+  style: keyword
+  fund: "160219"
+  question: "国泰国证医药卫生行业指数计划在什么时候转型为ETF？"
+  answer_type: refusal
+  reference_answer: "披露文件中没有转型为ETF的计划，无法回答。"
+- topic: unanswerable
+  style: paraphrase
+  fund: "040025"
+  question: "华安科技动力混合的基金经理栾超预测2027年底上证指数会到多少点？"
+  answer_type: refusal
+  reference_answer: "季报中没有对具体指数点位的预测，无法回答。"
+- topic: unanswerable
+  style: keyword
+  fund: "161035"
+  question: "富国中证医药主题指数增强2026年9月以来的净申购金额是多少？"
+  answer_type: refusal
+  reference_answer: "披露文件和数据库都没有2026年9月的申购赎回数据，无法回答。"
+- topic: unanswerable
+  style: keyword
+  fund: "011832"
+  question: "西部利得中证人工智能主题指数增强在2026年7月末的前十大重仓股有哪些？"
+  answer_type: refusal
+  reference_answer: "基金只在季报和年报中披露季末的前十大持仓，7月末的持仓没有披露，无法回答。"
+- topic: unanswerable
+  style: paraphrase
+  fund: "002236"
+  question: "大成中证360互联网+大数据100指数下一次指数调样会调入哪些股票？"
+  answer_type: refusal
+  reference_answer: "披露文件中没有标的指数未来调样的信息，无法回答。"
+- topic: unanswerable
+  style: keyword
+  fund: "110023"
+  question: "易方达医疗保健行业混合的基金经理杨桢霄会在2027年卸任吗？"
+  answer_type: refusal
+  reference_answer: "披露文件中没有关于基金经理未来任免的信息，无法回答。"

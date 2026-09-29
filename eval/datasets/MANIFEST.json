@@ -1,0 +1,30 @@
+{
+  "version": "v1",
+  "frozen": false,
+  "frozen_on": null,
+  "spotcheck": "待用户抽检（eval/datasets/review/spotcheck_v1.md）",
+  "data_as_of": "2026-09-28",
+  "data_manifest_sha256": "b5df59cb954c170e44071fb38603f57eff401863656912e410a96a721d49e127",
+  "universe_sha256": "7539d874374167f4954fef4bad46eb8b2232654972a6ab472242325aeec8692f",
+  "files": {
+    "fund_qa_v1.jsonl": {
+      "sha256": "c6a301bd193d583d2faa2e56264ae341b7ec6c397edc62ff0256f55cab3afee9",
+      "rows": 112,
+      "dev": 33,
+      "test": 79
+    },
+    "agent_tasks_v1.jsonl": {
+      "sha256": "9760ea749b68231c6e3cfa4c04cee97eef2df0819929145f9a74ffb263883157",
+      "rows": 66,
+      "dev": 21,
+      "test": 45
+    }
+  },
+  "build_command": "cd eval && .venv/Scripts/python -m reference.build_datasets",
+  "reports": [
+    "reports/dataset_validation/20260929T044953Z",
+    "reports/dataset_overlap/20260929T045330Z",
+    "reports/data_quality/20260929T045331Z"
+  ],
+  "rule": "test 集永远不进第三期训练数据；冻结后修改须升版本、写 CHANGELOG 并经用户批准"
+}

@@ -1,6 +1,7 @@
 # CI（CLAUDE.md §9）：不下载模型、不调用真实 LLM、不访问外网（除依赖下载外）。
 #   backend       temurin 17，mvn -B verify
-#   python        ai-service / mcp-tools / data-pipeline 三个包矩阵：ruff check、ruff format --check、pytest（排除 integration/slow/live）
+#   python        ai-service / mcp-tools / data-pipeline / eval 四个包矩阵：ruff check、ruff format --check、pytest（排除 integration/slow/live）；
+#                 eval 的 pytest 含对仓库内评测集的离线校验（schema、题数、分层、引用）
 #   scripts       security_scan / llm_smoke / gen_env 的离线单测 + 对本仓库跑安全扫描（含 --history）
 name: ci
 
@@ -46,7 +47,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        package: [ai-service, mcp-tools, data-pipeline]
+        package: [ai-service, mcp-tools, data-pipeline, eval]
     defaults:
       run:
         working-directory: ${{ matrix.package }}

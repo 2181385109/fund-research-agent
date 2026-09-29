@@ -1,0 +1,179 @@
+{
+  "git_commit": "4445b182649064d4a625a5431c87c2dc8f2552ee",
+  "git_dirty": true,
+  "data_as_of": "2026-09-28",
+  "manifest_sha256": "b5df59cb954c170e44071fb38603f57eff401863656912e410a96a721d49e127",
+  "dataset_sha256": {
+    "fund_qa_v1.jsonl": "c6a301bd193d583d2faa2e56264ae341b7ec6c397edc62ff0256f55cab3afee9",
+    "agent_tasks_v1.jsonl": "9760ea749b68231c6e3cfa4c04cee97eef2df0819929145f9a74ffb263883157"
+  },
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.3",
+    "cpu_count": 16
+  },
+  "command": "python.exe validate_dataset.py --chunks ../data/raw/_chunks.jsonl --out",
+  "files": {
+    "fund_qa_v1.jsonl": {
+      "rows": 112,
+      "distribution": {
+        "n": 112,
+        "split": {
+          "dev": 33,
+          "test": 79
+        },
+        "topic": {
+          "commentary": 18,
+          "contract_clause": 17,
+          "cross_doc": 11,
+          "fee": 17,
+          "holdings": 16,
+          "manager": 11,
+          "performance": 12,
+          "unanswerable": 10
+        },
+        "topic_split": {
+          "commentary": {
+            "dev": 5,
+            "test": 13
+          },
+          "contract_clause": {
+            "dev": 5,
+            "test": 12
+          },
+          "cross_doc": {
+            "dev": 3,
+            "test": 8
+          },
+          "fee": {
+            "dev": 5,
+            "test": 12
+          },
+          "holdings": {
+            "dev": 5,
+            "test": 11
+          },
+          "manager": {
+            "dev": 3,
+            "test": 8
+          },
+          "performance": {
+            "dev": 4,
+            "test": 8
+          },
+          "unanswerable": {
+            "dev": 3,
+            "test": 7
+          }
+        },
+        "style": {
+          "keyword": 58,
+          "paraphrase": 54
+        },
+        "answer_type": {
+          "entity": 19,
+          "list": 7,
+          "numeric": 46,
+          "refusal": 10,
+          "text": 30
+        },
+        "answerable": {
+          "false": 10,
+          "true": 102
+        },
+        "provenance": {
+          "llm_draft": 71,
+          "template_reference_script": 41
+        },
+        "funds_covered": 20,
+        "with_gold_sql": 0,
+        "with_evidence": 102,
+        "volatile": 0
+      }
+    },
+    "agent_tasks_v1.jsonl": {
+      "rows": 66,
+      "distribution": {
+        "n": 66,
+        "split": {
+          "dev": 21,
+          "test": 45
+        },
+        "topic": {
+          "advice_request": 6,
+          "calc_return": 9,
+          "doc_db": 13,
+          "doc_only": 8,
+          "latest_nav": 5,
+          "no_tool": 3,
+          "tool_sql": 22
+        },
+        "topic_split": {
+          "advice_request": {
+            "dev": 2,
+            "test": 4
+          },
+          "calc_return": {
+            "dev": 3,
+            "test": 6
+          },
+          "doc_db": {
+            "dev": 4,
+            "test": 9
+          },
+          "doc_only": {
+            "dev": 2,
+            "test": 6
+          },
+          "latest_nav": {
+            "dev": 2,
+            "test": 3
+          },
+          "no_tool": {
+            "dev": 1,
+            "test": 2
+          },
+          "tool_sql": {
+            "dev": 7,
+            "test": 15
+          }
+        },
+        "style": {
+          "keyword": 40,
+          "paraphrase": 26
+        },
+        "answer_type": {
+          "entity": 7,
+          "list": 4,
+          "numeric": 30,
+          "refusal": 6,
+          "text": 19
+        },
+        "answerable": {
+          "false": 6,
+          "true": 60
+        },
+        "provenance": {
+          "llm_draft": 17,
+          "template_reference_script": 49
+        },
+        "funds_covered": 19,
+        "with_gold_sql": 35,
+        "with_evidence": 21,
+        "volatile": 5
+      }
+    }
+  },
+  "errors": [],
+  "checks": {
+    "quotes_checked": 144,
+    "gold_sql_checked": 35,
+    "reachability": {
+      "quotes": 144,
+      "whole_quote_in_one_chunk": 128,
+      "unreachable": 0,
+      "unreachable_items": []
+    }
+  },
+  "ok": true
+}
