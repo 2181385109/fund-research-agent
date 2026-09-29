@@ -5,7 +5,7 @@
 ## 1. 当前进度
 - **B1–B7 完成；B8（S8 回答评测 + 第一期收尾）做到了「等用户盲标」**，还差三件事：盲标一致率 / kappa → README 与 PROGRESS 补数字 → 打 tag `v0.1-phase1` 并推送（CLAUDE.md §10：tag 只打 `v0.1-phase1`）。
 - 已完成并入库的：统筹补充 1（复现性检查，`docs/tuning_log.md` run 11、12）、补充 2（费用关卡，用户已确认，实测 vs 估算见 `reports/answer_eval/20260929T171529Z/cost_actual_vs_estimate.md`）、全量回答评测（test 124 题 × 2 检索配置，248 次运行**全部成功**，无失败、无重试、无判分失败）、README 指标表（每个数字带链接和 summary.json 字段路径）、`docs/LIMITATIONS.md`（一期汇总 + 回答评测方法 9 条）、ADR-046、PROGRESS「S8 … 进行中」一节。
-- 最后一个 commit / CI：见 `git log`；push 与 CI 结论在本文件下面「§6」由最后一次提交补记（如果这一行没有 CI 链接，说明还没确认，先 `gh run list` 看）。
+- 已 push；功能提交 `d024c82`，随后 `5dadd3c` 修了 scripts job 的 ruff（两个费用脚本的长行，第一次 CI run 36608044346 因此在 `scripts + security scan` 失败）。**CI run 36608275582（`5dadd3c`）7 个 job 全绿**。其后只有本文件 / PROGRESS 的文档提交。
 - 测试：ai-service 194+（含 `tests/test_eval_scoring.py` 15 个）、backend 108、frontend 30、scripts 29，均未改动其它部分。
 
 ## 2. 下一步（用户把盲标表交回来之后）

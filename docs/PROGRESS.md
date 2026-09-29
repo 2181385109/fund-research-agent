@@ -667,7 +667,7 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 - 前端范围：公共库文件清单页仍没做（`GET /api/kbs/1/documents` 恒为空，LIMITATIONS S6-7 / S7-4），界面上只放了说明文字；需要的话请在 B8 前给出要求。
 
 ## S8 端到端回答评测 + 第一期收尾 — 进行中（2026-09-30，B8；停在用户关卡：人工盲标）
-- commit 范围：`a5b05fe`..本节所在提交；CI：见 HANDOFF；**tag `v0.1-phase1` 尚未打**（等盲标一致率，见「需要用户做的事」）。
+- commit 范围：`a5b05fe`..`5dadd3c`；CI：run 36608275582 **7 个 job 全绿**（首次 run 36608044346 因新增费用脚本的 ruff 长行在 scripts job 失败，`5dadd3c` 修复）；**tag `v0.1-phase1` 尚未打**（等盲标一致率，见「需要用户做的事」）。
 - 证据目录：`reports/answer_eval/20260929T171529Z/`（目录名是 UTC 时间戳；两个配置各一个子目录，`summary.json` / `report.md` 在根）；费用小样 `reports/answer_eval/cost_sample_dev_20260930/`；复现性检查 `reports/retrieval/20260929T164941Z/`、`20260929T165108Z/`。
 
 ### 完成项
