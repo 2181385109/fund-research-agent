@@ -162,6 +162,12 @@ def test_rejects_into_and_locks(sql: str) -> None:
         "SELECT DATABASE()",
         "SELECT VERSION()",
         "SELECT * FROM funds WHERE fund_code = '1' AND SLEEP(5)",
+        "SELECT `SLEEP`(5)",  # 反引号包函数名
+        "SELECT sleep/**/(5)",  # 函数名与括号之间夹注释
+        "SELECT * FROM (SELECT SLEEP(1)) t",  # 子查询里
+        "SELECT 1 UNION SELECT SLEEP(3)",  # UNION 的另一支
+        "SELECT IF(1, SLEEP(1), 0)",
+        "SELECT sys_eval('id')",
         "SELECT @@version",
         "SELECT @@global.max_connections",
         "SELECT @a := 1",
@@ -169,6 +175,19 @@ def test_rejects_into_and_locks(sql: str) -> None:
 )
 def test_rejects_dangerous_functions_and_variables(sql: str) -> None:
     rejected(sql)
+
+
+@pytest.mark.parametrize(
+    "sql",
+    [
+        "SELECT /*+ MAX_EXECUTION_TIME(999999) */ * FROM funds",  # 会覆盖服务端 5 秒超时
+        "SELECT /*+ SET_VAR(max_execution_time=0) */ * FROM funds",
+        "SELECT /*+ SET_VAR(sql_mode='') */ 1",
+    ],
+)
+def test_rejects_optimizer_hints(sql: str) -> None:
+    """优化器提示不是普通注释：会被 sqlglot 保留并原样生成，能覆盖会话级的超时设置。"""
+    assert "Hint" in rejected(sql)
 
 
 def test_unparseable_sql_is_rejected_with_reason() -> None:

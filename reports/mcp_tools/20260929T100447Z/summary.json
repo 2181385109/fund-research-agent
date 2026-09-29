@@ -1,0 +1,252 @@
+{
+  "what": "mcp-tools calc_fund_return 与 eval/reference/gold.py::calc_return 逐位比对（== 比较）",
+  "git_commit": "8e54002b6b9f2265511f95a15eb5ecff791052bb",
+  "git_dirty": true,
+  "data_as_of": "2026-09-28",
+  "manifest_sha256": "b5df59cb954c170e44071fb38603f57eff401863656912e410a96a721d49e127",
+  "dataset_sha256": {
+    "agent_tasks_v1.jsonl": "7d4c4fc3f4d6b63643fe608ca17c1ca07177257086253a1c878cf13bb33c3b77"
+  },
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.3",
+    "cpu_count": 16
+  },
+  "command": "cd eval && python ../scripts/verify_returns_vs_reference.py",
+  "params": {
+    "seed": 20260929,
+    "random_windows_per_share": 25,
+    "amounts": [
+      1000.0,
+      50000.0,
+      999999.0,
+      1000000.0,
+      5000000.0
+    ],
+    "n_shares": 40
+  },
+  "counts": {
+    "cases_no_fee": 1522,
+    "both_raise": 250,
+    "cases_with_fee": 2670,
+    "compared": 3942,
+    "all_fields_identical": 3942
+  },
+  "field_identical": {
+    "start_used": {
+      "identical": 3942,
+      "compared": 3942
+    },
+    "end_used": {
+      "identical": 3942,
+      "compared": 3942
+    },
+    "ret": {
+      "identical": 3942,
+      "compared": 3942
+    },
+    "annualized": {
+      "identical": 3942,
+      "compared": 3942
+    },
+    "max_drawdown": {
+      "identical": 3942,
+      "compared": 3942
+    },
+    "dividends_in_range": {
+      "identical": 3942,
+      "compared": 3942
+    },
+    "net_ret_with_fees": {
+      "identical": 2465,
+      "compared": 2465
+    }
+  },
+  "n_mismatches": 0,
+  "dataset_calc_return": {
+    "n": 9,
+    "matched": 9,
+    "items": [
+      {
+        "id": "agent-0023",
+        "match": true,
+        "got": {
+          "start_used": "2025-12-31",
+          "end_used": "2026-06-30",
+          "ret": 0.03856345,
+          "annualized": 0.07929072,
+          "max_drawdown": -0.23366641,
+          "net_ret_with_fees": null
+        },
+        "want": {
+          "start_used": "2025-12-31",
+          "end_used": "2026-06-30",
+          "ret": 0.03856345,
+          "annualized": 0.07929072,
+          "max_drawdown": -0.23366641,
+          "net_ret_with_fees": null
+        }
+      },
+      {
+        "id": "agent-0024",
+        "match": true,
+        "got": {
+          "start_used": "2025-12-31",
+          "end_used": "2026-06-30",
+          "ret": 1.03023017,
+          "annualized": 3.17049872,
+          "max_drawdown": -0.07431994,
+          "net_ret_with_fees": null
+        },
+        "want": {
+          "start_used": "2025-12-31",
+          "end_used": "2026-06-30",
+          "ret": 1.03023017,
+          "annualized": 3.17049872,
+          "max_drawdown": -0.07431994,
+          "net_ret_with_fees": null
+        }
+      },
+      {
+        "id": "agent-0025",
+        "match": true,
+        "got": {
+          "start_used": "2026-03-31",
+          "end_used": "2026-06-30",
+          "ret": 1.11182162,
+          "annualized": 19.05379596,
+          "max_drawdown": -0.11547426,
+          "net_ret_with_fees": null
+        },
+        "want": {
+          "start_used": "2026-03-31",
+          "end_used": "2026-06-30",
+          "ret": 1.11182162,
+          "annualized": 19.05379596,
+          "max_drawdown": -0.11547426,
+          "net_ret_with_fees": null
+        }
+      },
+      {
+        "id": "agent-0026",
+        "match": true,
+        "got": {
+          "start_used": "2025-09-26",
+          "end_used": "2026-09-28",
+          "ret": -0.05381269,
+          "annualized": -0.05352742,
+          "max_drawdown": -0.25855086,
+          "net_ret_with_fees": null
+        },
+        "want": {
+          "start_used": "2025-09-26",
+          "end_used": "2026-09-28",
+          "ret": -0.05381269,
+          "annualized": -0.05352742,
+          "max_drawdown": -0.25855086,
+          "net_ret_with_fees": null
+        }
+      },
+      {
+        "id": "agent-0027",
+        "match": true,
+        "got": {
+          "start_used": "2022-12-30",
+          "end_used": "2023-12-29",
+          "ret": -0.06179025,
+          "annualized": -0.06195463,
+          "max_drawdown": -0.19132029,
+          "net_ret_with_fees": null
+        },
+        "want": {
+          "start_used": "2022-12-30",
+          "end_used": "2023-12-29",
+          "ret": -0.06179025,
+          "annualized": -0.06195463,
+          "max_drawdown": -0.19132029,
+          "net_ret_with_fees": null
+        }
+      },
+      {
+        "id": "agent-0028",
+        "match": true,
+        "got": {
+          "start_used": "2026-01-05",
+          "end_used": "2026-09-28",
+          "ret": 0.2971006,
+          "annualized": 0.42896058,
+          "max_drawdown": -0.27635997,
+          "net_ret_with_fees": null
+        },
+        "want": {
+          "start_used": "2026-01-05",
+          "end_used": "2026-09-28",
+          "ret": 0.2971006,
+          "annualized": 0.42896058,
+          "max_drawdown": -0.27635997,
+          "net_ret_with_fees": null
+        }
+      },
+      {
+        "id": "agent-0029",
+        "match": true,
+        "got": {
+          "start_used": "2024-09-27",
+          "end_used": "2026-09-24",
+          "ret": 2.00278369,
+          "annualized": 0.73678991,
+          "max_drawdown": -0.34411549,
+          "net_ret_with_fees": null
+        },
+        "want": {
+          "start_used": "2024-09-27",
+          "end_used": "2026-09-24",
+          "ret": 2.00278369,
+          "annualized": 0.73678991,
+          "max_drawdown": -0.34411549,
+          "net_ret_with_fees": null
+        }
+      },
+      {
+        "id": "agent-0030",
+        "match": true,
+        "got": {
+          "start_used": "2026-01-05",
+          "end_used": "2026-06-30",
+          "ret": -0.00135531,
+          "annualized": -0.00280868,
+          "max_drawdown": -0.23366641,
+          "net_ret_with_fees": -0.02103304
+        },
+        "want": {
+          "start_used": "2026-01-05",
+          "end_used": "2026-06-30",
+          "ret": -0.00135531,
+          "annualized": -0.00280868,
+          "max_drawdown": -0.23366641,
+          "net_ret_with_fees": -0.02103304
+        }
+      },
+      {
+        "id": "agent-0031",
+        "match": true,
+        "got": {
+          "start_used": "2025-06-30",
+          "end_used": "2026-06-30",
+          "ret": 0.03156856,
+          "annualized": 0.03156856,
+          "max_drawdown": -0.29842792,
+          "net_ret_with_fees": 0.01829095
+        },
+        "want": {
+          "start_used": "2025-06-30",
+          "end_used": "2026-06-30",
+          "ret": 0.03156856,
+          "annualized": 0.03156856,
+          "max_drawdown": -0.29842792,
+          "net_ret_with_fees": 0.01829095
+        }
+      }
+    ]
+  }
+}

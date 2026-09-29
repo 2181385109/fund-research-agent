@@ -53,6 +53,7 @@ _FORBIDDEN_NODE_NAMES = (
     "Parameter",  # @user_var（可以赋值，属于写会话状态）
     "SessionParameter",  # @@system_var
     "Placeholder",
+    "Hint",  # /*+ MAX_EXECUTION_TIME(...) */ 可以覆盖服务端超时，SET_VAR(...) 可以改会话变量
 )
 _FORBIDDEN_NODES = tuple(
     t for n in _FORBIDDEN_NODE_NAMES if isinstance(t := getattr(exp, n, None), type)
@@ -177,7 +178,7 @@ def guard_sql(sql: str, *, max_rows: int = 200) -> GuardedSql:
         if isinstance(node, exp.Func):
             names = {node.sql_name().lower()}
             if isinstance(node, exp.Anonymous):
-                names.add(str(node.this).lower())
+                names.add(node.name.lower())  # 反引号包起来的函数名也按原名比较
             bad = names & _FORBIDDEN_FUNCS
             if bad:
                 raise _reject(f"禁止使用函数 {sorted(bad)[0].upper()}()")

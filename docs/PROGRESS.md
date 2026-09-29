@@ -3,7 +3,7 @@
 > 由执行者在每个阶段结束时按 CLAUDE.md §11 的模板追加一节，旧内容不删除。统筹审查后会在对应小节末尾追加「统筹审查结论」。
 
 ## 当前状态
-- 当前阶段：批次 B3（S4 收尾）已完成：S2 切块修复并重新入库（ADR-037）、dev 调参、test 评测（各一次）。下一批 B4（S5 前半：mcp-tools 的 4 个工具），见 `docs/HANDOFF.md`。S4 的两个待统筹决定见 PROGRESS「S4 … 给统筹的问题」
+- 当前阶段：批次 B4（S5 前半：mcp-tools 的 4 个工具）已完成。下一批 B5（S5 后半：文档 MCP、LangGraph、出处、风险提示、SSE），见 `docs/HANDOFF.md`。统筹对 B3 遗留的两个问题已答复（ADR-038、ADR-039）
 - 最近一次 CI：见 `docs/HANDOFF.md`
 - 已完成的用户事项：`.env` 已生成（含 DeepSeek key）；`.wslconfig` 已设 10GB/4GB；**基金池 v1 已于 2026-09-29 确认并冻结**；**S3 评测集抽检已于 2026-09-29 完成**（27 条，通过 23，修改 4）
 - 待用户处理：
@@ -437,3 +437,49 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 ### 给统筹的问题
 1. 实体过滤：dev 选「关」、test 消融显示「开」略好但不显著。是否保持「关」？如果要重新决定，需要新的证据来源（不能再用 test）。
 2. 持仓表格块检索很弱（holdings nDCG@10 0.126）。是否在 S5 之前做一次入库改动（合并表格碎片、给表格块加自然语言标题行）？这会使 test 需要重新评估，不属于本批的授权范围。
+
+**统筹答复（B4 开工时转达）**：1. 实体过滤保持「关」，不因 test 上 +0.022（CI 含 0）改配置，S5 `search_fund_documents` 的 `fund_codes` 由 Agent 显式传入、与该开关独立 → ADR-038。2. 持仓表格入库方式不改，持仓题主路径是 `run_fund_sql` 查 `holdings_top10`，检索在持仓题上偏弱作为已知局限；「纯 RRF 混合检索不如单独 BM25」也如实记录 → ADR-039。两条都已写入 `docs/LIMITATIONS.md`「检索（S4）」一节。
+
+## S5 前半 mcp-tools 的四个工具 — 2026-09-29（B4）
+- commit 范围：`ae73c31`（ADR-038/039 与 LIMITATIONS）..本节所在提交，代码在 `8e54002`；CI：见 `docs/HANDOFF.md`
+- 范围：PLAN §7 的 B4 = S5 交付第 1 项（mcp-tools），对应验收 1、2、6 和验收 4 中 mcp-tools 的部分。文档 MCP、LangGraph、出处、风险提示、SSE、live 冒烟（验收 3、5、4 的另一半）留给 B5。
+
+### 完成项
+- `mcp-tools/`（FastMCP，streamable HTTP，`http://127.0.0.1:8101/mcp`，`/health`）：`get_fund_db_schema`、`run_fund_sql`（sqlglot 守卫）、`calc_fund_return`、`get_latest_nav`；实现选型见 ADR-040，工具契约见 `mcp-tools/README.md`。
+- 双保险：应用层 `sql_guard`（执行重新生成的 SQL，注释被丢弃）+ 数据库层（`fund_reader` 只读账号、只读事务、`MAX_EXECUTION_TIME`）。
+- `scripts/verify_returns_vs_reference.py`（与 `eval/reference/gold.py` 逐位比对）、`scripts/mcp_client_check.py`（独立 MCP 客户端）。
+- CI 的 python 矩阵早已包含 mcp-tools（ruff check、ruff format --check、pytest 排除 integration/slow/live），无需新增 job；`.env.example` 补了 `MCP_TOOLS_HOST`、`NAV_*`、`SQL_*`；README 进度表更新（此前停在 S0，属于遗漏）。
+- 登记：ADR-038、ADR-039（统筹对 B3 遗留问题的两个决定）与 `docs/LIMITATIONS.md` 新增「检索（S4）」一节；ADR-040（mcp-tools 选型）。
+
+### 验收逐条
+1. SQL 守卫单测覆盖：DROP、DELETE、UPDATE、INSERT、多语句、注释绕过、系统库、INTO OUTFILE、结果截断 — ✅ — `mcp-tools/tests/test_sql_guard.py` 86 条（另有 `test_server.py` 经 MCP 协议验证「被拒绝的 SQL 不会发到数据库」「201 行探针 → 返回 200 行并标 truncated」）。命令：`cd mcp-tools && .venv/Scripts/python -m pytest -q` → `144 passed, 11 deselected`（CI 同款 marker）；含 integration 共 155 条全过。数据库侧的保险另由 `tests/test_integration_db.py` 证明：绕过守卫直接发 INSERT / DELETE / UPDATE / DROP / CREATE 都被 MySQL 拒绝，读 `mysql.user` 被拒绝，三表笛卡尔积在 `timeout_s=1` 时被服务端中断并报「查询超时」。
+2. 收益计算单测：手算用例（一次分红、起止日为非交易日、含费 / 不含费），与参考脚本结果逐位一致 — ✅ — 手算用例：`tests/test_returns.py` 22 条（自造序列：一次分红复权得 +10.00% 而不是 −1%、周六 / 周日起止日取前一交易日且周六那条净值被忽略、节假日、同日窗口、百分比申购费档 / 固定费用档 / 无费档份额、除息日无交易日时写入 notes、各类参数错误）。逐位比对（真实链路：MySQL → `DbReturnData` → `calc_fund_return`，参考端读快照 CSV）：`reports/mcp_tools/20260929T100447Z/{summary.json,report.md}`，命令 `cd eval && python ../scripts/verify_returns_vs_reference.py`。结果：40 个份额、用例 4192 条（不含费 1522、含费 2670），两边都判为无法计算（起点早于首个净值日）250 条，**参与比较 3942 条，`==` 比较全部相同（起止日、区间收益、年化、最大回撤、区间内分红次数各 3942/3942，含费净收益 2465/2465），不一致 0 处**；数据集 `agent_tasks_v1` 的 calc_return 题 9/9 与 gold_params（8 位小数）一致。
+4. （mcp-tools 部分）用独立 MCP 客户端列出并调用工具 — ✅（另一半文档 MCP 属于 B5）— `reports/mcp_tools/20260929T100658Z_client_check/client_check.md`：官方 SDK 的 streamable HTTP 客户端，`list_tools` 得 4 个工具，共调用 10 次（正常 6 次、预期被拒绝或参数错误 4 次），与预期不符 0 次；`get_latest_nav` 这次是真实调用东方财富接口（`stale=false`，`nav_date=2026-09-28`，`fetched_at` 有值）。
+6. `get_latest_nav` 的故障回退有测试（mock 超时）— ✅ — `tests/test_nav_client.py` 20 条：`httpx.ConnectTimeout` → `stale=true`、回退快照日期、共 3 次请求（首次 + 重试 2 次）；HTTP 5xx / 非 JSON / 空数据 / 错误码 / 净值无法解析都回退；重试后成功；缓存 599 秒内命中、超过 10 分钟重新请求；回退结果不缓存（接口恢复后立即拿到实时数据）；份额不在基金池直接报错且不请求外部接口。全程用 `httpx.MockTransport`，不访问外网。
+7. CI 全绿 — 见 `docs/HANDOFF.md`（push 后确认）。
+
+### 实测数字
+| 指标 | 值 | n / 分母 | 结果文件 |
+|---|---|---|---|
+| calc_fund_return 与参考实现逐位相同的用例 | 3942 | 3942（参与比较）；总用例 4192，250 条两边都判为无法计算 | `reports/mcp_tools/20260929T100447Z/summary.json` |
+| 数据集 calc_return 题与 gold_params 一致 | 9 | 9 | 同上 |
+| 独立 MCP 客户端调用与预期不符 | 0 | 10 次调用 | `reports/mcp_tools/20260929T100658Z_client_check/client_check.md` |
+| mcp-tools 单测（CI 同款 marker / 含 integration） | 144 / 155 通过 | 全部 | 命令见验收 1 |
+| `get_fund_db_schema` 返回体积 | 约 8.6 KB（缩排 JSON；字段写成一行文字之前为 26 KB） | 12 张表 | 本机 `SchemaProvider.describe()` 实测，ADR-040 |
+
+### 与计划的偏差（附理由和 ADR 编号）
+- MCP SDK 固定在 1.x（`mcp<2`）：ADR-040。
+- 自查中发现并修复了守卫的两处遗漏（修复后才收尾，`8e54002` 之后的提交）：① 优化器提示 `/*+ MAX_EXECUTION_TIME(999999) */` 和 `SET_VAR(...)` 不是普通注释，sqlglot 会保留并原样生成，能覆盖服务端 5 秒超时——现在整个 `Hint` 节点一律拒绝；② 用反引号包住的函数名（`` `SLEEP`(5) ``）绕过了函数黑名单——现在按原名比较。两处都补了单测，客户端冒烟在修复后的代码上重跑（上面引用的是重跑的结果）。逐位比对不经过 `run_fund_sql`，不受这两处修复影响，没有重跑。
+- 逐位比对的第一次运行（`ae73c31` 上、代码尚未提交）已删除并用提交后的代码重跑：两次的计数完全相同（seed 固定），只是第一次结果文件里的 git_commit 指向一个不含被测代码的提交，无法追溯，所以只保留重跑的一次。重跑时 `git_dirty=true` 的原因是当时工作区里只有文档（README / PROGRESS）尚未提交，被测代码即 `8e54002`。
+
+### 已知问题 / 技术债
+- 所有代码路径只在本机 MySQL 快照上验证过；`run_fund_sql` 的守卫是「根节点白名单 + 节点 / 函数黑名单」，没有做模糊测试（上面两处遗漏是人工试探出来的，说明黑名单可能还有没想到的写法）。数据库侧的保险（只读账号、只读事务、服务端超时）不依赖守卫。存储过程 / 触发器不适用（账号只有 SELECT）。
+- `get_fund_db_schema` 每次调用仍约 8.6 KB，占 Agent 上下文；B5 可以只在需要时调用，或把 `conventions` 合并进 system prompt。
+- 净值接口是非官方接口，字段含义（`JZZZL` 为百分数）是实测得到的，接口若改字段，工具会回退到快照并标 `stale`，不会静默出错。
+- 没有做 Dockerfile（属于 S7）；本机服务用 `python -m fund_mcp_tools.server` 起。
+
+### 需要用户做的事
+无。
+
+### 给统筹的问题
+无阻塞。一处提示：README 进度表此前停在 S0（B1–B3 都没更新），这次已经更正到 S0–S4 完成、S5 进行中。
