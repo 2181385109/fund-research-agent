@@ -49,6 +49,7 @@ LOCAL_PATH_EXEMPT: dict[str, str] = {
     "docs/SETUP.md": "本机环境搭建说明，需要给出可直接复制的 wsl 命令和路径",
     "docs/PROGRESS.md": "验收证据要求贴命令输出原文，其中含本机路径",
     "docs/DECISIONS.md": "ADR 的背景部分引用本机环境事实",
+    "docs/HANDOFF.md": "交接文件要给出本机环境下可直接复制的命令和路径（CLAUDE.md §1.8）",
     "docs/prompts/": "统筹写给执行者的提示词存档，执行者只读、不改写",
     "scripts/security_scan.py": "规则定义本身",
     "scripts/tests/": "扫描器单测里的违规样例",
