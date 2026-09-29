@@ -485,7 +485,7 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 无阻塞。一处提示：README 进度表此前停在 S0（B1–B3 都没更新），这次已经更正到 S0–S4 完成、S5 进行中。
 
 ## S5 后半 文档 MCP + LangGraph Agent + 出处 + 风险提示 + SSE — 2026-09-29（B5）
-- commit 范围：`ae92d44`（B4 HANDOFF）..CI 结论提交见 HANDOFF；CI：__CI__
+- commit 范围：`ae92d44`（B4 HANDOFF）..`c59cbe5`（代码主体 `6d2ef1e`）；CI：https://github.com/2181385109/fund-research-agent/actions/runs/36557182412 （✅ 6 个 job 全部 success，一次通过）
 - 范围：PLAN §7 的 B5 = S5 除 mcp-tools 之外的交付与验收（验收 3、验收 4 的另一半、验收 5、验收 7）。至此 S5 全部完成（验收 1、2、6 在 B4）。
 
 ### 完成项
@@ -499,7 +499,7 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 3. Agent 单测用 Fake LLM 覆盖：循环上限、工具报错后恢复、引用映射、非法编号丢弃、风险提示必定出现（含报错路径）— ✅ — `ai-service/tests/test_agent_graph.py`（27 条）+ `test_agent_units.py`（30 条）+ `test_agent_mcp_api.py`（11 条）。对应关系：循环上限 `test_loop_cap_forces_a_final_answer_without_tools`（max_steps=3 时恰好 3 轮工具，第 4 次调用不绑定工具）、`test_default_max_steps_is_six`；工具报错后恢复 `test_sql_error_is_returned_to_the_llm_and_the_retry_succeeds`、`test_sql_retries_are_capped_at_two`（首次 + 2 次重试后第 4 次不执行）、`test_unavailable_tool_does_not_break_the_request`；引用映射 `test_mixed_answer_cites_all_four_kinds`（database / document / computation / api，含 args 与实际起止日）；非法编号丢弃 `test_invalid_reference_numbers_are_dropped_and_logged`（用户流里看不到，日志有 warning，`done.dropped_citations`）；风险提示必定出现 `test_disclaimer_present_when_llm_fails_on_first_call`、`…_mid_run_…`、`…_when_tool_listing_fails`、`test_empty_model_answer_…`、`test_chat_stream_when_agent_cannot_be_built_still_sends_disclaimer`，且每个正常路径测试都断言 `disclaimer` 紧挨 `done`。命令：`cd ai-service && .venv/Scripts/python -m pytest -q -m "not integration and not slow and not live"` → 134 passed, 4 deselected。
 4. （文档 MCP 部分）用独立 MCP 客户端列出并调用两个服务的全部工具，贴原文 — ✅ — `reports/mcp_tools/20260929T103458Z_client_check/client_check.md`：官方 SDK 的 streamable HTTP 客户端，`:8101/mcp` 4 个工具、`:8001/mcp` 1 个工具，共 14 次调用（含 mcp-tools 的守卫拒绝 3 次、参数错误 1 次，文档 MCP 的正常 2 次、参数错误 2 次），与期望不符 0 次。命令：`python scripts/mcp_client_check.py --url http://127.0.0.1:8101/mcp --url http://127.0.0.1:8001/mcp`。
 5. live 冒烟：每种工具至少 2 题、综合题 3 题、荐基请求 2 题，贴 SSE 原文 — ✅ — 13 题，SSE 原文在 `reports/agent_smoke/20260929T103710Z/<题号>.sse`，汇总 `summary.json`。协议层面的结果（n=13，冒烟不是评测，没有标准答案）：13/13 `done.status=ok`；13/13 用到了预期工具；13/13 `disclaimer` 紧挨 `done`；输出守卫标记 0/13；无效编号丢弃 0 次；请求模型 `deepseek-flash`，响应模型 `deepseek-flash`。每类题的用法见下表。回答内容我读了原文（长回答只读了前 700–1400 字，数字没有逐项对账）：荐基题两题都先声明无法推荐、只陈述客观数据并标出处；**发现 1 处事实错误**——tool-calc-2 把 003095 写成「C 类」（003095 是 A 类，C 类是 003096；工具入参与结果都对，是最终回答的措辞错），没有任何自动检查会拦住这类错误，只能靠 S8 的回答评测量化。**没有做自动评分**，准确率数字要等 S8。
-7. CI 全绿 — __CI7__
+7. CI 全绿 — ✅ — run 36557182412（上面的链接），6 个 job：backend、python×4（ai-service / mcp-tools / data-pipeline / eval）、scripts + security scan；安全扫描 tracked 与 `--history` 两种模式本机均 PASS（findings=0）。三次 live 冒烟在提交前用未提交的工作区跑的（summary.json 里 `git_dirty=true`，`git_commit` 是父提交 `ae92d44`）；被测代码就是随后提交的 `6d2ef1e`，其间没有再改 src。
 
 **冒烟明细**（第三次运行；工具 = 实际调用序列的去重）：
 
