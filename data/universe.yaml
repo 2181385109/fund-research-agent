@@ -3,9 +3,11 @@
 # 规模 = fund_overview_em 的「净资产规模」（全部份额合计，截至 scale_date）；
 # manager_changed_2y = 2024-09-30～2026-09-30 之间有「解聘/离任」类基金经理变更公告（只增聘不算），
 #   依据是公告 PDF 里的「基金经理变更类型」字段（B1 核对，见 reports/universe/ 与 DECISIONS ADR-030）。
+# LOF（160219、161035）按场外份额收录，数据一律用场外 A/C 份额（用户 2026-09-29 决定，ADR-030）。
+# scale_yi 口径：截至 2026-06-30 的基金资产净值。
 version: v1
-frozen: false
-confirmed_by_user_on: null
+frozen: true
+confirmed_by_user_on: 2026-09-29
 screen_report: reports/universe/20260928T181640Z
 as_of_screen: 2026-09-30
 
@@ -112,7 +114,7 @@ funds:
     scale_date: 2026-06-30
     tracking_index: 国证医药卫生行业指数
     manager_changed_2y: false
-    reason: 全称带「(LOF)」，场内上市但可场外申赎；医药类非 ETF/联接的指数基金只有 3 只，需要用户确认是否接受 LOF
+    reason: 全称带「(LOF)」，场内上市、可场外申赎，按场外份额收录（用户确认）；医药类非 ETF/联接的指数基金只有 3 只
   - code: "161035"
     name: 富国中证医药主题指数增强
     share_classes: [{code: "161035", share_class: A}, {code: "005626", share_class: C}]
@@ -240,4 +242,4 @@ funds:
     scale_date: 2026-06-30
     tracking_index: 中证人工智能主题指数
     manager_changed_2y: true
-    reason: 两年内 3 次增聘+解聘（2024-11、2025-01、2026-01），经理变动最频繁的样本；规模 2.06 亿贴近门槛（备选：嘉实中证半导体指增 014854，13 亿）
+    reason: 两年内 3 次增聘+解聘（2024-11、2025-01、2026-01），经理变动最频繁的样本；规模 2.06 亿（截至 2026-06-30）满足 ≥2 亿门槛，用户确认保留

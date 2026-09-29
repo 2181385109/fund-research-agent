@@ -141,3 +141,40 @@
 
 ## ADR-026 WSL Docker 镜像加速顺序不改、不重启 Docker（B1，统筹决定 S0 问题 4）
 - **决定**：`/etc/docker/daemon.json` 保持原样，不 `systemctl restart docker`（会连带重启 ticket-qa 的容器）。新镜像拉取慢时继续按 SETUP §4.1 的办法（Windows 侧下载 + `docker load`）。
+
+---
+
+## ADR-027 AkShare 1.18.97 的两个缺陷：绕开处理，不改 AkShare 源码（S1）
+- **背景**：
+  1. `fund_fee_em(indicator="申购费率")` 返回空表。读 1.18.97 源码：它按页面 `<h4 class="t">` 的标题建表字典，但分支只认 `"申购费率（前端）"`；东方财富页面（`fundf10.eastmoney.com/jjfl_{code}.html`）现在的标题是 `"申购费率"`，于是任何参数都落到 `else` 分支返回空表（传 `"申购费率（前端）"` 则 KeyError）。2026-09-29 实测 003095、003096 均如此；`"赎回费率"`、`"运作费用"` 正常。
+  2. `fund_announcement_personnel_em` 在来源返回 0 条公告时，仍给空表设 8 个列名，抛 `ValueError: Length mismatch: Expected axis has 0 elements`。
+- **决定**：
+  1. 申购费分档改从最新招募说明书（更新）的费率表解析（pdfplumber），`purchase_fee_tiers.source` 标 doc_id 与页码（用户 2026-09-29 确认）。
+  2. `AkShareSource` 把含 `Expected axis has 0 elements` 的 ValueError 视为空结果（有单测）。
+  3. 同时给 `AkShareSource` 加有限重试：只对网络类临时错误（`requests.RequestException`、`OSError`，含来源偶发返回非 JSON）重试 3 次，退避 5s/10s/15s；逻辑错误立即抛出（有单测）。
+  4. 不修改、不 monkeypatch AkShare 源码；版本固定 1.18.97（`pyproject.toml`）。登记到 `docs/LIMITATIONS.md`。
+- **备选**：直接解析东方财富费率页面（同一来源，但绕过了 AkShare；且页面上是销售平台展示值）；给 AkShare 打补丁（用户否决）。
+- **后果**：申购费依赖招募说明书的表格版式，解析失败的份额登记为缺口，不静默补值。
+
+## ADR-028 公告列表直接调用东方财富 JJGG 接口（S1）
+- **背景**：PLAN §2.1 的报告 ID 来自 AkShare `fund_announcement_report_em`，它调用的是 `api.fund.eastmoney.com/f10/JJGG?type=3`（定期报告）。招募说明书和基金合同在同一接口的 `type=1`（发行运作），AkShare 没有封装。
+- **决定**：`fund_pipeline.docs.EastmoneyAnnouncements` 直接调 JJGG 的 type=1 和 type=3，带 `Referer` 与如实的 User-Agent（`fund_pipeline.net.USER_AGENT`，AkShare 用的是伪装的浏览器 UA）；节流 ≤1 次/秒、公告列表按 as_of 缓存。PDF 仍从 `pdf.dfcfw.com/pdf/H2_{ID}_1.pdf` 下载。数据源与 PLAN 一致，只是换了调用方式。
+- **后果**：接口字段名（`TITLE`、`PUBLISHDATEDesc`、`ID`）由我们自己解析，接口变动时 docs 模块直接报错。
+
+## ADR-029 fund_data 表结构细化（S1）
+- **决定**（`data-pipeline/src/fund_pipeline/schema.sql`）：
+  - 比率一律存小数（DECIMAL，`0.012` = 1.20%），金额单位元、持股单位股（来源的万元/万股在导入前换算），日期 DATE。
+  - 在 PLAN §4.2 的基础上：`purchase_fee_tiers`/`redemption_fee_tiers` 增加 `tier_text`（档位原文）；`purchase_fee_tiers` 增加 `fixed_fee`（每笔固定费用）和 `source_page`；赎回期限「年」按 365 天、「月」按 30 天折算，原文保留在 `tier_text`。
+  - `fund_manager_tenures` 来自定期报告的「基金经理（或基金经理小组）简介」表；`managers` 只收本基金池涉及的现任经理。
+  - `period_returns` 来自 `fund_open_fund_rank_em`，只有当它的「日期」等于 DATA_AS_OF 时才入库，否则登记问题。
+  - 每张表都有 `source`、`as_of`；表和列带中文 COMMENT，S5 的 `get_fund_db_schema` 直接读。
+  - 导入：`fund_loader` 账号（ADR-023）整库 DROP + CREATE + INSERT，幂等；导入后用 `fund_reader` 逐表 COUNT(*) 核对。
+
+## ADR-030 基金池筛选规则与用户决定（S1）
+- **筛选规则**（`fund_pipeline.universe`）：类型白名单 股票型 / 混合型-偏股 / 混合型-灵活 / 指数型-股票；名称排除 ETF、联接、LOF、持有期、定开、封闭、QDII、港股通/沪港深/全球/海外（跨境持仓会让持仓和净值口径变复杂）；主题按简称关键词，两类都命中的剔除；成立日 ≤ as_of − 2 年、最新净资产 ≥ 2 亿均取自 `fund_overview_em`。474 组 → 193 组通过（计数见 `reports/universe/20260928T181640Z/summary.json`）。
+- **「近两年换过经理」的口径**：2024-09-30～2026-09-30 之间，基金经理变更公告 PDF 的「基金经理变更类型」含「解聘」（即有经理离任）；只增聘不算。20 只中 8 只满足。
+- **用户决定（2026-09-29）**：
+  1. LOF 可以收：160219、161035 可场外申赎、净值口径与普通开放式一致，数据一律用场外 A/C 份额；PLAN §4.1 已加备注。（名称里带「LOF」的基金在自动筛选时被排除，这两只的简称不含「LOF」，是人工取舍时发现并经用户确认的。）
+  2. 011832 保留：规模 2.06 亿（截至 2026-06-30）满足门槛，三次换经理适合出题。
+  3. 其余 19 只不调换，universe v1 冻结（`data/CHANGELOG.md`）。
+- **后果**：候选名单里存在后端收费份额（名称带「(后端)」）被当成独立一组的情况，不影响最终 20 只，但筛选计数里 474/193 组含这类重复组。
