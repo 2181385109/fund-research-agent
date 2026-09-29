@@ -35,6 +35,7 @@ class Settings(BaseSettings):
     llm_model: str = "deepseek-flash"
     llm_thinking: str = "disabled"
     llm_timeout_seconds: float = 60.0
+    judge_model: str = "deepseek-v4-pro"  # S8 回答评测的 LLM 裁判，刻意与被测模型不同
 
     # Agent（S5）：两个 MCP 服务的地址；文档检索 MCP 挂在本进程的 /mcp，Agent 经 HTTP 回环调用
     mcp_tools_url: str = "http://127.0.0.1:8101/mcp"

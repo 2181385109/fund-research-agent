@@ -1,0 +1,176 @@
+{
+  "label": "S8 复现性检查：bm25 单模式再跑一次（确定性检验，同一索引）",
+  "env": {
+    "git_commit": "e65d2786fa6b69550b5ecaa710903dea08110374",
+    "git_dirty": true,
+    "data_as_of": "2026-09-28",
+    "data_manifest_sha256": "b5df59cb954c170e44071fb38603f57eff401863656912e410a96a721d49e127",
+    "models": {
+      "embedding": "BAAI/bge-small-zh-v1.5",
+      "reranker": "cross_encoder:BAAI/bge-reranker-base",
+      "llm_requested": null,
+      "llm_response": null
+    },
+    "index": {
+      "milvus_collection": "fund_chunks",
+      "es_index": "fund_chunks",
+      "ingest_run": "20260929T141806Z"
+    },
+    "machine": {
+      "platform": "Windows-11-10.0.26200-SP0",
+      "python": "3.12.3",
+      "cpu_count": 16
+    },
+    "command": "cd ai-service && python -m fund_ai.eval.retrieval --split test --modes bm25 --label S8 复现性检查：bm25 单模式再跑一次（确定性检验，同一索引） --entity-filter off --use-ctx on --query-instruction off --vector-k 20 --bm25-k 20 --rerank-candidates 20"
+  },
+  "dataset": {
+    "split": "test",
+    "n_split": 79,
+    "n_evaluated": 72,
+    "n_excluded_unanswerable_or_no_evidence": 7,
+    "dataset_sha256": {
+      "fund_qa_v1.jsonl": "77fb06a9686ea195ef8813d192bc90ffceb05ffe0b1122864777dc026997e48d"
+    }
+  },
+  "config": {
+    "vector_k": 20,
+    "bm25_k": 20,
+    "rrf_k": 60,
+    "rerank_candidates": 20,
+    "top_n": 10,
+    "entity_filter": false,
+    "use_ctx": true,
+    "query_instruction": false
+  },
+  "modes": [
+    "bm25"
+  ],
+  "results": {
+    "bm25": {
+      "overall": {
+        "n": 72,
+        "hit@1": 0.2639,
+        "hit@3": 0.4028,
+        "hit@5": 0.5139,
+        "hit@10": 0.5694,
+        "recall@5": 0.4931,
+        "recall@10": 0.5556,
+        "mrr@10": 0.3598,
+        "ndcg@10": 0.391
+      },
+      "by_topic": {
+        "commentary": {
+          "n": 13,
+          "hit@1": 0.5385,
+          "hit@3": 0.9231,
+          "hit@5": 0.9231,
+          "hit@10": 0.9231,
+          "recall@5": 0.9231,
+          "recall@10": 0.9231,
+          "mrr@10": 0.7308,
+          "ndcg@10": 0.7028
+        },
+        "contract_clause": {
+          "n": 12,
+          "hit@1": 0.5,
+          "hit@3": 0.5,
+          "hit@5": 0.6667,
+          "hit@10": 0.6667,
+          "recall@5": 0.6667,
+          "recall@10": 0.6667,
+          "mrr@10": 0.5333,
+          "ndcg@10": 0.5645
+        },
+        "cross_doc": {
+          "n": 8,
+          "hit@1": 0.125,
+          "hit@3": 0.375,
+          "hit@5": 0.5,
+          "hit@10": 0.5,
+          "recall@5": 0.375,
+          "recall@10": 0.4375,
+          "mrr@10": 0.2396,
+          "ndcg@10": 0.2779
+        },
+        "fee": {
+          "n": 12,
+          "hit@1": 0.1667,
+          "hit@3": 0.1667,
+          "hit@5": 0.4167,
+          "hit@10": 0.4167,
+          "recall@5": 0.375,
+          "recall@10": 0.375,
+          "mrr@10": 0.225,
+          "ndcg@10": 0.2568
+        },
+        "holdings": {
+          "n": 11,
+          "hit@1": 0.0,
+          "hit@3": 0.0909,
+          "hit@5": 0.1818,
+          "hit@10": 0.2727,
+          "recall@5": 0.1818,
+          "recall@10": 0.2727,
+          "mrr@10": 0.0773,
+          "ndcg@10": 0.1228
+        },
+        "manager": {
+          "n": 8,
+          "hit@1": 0.375,
+          "hit@3": 0.625,
+          "hit@5": 0.625,
+          "hit@10": 0.625,
+          "recall@5": 0.625,
+          "recall@10": 0.625,
+          "mrr@10": 0.4792,
+          "ndcg@10": 0.5164
+        },
+        "performance": {
+          "n": 8,
+          "hit@1": 0.0,
+          "hit@3": 0.0,
+          "hit@5": 0.125,
+          "hit@10": 0.5,
+          "recall@5": 0.125,
+          "recall@10": 0.5,
+          "mrr@10": 0.0878,
+          "ndcg@10": 0.1817
+        }
+      },
+      "by_style": {
+        "keyword": {
+          "n": 38,
+          "hit@1": 0.2105,
+          "hit@3": 0.2895,
+          "hit@5": 0.4211,
+          "hit@10": 0.4737,
+          "recall@5": 0.3947,
+          "recall@10": 0.4474,
+          "mrr@10": 0.2803,
+          "ndcg@10": 0.3196
+        },
+        "paraphrase": {
+          "n": 34,
+          "hit@1": 0.3235,
+          "hit@3": 0.5294,
+          "hit@5": 0.6176,
+          "hit@10": 0.6765,
+          "recall@5": 0.6029,
+          "recall@10": 0.6765,
+          "mrr@10": 0.4485,
+          "ndcg@10": 0.4708
+        }
+      },
+      "latency_ms": {
+        "p50": 54.13,
+        "p95": 59.2,
+        "n": 72
+      },
+      "entity_recognition": {
+        "covers_gold": 72,
+        "n": 72
+      }
+    }
+  },
+  "comparisons": {}
+}

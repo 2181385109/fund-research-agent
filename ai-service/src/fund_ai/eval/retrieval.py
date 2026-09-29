@@ -71,7 +71,20 @@ def _git(*args: str) -> str:
         return "unknown"
 
 
-def env_block() -> dict:
+def current_ingest_run() -> str | None:
+    """当前索引对应的入库 run：reports/ingest/ 下最新一个「全部文档入库成功」的目录名（可用 --ingest-run 覆盖）。"""
+    d = REPO_ROOT / "reports" / "ingest"
+    for run in sorted((p for p in d.iterdir() if p.is_dir()), reverse=True) if d.is_dir() else []:
+        try:
+            sm = json.loads((run / "summary.json").read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if sm.get("docs_ingested") == sm.get("docs_requested") and not sm.get("failures"):
+            return run.name
+    return None
+
+
+def env_block(ingest_run: str | None = None) -> dict:
     s = get_settings()
     return {
         "git_commit": _git("rev-parse", "HEAD"),
@@ -86,7 +99,11 @@ def env_block() -> dict:
             "llm_requested": None,
             "llm_response": None,
         },
-        "index": {"milvus_collection": s.milvus_collection, "es_index": s.es_index},
+        "index": {
+            "milvus_collection": s.milvus_collection,
+            "es_index": s.es_index,
+            "ingest_run": ingest_run or current_ingest_run(),
+        },
         "machine": {
             "platform": platform.platform(),
             "python": sys.version.split()[0],
@@ -259,6 +276,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--top-n", type=int)
     for flag in ("entity-filter", "use-ctx", "query-instruction"):
         ap.add_argument(f"--{flag}", choices=["on", "off"])
+    ap.add_argument(
+        "--ingest-run", help="当前索引对应的 reports/ingest/<run>；缺省取最新的全量成功 run"
+    )
     ap.add_argument("--compare", action="append", default=[], help="a:b，如 vector:hybrid_rerank")
     a = ap.parse_args(argv)
 
@@ -290,7 +310,7 @@ def main(argv: list[str] | None = None) -> int:
         x, y = pair.split(":")
         comparisons[f"{x} → {y}"] = compare(per_mode[x], per_mode[y])
     cfg = {k: v for k, v in base.__dict__.items() if k != "mode"}
-    env = env_block()
+    env = env_block(a.ingest_run)
     summary = {
         "label": a.label or f"{a.split}:{','.join(modes)}",
         "env": env,
