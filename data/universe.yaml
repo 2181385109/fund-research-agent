@@ -1,10 +1,10 @@
 # 基金池（PLAN §4.1）。由 `python -m fund_pipeline.universe screen` 筛出候选，再人工取舍。
 # 冻结后（frozen: true）修改须经统筹与用户批准，并写 CHANGELOG（CLAUDE.md §6）。
-# 规模 = fund_overview_em 的「净资产规模」（全部份额合计，截至 scale_date）；
+# 规模 = fund_overview_em 的「净资产规模」（A 类份额规模，截至 2026-06-30）；基金合计规模见 fund_data.fund_scale；
 # manager_changed_2y = 2024-09-30～2026-09-30 之间有「解聘/离任」类基金经理变更公告（只增聘不算），
 #   依据是公告 PDF 里的「基金经理变更类型」字段（B1 核对，见 reports/universe/ 与 DECISIONS ADR-030）。
 # LOF（160219、161035）按场外份额收录，数据一律用场外 A/C 份额（用户 2026-09-29 决定，ADR-030）。
-# scale_yi 口径：截至 2026-06-30 的基金资产净值。
+# scale_yi 口径：A 类份额规模，截至 2026-06-30（2026-09-29 注释更正，见 data/CHANGELOG.md）。
 version: v1
 frozen: true
 confirmed_by_user_on: 2026-09-29
