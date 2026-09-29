@@ -1,7 +1,7 @@
 [project]
 name = "fund-ai"
 version = "0.0.1"
-description = "fund-research-agent AI 服务：文档入库、混合检索、LangGraph Agent（S0 仅健康检查骨架）"
+description = "fund-research-agent AI 服务：文档入库、混合检索、LangGraph Agent"
 requires-python = ">=3.12,<3.13"
 license = "MIT"
 dependencies = [
@@ -11,13 +11,21 @@ dependencies = [
     "pydantic-settings>=2.4",
     "httpx>=0.27",
     "redis>=5.0",
+    "pdfplumber>=0.11",
+    "pymilvus>=2.5,<2.6",
+    "elasticsearch>=8.15,<9",
 ]
 
 [project.optional-dependencies]
+# 本地向量模型（torch CPU + sentence-transformers）；CI 不装、不下载模型，测试用 FakeEmbedder
+model = [
+    "sentence-transformers>=3",
+]
 dev = [
     "pytest>=8.3",
     "pytest-asyncio>=0.24",
     "ruff>=0.6",
+    "reportlab>=4",
 ]
 
 [build-system]
@@ -29,6 +37,7 @@ packages = ["src/fund_ai"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["tests"]
 addopts = "--strict-markers"
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
@@ -44,3 +53,7 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.pycodestyle]
+# 中文按双宽计：formatter 仍按 100 排版，E501 只对中文注释/字符串放宽到 120
+max-line-length = 120

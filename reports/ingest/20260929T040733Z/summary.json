@@ -1,0 +1,1762 @@
+{
+  "created_utc": "20260929T040733Z",
+  "git_commit": "d0ff86c50e8f0c972ba63a9080dabf463764b01f",
+  "git_dirty": true,
+  "command": "python -m fund_ai.ingest.cli",
+  "data_as_of": "2026-09-28",
+  "manifest_sha256": "119d8489b64cda43863555ae6f63880c1caf1a8edfd0282c41e79add64b75a7b",
+  "embedding_model": "BAAI/bge-small-zh-v1.5",
+  "embedding_dim": 512,
+  "params": {
+    "chunk_size": 600,
+    "chunk_overlap": 60,
+    "table_max_chars": 3000,
+    "milvus_collection": "fund_chunks",
+    "es_index": "fund_chunks"
+  },
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.3"
+  },
+  "docs_requested": 100,
+  "docs_ingested": 100,
+  "failures": [],
+  "pipeline_chunks_total": 18353,
+  "pipeline_chunks_by_doc_type": {
+    "annual_report": 5169,
+    "contract": 4447,
+    "prospectus": 6540,
+    "quarterly_report": 2197
+  },
+  "pipeline_table_chunks": 3655,
+  "pages_total": 6834,
+  "store_stats": {
+    "milvus": {
+      "total": 18353,
+      "by_doc_type": {
+        "prospectus": 6540,
+        "contract": 4447,
+        "annual_report": 5169,
+        "quarterly_report": 2197
+      }
+    },
+    "elasticsearch": {
+      "total": 18353,
+      "by_doc_type": {
+        "prospectus": 6540,
+        "annual_report": 5169,
+        "contract": 4447,
+        "quarterly_report": 2197
+      }
+    }
+  },
+  "timing_s": {
+    "wall": 1517.0,
+    "init_pipeline": 23.8,
+    "parse_chunk": 339.1,
+    "embed": 1016.1,
+    "write": 105.2
+  },
+  "per_doc": [
+    {
+      "doc_id": "003095_prospectus_2026-09-21",
+      "pages": 126,
+      "chunks": 298,
+      "table_chunks": 25,
+      "counts": {
+        "milvus": 298,
+        "elasticsearch": 298
+      },
+      "timings_ms": {
+        "parse_chunk": 5802.1,
+        "embed": 16369.5,
+        "write": 1888.8
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "003095_contract_2026-08-21",
+      "pages": 78,
+      "chunks": 174,
+      "table_chunks": 0,
+      "counts": {
+        "milvus": 174,
+        "elasticsearch": 174
+      },
+      "timings_ms": {
+        "parse_chunk": 2990.6,
+        "embed": 9681.3,
+        "write": 1239.4
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "003095_annual_report_2025",
+      "pages": 72,
+      "chunks": 258,
+      "table_chunks": 103,
+      "counts": {
+        "milvus": 258,
+        "elasticsearch": 258
+      },
+      "timings_ms": {
+        "parse_chunk": 5022.6,
+        "embed": 12208.3,
+        "write": 830.5
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "003095_quarterly_report_2026Q1",
+      "pages": 13,
+      "chunks": 58,
+      "table_chunks": 18,
+      "counts": {
+        "milvus": 58,
+        "elasticsearch": 58
+      },
+      "timings_ms": {
+        "parse_chunk": 754.9,
+        "embed": 3411.5,
+        "write": 819.3
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "003095_quarterly_report_2026Q2",
+      "pages": 13,
+      "chunks": 57,
+      "table_chunks": 17,
+      "counts": {
+        "milvus": 57,
+        "elasticsearch": 57
+      },
+      "timings_ms": {
+        "parse_chunk": 1028.2,
+        "embed": 3145.0,
+        "write": 658.6
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "006113_prospectus_2026-08-14",
+      "pages": 147,
+      "chunks": 346,
+      "table_chunks": 18,
+      "counts": {
+        "milvus": 346,
+        "elasticsearch": 346
+      },
+      "timings_ms": {
+        "parse_chunk": 5001.5,
+        "embed": 19832.7,
+        "write": 1562.2
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "006113_contract_2025-05-27",
+      "pages": 110,
+      "chunks": 248,
+      "table_chunks": 0,
+      "counts": {
+        "milvus": 248,
+        "elasticsearch": 248
+      },
+      "timings_ms": {
+        "parse_chunk": 3362.1,
+        "embed": 13937.7,
+        "write": 848.0
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "006113_annual_report_2025",
+      "pages": 91,
+      "chunks": 270,
+      "table_chunks": 115,
+      "counts": {
+        "milvus": 270,
+        "elasticsearch": 270
+      },
+      "timings_ms": {
+        "parse_chunk": 6692.8,
+        "embed": 14771.7,
+        "write": 1745.2
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "006113_quarterly_report_2026Q1",
+      "pages": 17,
+      "chunks": 60,
+      "table_chunks": 23,
+      "counts": {
+        "milvus": 60,
+        "elasticsearch": 60
+      },
+      "timings_ms": {
+        "parse_chunk": 884.0,
+        "embed": 3332.8,
+        "write": 1553.0
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "006113_quarterly_report_2026Q2",
+      "pages": 16,
+      "chunks": 58,
+      "table_chunks": 19,
+      "counts": {
+        "milvus": 58,
+        "elasticsearch": 58
+      },
+      "timings_ms": {
+        "parse_chunk": 699.9,
+        "embed": 3291.3,
+        "write": 954.3
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "001717_prospectus_2026-07-27",
+      "pages": 95,
+      "chunks": 285,
+      "table_chunks": 11,
+      "counts": {
+        "milvus": 285,
+        "elasticsearch": 285
+      },
+      "timings_ms": {
+        "parse_chunk": 6018.9,
+        "embed": 16463.1,
+        "write": 887.5
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "001717_contract_2026-06-26",
+      "pages": 80,
+      "chunks": 174,
+      "table_chunks": 0,
+      "counts": {
+        "milvus": 174,
+        "elasticsearch": 174
+      },
+      "timings_ms": {
+        "parse_chunk": 3630.8,
+        "embed": 9837.6,
+        "write": 1269.9
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "001717_annual_report_2025",
+      "pages": 68,
+      "chunks": 242,
+      "table_chunks": 90,
+      "counts": {
+        "milvus": 242,
+        "elasticsearch": 242
+      },
+      "timings_ms": {
+        "parse_chunk": 4638.2,
+        "embed": 11304.7,
+        "write": 1232.8
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "001717_quarterly_report_2026Q1",
+      "pages": 13,
+      "chunks": 58,
+      "table_chunks": 12,
+      "counts": {
+        "milvus": 58,
+        "elasticsearch": 58
+      },
+      "timings_ms": {
+        "parse_chunk": 607.8,
+        "embed": 2983.9,
+        "write": 1085.7
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "001717_quarterly_report_2026Q2",
+      "pages": 13,
+      "chunks": 58,
+      "table_chunks": 12,
+      "counts": {
+        "milvus": 58,
+        "elasticsearch": 58
+      },
+      "timings_ms": {
+        "parse_chunk": 577.2,
+        "embed": 3125.0,
+        "write": 1156.1
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "004851_prospectus_2026-07-27",
+      "pages": 110,
+      "chunks": 258,
+      "table_chunks": 14,
+      "counts": {
+        "milvus": 258,
+        "elasticsearch": 258
+      },
+      "timings_ms": {
+        "parse_chunk": 4351.0,
+        "embed": 14626.7,
+        "write": 1494.0
+      },
+      "boilerplate_lines": 1,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "004851_contract_2026-06-26",
+      "pages": 102,
+      "chunks": 219,
+      "table_chunks": 0,
+      "counts": {
+        "milvus": 219,
+        "elasticsearch": 219
+      },
+      "timings_ms": {
+        "parse_chunk": 3137.3,
+        "embed": 12316.4,
+        "write": 1440.9
+      },
+      "boilerplate_lines": 1,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "004851_annual_report_2025",
+      "pages": 68,
+      "chunks": 248,
+      "table_chunks": 92,
+      "counts": {
+        "milvus": 248,
+        "elasticsearch": 248
+      },
+      "timings_ms": {
+        "parse_chunk": 5868.7,
+        "embed": 11962.9,
+        "write": 613.1
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "004851_quarterly_report_2026Q1",
+      "pages": 13,
+      "chunks": 51,
+      "table_chunks": 18,
+      "counts": {
+        "milvus": 51,
+        "elasticsearch": 51
+      },
+      "timings_ms": {
+        "parse_chunk": 689.7,
+        "embed": 2562.6,
+        "write": 512.4
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "004851_quarterly_report_2026Q2",
+      "pages": 14,
+      "chunks": 50,
+      "table_chunks": 16,
+      "counts": {
+        "milvus": 50,
+        "elasticsearch": 50
+      },
+      "timings_ms": {
+        "parse_chunk": 645.2,
+        "embed": 2573.0,
+        "write": 338.8
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "110023_prospectus_2026-06-01",
+      "pages": 94,
+      "chunks": 248,
+      "table_chunks": 19,
+      "counts": {
+        "milvus": 248,
+        "elasticsearch": 248
+      },
+      "timings_ms": {
+        "parse_chunk": 4605.2,
+        "embed": 15053.2,
+        "write": 669.8
+      },
+      "boilerplate_lines": 1,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "110023_contract_2023-10-14",
+      "pages": 80,
+      "chunks": 183,
+      "table_chunks": 0,
+      "counts": {
+        "milvus": 183,
+        "elasticsearch": 183
+      },
+      "timings_ms": {
+        "parse_chunk": 2539.4,
+        "embed": 10473.6,
+        "write": 952.4
+      },
+      "boilerplate_lines": 1,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "110023_annual_report_2025",
+      "pages": 71,
+      "chunks": 263,
+      "table_chunks": 102,
+      "counts": {
+        "milvus": 263,
+        "elasticsearch": 263
+      },
+      "timings_ms": {
+        "parse_chunk": 5946.3,
+        "embed": 12791.6,
+        "write": 460.2
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "110023_quarterly_report_2026Q1",
+      "pages": 14,
+      "chunks": 49,
+      "table_chunks": 16,
+      "counts": {
+        "milvus": 49,
+        "elasticsearch": 49
+      },
+      "timings_ms": {
+        "parse_chunk": 553.1,
+        "embed": 3138.1,
+        "write": 1173.3
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "110023_quarterly_report_2026Q2",
+      "pages": 13,
+      "chunks": 48,
+      "table_chunks": 15,
+      "counts": {
+        "milvus": 48,
+        "elasticsearch": 48
+      },
+      "timings_ms": {
+        "parse_chunk": 1227.4,
+        "embed": 2948.8,
+        "write": 702.5
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "007718_prospectus_2026-07-27",
+      "pages": 123,
+      "chunks": 258,
+      "table_chunks": 16,
+      "counts": {
+        "milvus": 258,
+        "elasticsearch": 258
+      },
+      "timings_ms": {
+        "parse_chunk": 3854.9,
+        "embed": 16603.2,
+        "write": 740.0
+      },
+      "boilerplate_lines": 1,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "007718_contract_2026-06-26",
+      "pages": 107,
+      "chunks": 248,
+      "table_chunks": 0,
+      "counts": {
+        "milvus": 248,
+        "elasticsearch": 248
+      },
+      "timings_ms": {
+        "parse_chunk": 3206.1,
+        "embed": 13441.9,
+        "write": 583.2
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "007718_annual_report_2025",
+      "pages": 72,
+      "chunks": 260,
+      "table_chunks": 98,
+      "counts": {
+        "milvus": 260,
+        "elasticsearch": 260
+      },
+      "timings_ms": {
+        "parse_chunk": 5511.1,
+        "embed": 12415.8,
+        "write": 994.2
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "007718_quarterly_report_2026Q1",
+      "pages": 14,
+      "chunks": 55,
+      "table_chunks": 20,
+      "counts": {
+        "milvus": 55,
+        "elasticsearch": 55
+      },
+      "timings_ms": {
+        "parse_chunk": 697.9,
+        "embed": 3226.4,
+        "write": 1069.4
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "007718_quarterly_report_2026Q2",
+      "pages": 13,
+      "chunks": 55,
+      "table_chunks": 20,
+      "counts": {
+        "milvus": 55,
+        "elasticsearch": 55
+      },
+      "timings_ms": {
+        "parse_chunk": 1229.7,
+        "embed": 3299.4,
+        "write": 464.9
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "000452_prospectus_2026-09-03",
+      "pages": 114,
+      "chunks": 171,
+      "table_chunks": 127,
+      "counts": {
+        "milvus": 171,
+        "elasticsearch": 171
+      },
+      "timings_ms": {
+        "parse_chunk": 4240.8,
+        "embed": 12519.8,
+        "write": 1399.3
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "000452_contract_2026-09-03",
+      "pages": 89,
+      "chunks": 228,
+      "table_chunks": 0,
+      "counts": {
+        "milvus": 228,
+        "elasticsearch": 228
+      },
+      "timings_ms": {
+        "parse_chunk": 2545.1,
+        "embed": 13043.5,
+        "write": 1366.7
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "000452_annual_report_2025",
+      "pages": 73,
+      "chunks": 254,
+      "table_chunks": 102,
+      "counts": {
+        "milvus": 254,
+        "elasticsearch": 254
+      },
+      "timings_ms": {
+        "parse_chunk": 4060.7,
+        "embed": 12529.5,
+        "write": 1590.3
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "000452_quarterly_report_2026Q1",
+      "pages": 12,
+      "chunks": 54,
+      "table_chunks": 15,
+      "counts": {
+        "milvus": 54,
+        "elasticsearch": 54
+      },
+      "timings_ms": {
+        "parse_chunk": 413.4,
+        "embed": 3189.7,
+        "write": 1045.1
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "000452_quarterly_report_2026Q2",
+      "pages": 12,
+      "chunks": 53,
+      "table_chunks": 14,
+      "counts": {
+        "milvus": 53,
+        "elasticsearch": 53
+      },
+      "timings_ms": {
+        "parse_chunk": 811.1,
+        "embed": 3177.7,
+        "write": 876.6
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "001550_prospectus_2025-10-21",
+      "pages": 124,
+      "chunks": 248,
+      "table_chunks": 23,
+      "counts": {
+        "milvus": 248,
+        "elasticsearch": 248
+      },
+      "timings_ms": {
+        "parse_chunk": 4249.4,
+        "embed": 15252.9,
+        "write": 639.7
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "001550_contract_2025-04-04",
+      "pages": 105,
+      "chunks": 224,
+      "table_chunks": 0,
+      "counts": {
+        "milvus": 224,
+        "elasticsearch": 224
+      },
+      "timings_ms": {
+        "parse_chunk": 3679.6,
+        "embed": 13509.6,
+        "write": 852.7
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "001550_annual_report_2025",
+      "pages": 85,
+      "chunks": 255,
+      "table_chunks": 104,
+      "counts": {
+        "milvus": 255,
+        "elasticsearch": 255
+      },
+      "timings_ms": {
+        "parse_chunk": 6978.4,
+        "embed": 13743.9,
+        "write": 754.8
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "001550_quarterly_report_2026Q1",
+      "pages": 13,
+      "chunks": 53,
+      "table_chunks": 18,
+      "counts": {
+        "milvus": 53,
+        "elasticsearch": 53
+      },
+      "timings_ms": {
+        "parse_chunk": 625.8,
+        "embed": 2843.8,
+        "write": 1145.6
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "001550_quarterly_report_2026Q2",
+      "pages": 13,
+      "chunks": 54,
+      "table_chunks": 19,
+      "counts": {
+        "milvus": 54,
+        "elasticsearch": 54
+      },
+      "timings_ms": {
+        "parse_chunk": 685.4,
+        "embed": 2973.4,
+        "write": 971.0
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "160219_prospectus_2026-09-21",
+      "pages": 123,
+      "chunks": 277,
+      "table_chunks": 18,
+      "counts": {
+        "milvus": 277,
+        "elasticsearch": 277
+      },
+      "timings_ms": {
+        "parse_chunk": 4838.5,
+        "embed": 16452.7,
+        "write": 867.6
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "160219_contract_2025-03-19",
+      "pages": 86,
+      "chunks": 201,
+      "table_chunks": 0,
+      "counts": {
+        "milvus": 201,
+        "elasticsearch": 201
+      },
+      "timings_ms": {
+        "parse_chunk": 3634.4,
+        "embed": 11919.2,
+        "write": 1536.8
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "160219_annual_report_2025",
+      "pages": 71,
+      "chunks": 247,
+      "table_chunks": 93,
+      "counts": {
+        "milvus": 247,
+        "elasticsearch": 247
+      },
+      "timings_ms": {
+        "parse_chunk": 5254.9,
+        "embed": 13633.2,
+        "write": 1342.1
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "160219_quarterly_report_2026Q1",
+      "pages": 19,
+      "chunks": 57,
+      "table_chunks": 21,
+      "counts": {
+        "milvus": 57,
+        "elasticsearch": 57
+      },
+      "timings_ms": {
+        "parse_chunk": 788.0,
+        "embed": 3790.1,
+        "write": 1182.2
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "160219_quarterly_report_2026Q2",
+      "pages": 19,
+      "chunks": 57,
+      "table_chunks": 21,
+      "counts": {
+        "milvus": 57,
+        "elasticsearch": 57
+      },
+      "timings_ms": {
+        "parse_chunk": 1065.6,
+        "embed": 3712.3,
+        "write": 946.8
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "161035_prospectus_2026-03-19",
+      "pages": 161,
+      "chunks": 235,
+      "table_chunks": 21,
+      "counts": {
+        "milvus": 235,
+        "elasticsearch": 235
+      },
+      "timings_ms": {
+        "parse_chunk": 5614.2,
+        "embed": 19314.8,
+        "write": 1881.6
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "161035_contract_2025-03-20",
+      "pages": 85,
+      "chunks": 189,
+      "table_chunks": 0,
+      "counts": {
+        "milvus": 189,
+        "elasticsearch": 189
+      },
+      "timings_ms": {
+        "parse_chunk": 3200.2,
+        "embed": 10678.3,
+        "write": 1342.4
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "161035_annual_report_2025",
+      "pages": 85,
+      "chunks": 250,
+      "table_chunks": 105,
+      "counts": {
+        "milvus": 250,
+        "elasticsearch": 250
+      },
+      "timings_ms": {
+        "parse_chunk": 7359.1,
+        "embed": 13751.8,
+        "write": 936.5
+      },
+      "boilerplate_lines": 1,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "161035_quarterly_report_2026Q1",
+      "pages": 21,
+      "chunks": 55,
+      "table_chunks": 20,
+      "counts": {
+        "milvus": 55,
+        "elasticsearch": 55
+      },
+      "timings_ms": {
+        "parse_chunk": 766.7,
+        "embed": 3549.6,
+        "write": 517.8
+      },
+      "boilerplate_lines": 1,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "161035_quarterly_report_2026Q2",
+      "pages": 21,
+      "chunks": 57,
+      "table_chunks": 20,
+      "counts": {
+        "milvus": 57,
+        "elasticsearch": 57
+      },
+      "timings_ms": {
+        "parse_chunk": 1576.3,
+        "embed": 3397.1,
+        "write": 1110.9
+      },
+      "boilerplate_lines": 1,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "002692_prospectus_2026-06-11",
+      "pages": 163,
+      "chunks": 250,
+      "table_chunks": 22,
+      "counts": {
+        "milvus": 250,
+        "elasticsearch": 250
+      },
+      "timings_ms": {
+        "parse_chunk": 4908.9,
+        "embed": 19318.5,
+        "write": 994.2
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "002692_contract_2023-07-08",
+      "pages": 103,
+      "chunks": 227,
+      "table_chunks": 0,
+      "counts": {
+        "milvus": 227,
+        "elasticsearch": 227
+      },
+      "timings_ms": {
+        "parse_chunk": 3055.3,
+        "embed": 13329.1,
+        "write": 980.9
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "002692_annual_report_2025",
+      "pages": 78,
+      "chunks": 226,
+      "table_chunks": 91,
+      "counts": {
+        "milvus": 226,
+        "elasticsearch": 226
+      },
+      "timings_ms": {
+        "parse_chunk": 5700.6,
+        "embed": 12493.5,
+        "write": 1038.7
+      },
+      "boilerplate_lines": 1,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "002692_quarterly_report_2026Q1",
+      "pages": 18,
+      "chunks": 49,
+      "table_chunks": 15,
+      "counts": {
+        "milvus": 49,
+        "elasticsearch": 49
+      },
+      "timings_ms": {
+        "parse_chunk": 652.7,
+        "embed": 3157.1,
+        "write": 1058.8
+      },
+      "boilerplate_lines": 1,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "002692_quarterly_report_2026Q2",
+      "pages": 18,
+      "chunks": 50,
+      "table_chunks": 15,
+      "counts": {
+        "milvus": 50,
+        "elasticsearch": 50
+      },
+      "timings_ms": {
+        "parse_chunk": 1190.8,
+        "embed": 3185.8,
+        "write": 515.4
+      },
+      "boilerplate_lines": 1,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "001513_prospectus_2026-06-01",
+      "pages": 121,
+      "chunks": 281,
+      "table_chunks": 20,
+      "counts": {
+        "milvus": 281,
+        "elasticsearch": 281
+      },
+      "timings_ms": {
+        "parse_chunk": 4420.9,
+        "embed": 16925.0,
+        "write": 795.3
+      },
+      "boilerplate_lines": 1,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "001513_contract_2026-04-30",
+      "pages": 99,
+      "chunks": 214,
+      "table_chunks": 0,
+      "counts": {
+        "milvus": 214,
+        "elasticsearch": 214
+      },
+      "timings_ms": {
+        "parse_chunk": 3559.3,
+        "embed": 12632.3,
+        "write": 752.9
+      },
+      "boilerplate_lines": 1,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "001513_annual_report_2025",
+      "pages": 77,
+      "chunks": 272,
+      "table_chunks": 111,
+      "counts": {
+        "milvus": 272,
+        "elasticsearch": 272
+      },
+      "timings_ms": {
+        "parse_chunk": 7521.2,
+        "embed": 13487.5,
+        "write": 1143.7
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "001513_quarterly_report_2026Q1",
+      "pages": 14,
+      "chunks": 48,
+      "table_chunks": 17,
+      "counts": {
+        "milvus": 48,
+        "elasticsearch": 48
+      },
+      "timings_ms": {
+        "parse_chunk": 617.6,
+        "embed": 2994.3,
+        "write": 1324.8
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "001513_quarterly_report_2026Q2",
+      "pages": 15,
+      "chunks": 51,
+      "table_chunks": 20,
+      "counts": {
+        "milvus": 51,
+        "elasticsearch": 51
+      },
+      "timings_ms": {
+        "parse_chunk": 798.0,
+        "embed": 3516.1,
+        "write": 634.5
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "013840_prospectus_2025-11-07",
+      "pages": 165,
+      "chunks": 798,
+      "table_chunks": 267,
+      "counts": {
+        "milvus": 798,
+        "elasticsearch": 798
+      },
+      "timings_ms": {
+        "parse_chunk": 8852.9,
+        "embed": 25525.9,
+        "write": 2293.0
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "013840_contract_2023-07-08",
+      "pages": 115,
+      "chunks": 262,
+      "table_chunks": 1,
+      "counts": {
+        "milvus": 262,
+        "elasticsearch": 262
+      },
+      "timings_ms": {
+        "parse_chunk": 3276.9,
+        "embed": 15179.2,
+        "write": 846.8
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "013840_annual_report_2025",
+      "pages": 73,
+      "chunks": 310,
+      "table_chunks": 154,
+      "counts": {
+        "milvus": 310,
+        "elasticsearch": 310
+      },
+      "timings_ms": {
+        "parse_chunk": 7071.6,
+        "embed": 13506.6,
+        "write": 1412.5
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "013840_quarterly_report_2026Q1",
+      "pages": 14,
+      "chunks": 55,
+      "table_chunks": 20,
+      "counts": {
+        "milvus": 55,
+        "elasticsearch": 55
+      },
+      "timings_ms": {
+        "parse_chunk": 921.4,
+        "embed": 3381.4,
+        "write": 530.3
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "013840_quarterly_report_2026Q2",
+      "pages": 14,
+      "chunks": 55,
+      "table_chunks": 19,
+      "counts": {
+        "milvus": 55,
+        "elasticsearch": 55
+      },
+      "timings_ms": {
+        "parse_chunk": 1568.1,
+        "embed": 3459.3,
+        "write": 838.1
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "008919_prospectus_2026-09-21",
+      "pages": 126,
+      "chunks": 306,
+      "table_chunks": 17,
+      "counts": {
+        "milvus": 306,
+        "elasticsearch": 306
+      },
+      "timings_ms": {
+        "parse_chunk": 5007.5,
+        "embed": 17523.6,
+        "write": 1555.1
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "008919_contract_2026-08-21",
+      "pages": 117,
+      "chunks": 251,
+      "table_chunks": 0,
+      "counts": {
+        "milvus": 251,
+        "elasticsearch": 251
+      },
+      "timings_ms": {
+        "parse_chunk": 4063.6,
+        "embed": 15364.3,
+        "write": 797.2
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "008919_annual_report_2025",
+      "pages": 71,
+      "chunks": 265,
+      "table_chunks": 103,
+      "counts": {
+        "milvus": 265,
+        "elasticsearch": 265
+      },
+      "timings_ms": {
+        "parse_chunk": 7225.3,
+        "embed": 13246.1,
+        "write": 811.9
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "008919_quarterly_report_2026Q1",
+      "pages": 12,
+      "chunks": 48,
+      "table_chunks": 14,
+      "counts": {
+        "milvus": 48,
+        "elasticsearch": 48
+      },
+      "timings_ms": {
+        "parse_chunk": 668.4,
+        "embed": 3069.6,
+        "write": 998.9
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "008919_quarterly_report_2026Q2",
+      "pages": 12,
+      "chunks": 48,
+      "table_chunks": 12,
+      "counts": {
+        "milvus": 48,
+        "elasticsearch": 48
+      },
+      "timings_ms": {
+        "parse_chunk": 600.6,
+        "embed": 2975.3,
+        "write": 1193.5
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "040025_prospectus_2026-07-27",
+      "pages": 176,
+      "chunks": 325,
+      "table_chunks": 14,
+      "counts": {
+        "milvus": 325,
+        "elasticsearch": 325
+      },
+      "timings_ms": {
+        "parse_chunk": 7013.8,
+        "embed": 20844.9,
+        "write": 645.7
+      },
+      "boilerplate_lines": 1,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "040025_contract_2026-06-26",
+      "pages": 89,
+      "chunks": 221,
+      "table_chunks": 0,
+      "counts": {
+        "milvus": 221,
+        "elasticsearch": 221
+      },
+      "timings_ms": {
+        "parse_chunk": 3725.5,
+        "embed": 12338.1,
+        "write": 1010.1
+      },
+      "boilerplate_lines": 1,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "040025_annual_report_2025",
+      "pages": 71,
+      "chunks": 276,
+      "table_chunks": 131,
+      "counts": {
+        "milvus": 276,
+        "elasticsearch": 276
+      },
+      "timings_ms": {
+        "parse_chunk": 6960.6,
+        "embed": 12840.1,
+        "write": 1393.2
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "040025_quarterly_report_2026Q1",
+      "pages": 11,
+      "chunks": 53,
+      "table_chunks": 14,
+      "counts": {
+        "milvus": 53,
+        "elasticsearch": 53
+      },
+      "timings_ms": {
+        "parse_chunk": 1424.2,
+        "embed": 3163.5,
+        "write": 1297.1
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "040025_quarterly_report_2026Q2",
+      "pages": 11,
+      "chunks": 52,
+      "table_chunks": 13,
+      "counts": {
+        "milvus": 52,
+        "elasticsearch": 52
+      },
+      "timings_ms": {
+        "parse_chunk": 744.4,
+        "embed": 3174.8,
+        "write": 956.7
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "012650_prospectus_2026-09-21",
+      "pages": 160,
+      "chunks": 626,
+      "table_chunks": 162,
+      "counts": {
+        "milvus": 626,
+        "elasticsearch": 626
+      },
+      "timings_ms": {
+        "parse_chunk": 8536.9,
+        "embed": 24656.6,
+        "write": 2390.4
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "012650_contract_2026-08-21",
+      "pages": 116,
+      "chunks": 259,
+      "table_chunks": 0,
+      "counts": {
+        "milvus": 259,
+        "elasticsearch": 259
+      },
+      "timings_ms": {
+        "parse_chunk": 5211.9,
+        "embed": 15149.2,
+        "write": 950.7
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "012650_annual_report_2025",
+      "pages": 69,
+      "chunks": 257,
+      "table_chunks": 93,
+      "counts": {
+        "milvus": 257,
+        "elasticsearch": 257
+      },
+      "timings_ms": {
+        "parse_chunk": 5095.9,
+        "embed": 13240.2,
+        "write": 1222.0
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "012650_quarterly_report_2026Q1",
+      "pages": 12,
+      "chunks": 55,
+      "table_chunks": 17,
+      "counts": {
+        "milvus": 55,
+        "elasticsearch": 55
+      },
+      "timings_ms": {
+        "parse_chunk": 1078.4,
+        "embed": 3467.9,
+        "write": 1109.0
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "012650_quarterly_report_2026Q2",
+      "pages": 15,
+      "chunks": 55,
+      "table_chunks": 17,
+      "counts": {
+        "milvus": 55,
+        "elasticsearch": 55
+      },
+      "timings_ms": {
+        "parse_chunk": 637.2,
+        "embed": 3284.8,
+        "write": 938.3
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "014193_prospectus_2025-12-19",
+      "pages": 205,
+      "chunks": 370,
+      "table_chunks": 24,
+      "counts": {
+        "milvus": 370,
+        "elasticsearch": 370
+      },
+      "timings_ms": {
+        "parse_chunk": 7318.1,
+        "embed": 20909.3,
+        "write": 995.0
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "014193_contract_2021-11-11",
+      "pages": 119,
+      "chunks": 267,
+      "table_chunks": 0,
+      "counts": {
+        "milvus": 267,
+        "elasticsearch": 267
+      },
+      "timings_ms": {
+        "parse_chunk": 3893.6,
+        "embed": 14894.4,
+        "write": 1465.4
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "014193_annual_report_2025",
+      "pages": 85,
+      "chunks": 260,
+      "table_chunks": 105,
+      "counts": {
+        "milvus": 260,
+        "elasticsearch": 260
+      },
+      "timings_ms": {
+        "parse_chunk": 6411.2,
+        "embed": 14546.1,
+        "write": 1371.8
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "014193_quarterly_report_2026Q1",
+      "pages": 20,
+      "chunks": 70,
+      "table_chunks": 26,
+      "counts": {
+        "milvus": 70,
+        "elasticsearch": 70
+      },
+      "timings_ms": {
+        "parse_chunk": 915.5,
+        "embed": 3822.4,
+        "write": 1234.7
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "014193_quarterly_report_2026Q2",
+      "pages": 20,
+      "chunks": 67,
+      "table_chunks": 24,
+      "counts": {
+        "milvus": 67,
+        "elasticsearch": 67
+      },
+      "timings_ms": {
+        "parse_chunk": 942.8,
+        "embed": 3914.3,
+        "write": 928.3
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "008326_prospectus_2026-06-27",
+      "pages": 129,
+      "chunks": 283,
+      "table_chunks": 21,
+      "counts": {
+        "milvus": 283,
+        "elasticsearch": 283
+      },
+      "timings_ms": {
+        "parse_chunk": 4210.5,
+        "embed": 16956.2,
+        "write": 1003.8
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "008326_contract_2026-04-03",
+      "pages": 116,
+      "chunks": 236,
+      "table_chunks": 0,
+      "counts": {
+        "milvus": 236,
+        "elasticsearch": 236
+      },
+      "timings_ms": {
+        "parse_chunk": 3071.2,
+        "embed": 14166.5,
+        "write": 1070.8
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "008326_annual_report_2025",
+      "pages": 73,
+      "chunks": 244,
+      "table_chunks": 89,
+      "counts": {
+        "milvus": 244,
+        "elasticsearch": 244
+      },
+      "timings_ms": {
+        "parse_chunk": 5550.3,
+        "embed": 12604.0,
+        "write": 796.8
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "008326_quarterly_report_2026Q1",
+      "pages": 13,
+      "chunks": 56,
+      "table_chunks": 18,
+      "counts": {
+        "milvus": 56,
+        "elasticsearch": 56
+      },
+      "timings_ms": {
+        "parse_chunk": 691.3,
+        "embed": 2728.5,
+        "write": 399.6
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "008326_quarterly_report_2026Q2",
+      "pages": 13,
+      "chunks": 56,
+      "table_chunks": 18,
+      "counts": {
+        "milvus": 56,
+        "elasticsearch": 56
+      },
+      "timings_ms": {
+        "parse_chunk": 1334.6,
+        "embed": 3133.1,
+        "write": 1368.2
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "002236_prospectus_2026-03-03",
+      "pages": 154,
+      "chunks": 320,
+      "table_chunks": 19,
+      "counts": {
+        "milvus": 320,
+        "elasticsearch": 320
+      },
+      "timings_ms": {
+        "parse_chunk": 7847.0,
+        "embed": 22551.7,
+        "write": 920.5
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "002236_contract_2025-03-20",
+      "pages": 77,
+      "chunks": 169,
+      "table_chunks": 0,
+      "counts": {
+        "milvus": 169,
+        "elasticsearch": 169
+      },
+      "timings_ms": {
+        "parse_chunk": 3410.3,
+        "embed": 10188.6,
+        "write": 1447.9
+      },
+      "boilerplate_lines": 0,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "002236_annual_report_2025",
+      "pages": 72,
+      "chunks": 263,
+      "table_chunks": 98,
+      "counts": {
+        "milvus": 263,
+        "elasticsearch": 263
+      },
+      "timings_ms": {
+        "parse_chunk": 8000.6,
+        "embed": 14489.9,
+        "write": 850.6
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "002236_quarterly_report_2026Q1",
+      "pages": 13,
+      "chunks": 58,
+      "table_chunks": 17,
+      "counts": {
+        "milvus": 58,
+        "elasticsearch": 58
+      },
+      "timings_ms": {
+        "parse_chunk": 1569.9,
+        "embed": 3589.3,
+        "write": 650.8
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "002236_quarterly_report_2026Q2",
+      "pages": 13,
+      "chunks": 57,
+      "table_chunks": 16,
+      "counts": {
+        "milvus": 57,
+        "elasticsearch": 57
+      },
+      "timings_ms": {
+        "parse_chunk": 937.8,
+        "embed": 3443.9,
+        "write": 1373.7
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "011832_prospectus_2026-06-18",
+      "pages": 162,
+      "chunks": 357,
+      "table_chunks": 22,
+      "counts": {
+        "milvus": 357,
+        "elasticsearch": 357
+      },
+      "timings_ms": {
+        "parse_chunk": 6239.2,
+        "embed": 21056.0,
+        "write": 1329.4
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "011832_contract_2021-04-19",
+      "pages": 110,
+      "chunks": 253,
+      "table_chunks": 0,
+      "counts": {
+        "milvus": 253,
+        "elasticsearch": 253
+      },
+      "timings_ms": {
+        "parse_chunk": 3838.4,
+        "embed": 14433.4,
+        "write": 881.9
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "contract"
+    },
+    {
+      "doc_id": "011832_annual_report_2025",
+      "pages": 68,
+      "chunks": 249,
+      "table_chunks": 96,
+      "counts": {
+        "milvus": 249,
+        "elasticsearch": 249
+      },
+      "timings_ms": {
+        "parse_chunk": 4927.6,
+        "embed": 11642.5,
+        "write": 689.4
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "annual_report"
+    },
+    {
+      "doc_id": "011832_quarterly_report_2026Q1",
+      "pages": 13,
+      "chunks": 59,
+      "table_chunks": 17,
+      "counts": {
+        "milvus": 59,
+        "elasticsearch": 59
+      },
+      "timings_ms": {
+        "parse_chunk": 1015.3,
+        "embed": 3268.8,
+        "write": 786.0
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    },
+    {
+      "doc_id": "011832_quarterly_report_2026Q2",
+      "pages": 13,
+      "chunks": 58,
+      "table_chunks": 16,
+      "counts": {
+        "milvus": 58,
+        "elasticsearch": 58
+      },
+      "timings_ms": {
+        "parse_chunk": 668.9,
+        "embed": 3260.1,
+        "write": 961.2
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    }
+  ]
+}

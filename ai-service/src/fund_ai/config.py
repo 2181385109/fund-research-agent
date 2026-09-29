@@ -36,6 +36,26 @@ class Settings(BaseSettings):
     llm_thinking: str = "disabled"
     llm_timeout_seconds: float = 60.0
 
+    # 本地模型（S2 起）
+    embedding_provider: str = "bge"  # bge | fake（fake 只用于测试和 CI）
+    embedding_model: str = "BAAI/bge-small-zh-v1.5"
+    embedding_batch_size: int = 32
+    hf_endpoint: str = "https://hf-mirror.com"
+    model_cache_dir: Path = REPO_ROOT / ".cache" / "models"
+
+    # 入库（S2 起）
+    milvus_collection: str = "fund_chunks"
+    es_index: str = "fund_chunks"
+    chunk_size: int = 600  # 正文块目标字符数
+    chunk_overlap: int = 60  # 超长段落硬切时相邻块的重叠字符数
+    table_max_chars: int = 3000  # 表格块上限，超过按行拆分并重复表头
+    data_dir: Path = REPO_ROOT / "data"
+
+    @property
+    def model_cache_path(self) -> Path:
+        p = self.model_cache_dir
+        return p if p.is_absolute() else REPO_ROOT / p
+
 
 @lru_cache
 def get_settings() -> Settings:

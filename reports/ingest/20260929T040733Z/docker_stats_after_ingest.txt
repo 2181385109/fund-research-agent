@@ -1,0 +1,5 @@
+NAME                  MEM USAGE / LIMIT     MEM %
+fra-mysql             253.8MiB / 512MiB     49.57%
+fra-elasticsearch     1.531GiB / 1.75GiB    87.51%
+fra-milvus            588.5MiB / 2GiB       28.74%
+fra-redis             11.46MiB / 256MiB     4.48%

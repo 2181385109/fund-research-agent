@@ -2,23 +2,43 @@
 
 from __future__ import annotations
 
-from collections.abc import AsyncIterator, Sequence
+from collections.abc import AsyncIterator, Callable, Sequence
 from contextlib import asynccontextmanager
 
 import httpx
 from fastapi import FastAPI
 
 from fund_ai import __version__
+from fund_ai.api.documents import router as documents_router
 from fund_ai.api.health import HealthChecker, build_checkers, build_redis_client
 from fund_ai.api.health import router as health_router
 from fund_ai.config import Settings, get_settings
+from fund_ai.embedding.factory import build_embedder
+from fund_ai.ingest.chunking import ChunkParams
+from fund_ai.ingest.pipeline import IngestPipeline
+from fund_ai.stores.es_store import EsChunkStore
+from fund_ai.stores.milvus_store import MilvusChunkStore
+
+
+def build_pipeline(settings: Settings) -> IngestPipeline:
+    """真实的入库流水线：本地 BGE（或 fake）+ Milvus + ES。首次调用入库接口时才构造。"""
+    embedder = build_embedder(settings)
+    stores = [
+        MilvusChunkStore(settings.milvus_uri, settings.milvus_collection, embedder.dim),
+        EsChunkStore(settings.es_url, settings.es_index),
+    ]
+    params = ChunkParams(settings.chunk_size, settings.chunk_overlap, settings.table_max_chars)
+    pipeline = IngestPipeline(embedder, stores, params)
+    pipeline.ensure()
+    return pipeline
 
 
 def create_app(
     settings: Settings | None = None,
     checkers: Sequence[HealthChecker] | None = None,
+    pipeline_factory: Callable[[], IngestPipeline] | None = None,
 ) -> FastAPI:
-    """``checkers`` 为 None 时按配置构造真实探测器；测试时传入 fake。"""
+    """``checkers`` / ``pipeline_factory`` 为 None 时按配置构造真实依赖；测试时传入 fake。"""
     settings = settings or get_settings()
 
     @asynccontextmanager
@@ -41,6 +61,10 @@ def create_app(
 
     app = FastAPI(title="fund-research-agent ai-service", version=__version__, lifespan=lifespan)
     app.include_router(health_router)
+    app.include_router(documents_router)
+    app.state.pipeline = None
+    app.state.pipeline_factory = pipeline_factory or (lambda: build_pipeline(settings))
+    app.state.ingest_roots = [settings.data_dir]
     return app
 
 

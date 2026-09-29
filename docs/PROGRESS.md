@@ -3,8 +3,8 @@
 > 由执行者在每个阶段结束时按 CLAUDE.md §11 的模板追加一节，旧内容不删除。统筹审查后会在对应小节末尾追加「统筹审查结论」。
 
 ## 当前状态
-- 当前阶段：批次 B1（S1 + S2）进行中；S1 已完成（2026-09-29），S2 进行中
-- 最近一次 CI：见 S1 小节
+- 当前阶段：**批次 B1（S1 + S2）已完成**（2026-09-29）；下一批 B2 = S3 评测集 + S4 检索，见 `docs/HANDOFF.md`
+- 最近一次 CI：见 `docs/HANDOFF.md`（S1 push 时 run 36517568380 全绿）
 - 已完成的用户事项：`.env` 已生成（含 DeepSeek key）；`.wslconfig` 已设 10GB/4GB；**基金池 v1 已于 2026-09-29 确认并冻结**
 - 待用户处理：
   1. 决定是否停掉 ticket-qa 的容器（S0 实测合计约 844MiB）
@@ -217,7 +217,7 @@ $ git check-ignore -v .env
 ---
 
 ## S1 基金池与数据采集 — 2026-09-29
-- commit 范围：`69c90d2`..本节所在提交；CI：见本批 HANDOFF（S1、S2 一起 push）
+- commit 范围：`69c90d2`..`d0ff86c`；CI：https://github.com/2181385109/fund-research-agent/actions/runs/36517568380 （✅ 5 个 job 全绿）
 - 用户关卡：基金池 v1 于 **2026-09-29** 经用户确认冻结（LOF 按场外份额收录、011832 保留，ADR-030）
 
 ### 完成项
@@ -231,7 +231,7 @@ $ git check-ignore -v .env
 3. 质量报告原文：持仓比对一致率（写明分母）；每处不一致都给出解释 — ✅ — `reports/data_quality/20260929T032645Z/report.md`：持仓 **200/202 一致（20 只基金，分母为 PDF 明细行）**，2 行差异是同一发行人的 A 股和 H 股在季报里共用一个序号（013840 华虹宏力、012650 中芯国际），逐条解释见报告 §3；现任经理 19/20 一致（012650 于 2026-07-15 换人，晚于季报期末）；净值缺口 451 天全部在成立后 3 个月的建仓封闭期内；区间收益按分红再投资口径自算，**276/276 在 ±0.01pp 内**。
 4. 爬取节流和缓存有测试或证据；重复执行不会重复下载 — ✅ — 单测：`test_throttle_enforces_min_interval`、`test_json_cache_second_call_does_not_fetch`、`test_akshare_source_throttles_and_caches`、`test_download_skips_existing_file_and_resumes_part`（Range 续传）。实跑证据：第三次 `docs fetch` 统计 `{'downloaded': 0, 'reused_local': 100, 'announcement_list_requests': 0, 'announcement_list_cache_hits': 40}`（写在 `data/MANIFEST.json` 的 `documents_fetch_stats`）；`structured fetch` 重跑 `AkShare 请求 0，缓存命中 283`。
 5. 单测：文档类型与报告期匹配、截断到 as_of、费率表解析（fixture） — ✅ — `tests/test_docs.py`（含中文数字年份「二0二五年」）、`tests/test_structured.py`（净值/分红/持仓截断）、`tests/test_pdf_extract.py`（reportlab 生成的招募说明书：养老金表与一般表、C 类不收申购费；合表与两列并列版式；正文退路）。
-6. CI 全绿；安全扫描确认仓库内没有真实 PDF 或快照 — ✅（安全扫描）/ CI 见 HANDOFF — `security_scan` tracked 与 `--history` 均 PASS（检查了 8 个密钥变量）；`git ls-files` 中没有 `.pdf`、`data/raw`、`data/snapshots`。
+6. CI 全绿；安全扫描确认仓库内没有真实 PDF 或快照 — ✅ — CI run 36517568380 全绿；`security_scan` tracked 与 `--history` 均 PASS（检查了 8 个密钥变量）；`git ls-files` 中没有 `.pdf`、`data/raw`、`data/snapshots`。
 
 ### 实测数字
 | 指标 | 值 | n / 分母 | 结果文件 |
@@ -262,3 +262,43 @@ $ git check-ignore -v .env
 
 ### 给统筹的问题
 1. **universe.yaml 的规模口径注释**：注释写的是「全部份额合计」，实际是 A 类份额的规模（数值与入选结果不受影响，≥2 亿门槛仍然满足）。要不要批准只改这一行注释（按 §6 要写 CHANGELOG，已预登记）？不改也不影响后续阶段。
+
+---
+
+## S2 文档入库流水线 — 2026-09-29
+- commit 范围：`d0ff86c`..本节所在提交；CI：见 `docs/HANDOFF.md`
+- 证据目录：`reports/ingest/20260929T040733Z/`（`summary.json`、`idempotency_and_delete.txt`、`sample_chunks.json`、`docker_stats_after_ingest.txt`）
+
+### 完成项
+- ai-service：`ingest/parsers/pdf.py`（pdfplumber，页码、表格转 markdown、页眉页脚去除）、`ingest/chunking.py`（章节感知 + 递归切分、规范文本 char offset、表格独立成块、上下文头 `text_ctx`）、`embedding/`（`Embedder` 接口、`BgeEmbedder`、`FakeEmbedder`、factory）、`stores/`（Milvus、ES、内存 fake）、`ingest/pipeline.py`（parse → chunk → embed → 两边删 → 两边写 → 核对计数）、`ingest/cli.py`（按 MANIFEST 批量）、HTTP 接口 `POST /v1/documents/ingest`、`DELETE /v1/documents/{doc_id}`、`GET /v1/stats`（`docs/API.md`）。设计见 ADR-032、ADR-033。
+- 测试：离线单测 22 个（reportlab 自造 PDF + FakeEmbedder + 内存存储）；`-m integration` 1 个（真实 Milvus + ES，独立的 `*_it` 集合，本机通过）。
+
+### 验收逐条
+1. 单测：表格块、页眉页脚去除、章节路径、char offset 能从原文切回 chunk 文本、空文档和超长段落 — ✅ — `ai-service/tests/test_ingest.py`（11 个）。
+2. 全量入库后 Milvus 与 ES 的 chunk 数一致，并等于流水线统计；按 doc_type 分组的统计和实测耗时 — ✅ — `summary.json`：100/100 份、失败 0；流水线 18353 = Milvus 18353 = ES 18353；按类型两边都是 prospectus 6540、contract 4447、annual_report 5169、quarterly_report 2197；表格块 3655；6834 页。耗时（单次运行）：总 1517s（解析切块 339s、embedding 1016s、写入 105s、初始化 24s）。
+3. 幂等：重复入库 chunk 数不变；删除后两边为 0 — ✅ — `idempotency_and_delete.txt`（经 HTTP 接口）：003095 季报连续两次入库都是 57/57，总数保持 18353；DELETE 后 `remaining {"milvus": 0, "elasticsearch": 0}`，总数 18296；重新入库后恢复 18353。
+4. 展示 3 个 chunk 的完整元数据 — ✅ — `sample_chunks.json`：费率表格块 `040025_prospectus_2026-07-27#0108`（p76，「八、基金份额的申购、赎回与转换 > （六）申购费用和赎回费用」）；持仓表格块 `003095_quarterly_report_2026Q2#0028`（p9，5.3.1 前十名股票投资明细）；正文块 `003095_quarterly_report_2026Q2#0019`（p6–7，「§4 管理人报告 > 4.4 报告期内基金的投资策略和运作分析」）。
+5. CI 全绿（FakeEmbedder） — 见 HANDOFF。
+
+### 实测数字
+| 指标 | 值 | n / 分母 | 结果文件 |
+|---|---|---|---|
+| 入库文档 | 100/100，失败 0 | MANIFEST 中可提取的 100 份 | reports/ingest/20260929T040733Z/summary.json |
+| chunk 数（流水线 / Milvus / ES） | 18353 / 18353 / 18353 | — | 同上 |
+| 全量入库耗时 | 1517s（embedding 1016s） | 1 次运行，CPU，bge-small-zh-v1.5，正文与上下文头两组向量 | 同上 |
+| embedding 吞吐（基准） | 约 23.8 条/秒（约 500 字的文本） | 256 条，1 次 | 未存文件（B1 对话内测得），仅供参考 |
+| 入库后内存 | ES 1.531GiB/1.75GiB（87.5%）、Milvus 588.5MiB、MySQL 253.8MiB | 1 次快照 | docker_stats_after_ingest.txt |
+
+### 与计划的偏差（附理由和 ADR 编号）
+1. Milvus 存两个向量字段（正文、带上下文头），ES 存 `text` 与 `text_ctx`，S4 切上下文头开关时不用重新入库（ADR-032）。
+2. `sentence-transformers` 放在 `[model]` extra，CI 不装（ADR-033）。
+3. 全量入库时 S2 代码还没提交（`summary.json` 里 `git_commit=d0ff86c`、`git_dirty=true`）；入库代码随后在本节所在提交里原样提交，之后只改了 BGE 的离线加载开关和一处弃用 API。
+
+### 已知问题 / 技术债
+1. ES 入库后占 mem_limit 的 87.5%（空载 81%）；S4 检索压测时要继续观察。
+2. bge-small-zh 最大 512 token，长表格块只有前约 500 字参与向量（ADR-032 后果）。
+3. 跨页表格切成了两块（各页一块），第二块没有表头行；S4 若发现表格召回差，再考虑续表合并。
+4. `scripts/ingest_evidence.py` 是依赖运行中服务的取证脚本，没有单测。
+
+### 给统筹的问题
+- 无。

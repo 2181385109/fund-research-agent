@@ -1,0 +1,16 @@
+$ GET /v1/stats（前）
+{"milvus": {"total": 18353, "by_doc_type": {"prospectus": 6540, "contract": 4447, "annual_report": 5169, "quarterly_report": 2197}}, "elasticsearch": {"total": 18353, "by_doc_type": {"prospectus": 6540, "annual_report": 5169, "contract": 4447, "quarterly_report": 2197}}}
+$ POST /v1/documents/ingest 第1次 → HTTP 200
+{"doc_id":"003095_quarterly_report_2026Q2","pages":13,"chunks":57,"table_chunks":17,"counts":{"milvus":57,"elasticsearch":57},"timings_ms":{"parse_chunk":980.6,"embed":3369.9,"write":958.1},"boilerplate_lines":2}
+$ POST /v1/documents/ingest 第2次 → HTTP 200
+{"doc_id":"003095_quarterly_report_2026Q2","pages":13,"chunks":57,"table_chunks":17,"counts":{"milvus":57,"elasticsearch":57},"timings_ms":{"parse_chunk":901.3,"embed":3206.1,"write":485.9},"boilerplate_lines":2}
+$ GET /v1/stats（两次入库后）
+{"milvus": {"total": 18353, "by_doc_type": {"prospectus": 6540, "contract": 4447, "annual_report": 5169, "quarterly_report": 2197}}, "elasticsearch": {"total": 18353, "by_doc_type": {"prospectus": 6540, "annual_report": 5169, "contract": 4447, "quarterly_report": 2197}}}
+$ DELETE /v1/documents/003095_quarterly_report_2026Q2 → HTTP 200
+{"doc_id":"003095_quarterly_report_2026Q2","remaining":{"milvus":0,"elasticsearch":0}}
+$ GET /v1/stats（删除后）
+{"milvus": {"total": 18296, "by_doc_type": {"prospectus": 6540, "contract": 4447, "annual_report": 5169, "quarterly_report": 2140}}, "elasticsearch": {"total": 18296, "by_doc_type": {"prospectus": 6540, "annual_report": 5169, "contract": 4447, "quarterly_report": 2140}}}
+$ POST /v1/documents/ingest（恢复）→ HTTP 200
+{"doc_id":"003095_quarterly_report_2026Q2","pages":13,"chunks":57,"table_chunks":17,"counts":{"milvus":57,"elasticsearch":57},"timings_ms":{"parse_chunk":666.4,"embed":3442.7,"write":740.7},"boilerplate_lines":2}
+$ GET /v1/stats（恢复后）
+{"milvus": {"total": 18353, "by_doc_type": {"prospectus": 6540, "contract": 4447, "annual_report": 5169, "quarterly_report": 2197}}, "elasticsearch": {"total": 18353, "by_doc_type": {"prospectus": 6540, "annual_report": 5169, "contract": 4447, "quarterly_report": 2197}}}

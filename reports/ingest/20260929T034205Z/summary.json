@@ -1,0 +1,90 @@
+{
+  "created_utc": "20260929T034205Z",
+  "git_commit": "d0ff86c50e8f0c972ba63a9080dabf463764b01f",
+  "git_dirty": true,
+  "command": "python -m fund_ai.ingest.cli --doc-id 003095_quarterly_report_2026Q2 --doc-id 003095_prospectus_2026-09-21",
+  "data_as_of": "2026-09-28",
+  "manifest_sha256": "119d8489b64cda43863555ae6f63880c1caf1a8edfd0282c41e79add64b75a7b",
+  "embedding_model": "BAAI/bge-small-zh-v1.5",
+  "embedding_dim": 512,
+  "params": {
+    "chunk_size": 600,
+    "chunk_overlap": 60,
+    "table_max_chars": 3000,
+    "milvus_collection": "fund_chunks",
+    "es_index": "fund_chunks"
+  },
+  "machine": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.3"
+  },
+  "docs_requested": 2,
+  "docs_ingested": 2,
+  "failures": [],
+  "pipeline_chunks_total": 355,
+  "pipeline_chunks_by_doc_type": {
+    "prospectus": 298,
+    "quarterly_report": 57
+  },
+  "pipeline_table_chunks": 42,
+  "pages_total": 139,
+  "store_stats": {
+    "milvus": {
+      "total": 355,
+      "by_doc_type": {
+        "prospectus": 298,
+        "quarterly_report": 57
+      }
+    },
+    "elasticsearch": {
+      "total": 355,
+      "by_doc_type": {
+        "prospectus": 298,
+        "quarterly_report": 57
+      }
+    }
+  },
+  "timing_s": {
+    "wall": 59.0,
+    "init_pipeline": 30.3,
+    "parse_chunk": 5.9,
+    "embed": 19.6,
+    "write": 2.9
+  },
+  "per_doc": [
+    {
+      "doc_id": "003095_prospectus_2026-09-21",
+      "pages": 126,
+      "chunks": 298,
+      "table_chunks": 25,
+      "counts": {
+        "milvus": 298,
+        "elasticsearch": 298
+      },
+      "timings_ms": {
+        "parse_chunk": 5262.0,
+        "embed": 16249.9,
+        "write": 1932.5
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "prospectus"
+    },
+    {
+      "doc_id": "003095_quarterly_report_2026Q2",
+      "pages": 13,
+      "chunks": 57,
+      "table_chunks": 17,
+      "counts": {
+        "milvus": 57,
+        "elasticsearch": 57
+      },
+      "timings_ms": {
+        "parse_chunk": 589.9,
+        "embed": 3327.2,
+        "write": 919.0
+      },
+      "boilerplate_lines": 2,
+      "doc_type": "quarterly_report"
+    }
+  ]
+}

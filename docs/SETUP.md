@@ -129,9 +129,21 @@ cd backend && mvn -B verify && java -Dfile.encoding=UTF-8 -jar target/backend-0.
 ```
 
 ```bash
-cd ai-service && python -m venv .venv && .venv/Scripts/python -m pip install -e ".[dev]"
+cd ai-service && python -m venv .venv && .venv/Scripts/python -m pip install -e ".[dev,model]"
 .venv/Scripts/python -m uvicorn fund_ai.api.app:app --port 8001
 ```
+
+`[model]` 装 sentence-transformers 和 CPU 版 torch（ADR-033）。首次用到向量模型时，从 `HF_ENDPOINT`（默认 hf-mirror）下载 `BAAI/bge-small-zh-v1.5`（约 95MB）到 `MODEL_CACHE_DIR`；缓存存在后离线加载。
+
+### 6.1 数据采集与入库（S1、S2）
+
+采集步骤见 `data-pipeline/README.md`（基金池 → PDF → 结构化 → fund_data → 质量报告）。PDF 就位后按 MANIFEST 全量入库 Milvus 与 ES：
+
+```bash
+cd ai-service && .venv/Scripts/python -m fund_ai.ingest.cli
+```
+
+结果写到 `reports/ingest/<UTC>/summary.json`。重复执行是幂等的（每份文档先删后写）；只入库个别文档时加 `--doc-id <doc_id>`。
 
 健康检查（本机 curl 访问 127.0.0.1 时绕过代理）：
 

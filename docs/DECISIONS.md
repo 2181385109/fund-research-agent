@@ -178,3 +178,30 @@
   2. 011832 保留：规模 2.06 亿（截至 2026-06-30）满足门槛，三次换经理适合出题。
   3. 其余 19 只不调换，universe v1 冻结（`data/CHANGELOG.md`）。
 - **后果**：候选名单里存在后端收费份额（名称带「(后端)」）被当成独立一组的情况，不影响最终 20 只，但筛选计数里 474/193 组含这类重复组。
+- **补充（冻结后发现）**：`fund_overview_em` 的「净资产规模」是主代码（A 类）份额的规模，不是全部份额合计；universe.yaml 注释的说法不准，数值和入选结果不变，已登记 `data/CHANGELOG.md`，待统筹决定是否更正注释。
+
+## ADR-031 PDF 数据的解析策略（S1）
+- **背景**：申购费、经理任职、季报规模、前十持仓（质量比对用）都要从 20 家公司各自排版的 PDF 里取，版式差异大。
+- **决定**（`fund_pipeline/pdf_extract.py`、`quality.py`）：pdfplumber 抽表格为主、正文正则为退路；每一种版式都有单测（自造 fixture）：
+  - 申购费：独立费率表 / A、C 合表 / 养老金与其他投资者两列并列 / 无表格线的正文。养老金优惠表的判定只看表格正上方引导语的最后一句（「非养老金客户」「除养老金客户以外的其他投资者」算一般费率）。
+  - 经理简介表：表头跨 2–3 行、合并单元格空列、续表跨页（最多 3 页）、行被分页拆开时按列拼回、「基金经理助理」行排除。任职记录 = 年报 → Q1 → Q2 → 变更公告，后出现的非空值覆盖。
+  - 前十持仓：标题在页末时取下一页；表头跨 3 行；序号不足 10 时接下一页；港股代码补齐 5 位；PDF 对同一发行人的 A 股和 H 股共用一个序号，所以比对按证券代码而不是按排名。
+- **后果**：换一批基金可能出现新版式；解析不出时登记缺口，不猜测（S1 剩 4 份年报的经理表未解析，见 PROGRESS）。
+
+## ADR-032 入库设计：规范文本、双向量、表格独立成块（S2）
+- **决定**：
+  - **规范文本**：解析出的正文段落、标题行、表格 markdown 用 `\n` 连成文档的规范文本；每个 chunk 的 `text` 恰好是 `canonical[char_start:char_end]`（单测钉住）。表格按行拆分时，拆出来的各块在规范文本里是连续的；续表的表头只补在 `text_ctx`（embedding/BM25 用）里，不改变 `text`。
+  - **页眉页脚**：统计每页首尾各 2 行（数字归一为 `#`），在 ≥3 页且 ≥30% 页上重复出现的删除，只删首尾位置。
+  - **章节识别**：`§N`、`第X部分` 为 1 级；`N.N`、`一、` 为 2 级；`N.N.N`、`（一）` 为 3 级；≤40 字、不以句号结尾、不是目录行（点引导线）。
+  - **切块参数**：`CHUNK_SIZE=600`、`CHUNK_OVERLAP=60`（只在超长段落硬切时重叠）、`TABLE_MAX_CHARS=3000`，都走 env。
+  - **上下文头开关**：Milvus 同时存 `embedding`（正文）与 `embedding_ctx`（上下文头 + 正文）两个向量字段，ES 同时有 `text` 与 `text_ctx`。PLAN 要求上下文头「由开关控制，在 S4 的 dev 集上裁决」，两份都存，S4 切开关时不用重新入库；代价是 embedding 计算量翻倍。
+  - **Milvus**：HNSW（M=16，efConstruction=200）+ IP（向量已归一化），`doc_id`、`fund_code`、`doc_type` 建 INVERTED 标量索引，计数用 Strong 一致性。**ES**：`text`/`text_ctx` 写入 `ik_max_word`、检索 `ik_smart`，元数据 keyword，副本 0。
+  - **一致性**：先算完全部向量再删旧写新；写入后按 doc_id 两边计数，不等于切块数就报错。
+  - **接口安全**：`/v1/documents/ingest` 的文件路径只允许落在 `DATA_DIR` 下。
+- **备选**：只存一种向量、S4 按需重建（重新入库一次约 20 分钟，且两次入库的切块可能因代码变化不一致）；表格按行切成小块（会丢失整表上下文）。
+- **后果**：bge-small-zh 最大输入 512 token，超过的表格块（最长 3000 字）只有前约 500 字参与向量；BM25 不受影响。S4 要注意表格块的向量召回偏弱。
+
+## ADR-033 sentence-transformers 放在可选依赖 `[model]`（S2）
+- **背景**：Linux 上 `pip install sentence-transformers` 默认带 CUDA 版 torch（数 GB）；CI 不下载模型、测试只用 FakeEmbedder。
+- **决定**：ai-service 的 `pyproject.toml` 把 `sentence-transformers` 放进 `[model]` extra，CI 只装 `.[dev]`；`BgeEmbedder` 在第一次用时才 import。本机：`pip install -e ".[dev,model]"`（Windows 上 PyPI 的 torch 就是 CPU 版，实装 torch 2.14.0+cpu、sentence-transformers 6.1.0）。S7 做镜像时用 CPU 版 torch 的 index。
+- **后果**：模型首次加载要从 hf-mirror 下载约 95MB 到 `MODEL_CACHE_DIR`（`.cache/` 已 gitignore）。
