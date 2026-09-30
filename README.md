@@ -47,7 +47,7 @@
 | S5 | MCP 工具 + LangGraph Agent + SSE | ✅ 完成（2026-09-29）：mcp-tools 四个工具（[说明](mcp-tools/README.md)）、文档 MCP `/mcp`、`POST /v1/chat/stream`（协议见 [docs/API.md](docs/API.md)），证据见 PROGRESS |
 | S6 | Java 主后端 | ✅ 完成（2026-09-29）：auth / kb / document / conversation / chat（SSE 代理，断开取消上游）、私有知识库检索范围由服务端注入（ADR-043）；接口见 [docs/API.md](docs/API.md)，证据见 PROGRESS |
 | S7 | 前端（Vue3）+ 四个 Dockerfile + 一键启动 | ✅ 完成（2026-09-29）：登录 / 知识库与文档 / 对话页（检索范围、四类出处、固定风险提示）；`docker compose --profile app up -d` 一键起全栈（见「一键启动全栈」）；证据见 PROGRESS |
-| S8 | 回答评测 + 第一期收尾 | 🟡 评测已跑完并判分（下方指标表），待人工盲标（≥ 30 条）算一致率 / kappa 后打 tag `v0.1-phase1` |
+| S8 | 回答评测 + 第一期收尾 | ✅ 完成（2026-10-01）：test 124 题 × 2 种检索配置的回答评测、人工盲标 36 条（见下方「第一期指标」），tag `v0.1-phase1` |
 | S9–S13 | 第二期：gRPC → Redis → Kafka → 压测 → 优化 | 未开始 |
 
 详细计划见 [docs/PLAN.md](docs/PLAN.md)，逐阶段进度与验收证据见 [docs/PROGRESS.md](docs/PROGRESS.md)。
@@ -82,7 +82,15 @@
 
 读表时注意：entity 的 hybrid_rerank 一题（qa-0101）是判分器对二选一题的误判（回答结论正确），vector 一题（qa-0023）是真实错误；两处都在 [numeric_any_vs_first.md](reports/answer_eval/20260929T171529Z/numeric_any_vs_first.md) 末尾逐条说明，**没有**为此改口径。
 
-**人工盲标**（text 类 ≥ 30 条，一致率与 kappa）：待用户标注后补充，见 [`blind_agreement.json`](reports/answer_eval/20260929T171529Z/blind_agreement.json)（尚未生成）。
+**人工盲标 vs LLM 裁判**（text 类，n = 36 行，来自 26 道不同的题，两个配置的回答混合按 topic 分层抽样，种子 20260930；人工标注时看不到裁判分，全部数字来自 [`blind_agreement.json`](reports/answer_eval/20260929T171529Z/blind_agreement.json)）：
+
+| 指标 | 值 | 字段 |
+|---|---|---|
+| 精确一致率（n = 36） | [34/36 = 94.4%](reports/answer_eval/20260929T171529Z/blind_agreement.json)（Wilson 95% 区间 81.9%–98.5%） | `exact_agreement` |
+| Cohen kappa（无权 / 线性加权 / 满分 vs 非满分） | [0.478 / 0.478 / 0.478](reports/answer_eval/20260929T171529Z/blind_agreement.json) | `cohen_kappa_unweighted`、`cohen_kappa_linear_weighted`、`binary_kappa_full_vs_not` |
+| 人工均分 / 裁判均分（0–2） | [1.917 / 1.972](reports/answer_eval/20260929T171529Z/blind_agreement.json) | `human_mean_score`、`judge_mean_score` |
+
+混淆矩阵（行 = 人工，列 = 裁判）：人工 0 分 0 行；人工 1 分 3 行（裁判给 1 分 1 行、给 2 分 2 行）；人工 2 分 33 行（裁判全给 2 分）。**一致率高，kappa 只有中等**：人工只给了 3 个非满分，标签极不均衡，kappa 对这 3 行极其敏感，不宜单独解读。**两处分歧方向相同——裁判给 2、人给 1（裁判偏宽）**，且都是 no_tool 类通用概念题（抽到的 2 行 no_tool 全部分歧、其余 34 行全部一致）；只有 2 行，不足以量化偏宽程度，也不能推广到 no_tool 以外。裁判与被测是同一个模型（deepseek-flash）的局限见 [LIMITATIONS](docs/LIMITATIONS.md) S8-2；盲标只覆盖 text 类，refusal 类裁判判断未人工核对。本表的裁判分没有因盲标结果调整。
 
 **检索评测（S4，test，n=72）**：最终配置 hybrid_rerank 的 hit@5 [0.653](reports/retrieval/20260929T090548Z/summary.json)、nDCG@10 [0.532](reports/retrieval/20260929T090548Z/summary.json)（`results.hybrid_rerank.overall`），vector 单路 nDCG@10 [0.200](reports/retrieval/20260929T090548Z/summary.json)。容器内重新入库后同配置复现：hybrid_rerank nDCG@10 [0.530](reports/retrieval/20260929T164941Z/summary.json)，bm25 路有小幅差异、原因未验证，见 [LIMITATIONS](docs/LIMITATIONS.md)「回答评测方法」第 1 条。
 

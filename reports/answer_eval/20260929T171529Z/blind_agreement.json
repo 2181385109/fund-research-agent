@@ -1,0 +1,320 @@
+{
+  "n_key_rows": 36,
+  "n_human_labelled": 36,
+  "n_compared": 36,
+  "n_judge_failed_excluded": 0,
+  "exact_agreement": 0.9444,
+  "cohen_kappa_unweighted": 0.4783,
+  "cohen_kappa_linear_weighted": 0.4783,
+  "binary_full_score_agreement": 0.9444,
+  "binary_kappa_full_vs_not": 0.4783,
+  "confusion_rows_human_cols_judge": [
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      2
+    ],
+    [
+      0,
+      0,
+      33
+    ]
+  ],
+  "human_mean_score": 1.9167,
+  "judge_mean_score": 1.9722,
+  "pairs": [
+    {
+      "row": "B001",
+      "config": "vector",
+      "id": "qa-0082",
+      "topic": "commentary",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B002",
+      "config": "hybrid_rerank",
+      "id": "agent-0061",
+      "topic": "doc_only",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B003",
+      "config": "vector",
+      "id": "qa-0074",
+      "topic": "commentary",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B004",
+      "config": "hybrid_rerank",
+      "id": "agent-0045",
+      "topic": "doc_db",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B005",
+      "config": "vector",
+      "id": "qa-0099",
+      "topic": "cross_doc",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B006",
+      "config": "hybrid_rerank",
+      "id": "agent-0047",
+      "topic": "doc_db",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B007",
+      "config": "hybrid_rerank",
+      "id": "qa-0087",
+      "topic": "commentary",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B008",
+      "config": "hybrid_rerank",
+      "id": "qa-0069",
+      "topic": "contract_clause",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B009",
+      "config": "hybrid_rerank",
+      "id": "agent-0040",
+      "topic": "doc_db",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B010",
+      "config": "vector",
+      "id": "qa-0078",
+      "topic": "commentary",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B011",
+      "config": "hybrid_rerank",
+      "id": "qa-0094",
+      "topic": "cross_doc",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B012",
+      "config": "vector",
+      "id": "agent-0045",
+      "topic": "doc_db",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B013",
+      "config": "hybrid_rerank",
+      "id": "qa-0084",
+      "topic": "commentary",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B014",
+      "config": "vector",
+      "id": "agent-0042",
+      "topic": "doc_db",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B015",
+      "config": "hybrid_rerank",
+      "id": "qa-0098",
+      "topic": "cross_doc",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B016",
+      "config": "hybrid_rerank",
+      "id": "qa-0099",
+      "topic": "cross_doc",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B017",
+      "config": "hybrid_rerank",
+      "id": "qa-0057",
+      "topic": "contract_clause",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B018",
+      "config": "vector",
+      "id": "qa-0093",
+      "topic": "cross_doc",
+      "human": 1,
+      "judge": 1
+    },
+    {
+      "row": "B019",
+      "config": "vector",
+      "id": "agent-0064",
+      "topic": "no_tool",
+      "human": 1,
+      "judge": 2
+    },
+    {
+      "row": "B020",
+      "config": "hybrid_rerank",
+      "id": "qa-0082",
+      "topic": "commentary",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B021",
+      "config": "vector",
+      "id": "qa-0079",
+      "topic": "commentary",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B022",
+      "config": "vector",
+      "id": "qa-0087",
+      "topic": "commentary",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B023",
+      "config": "vector",
+      "id": "agent-0040",
+      "topic": "doc_db",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B024",
+      "config": "hybrid_rerank",
+      "id": "qa-0071",
+      "topic": "contract_clause",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B025",
+      "config": "vector",
+      "id": "qa-0071",
+      "topic": "contract_clause",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B026",
+      "config": "vector",
+      "id": "qa-0069",
+      "topic": "contract_clause",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B027",
+      "config": "hybrid_rerank",
+      "id": "agent-0043",
+      "topic": "doc_db",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B028",
+      "config": "hybrid_rerank",
+      "id": "qa-0090",
+      "topic": "commentary",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B029",
+      "config": "hybrid_rerank",
+      "id": "agent-0041",
+      "topic": "doc_db",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B030",
+      "config": "hybrid_rerank",
+      "id": "qa-0074",
+      "topic": "commentary",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B031",
+      "config": "vector",
+      "id": "agent-0048",
+      "topic": "doc_db",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B032",
+      "config": "hybrid_rerank",
+      "id": "qa-0079",
+      "topic": "commentary",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B033",
+      "config": "hybrid_rerank",
+      "id": "qa-0086",
+      "topic": "commentary",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B034",
+      "config": "hybrid_rerank",
+      "id": "qa-0085",
+      "topic": "commentary",
+      "human": 2,
+      "judge": 2
+    },
+    {
+      "row": "B035",
+      "config": "hybrid_rerank",
+      "id": "agent-0066",
+      "topic": "no_tool",
+      "human": 1,
+      "judge": 2
+    },
+    {
+      "row": "B036",
+      "config": "vector",
+      "id": "agent-0061",
+      "topic": "doc_only",
+      "human": 2,
+      "judge": 2
+    }
+  ]
+}

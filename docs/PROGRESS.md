@@ -666,8 +666,8 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 - 工作区里 `docs/PLAN.md` 有一处未提交的改动（§7 表 B3–B6 加 ✅），不是我改的，我没有提交它，请统筹自行提交。
 - 前端范围：公共库文件清单页仍没做（`GET /api/kbs/1/documents` 恒为空，LIMITATIONS S6-7 / S7-4），界面上只放了说明文字；需要的话请在 B8 前给出要求。
 
-## S8 端到端回答评测 + 第一期收尾 — 进行中（2026-09-30，B8；停在用户关卡：人工盲标）
-- commit 范围：`a5b05fe`..`5dadd3c`；CI：run 36608275582 **7 个 job 全绿**（首次 run 36608044346 因新增费用脚本的 ruff 长行在 scripts job 失败，`5dadd3c` 修复）；**tag `v0.1-phase1` 尚未打**（等盲标一致率，见「需要用户做的事」）。
+## S8 端到端回答评测 + 第一期收尾 — 2026-10-01（B8）
+- commit 范围：`a5b05fe`..本节所在提交（盲标结果提交）；CI：功能提交 run 36608275582 **7 个 job 全绿**（首次 run 36608044346 因新增费用脚本的 ruff 长行在 scripts job 失败，`5dadd3c` 修复）；盲标结果提交的 CI 与 tag `v0.1-phase1` 见 HANDOFF。
 - 证据目录：`reports/answer_eval/20260929T171529Z/`（目录名是 UTC 时间戳；两个配置各一个子目录，`summary.json` / `report.md` 在根）；费用小样 `reports/answer_eval/cost_sample_dev_20260930/`；复现性检查 `reports/retrieval/20260929T164941Z/`、`20260929T165108Z/`。
 
 ### 完成项
@@ -679,11 +679,11 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 
 ### 验收逐条（PLAN §5 S8）
 1. 每个数字都可追溯 — ✅ — README 表每个数字链接到 `summary.json` 并写明字段（已用脚本逐个核对）。
-2. 人工一致性已完成 — ❌ **等用户盲标**（≥ 30 条；表里 36 行）。
+2. 人工一致性已完成 — ✅ — 用户标注了全部 36 行（≥ 30），`reports/answer_eval/20260929T171529Z/blind_agreement.json`：**n = 36，精确一致率 34/36 = 94.4%（Wilson 95% 区间 [81.9%, 98.5%]），Cohen kappa 0.478（线性加权同为 0.478，「满分 vs 非满分」二值 kappa 同为 0.478）**；混淆矩阵见下。结果如实：一致率高，kappa 只有中等，是因为标签极不均衡（人只给了 3 个非满分），kappa 在这种情形下不稳定，不宜单独解读。
 3. 分母和失败数已上报 — ✅ — `summary.json` 的 `failed_runs`（0）、`api_error_retries`（0）、`results.*.n_run_failed` / `n_judge_failed`（0）；各指标的分母写在 README 与 `report.md`。
 4. 成本已记录 — ✅ — `cost_actual_vs_estimate.md`：实测（非高峰价，上界）约 $0.53，估算约 $0.51–0.55。
 5. CI 全绿 — ✅ — run 36608275582，7 个 job（backend、frontend、python × 4、scripts + security scan）success；打 tag 前还要在最后一次提交后再确认一次。
-6. tag 已推送 — ❌ 等 2。
+6. tag 已推送 — 见 HANDOFF（盲标结果提交 CI 全绿后打 `v0.1-phase1` 并推送）。
 
 ### 实测数字（摘要；全表见 README 与 `report.md`）
 | 指标 | hybrid_rerank | vector | n / 分母 | 结果文件 |
@@ -694,6 +694,19 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 | 出处准确率 | 86/111 | 73/111 | 111 | `citation_accuracy.overall` |
 | 风险提示覆盖率 | 124/124 | 124/124 | 124 | `disclaimer_coverage` |
 | 首 token p50（ms） | 7836 | 4112 | 124 | `latency_ms.first_token` |
+| 人工盲标 vs 裁判：精确一致率 | 34/36 = 94.4%（Wilson 95% [81.9%, 98.5%]） | | 36 行（26 道不同的题，两个配置的回答混合抽样） | `blind_agreement.json` `exact_agreement` |
+| 人工盲标 vs 裁判：Cohen kappa | 0.478（无权 = 线性加权 = 二值） | | 36 | `cohen_kappa_unweighted` 等 |
+| 人工均分 / 裁判均分（0–2） | 1.917 / 1.972 | | 36 | `human_mean_score`、`judge_mean_score` |
+
+**盲标混淆矩阵**（行 = 人工评分，列 = 裁判评分；n = 36）：
+
+| 人 \ 裁判 | 0 | 1 | 2 |
+|---|---|---|---|
+| 0 | 0 | 0 | 0 |
+| 1 | 0 | 1 | 2 |
+| 2 | 0 | 0 | 33 |
+
+**读法（如实）**：① 两处分歧方向相同：**裁判给 2、人给 1**（裁判偏宽），没有相反方向的分歧，和预期的同源自我偏好方向一致，但只有 2 行，不足以量化偏宽程度。② 两处分歧**都是 no_tool 类**（agent-0064「A 类和 C 类份额的区别」的 vector 回答、agent-0066「业绩比较基准是什么意思」的 hybrid_rerank 回答）——这类是通用概念题，没有数据库 / 文档里的事实可核对，要点较宽松；抽到的 2 行 no_tool 全部分歧、其余 34 行全部一致（no_tool 在 test 里只有 2 道题，样本太小，不能推广）。③ 人工标注里没有 0 分；裁判的 1 分在样本里只抽到 1 行（qa-0093 vector：二季度净值增长率写成 95.79%，要点是 96.00%），人裁判都给 1。④ 只有 3 个人工非满分，kappa 对这 3 行的取舍极其敏感；本表只覆盖 text 类，refusal 类裁判判断没有人工核对。⑤ 36 行来自 26 道不同的题（同一题在两个配置下的回答都可能被抽到），行之间不完全独立。这些裁判分没有因盲标结果调整（README 与 summary 里的 text 类数字保持判分时的原值）。
 
 ### 与计划的偏差（附理由和 ADR 编号）
 - 裁判由 PLAN 隐含的「与被测不同源」（deepseek-v4-pro）改为 **deepseek-flash（与被测同一个）**：用户 2026-09-30 决定，ADR-046，LIMITATIONS S8-2。费用小样（dev）仍是 v4-pro 判的。
@@ -704,7 +717,7 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 - 见 LIMITATIONS「回答评测方法（S8）」9 条与「第一期局限汇总」。要点：numeric 的 first 口径是下界（hybrid_rerank 47 题里 any 与 first 差 13 题，其中 12 题回答本身是对的，逐条说明见 `numeric_any_vs_first.md`）；entity 二选一规则对 qa-0101 误判；agent-0020（两个配置都答 21，gold 23）原因未查明；vector 配置有 4 题因检索不到而答错或答「没有找到」。
 
 ### 需要用户做的事
-- **人工盲标**：打开 `reports/answer_eval/20260929T171529Z/blind_table/blind_table.xlsx`，在最后一列填 0 / 1 / 2（评分标准写在表头），保存后告诉我路径；我用 `python -m fund_ai.eval.answer blind-score` 算一致率与 kappa，补进 README，然后打 tag。**标完之前请不要去看 `scores.jsonl` / `report.md` 里的裁判分。**
+- 无（盲标已完成）。可选：恢复 ticket-qa 的 5 个容器（见 HANDOFF §6）。
 
 ### 给统筹的问题
 - 无阻塞问题。请知悉：CLAUDE.md §5 `JUDGE_MODEL` 那一行已按用户决定修改；`docs/PLAN.md` §7 的 B7 / B8 状态请统筹标记。
