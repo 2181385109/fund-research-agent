@@ -1,32 +1,38 @@
-# HANDOFF — B8 完成，第一期收尾（2026-10-01）
+# HANDOFF — B9（S9 gRPC）完成（2026-10-02）
 
-写给下一个执行者对话（B9 = S9 gRPC，第二期第一个阶段）。已写进 CLAUDE.md / PLAN / DECISIONS / API 的内容只给指针。
+写给下一个执行者对话（B10 = S10 Redis：限流 + 配额 + 语义缓存）。已写进 CLAUDE.md / PLAN / DECISIONS / API / LIMITATIONS 的内容只给指针。
 
 ## 1. 当前进度
-- **第一期（S0–S8）全部完成，tag `v0.1-phase1` 已打并推送**（打在盲标结果提交、CI 全绿之后；确认用 `git tag -l` 与 `git ls-remote --tags origin`）。
-- S8 做了什么（细节与证据在 `docs/PROGRESS.md`「S8」一节、README「第一期指标」、ADR-046、LIMITATIONS「回答评测方法（S8）」）：复现性检查；费用关卡（用户确认）；test 124 题 × 2 检索配置的回答评测（248 次运行全部成功、无失败、无重试、无判分失败）；盲标 36 行，**一致率 34/36 = 94.4%，kappa 0.478**，两处分歧都是裁判偏宽（no_tool 类），均已如实写进 README / PROGRESS / LIMITATIONS；费用实测（非高峰价上界）约 $0.53 vs 估算 $0.51–0.55（`reports/answer_eval/20260929T171529Z/cost_actual_vs_estimate.md`）。
-- 结果目录 `reports/answer_eval/20260929T171529Z/`：`summary.json`（README 每个数字都链到它并写明字段）、`report.md`、`numeric_any_vs_first.md`（any ≠ first 的逐条说明）、`blind_agreement.json`、`blind_table/blind_table.xlsx`（用户标注后的原件）、`blind_key.json`、两个配置的 `answers.jsonl` / `scores.jsonl`（SSE 原文在各自的 `raw/`，gitignore）。
-- 测试：ai-service 194+、backend 108、frontend 30、scripts 29；CI 7 个 job。**fra 的 8 个容器仍在运行**（compose `app` profile，入口 <http://127.0.0.1:8088>）；评测用的本机 ai-service 进程（8011 / 8012）已停。
+- 第一期（S0–S8）完成并打了 tag `v0.1-phase1`；**第二期 S9 完成**（B9）。功能提交 `f9d174b`..`dbcb393`（已推送），CI run 36894374398 **8 个 job 全绿**（backend 含 `BackendIntegrationTest`、frontend、python×4、scripts + security scan、新增的 `proto`）。本文件所在提交之后再确认一次 CI（只改文档）。
+- S9 做了什么（证据在 `docs/PROGRESS.md`「S9」、`docs/perf/grpc_vs_http.md`、ADR-047、LIMITATIONS「gRPC 改造（S9）」、API.md 的「gRPC」一节）：
+  - `proto/fundagent/v1/ai_service.proto`（`Chat` 流式 / `Retrieve` / `IngestDocument` / `DeleteDocument`）；Python 桩代码 `scripts/gen_proto.py` 生成并提交（`ai-service/src/fundagent/v1/`），Java 桩代码构建时生成。
+  - ai-service：grpc.aio 与 FastAPI 同进程（`fund_ai/grpc_server/`）；**`fund_ai/api/chat.py` 的 `chat_events()` 是两种传输共用的对话入口**（S10 的语义缓存放这里就同时覆盖 HTTP 与 gRPC）。
+  - backend：`GrpcAiServiceClient`（默认）/ `HttpAiServiceClient`（`AI_TRANSPORT=http`）；`ChatEventJson` 把 `ChatEvent` 还原成与 HTTP 相同的 SSE JSON（`proto/testdata/chat_events.jsonl` 是 Python / Java 共用的跨语言样例）。
+  - **`CHAT_HEARTBEAT` 默认 5 s → 1 s**（取消延迟实验的结论）；本机 `.env`（gitignored）里的同名项我已改成 `1s`。
+- 测试：ai-service 204、backend 121（本机 `BackendIntegrationTest` 因无 Docker 不能跑，CI 里跑）、scripts 29、frontend 30。**fra 的 8 个容器在运行**，用的是最新镜像（backend 默认 grpc、心跳 1 s；入口 <http://127.0.0.1:8088>，gRPC 端口只绑宿主机回环 50051）。ticket-qa 的 5 个容器**仍是停止状态**（统筹补充 1：第二期期间保持，不用问用户）。
 
-## 2. 下一步：B9 = S9 gRPC 改造（PLAN §5 S9、§7）
-- 要点：proto（`Chat` server streaming，`ChatEvent` 用 oneof 对应全部 SSE 事件含 citations 与 disclaimer；`Retrieve`、`IngestDocument`、`DeleteDocument`）；Java `GrpcAiServiceClient`（复用 channel、deadline、**取消传播到 Python**、可配置切回 http）；Python 端 grpc.aio 与 FastAPI 同进程。验收：两端 in-process 单测、取消传播证据、grpc 模式 e2e、HTTP vs gRPC 延迟预实验（写明 n 和条件）、CI 校验 proto 能编译。
-- 现有协议事实来源是 `docs/API.md`（SSE 事件）；SSE 取消传播的做法与局限见 LIMITATIONS S6-4（心跳最晚 ~5 s 才发现断开）。e2e 冒烟脚本 `scripts/e2e_smoke.sh`。
-- 性能基线相关：第二期压测（S12）要用 mock LLM（`loadtest/mock_llm/`），别拿真实 DeepSeek 压；S8 的延迟数字是单并发、CPU 重排、本机进程（LIMITATIONS S8-8），不能当压测基线。
+## 2. 下一步：B10 = S10 Redis（PLAN §5 S10、§7）
+- 要点：令牌桶（Lua 原子、分用户 / 全局两个维度、429 + Retry-After）+ 每日配额（次数和 token，定时回写 MySQL）+ 语义缓存（Redis 向量索引，按 `kb_id + kb_version + DATA_AS_OF` 隔离；**用过 `get_latest_nav` 的回答、荐基类、出错的回答不缓存**；命中时按同一事件协议回放并标 `cache_hit`；风险提示照常追加）+ 阈值校准集 `cache_pairs_v1.jsonl`（同义改写对 + 金融难负例对）。验收见 PLAN。
+- 与 S9 的衔接：限流 / 配额放 backend（`ChatService.start` 之前，超限抛业务异常 → 429）；`GrpcAiServiceClient.chat()` 已有并发上限（`fra.ai.grpc.max-concurrent-chats`，默认 64，超出 503），那是过载保护，不是限流。语义缓存放 ai-service 的 `chat_events()`；回放时仍要产出完整事件序列（含 `citations`、`disclaimer` 紧挨 `done`）。注意 gRPC 路径上数组字段总是输出（API.md「gRPC」），回放缓存时不要依赖「字段缺省」。
+- Redis 8（compose 里已有，6380）；本机 backend 的 `spring.data.redis` 已配好，ai-service 有 `redis` 依赖（`api/health.py` 里在用）。压测（S12）要用 mock LLM（`loadtest/mock_llm/`），别拿真实 DeepSeek 压。
 
 ## 3. 如何拉起环境
-- 全栈：README「一键启动全栈」。已在跑时不需要动。重启：`wsl.exe -d Ubuntu-24.04 -u root -- bash -c 'cd /mnt/d/xiangmu/fund-research-agent && docker compose --profile app up -d'`（停：`docker compose --profile app stop`，**不要 `down -v`**，会清掉数据卷、模型缓存和上传）。
-- 改了代码后重建单个服务：`docker compose --profile app up -d --build <backend|ai-service|mcp-tools|frontend>`。本机进程开发模式（mcp-tools / ai-service / backend / 前端）见 CLAUDE.md §8 与 `docs/SETUP.md` §6；回到本机进程前要先 `docker compose --profile app stop backend ai-service mcp-tools frontend`。
-- 容器里一次性任务：`docker compose --profile app run --rm ai-service python -m fund_ai.models_cli`（预下载模型）、`… python -m fund_ai.ingest.cli`（入库约 24 分钟）。
-- 回答评测重跑（**会花钱，而且 test 已用掉，见 §5**）：`ai-service/src/fund_ai/eval/README.md`；两个检索配置各起一个本机 ai-service（`RETRIEVAL_MODE` / `AI_SERVICE_PORT` / `MCP_DOCS_URL`），用 PowerShell `Start-Process` 起并重定向日志。
+- 全栈：README「一键启动全栈」。已在跑时不需要动。重启 / 重建：`wsl.exe -d Ubuntu-24.04 -u root -- bash -c 'cd /mnt/d/xiangmu/fund-research-agent && docker compose --profile app up -d --build <backend|ai-service|frontend>'`（**不要 `down -v`**）。改了 `proto/` 要同时重生成 Python 桩（`ai-service/.venv/Scripts/python scripts/gen_proto.py`，CI 的 `proto` job 会校验）并重建 backend 与 ai-service。
+- backend 本机跑 jar：先 `docker compose --profile app stop backend`（或用 `BACKEND_PORT=8082` 另起一个，与容器共用 MySQL / Redis）；`java -Dfile.encoding=UTF-8 -jar backend/target/backend-*.jar`，在 `backend/` 下运行才读得到 `../.env`；改完代码要重新 `mvn -DskipTests package`，**先停掉正在跑的 jar，否则 Windows 下 repackage 失败（文件被占用）**。
+- 切回 HTTP：`AI_TRANSPORT=http`（compose / 环境变量 / `.env`）。同时在本机起多个 ai-service（评测的两个检索配置）时，除一个外都要 `AI_GRPC_ENABLED=false`（或换 `AI_GRPC_PORT`），否则端口冲突只记 error 日志、gRPC 不可用。
+- 取消 / 传输实验脚本：`scripts/cancel_latency_matrix.sh`（WSL 里跑）、`scripts/bench_fake_ai.py` + `scripts/bench_transport.py`（用法在各自文件头）；`scripts/e2e_smoke.sh` 两种传输都适用（`PY`、`AI_LOG`、`BACKEND_LOG` 见文件头）。
 - 访问本机端口：curl 用 `--noproxy '*'`，Python 客户端用 `trust_env=False` 或设 `NO_PROXY=127.0.0.1,localhost`。
 
-## 4. 会再踩的坑（B6/B7/B8；旧的见 git 历史里的 HANDOFF）
-- **命令分类器偶发不可用**：Bash / PowerShell 整体返回「auto mode classifier gave no verdict」（B8 遇到过，连 `echo` 也不行），换另一个工具或稍后重试；期间做只读 / 编辑类工作。
-- **Bash heredoc 里放中文会被截断 / 乱码**：改文件一律用 Edit / Write；含中文的 Python 脚本先 Write 成文件再运行（PowerShell 下 `@'…'@ | Set-Content -Encoding UTF8` 也可以）。
-- **后台任务有 10 分钟超时**：长任务（评测 run、uvicorn）用 PowerShell `Start-Process -RedirectStandardOutput/-RedirectStandardError`（同一个参数不能写两遍）+ Monitor 等完成标志；管道 `| tail` 会缓冲到结束才有输出。
-- **CI 的 scripts job 跑 `ruff check` + `format --check`（scripts/ 目录）**：新增脚本提交前在 `scripts/` 下跑一遍（长中文字符串行用文件级 `# ruff: noqa: E501`），B8 因此红过一次。
-- **`git_dirty`**：`summary.json` 记录的是评测判分时的工作区状态；改了文档后先提交再 `score`（已有 `scores.jsonl` 的题不会再调裁判，只重写 summary / report，不花钱）。
-- WSL 多行命令、compose 变量插值、nginx 与 SSE、前端调试、内置浏览器等 B7 的坑仍然有效：WSL 里多行命令先写 `.sh` 再 `MSYS_NO_PATHCONV=1 wsl.exe … bash /mnt/d/...`，脚本里有本机路径，用完删掉别提交；compose 应用变量用 `${X:-}`；生产 nginx 的 SSE location 要保留 `proxy_buffering off` 与 `gzip off`。
+## 4. 会再踩的坑（B9 新增；B6–B8 的旧坑仍有效，见 git 历史里的 HANDOFF）
+- **从 Git Bash 采集 WSL 里容器日志**：`wsl.exe … docker logs -f` 的输出里混有 UTF-16 的 wsl 警告（NUL 字节，`grep` 会报「Binary file matches」）；管道里再接 `tr` 会被缓冲、文件长时间是空的。可靠写法：`wsl.exe -d Ubuntu-24.04 -u root -- bash -c 'docker logs -f --since 0s <容器> 2>&1' 2>/dev/null > 文件`（stderr 丢掉、合并在 WSL 内部做）。采集进程不会自己退出，用完要清理。
+- **WSL 里的长任务**：后台任务有 10 分钟上限，`nohup … &` 在 `bash -c` 里会随会话结束被杀。超过 10 分钟的（如 `cancel_latency_matrix.sh`，约 25 分钟）用 PowerShell `Start-Process wsl.exe -ArgumentList '…' -RedirectStandardOutput …`（参数整体放一个字符串，别用逗号数组），再用 `until` 循环等标志。
+- **PowerShell 里按命令行匹配杀进程会误杀自己**：命令行里写的匹配串本身就出现在父 bash 的命令行里，把当前会话的 shell 也杀了；把匹配串拆开拼接（`'_can' + 'cel'`），或按端口杀（`Get-NetTCPConnection -LocalPort … | Stop-Process`）。
+- **Windows 的 asyncio 定时器粒度 ~15.6 ms**：`sleep(0.01)` 在 uvicorn 路径上被当成立即返回；做节奏相关的实验用 ≥ 20 ms 的间隔（见报告第 1 节结论 5）。
+- **protobuf-maven-plugin**：用的是 ascopes 5.1.11，grpc 插件写成 `<plugins><plugin kind="binary-maven">…`（旧文档里的 `binaryMavenPlugins` 在 5.x 里是未知参数，只会生成消息类、不生成 gRPC 桩，编译时才报找不到 `AiServiceGrpc`）。backend 镜像构建要 `COPY proto /proto`（`.dockerignore` 只排除 `proto/testdata`）；改 pom 会让镜像里的 `dependency:go-offline` 重新下载依赖（要等几分钟）。
+- **类名遮蔽**：`AiServiceClient` 里有嵌套类型 `HistoryItem` / `KbScope`，在实现类里会遮蔽同名的 proto 类的 import，proto 的这两个要用全限定名。proto 消息别叫 `Error`（已改 `ChatError`）。
+- **生成的桩代码会校验运行时版本**：`grpcio>=1.84` / `protobuf>=7.36`（pyproject 里已写）；换 grpcio-tools 版本要同时改 dev 依赖、CI 的 `proto` job 里的版本和重新生成。
+- **安全扫描的盘符规则会误判**：任何「字母 + 冒号 + 反斜杠」（含正则里的 `\d:\d`、protoc 生成的转义字节串）都会命中。正则里用 `[0-9]`；生成物目录已在 `LOCAL_PATH_EXEMPT`；新增脚本提交前跑 `scripts/security_scan.py` 和 `--history`（CI 的 scripts job 两个都跑）。
+- **`BackendIntegrationTest` 本机跑不了**（Testcontainers 要 Docker）；它用 HTTP 的假 ai-service，已显式 `fra.ai.transport=http`。以后新增依赖默认传输的 Spring 集成测试要注意这一点。
 - 私有库检索范围只有服务端能给（ADR-043）；私有库检索质量没评测过，别在文档里吹。
 
 ## 5. 已冻结的产物
@@ -38,10 +44,10 @@
 | `eval/datasets/fund_qa_v1.jsonl` | v1，112 题（dev 33 / test 79） | `77fb06a9686ea195ef8813d192bc90ffceb05ffe0b1122864777dc026997e48d` |
 | `eval/datasets/agent_tasks_v1.jsonl` | v1，66 题（dev 21 / test 45） | `7d4c4fc3f4d6b63643fe608ca17c1ca07177257086253a1c878cf13bb33c3b77` |
 
-**test 集已用掉**：S4 检索评测（run 9、10，复现 run 11）与 S8 回答评测（`reports/answer_eval/20260929T171529Z`）。之后任何改 Agent / 检索 / prompt 的改动，要重新评估 test 时必须按红线 2 登记（写进 `docs/tuning_log.md` 风格的记录），不要覆盖已有结果；S13 的质量回归规则见 PLAN。判分口径已冻结（ADR-046：numeric 主口径 first、list 标准项全部出现、裁判 deepseek-flash），要改先新增 ADR 并写明是在看到 test 结果之后。改变入库或检索的改动先跑 `scripts/public_retrieval_regression.py`（快照在 `reports/s7/public_regression/`）。
+**test 集已用掉**：S4 检索评测（run 9、10，复现 run 11）与 S8 回答评测（`reports/answer_eval/20260929T171529Z`）。S9 没有改 Agent / 检索 / prompt / 入库（只换了传输，事件内容经跨语言样例与 e2e 验证一致），所以不需要重跑评测。**S10 的语义缓存会改变回答的来源**，S13 的质量回归规则见 PLAN；任何改 Agent / 检索 / prompt 的改动要重新评估 test 时必须按红线 2 登记（`docs/tuning_log.md` 风格），不要覆盖已有结果。判分口径已冻结（ADR-046）。改变入库或检索的改动先跑 `scripts/public_retrieval_regression.py`（快照在 `reports/s7/public_regression/`）。
 
 ## 6. 等用户 / 统筹处理的事
-1. **用户（可选）：ticket-qa 的 5 个容器仍是停止状态**（B7 起）。恢复：`wsl.exe -d Ubuntu-24.04 -u root -- docker start ticketqa-rabbitmq ticketqa-redis ticketqa-wiremock ticketqa-mysql ticketqa-prometheus`（合计约 4.8 GiB，fra 全栈在跑，内存够）。
-2. **统筹**：`docs/PLAN.md` §7 表标记 B7、B8 完成；CLAUDE.md §5 的 `JUDGE_MODEL` 那一行按用户决定改成了 deepseek-flash（执行者通常不改 CLAUDE.md）；前端「公共库文件清单页」仍没做（LIMITATIONS S6-7 / S7-4）。
-3. 数据质量登记（未改动）：001551 销售服务费快照与招募说明书不一致（`reports/data_quality/20260929T045331Z/`）。
-4. 已登记但未查明的真实错误（不阻塞）：agent-0020（两个配置都答 21，gold 23）；vector 配置有 4 题因检索不到答错（qa-0008、0023、0047、0053）；hybrid_rerank 的 qa-0055 把 A/C 份额数字说反；逐条见 `numeric_any_vs_first.md`。
+1. **统筹**：`docs/PLAN.md` §7 表标记 B9 完成；CLAUDE.md §5 的 `JUDGE_MODEL` 那一行按用户决定改成了 deepseek-flash（B8 遗留，执行者通常不改 CLAUDE.md）；前端「公共库文件清单页」仍没做（LIMITATIONS S6-7 / S7-4）。
+2. **统筹（可选）**：工具执行期（`tool_start` 之后）断开的取消延迟在心跳 1 s 下仍约 3.6 s，成因没查清（疑似 docker 用户态端口代理，LIMITATIONS S9-5）；是否在 S12 压测环境里顺带复验。
+3. 本机 `.env` 的 `CHAT_HEARTBEAT` 我改成了 `1s`（与新默认一致）；若用户想保持 5 s 自行改回即可。
+4. 数据质量登记（未改动）：001551 销售服务费快照与招募说明书不一致（`reports/data_quality/20260929T045331Z/`）。已登记但未查明的真实错误（不阻塞）：agent-0020、vector 配置 4 题检索不到（qa-0008、0023、0047、0053）、hybrid_rerank 的 qa-0055，逐条见 `numeric_any_vs_first.md`。

@@ -723,7 +723,7 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 - 无阻塞问题。请知悉：CLAUDE.md §5 `JUDGE_MODEL` 那一行已按用户决定修改；`docs/PLAN.md` §7 的 B7 / B8 状态请统筹标记。
 
 ## S9 gRPC 改造 — 2026-10-02（B9）
-- commit 范围：`f9d174b`..本节所在提交；CI：见文末（push 后补）。
+- commit 范围：`f9d174b`..本节所在提交；CI：功能提交 `dbcb393` 的 run [36894374398](https://github.com/2181385109/fund-research-agent/actions/runs/36894374398) **8 个 job 全绿**（backend、frontend、python × 4、scripts + security scan、proto）；本节所在的文档提交另见最后一次 run。
 - 证据目录：`reports/s9/`（`transport_latency/20261001T155512Z/` 传输延迟原始 JSON、`cancel_latency/20261001T161858Z/` 取消延迟 120 次原始记录、`*_e2e_grpc*` 与 `*_e2e_http_fallback` 的 e2e 原文）；报告 `docs/perf/grpc_vs_http.md`；决策 ADR-047；局限 LIMITATIONS「gRPC 改造（S9）」。
 
 ### 完成项
@@ -737,8 +737,8 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 2. **取消传播的证据** — ✅ — ①单测：`test_client_cancel_reaches_the_agent_generator_quickly`（客户端 `cancel()` 后 Agent 生成器 500 ms 内收到 `CancelledError`，不依赖心跳）、`test_deadline_exceeded_cancels_the_agent…`、`test_cancel_is_logged_with_transport`；Java `cancelReachesTheServerQuicklyAndSilencesTheListener`、`downstreamFailureCancelsUpstreamAndStopsCallbacks`、`idleServerIsAbandonedAndCancelled`、`deadlineEndsTheCallAndCancelsTheServer`；②全栈：e2e 第 8 步，`reports/s9/20261001T163912Z_e2e_grpc_final/cancel_ai_log.txt` 有 `chat_stream_cancelled … transport=grpc`；③120 次实测（见下表）：backend 决定取消 → ai-service 的 Agent 被取消，差值中位数 2 ms、最大 113 ms。
 3. **grpc 模式下 e2e 通过** — ✅ — `reports/s9/20261001T163912Z_e2e_grpc_final/`（默认配置：grpc、心跳 1 s，真实 DeepSeek）：`E2E RESULT: PASS`，18 项检查全过（含公共库 / 私有库问答带出处与风险提示、越权 403 / 404、被拒请求未到达 ai-service、断开 → `chat_stream_cancelled`、被取消的回答以 `CANCELLED` 保存）；ai-service 日志（`ai_service_chat_log.txt`）里 3 次 `chat_stream_started … transport=grpc`、1 次 `chat_stream_cancelled … transport=grpc`，这段时间没有 `POST /v1/chat/stream` 访问日志。**切回 http 同样通过**：`reports/s9/20261001T164037Z_e2e_http_fallback/`（`AI_TRANSPORT=http`，同目录 `ai_service_chat_log.txt` 里是 `transport=http`）。前两次 gRPC e2e（`20261001T161357Z_e2e_grpc`、`…161501Z_e2e_grpc_run2`）各有 1～2 项失败，**原因都是我采集日志的方式有问题**（`wsl.exe` 输出含 NUL 字节使 `grep` 报「Binary file matches」；管道缓冲使日志文件是空的），与被测代码无关，原文保留；第三次起（`…161548Z_e2e_grpc_run3`）修正采集方式，18 项全过。
 4. **HTTP 与 gRPC 的延迟预实验（写明 n 和条件）** — ✅ — `docs/perf/grpc_vs_http.md`：传输延迟（假 ai-service，无 LLM；突发 n = 200×2 轮 / 有节奏 n = 30×2 轮；direct 与经 backend 两层）与取消延迟（真实全栈，4 个配置 × 3 个断开点 × 10 次，n = 120，全部成功取消）。结论摘要见下表；这是预实验，不是压测基线。
-5. **CI 校验 proto 能编译** — ✅（待 CI 确认）— 新增 `proto` job（`scripts/gen_proto.py --check`：重新生成并与已提交的 Python 桩代码比较）；Java 侧由 `backend` job 的 `mvn verify` 在 `generate-sources` 阶段从同一份 proto 生成并编译。
-6. **CI 全绿** — 见文末。
+5. **CI 校验 proto 能编译** — ✅ — run 36894374398 的 `proto` job 与 `backend` job 均 success； 新增 `proto` job（`scripts/gen_proto.py --check`：重新生成并与已提交的 Python 桩代码比较）；Java 侧由 `backend` job 的 `mvn verify` 在 `generate-sources` 阶段从同一份 proto 生成并编译。
+6. **CI 全绿** — ✅ — run 36894374398，8 个 job success（含 CI 里运行的 `BackendIntegrationTest`）。
 
 ### 实测数字（全表见 `docs/perf/grpc_vs_http.md`）
 | 指标 | 值 | n / 分母 | 结果文件 |
