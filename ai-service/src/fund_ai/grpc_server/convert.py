@@ -59,6 +59,10 @@ def event_to_proto(ev: dict[str, Any], *, strict: bool = False) -> pb.ChatEvent:
     """Agent 事件 ``{"event": 名字, "data": dict}`` → ChatEvent。"""
     name, data = ev["event"], ev["data"]
     out = pb.ChatEvent()
+    if name == "token" and data.keys() == {"text"}:
+        # 快速路径：token 事件占绝大多数，json_format 的解析开销在这里不划算
+        out.token.text = data["text"]
+        return out
     if name == "citations":
         out.citations.items.extend(citation_to_proto(i, strict=strict) for i in data["items"])
         return out

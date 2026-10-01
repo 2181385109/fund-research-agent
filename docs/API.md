@@ -159,6 +159,24 @@ Host 头受 `MCP_ALLOWED_HOSTS` 白名单限制（DNS rebinding 防护），不�
 `fund_codes` / `doc_types` 只作用于公共库；公共与私有结果各自召回融合后合并成一个候选池再重排。
 mcp-tools（`:8101/mcp`）的四个工具见 `mcp-tools/README.md`。
 
+### gRPC（S9）：`fundagent.v1.AiService`（默认 `127.0.0.1:50051`，`AI_GRPC_PORT`）
+与上面的 HTTP 接口并存、语义一致，定义在 `proto/fundagent/v1/ai_service.proto`（唯一事实来源）；grpc.aio 与 FastAPI 在**同一进程、同一个事件循环**里运行（`AI_GRPC_ENABLED`、`AI_GRPC_HOST`）。
+端口无鉴权（与 HTTP 一致），只在内网 / 回环暴露；端口被占用时 ai-service 只记 error 日志、HTTP 照常服务。
+
+| RPC | 对应 HTTP | 说明 |
+|---|---|---|
+| `Chat(ChatRequest) returns (stream ChatEvent)` | `POST /v1/chat/stream` | 一个 `ChatEvent` 对应一个 SSE 事件，事件名 = `oneof event` 的字段名（`meta` `tool_start` `tool_end` `token` `citations` `disclaimer` `done` `error`），顺序与 `disclaimer` 紧挨 `done` 的不变量同上 |
+| `Retrieve` | `POST /v1/retrieve` | 覆盖项用 `optional`；`fund_codes` / `doc_types` 为空 = 不显式过滤 |
+| `IngestDocument` | `POST /v1/documents/ingest` | `callback=true` 时返回 `accepted=true`，入库在后台执行，完成后仍然是 **HTTP 回调** backend（`/internal/documents/callback`） |
+| `DeleteDocument` | `DELETE /v1/documents/{doc_id}` | 私有库文档带 `kb_id` |
+
+- **字段名与 HTTP 的 JSON 完全一致**（snake_case）。「可能缺省」的字段在 proto 里是 `optional`，Java 侧把 `ChatEvent` 还原成 SSE 的 `data` 时靠存在性保持字段集合一致；差别只有一处：**数组字段在 gRPC 路径上总是输出**（空数组也输出，如出错路径上的 `tool_end.citation_ids`、`done.compliance_flags`），HTTP 里这些可能缺省。`citations.items[]` 用 `oneof detail`（`document` / `database` / `computation` / `api`）建模，Java 侧还原时展平到与 `id`、`kind` 同一层，所以前端看到的 JSON 与 HTTP 相同。
+- **状态码映射**：HTTP 400 / 422 → `INVALID_ARGUMENT`（含 `question` 为空或超长、`history` 非法、`kb_scope` 不合法、路径不在 `DATA_DIR` 下、检索模式未知）；404 → `NOT_FOUND`（入库文件不存在）；500 及其他 → `INTERNAL`；客户端取消 → `CANCELLED`；超过 deadline → `DEADLINE_EXCEEDED`；后端不可达 → `UNAVAILABLE`（客户端侧产生）。`Chat` 在**开始流式输出之后**发生的错误不是 gRPC 状态，而是 `error → disclaimer → done(status=error)` 事件（与 SSE 一致），所以客户端总能拿到风险提示。
+- **取消与 deadline**：客户端取消（`ClientCall.cancel`）或超过 deadline 时 grpc.aio 取消服务端处理协程，取消沿 LangGraph → LLM / MCP 调用传播（与 HTTP 断开连接时相同），ai-service 记一条 `chat_stream_cancelled request=… transport=grpc|http elapsed_ms=…`。取消是即时的，不依赖心跳。
+- backend 用哪种传输由 `AI_TRANSPORT`（`grpc` 默认 | `http`）决定，gRPC 目标地址 `AI_SERVICE_GRPC_TARGET`，单次对话流的 deadline `AI_GRPC_CHAT_DEADLINE`（默认 6 分钟）。
+- 跨语言一致性样例：`proto/testdata/chat_events.jsonl`（每行 = Agent 原始事件 + 序列化后的 `ChatEvent`），ai-service 的 `test_golden_file_for_the_java_side_is_current` 生成 / 校验，backend 的 `ChatEventJsonTest` 用它验证还原出来的 JSON 与原始事件一致。
+- 桩代码：Python 的由 `scripts/gen_proto.py` 生成并提交（`ai-service/src/fundagent/v1/`，CI 的 `proto` job 用 `--check` 校验与 proto 一致）；Java 的由 backend 的 `mvn` 构建在 `generate-sources` 阶段从同一份 proto 生成，不提交。
+
 ### 切块字段（Milvus 集合与 ES 索引 `fund_chunks`；私有库 `user_chunks` 另加三个字段）
 私有库 `user_chunks`（S6）：同样的字段，外加 `kb_id`、`owner_id`、`doc_title`（用户文件名，公共块的文档名是靠 `doc_type + report_period` 重建的）。
 `chunk_id`、`doc_id`、`fund_code`、`fund_name`、`doc_type`、`report_period`、`page_start`、`page_end`（从 1 开始）、`section_path`（章节路径，` > ` 分隔）、`is_table`、`char_start`、`char_end`（在文档规范文本中的位置）、`text`（原文，对外展示用）。
@@ -206,4 +224,4 @@ ES 另有 `text_ctx`（`【基金简称｜文档名｜章节】` + 正文，BM25
 **检索范围（ADR-043）**：`kbIds` 缺省 = 公共库 + 我的全部私有库；给了就必须**每一个**都是我可访问的库，否则整个请求 **403**（不区分「不存在」和「是别人的」；此时不保存任何消息，也不会调用 ai-service）。
 只选私有库时 `include_public=false`。发给 ai-service 的 `kb_scope.owner_id` 恒为当前用户。
 **上下文**：最近 6 轮（`CHAT_HISTORY_ROUNDS`）「提问 + 成功回答」成对的消息；失败 / 被取消的回答及其提问不进入上下文。
-**断开即取消**：客户端断开（连接关闭、写失败、心跳写失败）时立即关闭到 ai-service 的连接，ai-service 侧生成器被取消（日志 `chat_stream_cancelled`），已生成的部分以 `CANCELLED` 保存。
+**断开即取消**：客户端断开（连接关闭、写失败、心跳写失败）时立即取消到 ai-service 的上游调用（HTTP：关闭连接；gRPC：`ClientCall.cancel`），ai-service 侧生成器被取消（日志 `chat_stream_cancelled`），已生成的部分以 `CANCELLED` 保存。backend 只有在往客户端写数据失败时才知道客户端断了（Tomcat 的限制），所以「客户端断开 → 上游取消」的延迟 ≈ 距离下一次写（下一个事件或下一次心跳）的时间；实测见 `docs/perf/grpc_vs_http.md`。

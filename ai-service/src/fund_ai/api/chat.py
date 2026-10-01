@@ -83,6 +83,7 @@ async def chat_events(
     客户端断开 / 取消时生成器被取消（HTTP：Starlette；gRPC：grpc.aio 取消处理协程），取消随后传给
     LangGraph / LLM / MCP；这里记一条 ``chat_stream_cancelled``，S9 用它的时间戳量取消延迟。
     """
+    log.info("chat_stream_started request=%s transport=%s", rid, transport)
     try:
         runner = _runner(app)
     except Exception as e:  # noqa: BLE001 - 见 _failed_events

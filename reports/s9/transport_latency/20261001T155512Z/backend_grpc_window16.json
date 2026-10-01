@@ -1,0 +1,39 @@
+{
+  "mode": "backend",
+  "note": "试验：Java 客户端接收窗口 16（原为逐条 request(1)）；其余同 backend_grpc",
+  "env": {
+    "python": "3.12.3",
+    "platform": "Windows-11-10.0.26200-SP0"
+  },
+  "warmup": 20,
+  "label": "grpc_window16",
+  "backend": {
+    "concurrency": 1,
+    "n_per_thread": 200,
+    "ok": 200,
+    "errors": 0,
+    "error_samples": [],
+    "events_per_request": [
+      306
+    ],
+    "throughput_rps": 7.12,
+    "t_first": {
+      "n": 200,
+      "median_ms": 10.48,
+      "mean_ms": 15.77,
+      "p95_ms": 33.88,
+      "p99_ms": 35.78,
+      "max_ms": 36.72,
+      "min_ms": 8.08
+    },
+    "t_total": {
+      "n": 200,
+      "median_ms": 61.97,
+      "mean_ms": 63.25,
+      "p95_ms": 83.51,
+      "p99_ms": 88.22,
+      "max_ms": 89.5,
+      "min_ms": 44.39
+    }
+  }
+}

@@ -40,6 +40,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -83,7 +84,7 @@ class GrpcAiServiceClientTest {
     private GrpcAiServiceClient client(Duration idle, Duration chatDeadline) {
         return new GrpcAiServiceClient(
                 new AiServiceProperties("http://unused", Duration.ofSeconds(2), Duration.ofSeconds(5), idle),
-                new AiGrpcProperties("unused:0", chatDeadline, Duration.ofSeconds(30), 8 << 20),
+                new AiGrpcProperties("unused:0", chatDeadline, Duration.ofSeconds(30), 8 << 20, 64),
                 channel,
                 streams,
                 scheduler);
@@ -215,6 +216,29 @@ class GrpcAiServiceClientTest {
     }
 
     @Test
+    void rejectsNewStreamsBeyondTheConcurrencyLimitAndFreesSlotsWhenCallsEnd() throws Exception {
+        fake.chat = (req, out) -> out.onNext(meta("rid-x")); // 一直挂着
+        GrpcAiServiceClient limited = new GrpcAiServiceClient(
+                new AiServiceProperties("http://unused", Duration.ofSeconds(2), Duration.ofSeconds(5), Duration.ofSeconds(30)),
+                new AiGrpcProperties("unused:0", Duration.ofSeconds(60), Duration.ofSeconds(30), 8 << 20, 2),
+                channel,
+                streams,
+                scheduler);
+        Recorder r1 = new Recorder();
+        Recorder r2 = new Recorder();
+        ChatStream s1 = limited.chat(cmd(null), r1);
+        limited.chat(cmd(null), r2);
+
+        assertThatThrownBy(() -> limited.chat(cmd(null), new Recorder())).isInstanceOf(RejectedExecutionException.class);
+
+        s1.cancel(); // 取消的调用结束后释放名额
+        await().atMost(3, TimeUnit.SECONDS).untilAsserted(() -> {
+            ChatStream again = limited.chat(cmd(null), new Recorder());
+            again.cancel();
+        });
+    }
+
+    @Test
     void cancelBeforeAnyEventStillCancelsTheCall() throws Exception {
         CountDownLatch serverCancelled = new CountDownLatch(1);
         CountDownLatch entered = new CountDownLatch(1);
@@ -315,7 +339,7 @@ class GrpcAiServiceClientTest {
         ManagedChannel dead = InProcessChannelBuilder.forName("no-such-server-" + UUID.randomUUID()).build();
         GrpcAiServiceClient c = new GrpcAiServiceClient(
                 new AiServiceProperties("http://unused", Duration.ofSeconds(1), Duration.ofSeconds(1), Duration.ofSeconds(30)),
-                new AiGrpcProperties("unused:0", Duration.ofSeconds(10), Duration.ofSeconds(30), 8 << 20),
+                new AiGrpcProperties("unused:0", Duration.ofSeconds(10), Duration.ofSeconds(30), 8 << 20, 64),
                 dead,
                 streams,
                 scheduler);
@@ -420,7 +444,7 @@ class GrpcAiServiceClientTest {
         };
         GrpcAiServiceClient c = new GrpcAiServiceClient(
                 new AiServiceProperties("http://unused", Duration.ofSeconds(1), Duration.ofMillis(300), Duration.ofSeconds(30)),
-                new AiGrpcProperties("unused:0", Duration.ofSeconds(10), Duration.ofSeconds(30), 8 << 20),
+                new AiGrpcProperties("unused:0", Duration.ofSeconds(10), Duration.ofSeconds(30), 8 << 20, 64),
                 channel,
                 streams,
                 scheduler);

@@ -98,3 +98,14 @@
 7. **样本小、单次运行**：test 共 124 题（fund_qa 79 + agent_tasks 45），按 topic / 类型拆分后每组只有 2–15 题；每个配置每题只跑一次（没有重复取平均），Agent 的 temperature 为 0 但 LLM 服务端仍可能有非确定性，所以细小的差异（一两题）不能解读为配置差异；配对 bootstrap 的 CI 反映的是题目抽样，不含 LLM 运行间的随机性。
 8. **延迟是单并发、CPU 上的数字**：并发 1 顺序执行，重排在 CPU 上，服务是本机进程（不是容器），DeepSeek 接口延迟随时间波动；不同时间段（费用高峰 / 非高峰）跑的两个配置之间，延迟差异不能全部归因于检索配置。
 9. **费用是估算与实测的对照，不是精确账单**：`done.usage` 不区分缓存命中，实测费用按「输入全部未命中」计价，是上界；失败 run 的 token 用量服务端没有上报，未计入。
+
+## gRPC 改造（S9）
+
+数字来自 `docs/perf/grpc_vs_http.md`（单机、单次运行集合、n 与条件见该文件，**不是压测基线**——压测是 S12）。
+
+1. **传输对比是预实验，不是结论**：假 ai-service（无 LLM、无检索）+ 本机回环 + 单并发，量的只是传输 / 序列化 / 客户端解析的开销；真实对话里延迟由 LLM（秒级）和检索（百毫秒～秒级）决定，传输差异在其中可以忽略。结果里 gRPC 在**突发**事件流（300 个 token 事件背靠背发出）下总耗时反而比 HTTP 高，原因是 grpc.aio 每条消息一次异步发送，而 SSE 的小写入会被合并；token 之间有真实间隔（模拟 LLM 输出速度）时两者没有可见差别。
+2. **gRPC 端口没有鉴权、没有 TLS**（与 HTTP 接口一致，信任内网）：compose 只把它绑定到宿主机回环；任何能连上 50051 的进程都能提问、入库、删除文档。生产化需要 mTLS 或至少共享密钥拦截器。
+3. **Java 侧 `Retrieve` 没有客户端方法**（backend 没有调用点）；Python 侧实现并有单测，需要时给 `AiServiceClient` 加方法即可。入库完成的回调仍是 ai-service → backend 的 **HTTP** 回调，没有改成 gRPC。
+4. **gRPC 路径与 HTTP 路径的已知差别**：数组字段总是输出（见 API.md）；backend 在 gRPC 模式下没有「每路对话占一个读取线程（上限 64，超出 503）」的并发上限（回调在线程池里串行执行、线程只在处理事件时占用），所以过载保护要靠 S10 的限流，不再靠线程池拒绝。
+5. **「客户端断开 → 上游取消」的延迟仍由 backend 决定**：gRPC 的取消本身是即时的（`ClientCall.cancel` → RST_STREAM → 服务端协程被取消，in-process / 容器网络下毫秒级，数字见 `docs/perf/grpc_vs_http.md`），但 backend 只有往浏览器写失败时才知道浏览器断了（Tomcat 的限制，S6-4）：延迟 ≈ 距离下一次写（下一个事件或下一次心跳）的时间，与上游用 HTTP 还是 gRPC 无关。把 `CHAT_HEARTBEAT` 调小可以缩短，代价与结果见同一份报告。
+6. **`BackendIntegrationTest`（Testcontainers）本机无法运行**（本机没有 Docker 环境给 Testcontainers 用），只在 CI 验证；gRPC 相关的 Java 测试（in-process 服务端）不依赖 Docker，本机已全部运行。

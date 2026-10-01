@@ -14,7 +14,7 @@ loadtest
 docs
 scripts
 data-pipeline
-proto
+proto/testdata
 **/.venv
 **/__pycache__
 **/.pytest_cache

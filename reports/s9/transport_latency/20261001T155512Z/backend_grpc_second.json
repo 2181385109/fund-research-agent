@@ -1,0 +1,39 @@
+{
+  "mode": "backend",
+  "note": "backend 本机进程 AI_TRANSPORT=grpc（第二轮，交换顺序）；其余同上",
+  "env": {
+    "python": "3.12.3",
+    "platform": "Windows-11-10.0.26200-SP0"
+  },
+  "warmup": 20,
+  "label": "grpc",
+  "backend": {
+    "concurrency": 1,
+    "n_per_thread": 200,
+    "ok": 200,
+    "errors": 0,
+    "error_samples": [],
+    "events_per_request": [
+      306
+    ],
+    "throughput_rps": 7.66,
+    "t_first": {
+      "n": 200,
+      "median_ms": 12.25,
+      "mean_ms": 18.6,
+      "p95_ms": 35.41,
+      "p99_ms": 37.05,
+      "max_ms": 38.33,
+      "min_ms": 8.54
+    },
+    "t_total": {
+      "n": 200,
+      "median_ms": 49.53,
+      "mean_ms": 55.08,
+      "p95_ms": 72.37,
+      "p99_ms": 77.65,
+      "max_ms": 83.09,
+      "min_ms": 43.04
+    }
+  }
+}

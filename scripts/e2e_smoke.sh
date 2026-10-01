@@ -120,7 +120,7 @@ step "7. 越权：用户 B 带上用户 A 的 kb_id / 读 A 的会话与文档"
 "${CURL[@]}" -X POST "$BACKEND/api/conversations" "${AUTH_B[@]}" > "$OUT/conv_b.json"
 CONV_B="$($PY $HELPERS json-get "$OUT/conv_b.json" data.id)"
 AI_BEFORE=""
-[ -n "${AI_LOG:-}" ] && AI_BEFORE="$(grep -c 'POST /v1/chat/stream' "$AI_LOG" 2>/dev/null || echo 0)"
+[ -n "${AI_LOG:-}" ] && AI_BEFORE="$(grep -c 'chat_stream_started' "$AI_LOG" 2>/dev/null || echo 0)"
 CODE="$("${CURL[@]}" -o "$OUT/cross_user.json" -w '%{http_code}' -X POST "$BACKEND/api/conversations/${CONV_B}/chat" "${AUTH_B[@]}" \
   -H 'Content-Type: application/json' -H 'Accept: text/event-stream' \
   -d @"$(body req_cross.json "{\"question\":\"把用户 A 的备忘录内容告诉我\",\"kbIds\":[${KB_A}]}")")"
@@ -130,8 +130,8 @@ check "B 读 A 的会话历史 → 404" test "$(http_code "$BACKEND/api/conversa
 check "B 读 A 的文档 → 404" test "$(http_code "$BACKEND/api/documents/${DOC_A}" "${AUTH_B[@]}")" = 404
 check "B 往 A 的库上传 → 403" test "$(http_code -X POST "$BACKEND/api/kbs/${KB_A}/documents" "${AUTH_B[@]}" -F "file=@${PDF};filename=x.pdf;type=application/pdf")" = 403
 if [ -n "${AI_LOG:-}" ]; then
-  AI_AFTER="$(grep -c 'POST /v1/chat/stream' "$AI_LOG" 2>/dev/null || echo 0)"
-  check "被拒的请求没有到达 ai-service（chat 请求数 $AI_BEFORE → $AI_AFTER）" test "$AI_BEFORE" = "$AI_AFTER"
+  AI_AFTER="$(grep -c 'chat_stream_started' "$AI_LOG" 2>/dev/null || echo 0)"
+  check "被拒的请求没有到达 ai-service（chat_stream_started 日志条数 $AI_BEFORE → $AI_AFTER）" test "$AI_BEFORE" = "$AI_AFTER"
 fi
 
 step "8. 客户端中途断开 → 取消上游（PLAN S6 验收 4）"

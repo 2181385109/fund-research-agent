@@ -1,0 +1,39 @@
+{
+  "mode": "backend",
+  "note": "backend 本机进程 AI_TRANSPORT=grpc；上游 = 假 ai-service（300 个 token 事件突发）；回环；顺序执行；每次请求新建会话",
+  "env": {
+    "python": "3.12.3",
+    "platform": "Windows-11-10.0.26200-SP0"
+  },
+  "warmup": 20,
+  "label": "grpc",
+  "backend": {
+    "concurrency": 1,
+    "n_per_thread": 200,
+    "ok": 200,
+    "errors": 0,
+    "error_samples": [],
+    "events_per_request": [
+      306
+    ],
+    "throughput_rps": 7.47,
+    "t_first": {
+      "n": 200,
+      "median_ms": 19.18,
+      "mean_ms": 20.48,
+      "p95_ms": 35.64,
+      "p99_ms": 37.85,
+      "max_ms": 40.84,
+      "min_ms": 8.63
+    },
+    "t_total": {
+      "n": 200,
+      "median_ms": 57.5,
+      "mean_ms": 57.52,
+      "p95_ms": 74.11,
+      "p99_ms": 80.6,
+      "max_ms": 91.87,
+      "min_ms": 43.49
+    }
+  }
+}

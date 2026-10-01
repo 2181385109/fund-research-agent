@@ -12,10 +12,13 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
  *                      应不小于 SSE 的 emitter 超时
  * @param keepAliveTime 空闲时发送 HTTP/2 PING 的间隔，用来发现半开连接；服务端允许的最小间隔是 10 秒
  * @param maxMessageSize 单条消息的最大字节数
+ * @param maxConcurrentChats 同时进行的对话流上限，超出时 {@code chat()} 抛 RejectedExecutionException（backend 返回 503）；
+ *                      与 HTTP 实现的「读取线程上限 64」同一语义（gRPC 是异步回调，不会因此占用线程，所以要显式限制）
  */
 @ConfigurationProperties(prefix = "fra.ai.grpc")
 public record AiGrpcProperties(
         @DefaultValue("127.0.0.1:50051") String target,
         @DefaultValue("6m") Duration chatDeadline,
         @DefaultValue("30s") Duration keepAliveTime,
-        @DefaultValue("8388608") int maxMessageSize) {}
+        @DefaultValue("8388608") int maxMessageSize,
+        @DefaultValue("64") int maxConcurrentChats) {}

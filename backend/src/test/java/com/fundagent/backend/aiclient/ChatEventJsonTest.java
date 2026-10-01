@@ -63,6 +63,17 @@ class ChatEventJsonTest {
         assertThat(items.get(4).get("stale").asBoolean()).isTrue();
     }
 
+    @Test
+    void structNumbersThatAreIntegralAreNotPrintedAsDoubles() throws Exception {
+        String line = Files.readAllLines(GOLDEN).stream().filter(l -> l.startsWith("{\"event\": \"tool_start\"")).findFirst().orElseThrow();
+        ChatEvent ev = ChatEvent.parseFrom(Base64.getDecoder().decode(mapper.readTree(line).get("proto_b64").asText()));
+
+        String data = ChatEventJson.toSse(ev).data();
+
+        assertThat(data).contains("\"a\":[1,"); // 不是 1.0
+        assertThat(data).doesNotContain("1.0");
+    }
+
     private void compare(JsonNode expected, JsonNode actual, String path, List<String> problems) {
         if (expected.isObject()) {
             if (!actual.isObject()) {

@@ -19,6 +19,11 @@ import io.grpc.stub.ClientCalls;
 import io.grpc.stub.ClientResponseObserver;
 import jakarta.annotation.PreDestroy;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -38,7 +43,8 @@ import org.springframework.stereotype.Component;
  *   <li>对话流：server streaming，带 deadline；{@link ChatStream#cancel()} = {@code ClientCall.cancel}，gRPC 发出 RST_STREAM，
  *       ai-service 的 grpc.aio 立即取消处理协程，取消沿 LangGraph → LLM / MCP 传播（不依赖任何心跳）；
  *   <li>手动流控：处理完一个事件（写进 SSE）才向上游要下一个，客户端读得慢时不会在本进程无限堆积；
- *   <li>回调在 {@code chatStreamExecutor} 上串行执行（gRPC 保证同一个调用的回调顺序），与 HTTP 实现的线程模型一致；
+ *   <li>回调在专用线程池上串行执行（gRPC 保证同一个调用的回调顺序）；同时进行的对话流上限 {@code maxConcurrentChats}
+ *       （默认 64，与 HTTP 实现的读取线程上限同一语义，超出抛 RejectedExecutionException → backend 503）；
  *   <li>普通请求（入库、删除）是带 deadline 的阻塞调用。
  * </ul>
  */
@@ -54,14 +60,16 @@ public class GrpcAiServiceClient implements AiServiceClient {
     private final Executor streamExecutor;
     private final ScheduledExecutorService watchdog;
     private final long chatDeadlineMs;
+    private final int maxConcurrentChats;
+    private final AtomicInteger activeChats = new AtomicInteger();
+    private final ExecutorService ownedExecutor;
 
     @Autowired
     public GrpcAiServiceClient(
-            AiServiceProperties props,
-            AiGrpcProperties grpc,
-            @Qualifier("chatStreamExecutor") Executor streamExecutor,
-            @Qualifier("chatScheduler") ScheduledExecutorService watchdog) {
-        this(props, grpc, channel(grpc), streamExecutor, watchdog);
+            AiServiceProperties props, AiGrpcProperties grpc, @Qualifier("chatScheduler") ScheduledExecutorService watchdog) {
+        // 回调线程池：线程只在处理一个事件（写进 SSE）的瞬间占用，上限由 maxConcurrentChats 在 chat() 入口控制，
+        // 所以这里不能再用有界队列的池（满了 gRPC 的回调会被拒绝丢掉，对话流会一直卡到空闲超时）
+        this(props, grpc, channel(grpc), Executors.newCachedThreadPool(new GrpcThreadFactory()), watchdog, true);
     }
 
     /** 测试用：传入已建好的通道（如 in-process）。 */
@@ -71,6 +79,18 @@ public class GrpcAiServiceClient implements AiServiceClient {
             ManagedChannel channel,
             Executor streamExecutor,
             ScheduledExecutorService watchdog) {
+        this(props, grpc, channel, streamExecutor, watchdog, false);
+    }
+
+    private GrpcAiServiceClient(
+            AiServiceProperties props,
+            AiGrpcProperties grpc,
+            ManagedChannel channel,
+            Executor streamExecutor,
+            ScheduledExecutorService watchdog,
+            boolean ownsExecutor) {
+        this.ownedExecutor = ownsExecutor ? (ExecutorService) streamExecutor : null;
+        this.maxConcurrentChats = grpc.maxConcurrentChats();
         this.props = props;
         this.channel = channel;
         this.streamExecutor = streamExecutor;
@@ -92,6 +112,20 @@ public class GrpcAiServiceClient implements AiServiceClient {
         channel.shutdown();
         if (!channel.awaitTermination(3, TimeUnit.SECONDS)) {
             channel.shutdownNow();
+        }
+        if (ownedExecutor != null) {
+            ownedExecutor.shutdownNow();
+        }
+    }
+
+    private static final class GrpcThreadFactory implements ThreadFactory {
+        private final AtomicInteger n = new AtomicInteger();
+
+        @Override
+        public Thread newThread(Runnable r) {
+            Thread t = new Thread(r, "grpc-chat-" + n.incrementAndGet());
+            t.setDaemon(true);
+            return t;
         }
     }
 
@@ -138,8 +172,17 @@ public class GrpcAiServiceClient implements AiServiceClient {
 
     @Override
     public ChatStream chat(ChatCommand cmd, ChatListener listener) {
+        if (activeChats.incrementAndGet() > maxConcurrentChats) {
+            activeChats.decrementAndGet();
+            throw new RejectedExecutionException("对话流数量已达上限 " + maxConcurrentChats);
+        }
         Stream stream = new Stream(cmd, listener);
-        stream.start();
+        try {
+            stream.start();
+        } catch (RuntimeException e) {
+            stream.release();
+            throw e;
+        }
         return stream;
     }
 
@@ -150,7 +193,15 @@ public class GrpcAiServiceClient implements AiServiceClient {
         private final AtomicBoolean finished = new AtomicBoolean();
         private volatile ClientCall<ChatRequest, ChatEvent> call;
         private volatile ScheduledFuture<?> idle;
+        private final AtomicBoolean released = new AtomicBoolean();
         private volatile long lastActivityNanos = System.nanoTime();
+
+        /** 释放一个并发名额（恰好一次）：调用终止（onCompleted / onError）时。 */
+        void release() {
+            if (released.compareAndSet(false, true)) {
+                activeChats.decrementAndGet();
+            }
+        }
 
         Stream(ChatCommand cmd, ChatListener listener) {
             this.cmd = cmd;
@@ -230,6 +281,7 @@ public class GrpcAiServiceClient implements AiServiceClient {
 
             @Override
             public void onError(Throwable t) {
+                release();
                 if (cancelled.get()) {
                     return; // 主动取消：不回调
                 }
@@ -238,6 +290,7 @@ public class GrpcAiServiceClient implements AiServiceClient {
 
             @Override
             public void onCompleted() {
+                release();
                 ScheduledFuture<?> i = idle;
                 if (i != null) {
                     i.cancel(false);

@@ -1,0 +1,125 @@
+{
+  "mode": "direct",
+  "note": "假 ai-service：300 个 token 事件突发（无间隔）；本机回环；Python 客户端；顺序执行",
+  "env": {
+    "python": "3.12.3",
+    "platform": "Windows-11-10.0.26200-SP0"
+  },
+  "warmup": 20,
+  "http": {
+    "concurrency": 1,
+    "n_per_thread": 200,
+    "ok": 200,
+    "errors": 0,
+    "error_samples": [],
+    "events_per_request": [
+      306
+    ],
+    "throughput_rps": 92.04,
+    "t_first": {
+      "n": 200,
+      "median_ms": 3.01,
+      "mean_ms": 8.69,
+      "p95_ms": 25.05,
+      "p99_ms": 27.73,
+      "max_ms": 28.77,
+      "min_ms": 2.41
+    },
+    "t_total": {
+      "n": 200,
+      "median_ms": 5.28,
+      "mean_ms": 10.86,
+      "p95_ms": 26.97,
+      "p99_ms": 29.72,
+      "max_ms": 30.84,
+      "min_ms": 4.31
+    }
+  },
+  "grpc": {
+    "concurrency": 1,
+    "n_per_thread": 200,
+    "ok": 200,
+    "errors": 0,
+    "error_samples": [],
+    "events_per_request": [
+      306
+    ],
+    "throughput_rps": 28.44,
+    "t_first": {
+      "n": 200,
+      "median_ms": 0.61,
+      "mean_ms": 0.62,
+      "p95_ms": 0.72,
+      "p99_ms": 0.88,
+      "max_ms": 1.01,
+      "min_ms": 0.51
+    },
+    "t_total": {
+      "n": 200,
+      "median_ms": 34.13,
+      "mean_ms": 35.15,
+      "p95_ms": 40.43,
+      "p99_ms": 45.19,
+      "max_ms": 52.85,
+      "min_ms": 31.1
+    }
+  },
+  "grpc_second": {
+    "concurrency": 1,
+    "n_per_thread": 200,
+    "ok": 200,
+    "errors": 0,
+    "error_samples": [],
+    "events_per_request": [
+      306
+    ],
+    "throughput_rps": 28.13,
+    "t_first": {
+      "n": 200,
+      "median_ms": 0.62,
+      "mean_ms": 0.64,
+      "p95_ms": 0.8,
+      "p99_ms": 0.87,
+      "max_ms": 2.34,
+      "min_ms": 0.51
+    },
+    "t_total": {
+      "n": 200,
+      "median_ms": 34.69,
+      "mean_ms": 35.54,
+      "p95_ms": 41.01,
+      "p99_ms": 43.32,
+      "max_ms": 52.53,
+      "min_ms": 31.66
+    }
+  },
+  "http_second": {
+    "concurrency": 1,
+    "n_per_thread": 200,
+    "ok": 200,
+    "errors": 0,
+    "error_samples": [],
+    "events_per_request": [
+      306
+    ],
+    "throughput_rps": 90.94,
+    "t_first": {
+      "n": 200,
+      "median_ms": 3.19,
+      "mean_ms": 8.77,
+      "p95_ms": 24.51,
+      "p99_ms": 27.97,
+      "max_ms": 30.34,
+      "min_ms": 2.4
+    },
+    "t_total": {
+      "n": 200,
+      "median_ms": 5.52,
+      "mean_ms": 10.99,
+      "p95_ms": 26.58,
+      "p99_ms": 30.03,
+      "max_ms": 39.65,
+      "min_ms": 4.28
+    }
+  }
+}

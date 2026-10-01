@@ -1,0 +1,39 @@
+{
+  "mode": "backend",
+  "note": "backend 本机进程 AI_TRANSPORT=http；上游 = 假 ai-service（300 个 token 事件突发）；回环；顺序执行；每次请求新建会话",
+  "env": {
+    "python": "3.12.3",
+    "platform": "Windows-11-10.0.26200-SP0"
+  },
+  "warmup": 20,
+  "label": "http",
+  "backend": {
+    "concurrency": 1,
+    "n_per_thread": 200,
+    "ok": 200,
+    "errors": 0,
+    "error_samples": [],
+    "events_per_request": [
+      306
+    ],
+    "throughput_rps": 8.36,
+    "t_first": {
+      "n": 200,
+      "median_ms": 16.96,
+      "mean_ms": 21.4,
+      "p95_ms": 37.92,
+      "p99_ms": 42.85,
+      "max_ms": 45.72,
+      "min_ms": 9.74
+    },
+    "t_total": {
+      "n": 200,
+      "median_ms": 27.98,
+      "mean_ms": 30.63,
+      "p95_ms": 47.42,
+      "p99_ms": 55.3,
+      "max_ms": 57.94,
+      "min_ms": 17.01
+    }
+  }
+}

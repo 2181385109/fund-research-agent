@@ -39,6 +39,8 @@ public final class ChatEventJson {
             String json = PRINTER.print(payload);
             if ("citations".equals(name)) {
                 json = flattenCitations(json);
+            } else if ("tool_start".equals(name)) {
+                json = intifyArgs(json);
             }
             return new SseEvent(name, json);
         } catch (InvalidProtocolBufferException e) {
@@ -51,6 +53,44 @@ public final class ChatEventJson {
             throw new IllegalStateException("ChatEvent 没有设置任何事件");
         }
         return ev.getEventCase().name().toLowerCase();
+    }
+
+    /**
+     * 工具入参 {@code args} 在 proto 里是 {@code google.protobuf.Struct}，数字一律是 double（{@code 5} 会被打印成 {@code 5.0}）。
+     * 把值为整数的数字还原成整数，使 JSON 与 HTTP 的文本一致（语义上两者本来就相等）。
+     */
+    private static String intifyArgs(String json) {
+        try {
+            JsonNode root = MAPPER.readTree(json);
+            if (root.has("args")) {
+                ((ObjectNode) root).set("args", intify(root.get("args")));
+            }
+            return MAPPER.writeValueAsString(root);
+        } catch (Exception e) {
+            throw new IllegalStateException("无法处理 tool_start 的 args", e);
+        }
+    }
+
+    private static JsonNode intify(JsonNode n) {
+        if (n.isObject()) {
+            ObjectNode o = (ObjectNode) n;
+            for (Iterator<String> it = o.fieldNames(); it.hasNext(); ) {
+                String k = it.next();
+                o.set(k, intify(o.get(k)));
+            }
+            return o;
+        }
+        if (n.isArray()) {
+            ArrayNode a = (ArrayNode) n;
+            for (int i = 0; i < a.size(); i++) {
+                a.set(i, intify(a.get(i)));
+            }
+            return a;
+        }
+        if (n.isDouble() && n.doubleValue() == Math.rint(n.doubleValue()) && Math.abs(n.doubleValue()) < 9.007199254740992E15) {
+            return MAPPER.getNodeFactory().numberNode(n.longValue());
+        }
+        return n;
     }
 
     private static String flattenCitations(String json) {
@@ -69,6 +109,9 @@ public final class ChatEventJson {
                         Map.Entry<String, JsonNode> f = it.next();
                         flat.set(f.getKey(), f.getValue());
                     }
+                }
+                if (flat.has("args")) {
+                    flat.set("args", intify(flat.get("args")));
                 }
                 items.add(flat);
             }
