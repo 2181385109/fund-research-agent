@@ -1,0 +1,4 @@
+2026-10-02 00:40:39,293 INFO fund_ai.api.chat chat_stream_started request=6b0d7968d58643c5 transport=http
+2026-10-02 00:40:49,804 INFO fund_ai.api.chat chat_stream_started request=c2a6822fb96544e5 transport=http
+2026-10-02 00:40:53,309 INFO fund_ai.api.chat chat_stream_started request=437788ae9bb64942 transport=http
+2026-10-02 00:40:59,740 INFO fund_ai.api.chat chat_stream_cancelled request=437788ae9bb64942 transport=http elapsed_ms=6430

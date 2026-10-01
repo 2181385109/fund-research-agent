@@ -1,0 +1,5 @@
+2026-10-02 00:39:14,068 INFO fund_ai.api.chat chat_stream_started request=2527c6ff4c964397 transport=grpc
+2026-10-02 00:39:26,017 INFO fund_ai.api.chat chat_stream_started request=5af624b8077e47c7 transport=grpc
+2026-10-02 00:39:30,809 INFO fund_ai.api.chat chat_stream_started request=b184b691d38847b1 transport=grpc
+2026-10-02 00:39:37,835 INFO fund_ai.api.chat chat_stream_cancelled request=b184b691d38847b1 transport=grpc elapsed_ms=7025
+# 上面是 ai-service 的 chat_stream_* 日志（只含 transport= 标注的行；本次运行期间没有任何 'POST /v1/chat/stream' HTTP 访问日志）

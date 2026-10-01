@@ -116,7 +116,7 @@ wsl.exe -d Ubuntu-24.04 -u root -- bash -c 'docker pull docker.m.daocloud.io/lib
 | Milvus 管理（/healthz、/metrics） | 9091 | `MILVUS_METRICS_PORT` | S0 |
 | backend | 8081 | `BACKEND_PORT` | S0 |
 | ai-service HTTP | 8001 | `AI_SERVICE_PORT` | S0 |
-| ai-service gRPC | 50051 | `AI_GRPC_PORT` | S9 |
+| ai-service gRPC | 50051 | `AI_GRPC_PORT`（另 `AI_GRPC_ENABLED`、`AI_GRPC_HOST`；backend 侧 `AI_TRANSPORT`、`AI_SERVICE_GRPC_TARGET`） | S9 |
 | mcp-tools | 8101 | `MCP_TOOLS_PORT` | S5 |
 | Kafka | 9094 | `KAFKA_PORT` | S11 |
 | frontend | 8088 | `FRONTEND_PORT` | S7 |

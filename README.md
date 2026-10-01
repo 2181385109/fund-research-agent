@@ -48,7 +48,8 @@
 | S6 | Java 主后端 | ✅ 完成（2026-09-29）：auth / kb / document / conversation / chat（SSE 代理，断开取消上游）、私有知识库检索范围由服务端注入（ADR-043）；接口见 [docs/API.md](docs/API.md)，证据见 PROGRESS |
 | S7 | 前端（Vue3）+ 四个 Dockerfile + 一键启动 | ✅ 完成（2026-09-29）：登录 / 知识库与文档 / 对话页（检索范围、四类出处、固定风险提示）；`docker compose --profile app up -d` 一键起全栈（见「一键启动全栈」）；证据见 PROGRESS |
 | S8 | 回答评测 + 第一期收尾 | ✅ 完成（2026-10-01）：test 124 题 × 2 种检索配置的回答评测、人工盲标 36 条（见下方「第一期指标」），tag `v0.1-phase1` |
-| S9–S13 | 第二期：gRPC → Redis → Kafka → 压测 → 优化 | 未开始 |
+| S9 | gRPC 改造 | ✅ 完成（2026-10-02）：proto（`Chat` 流式 / `Retrieve` / `IngestDocument` / `DeleteDocument`）、ai-service 的 grpc.aio 与 FastAPI 同进程、backend `GrpcAiServiceClient`（复用 channel、deadline、取消传播；`AI_TRANSPORT=grpc|http` 可切回 http）；HTTP vs gRPC 延迟与取消延迟预实验见 [docs/perf/grpc_vs_http.md](docs/perf/grpc_vs_http.md)（预实验，不是压测基线），决策见 ADR-047 |
+| S10–S13 | 第二期：Redis → Kafka → 压测 → 优化 | 未开始 |
 
 详细计划见 [docs/PLAN.md](docs/PLAN.md)，逐阶段进度与验收证据见 [docs/PROGRESS.md](docs/PROGRESS.md)。
 

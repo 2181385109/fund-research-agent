@@ -2,7 +2,7 @@
 
 S8 回答评测（ADR-046）：`scoring.py`（numeric / entity / list 规则判分）、`judge.py`（LLM 裁判）、`answer_score.py`（逐题判分与汇总）、
 `answer.py`（`run` / `score` / `blind` / `blind-score` 四个子命令）、`answer_report.py`（report.md）。流程见 HANDOFF 与 PROGRESS S8；
-两种检索配置各起一个 ai-service（`RETRIEVAL_MODE=vector|hybrid_rerank`，`AI_SERVICE_PORT`、`MCP_DOCS_URL` 指向自己）后：
+两种检索配置各起一个 ai-service（`RETRIEVAL_MODE=vector|hybrid_rerank`，`AI_SERVICE_PORT`、`MCP_DOCS_URL` 指向自己；S9 起每个进程还会占 gRPC 端口 `AI_GRPC_PORT`（默认 50051），评测只用 HTTP，所以起这两个进程时都设 `AI_GRPC_ENABLED=false`，也避免和 compose 里的 ai-service 抢端口）后：
 
 ```bash
 python -m fund_ai.eval.answer run --config hybrid_rerank --url http://127.0.0.1:8011 --split test --out ../reports/answer_eval/<UTC> --concurrency 1

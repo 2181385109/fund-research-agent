@@ -721,3 +721,49 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 
 ### 给统筹的问题
 - 无阻塞问题。请知悉：CLAUDE.md §5 `JUDGE_MODEL` 那一行已按用户决定修改；`docs/PLAN.md` §7 的 B7 / B8 状态请统筹标记。
+
+## S9 gRPC 改造 — 2026-10-02（B9）
+- commit 范围：`f9d174b`..本节所在提交；CI：见文末（push 后补）。
+- 证据目录：`reports/s9/`（`transport_latency/20261001T155512Z/` 传输延迟原始 JSON、`cancel_latency/20261001T161858Z/` 取消延迟 120 次原始记录、`*_e2e_grpc*` 与 `*_e2e_http_fallback` 的 e2e 原文）；报告 `docs/perf/grpc_vs_http.md`；决策 ADR-047；局限 LIMITATIONS「gRPC 改造（S9）」。
+
+### 完成项
+- **proto**（`proto/fundagent/v1/ai_service.proto`）：`Chat`（server streaming，`ChatEvent` 用 `oneof` 对应全部 8 种 SSE 事件，含 `citations` 与 `disclaimer`）、`Retrieve`、`IngestDocument`、`DeleteDocument`；文件头写明状态码映射（400/422→INVALID_ARGUMENT、404→NOT_FOUND、500→INTERNAL、取消→CANCELLED、超时→DEADLINE_EXCEEDED）与兼容规则。Python 桩代码由 `scripts/gen_proto.py` 生成并提交，Java 桩代码构建时从同一份 proto 生成。
+- **ai-service**：grpc.aio 服务端与 FastAPI 同进程（`fund_ai/grpc_server/`，`AI_GRPC_ENABLED/HOST/PORT`）；HTTP 处理函数背后的逻辑抽成传输无关函数两边共用（`chat_events` / `run_retrieve` / `do_ingest` / `do_delete`）；`chat_stream_started/cancelled` 日志带 `transport=`。
+- **backend**：`GrpcAiServiceClient`（单 channel 复用、deadline、`ClientCall.cancel` 取消传播、手动流控、并发上限、空闲看门狗）、`ChatEventJson`（`ChatEvent` → 与 HTTP 相同的 SSE JSON）；`AI_TRANSPORT=grpc|http` 切换，默认 grpc。
+- **其他**：compose（ai-service 暴露 50051 仅绑回环、backend 走 `ai-service:50051`）、`.dockerignore` / backend Dockerfile 带上 `proto/`、CI 新增 `proto` job、`CHAT_HEARTBEAT` 默认 5 s → 1 s（取消延迟实验的结论，见下）、`scripts/e2e_smoke.sh` 改用 `chat_stream_started` 日志判断「被拒的请求没有到达 ai-service」（两种传输都适用）。
+
+### 验收逐条（PLAN §5 S9）
+1. **两端 in-process 单测** — ✅ — Python：`ai-service/tests/test_grpc_server.py` 18 个测试，用**真实的** grpc.aio 服务端（127.0.0.1:0）与真实客户端通道，Agent / 检索 / 入库换成 Fake：与 HTTP SSE 的事件逐字段一致、Agent 构造失败仍有 `disclaimer → done`、非法请求的 INVALID_ARGUMENT、`request_id` / history / `kb_scope` 传给 Agent（缺省 scope = 公共库）、Retrieve 与 HTTP 响应一致、Ingest 幂等 / `callback=true` 的 `accepted` + 回调 / 状态码映射、端口占用时 HTTP 不受影响、每种事件严格解析与往返。全量 `pytest -m "not integration and not slow and not live"`：**204 passed**（`ruff check` / `format --check` 通过）。Java：`GrpcAiServiceClientTest` 16 个（in-process 服务端：请求映射、事件顺序、取消、下游失败 / 空闲 / deadline 取消上游、背压、并发上限、状态码映射、入库 / 删除）、`ChatEventJsonTest` 3 个、`AiClientWiringTest` 3 个；`mvn verify` 全量 **121 个测试、120 通过，1 个错误是 `BackendIntegrationTest`——本机没有 Testcontainers 可用的 Docker，CI 里运行**（与第一期相同；该测试用 HTTP 的假 ai-service，已显式设 `fra.ai.transport=http`）。
+2. **取消传播的证据** — ✅ — ①单测：`test_client_cancel_reaches_the_agent_generator_quickly`（客户端 `cancel()` 后 Agent 生成器 500 ms 内收到 `CancelledError`，不依赖心跳）、`test_deadline_exceeded_cancels_the_agent…`、`test_cancel_is_logged_with_transport`；Java `cancelReachesTheServerQuicklyAndSilencesTheListener`、`downstreamFailureCancelsUpstreamAndStopsCallbacks`、`idleServerIsAbandonedAndCancelled`、`deadlineEndsTheCallAndCancelsTheServer`；②全栈：e2e 第 8 步，`reports/s9/20261001T163912Z_e2e_grpc_final/cancel_ai_log.txt` 有 `chat_stream_cancelled … transport=grpc`；③120 次实测（见下表）：backend 决定取消 → ai-service 的 Agent 被取消，差值中位数 2 ms、最大 113 ms。
+3. **grpc 模式下 e2e 通过** — ✅ — `reports/s9/20261001T163912Z_e2e_grpc_final/`（默认配置：grpc、心跳 1 s，真实 DeepSeek）：`E2E RESULT: PASS`，18 项检查全过（含公共库 / 私有库问答带出处与风险提示、越权 403 / 404、被拒请求未到达 ai-service、断开 → `chat_stream_cancelled`、被取消的回答以 `CANCELLED` 保存）；ai-service 日志（`ai_service_chat_log.txt`）里 3 次 `chat_stream_started … transport=grpc`、1 次 `chat_stream_cancelled … transport=grpc`，这段时间没有 `POST /v1/chat/stream` 访问日志。**切回 http 同样通过**：`reports/s9/20261001T164037Z_e2e_http_fallback/`（`AI_TRANSPORT=http`，同目录 `ai_service_chat_log.txt` 里是 `transport=http`）。前两次 gRPC e2e（`20261001T161357Z_e2e_grpc`、`…161501Z_e2e_grpc_run2`）各有 1～2 项失败，**原因都是我采集日志的方式有问题**（`wsl.exe` 输出含 NUL 字节使 `grep` 报「Binary file matches」；管道缓冲使日志文件是空的），与被测代码无关，原文保留；第三次起（`…161548Z_e2e_grpc_run3`）修正采集方式，18 项全过。
+4. **HTTP 与 gRPC 的延迟预实验（写明 n 和条件）** — ✅ — `docs/perf/grpc_vs_http.md`：传输延迟（假 ai-service，无 LLM；突发 n = 200×2 轮 / 有节奏 n = 30×2 轮；direct 与经 backend 两层）与取消延迟（真实全栈，4 个配置 × 3 个断开点 × 10 次，n = 120，全部成功取消）。结论摘要见下表；这是预实验，不是压测基线。
+5. **CI 校验 proto 能编译** — ✅（待 CI 确认）— 新增 `proto` job（`scripts/gen_proto.py --check`：重新生成并与已提交的 Python 桩代码比较）；Java 侧由 `backend` job 的 `mvn verify` 在 `generate-sources` 阶段从同一份 proto 生成并编译。
+6. **CI 全绿** — 见文末。
+
+### 实测数字（全表见 `docs/perf/grpc_vs_http.md`）
+| 指标 | 值 | n / 分母 | 结果文件 |
+|---|---|---|---|
+| 首个事件到达（direct，突发 306 事件），HTTP vs gRPC 中位数 | 3.01 / 3.19 ms vs 0.61 / 0.62 ms | 200 + 200 | `transport_latency/20261001T155512Z/direct_burst.json` |
+| 总耗时（direct，突发）HTTP vs gRPC 中位数 | 5.28 / 5.52 ms vs 34.13 / 34.69 ms | 200 + 200 | 同上 |
+| 总耗时（经 backend，突发）HTTP vs gRPC 中位数 | 27.98 ms vs 57.50 / 49.53 ms | 200 / 200 + 200 | `backend_http.json`、`backend_grpc*.json` |
+| 总耗时（有节奏：50 个 token，实测约 32 ms/个）direct，HTTP vs gRPC | 1552.6 / 1560.8 ms vs 1547.4 / 1548.3 ms | 30 + 30 | `direct_paced.json` |
+| 总耗时（有节奏）经 backend，HTTP vs gRPC | 1568.0 ms vs 1561.5 ms | 30 | `backend_paced_*.json` |
+| 断开 → ai-service 取消，事件流动期（token 断开点），四个配置中位数 | 3–6 ms（最大 52 ms） | 每配置 10 | `cancel_latency/20261001T161858Z/*.jsonl` |
+| 断开 → ai-service 取消，安静期（meta 断开点）心跳 5 s：gRPC / HTTP 中位数 | 6149 / 4998 ms（范围 4939–7437） | 10 / 10 | 同上 |
+| 同上，心跳 1 s：gRPC / HTTP 中位数 | 1988 / 1997 ms（范围 1220–2992） | 10 / 10 | 同上 |
+| 同上，工具执行期（tool_start 断开点）心跳 5 s → 1 s：gRPC | 4210 → 3624 ms | 10 / 10 | 同上（原因未查清，LIMITATIONS S9-5） |
+| backend 决定取消 → Agent 被取消的差值 | 中位数 2 ms，111/120 次 < 20 ms，最大 113 ms | 120 | 同上 |
+
+### 与计划的偏差（附理由和 ADR 编号）
+- 无偏离 PLAN 验收。实现取舍见 ADR-047；**`CHAT_HEARTBEAT` 默认值 5 s → 1 s** 是统筹补充 2 授权范围内的「顺手缩短」（数据见上）；本机 `.env`（gitignored）里原有 `CHAT_HEARTBEAT=5s`，已改为 `1s`，与新默认一致。
+
+### 已知问题 / 技术债
+- 传输对比的两个负面发现如实写进报告与 LIMITATIONS：突发事件流下 gRPC 总耗时更高（Python grpc.aio 每事件约 0.11 ms，用空服务端对照确认不是本项目代码）；工具执行期的取消延迟在心跳从 5 s 改到 1 s 后几乎没变（3.6 s），原因没有查清。
+- 第一次「有节奏」预实验因 Windows 定时器粒度作废并已删除（报告第 1 节 结论 5），尝试「接收窗口 16」无改善、已回退（结论 4）。
+- gRPC 端口无鉴权 / 无 TLS；Java 侧没有 `Retrieve` 方法；`BackendIntegrationTest` 本机无法运行（见 LIMITATIONS S9）。
+
+### 需要用户做的事
+- 无必须项。ticket-qa 容器按统筹补充 1 继续保持停止。
+
+### 给统筹的问题
+- 无阻塞。可选：`docs/PLAN.md` §7 表标记 B9 完成；工具执行期取消延迟的成因（疑似 docker 用户态端口代理）是否值得在 S12 压测环境里顺带复验。

@@ -11,7 +11,7 @@
 | `document` | 上传（魔数 / 大小 / sha256 去重）、状态机 PENDING→PROCESSING→READY/FAILED、ai-service 回调、超时清理 |
 | `conversation` | 会话与消息持久化（答案、出处、风险提示、检索范围），取最近 N 轮上下文 |
 | `chat` | `SseEmitter` 代理 `POST /v1/chat/stream`：原样转发事件、累积落库、心跳、客户端断开即取消上游 |
-| `aiclient` | `AiServiceClient` 接口 + `HttpAiServiceClient`（第二期 S9 再加 gRPC 实现） |
+| `aiclient` | `AiServiceClient` 接口 + `GrpcAiServiceClient`（默认，S9）/ `HttpAiServiceClient`（`AI_TRANSPORT=http`）两种实现；`ChatEventJson` 把 gRPC 的 `ChatEvent` 还原成与 HTTP 相同的 SSE JSON |
 | `common` `config` `health` | 统一响应体 / 错误码 / 全局异常 / requestId；配置属性；`GET /api/health` |
 
 每个业务包的 `service` 子包放业务逻辑，`mapper` 放 MyBatis-Plus Mapper，`dto` 放请求 / 响应对象。Flyway 迁移在 `src/main/resources/db/migration`（只增不改）。
