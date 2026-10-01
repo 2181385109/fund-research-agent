@@ -26,7 +26,7 @@ EVENT_TYPES: dict[str, type[Message]] = {
     "token": pb.Token,
     "disclaimer": pb.Disclaimer,
     "done": pb.Done,
-    "error": pb.Error,
+    "error": pb.ChatError,
 }
 CITATION_KINDS = ("document", "database", "computation", "api")
 

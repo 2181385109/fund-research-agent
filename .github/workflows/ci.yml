@@ -3,6 +3,7 @@
 #   frontend      node 22，npm ci → vitest（单测）→ vue-tsc + vite build（S7）
 #   python        ai-service / mcp-tools / data-pipeline / eval 四个包矩阵：ruff check、ruff format --check、pytest（排除 integration/slow/live）；
 #                 eval 的 pytest 含对仓库内评测集的离线校验（schema、题数、分层、引用）
+#   proto         （S9）proto 能编译，且已提交的 Python 桩代码与 proto 一致（Java 侧的桩代码由 backend job 的 mvn verify 在构建时生成并编译）
 #   scripts       security_scan / llm_smoke / gen_env 的离线单测 + 对本仓库跑安全扫描（含 --history）
 name: ci
 
@@ -88,6 +89,20 @@ jobs:
         run: ruff format --check .
       - name: pytest
         run: python -m pytest -m "not integration and not slow and not live"
+
+  proto:
+    name: proto (compile + stubs up to date)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 安装 grpcio-tools（版本与 ai-service 的 dev 依赖一致）
+        run: python -m pip install "grpcio-tools==1.84.0"
+      - name: 重新生成并与已提交的桩代码比较
+        run: python scripts/gen_proto.py --check
 
   scripts:
     name: scripts + security scan

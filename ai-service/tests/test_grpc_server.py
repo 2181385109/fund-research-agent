@@ -8,7 +8,9 @@ Agent / 检索 / 入库换成 Fake。覆盖：事件协议与 HTTP 的一致性�
 from __future__ import annotations
 
 import asyncio
+import base64
 import json
+import os
 import socket
 import time
 from collections.abc import AsyncIterator
@@ -20,6 +22,7 @@ import grpc
 import pytest
 from fastapi.testclient import TestClient
 from fixture_pdfs import report_like
+from golden_events import EVENTS
 from test_agent_mcp_api import _fake_runner, _sse
 from test_retrieval import _svc
 
@@ -429,148 +432,7 @@ def test_disabled_by_default_in_tests_and_by_flag():
 
 def test_every_event_type_the_agent_emits_parses_strictly():
     """严格模式（不接受未知字段）：Agent 的事件字段与 proto 不一致时这里会失败。"""
-    events = [
-        {"event": "meta", "data": {"request_id": "r", "model": "m", "max_steps": 6}},
-        {
-            "event": "tool_start",
-            "data": {"call_id": "c", "name": "n", "args": {"a": [1, {"b": None}]}, "step": 1},
-        },
-        {"event": "tool_start", "data": {"call_id": None, "name": "n", "args": {}, "step": 1}},
-        {
-            "event": "tool_end",
-            "data": {
-                "call_id": "c",
-                "name": "n",
-                "duration_ms": 1.5,
-                "status": "ok",
-                "summary": "s",
-                "citation_ids": [1, 2],
-            },
-        },
-        {
-            "event": "tool_end",
-            "data": {
-                "call_id": "c",
-                "name": "n",
-                "duration_ms": 1.5,
-                "status": "error",
-                "error": "e",
-                "error_kind": "unavailable",
-            },
-        },
-        {
-            "event": "tool_end",
-            "data": {"call_id": None, "name": "n", "status": "error", "error": "e"},
-        },
-        {"event": "token", "data": {"text": "你好"}},
-        {"event": "disclaimer", "data": {"text": DISCLAIMER}},
-        {"event": "error", "data": {"code": "agent_error", "message": "m"}},
-        {
-            "event": "done",
-            "data": {
-                "request_id": "r",
-                "status": "error",
-                "request_model": "m",
-                "timings_ms": {"total": 1.0},
-            },
-        },
-        {
-            "event": "done",
-            "data": {
-                "request_id": "r",
-                "status": "ok",
-                "request_model": "m",
-                "response_models": ["m"],
-                "usage": {"input_tokens": 1, "output_tokens": 2, "total_tokens": 3},
-                "timings_ms": {"total": 9.5, "first_token": None, "llm": 1.0, "tools": 2.0},
-                "tool_rounds": 1,
-                "max_steps_reached": True,
-                "llm_calls": [
-                    {
-                        "request_model": "m",
-                        "response_model": "m",
-                        "input_tokens": 1,
-                        "output_tokens": 1,
-                        "total_tokens": 2,
-                        "duration_ms": 3.0,
-                        "first_token_ms": None,
-                        "tool_calls": 1,
-                    }
-                ],
-                "tools": [{"name": "n", "status": "ok", "duration_ms": 1.0, "step": 1}],
-                "compliance_flags": ["x"],
-                "dropped_citations": [3],
-                "answer_chars": 10,
-                "preamble_dropped_chars": 0,
-                "preamble_leaked_chars": 0,
-            },
-        },
-        {
-            "event": "citations",
-            "data": {
-                "items": [
-                    {
-                        "id": 1,
-                        "kind": "document",
-                        "fund_code": "1",
-                        "fund_name": "n",
-                        "doc_id": "d",
-                        "doc_type": "t",
-                        "doc_title": "x",
-                        "report_period": "p",
-                        "page_start": 1,
-                        "page_end": 2,
-                        "section": "s",
-                        "snippet": "…",
-                    },
-                    {
-                        "id": 2,
-                        "kind": "document",
-                        "fund_code": "",
-                        "fund_name": "",
-                        "doc_id": "d",
-                        "doc_type": "user_upload",
-                        "doc_title": "x.pdf",
-                        "report_period": "",
-                        "page_start": 1,
-                        "page_end": 1,
-                        "section": "",
-                        "snippet": "…",
-                        "kb_id": "11",
-                    },
-                    {
-                        "id": 3,
-                        "kind": "database",
-                        "tables": ["a", "b"],
-                        "source": "s",
-                        "as_of": "d",
-                        "sql": "SELECT 1",
-                        "row_count": 1,
-                    },
-                    {
-                        "id": 4,
-                        "kind": "computation",
-                        "tool": "calc_fund_return",
-                        "args": {"share_code": "1", "start": "2025-01-01"},
-                        "share_code": "1",
-                        "start_used": "2025-01-02",
-                        "end_used": None,
-                        "source": "s",
-                        "as_of": "d",
-                    },
-                    {
-                        "id": 5,
-                        "kind": "api",
-                        "share_code": "1",
-                        "source": "s",
-                        "nav_date": "d",
-                        "fetched_at": "t",
-                        "stale": True,
-                    },
-                ]
-            },
-        },
-    ]
+    events = EVENTS
     for ev in events:
         msg = event_to_proto(ev, strict=True)
         name, data = _as_http(msg)
@@ -617,3 +479,42 @@ def test_json_of_the_citation_detail_is_flat_like_http():
         {"items": [{"id": 1, "kind": "api", "share_code": "1", "source": "s", "stale": False}]},
         ensure_ascii=False,
     )
+
+
+# ---------------------------------------------------------------- 与 Java 共用的样例文件
+
+GOLDEN = Path(__file__).resolve().parents[2] / "proto" / "testdata" / "chat_events.jsonl"
+
+
+def _golden_lines() -> list[str]:
+    out = []
+    for ev in EVENTS:
+        proto = event_to_proto(ev, strict=True).SerializeToString(deterministic=True)
+        out.append(
+            json.dumps(
+                {
+                    "event": ev["event"],
+                    "data": ev["data"],
+                    "proto_b64": base64.b64encode(proto).decode(),
+                },
+                ensure_ascii=False,
+            )
+        )
+    return out
+
+
+def test_golden_file_for_the_java_side_is_current():
+    """proto/testdata/chat_events.jsonl：每行 = Agent 原始事件 + 它序列化后的 ChatEvent。
+    Java 的 ChatEventJsonTest 读它，验证还原出来的 JSON 与原始事件一致。proto 或样例变了要重新生成：
+    UPDATE_GOLDEN=1 python -m pytest tests/test_grpc_server.py -k golden"""
+    if os.environ.get("UPDATE_GOLDEN") == "1":
+        GOLDEN.parent.mkdir(parents=True, exist_ok=True)
+        GOLDEN.write_text("\n".join(_golden_lines()) + "\n", encoding="utf-8", newline="\n")
+    lines = GOLDEN.read_text(encoding="utf-8").splitlines()
+    assert len(lines) == len(EVENTS)
+    for line, ev in zip(lines, EVENTS, strict=True):
+        row = json.loads(line)
+        assert row["event"] == ev["event"] and row["data"] == ev["data"]
+        assert pb.ChatEvent.FromString(base64.b64decode(row["proto_b64"])) == event_to_proto(
+            ev, strict=True
+        )

@@ -174,6 +174,9 @@ services:
     mem_limit: 2560m
     environment:
       AI_SERVICE_PORT: "8001"
+      AI_GRPC_ENABLED: "true"
+      AI_GRPC_HOST: 0.0.0.0
+      AI_GRPC_PORT: "50051"
       REDIS_HOST: redis
       REDIS_PORT: "6379"
       REDIS_PASSWORD: ${REDIS_PASSWORD:-}
@@ -206,6 +209,8 @@ services:
       TZ: Asia/Shanghai
     ports:
       - "${AI_SERVICE_PORT:-8001}:8001"
+      # gRPC 无鉴权：只绑定宿主机回环（调试 / 压测用），backend 走容器网络 ai-service:50051
+      - "127.0.0.1:${AI_GRPC_PORT:-50051}:50051"
     volumes:
       # 模型缓存：命名卷，首次用 `docker compose --profile app run --rm ai-service python -m fund_ai.models_cli` 下载
       - model_cache:/models
@@ -250,6 +255,9 @@ services:
       JWT_TTL: ${JWT_TTL:-12h}
       INTERNAL_CALLBACK_SECRET: ${INTERNAL_CALLBACK_SECRET:-}
       AI_SERVICE_BASE_URL: http://ai-service:8001
+      AI_TRANSPORT: ${AI_TRANSPORT:-grpc}
+      AI_SERVICE_GRPC_TARGET: ai-service:50051
+      AI_GRPC_CHAT_DEADLINE: ${AI_GRPC_CHAT_DEADLINE:-6m}
       AI_CHAT_IDLE_TIMEOUT: ${AI_CHAT_IDLE_TIMEOUT:-120s}
       CHAT_HISTORY_ROUNDS: ${CHAT_HISTORY_ROUNDS:-6}
       CHAT_HEARTBEAT: ${CHAT_HEARTBEAT:-5s}

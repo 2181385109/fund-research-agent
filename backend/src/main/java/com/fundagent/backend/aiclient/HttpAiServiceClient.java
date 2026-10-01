@@ -29,14 +29,16 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**
- * HTTP + SSE 实现（第一期）。用 JDK 的 {@link HttpClient}（强制 HTTP/1.1，不走系统代理）：
+ * HTTP + SSE 实现（第一期）。{@code fra.ai.transport=http} 时启用；默认是 gRPC（{@link GrpcAiServiceClient}）。用 JDK 的 {@link HttpClient}（强制 HTTP/1.1，不走系统代理）：
  * 对话流用 {@code BodyHandlers.ofInputStream()} 边读边转发，取消 = 取消 future + 关闭响应流，连接随之断开，
  * ai-service 侧的生成器被 Starlette 取消。
  */
 @Component
+@ConditionalOnProperty(prefix = "fra.ai", name = "transport", havingValue = "http")
 public class HttpAiServiceClient implements AiServiceClient {
 
     private static final Logger log = LoggerFactory.getLogger(HttpAiServiceClient.class);

@@ -5,6 +5,8 @@ FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /build
 # 依赖只取决于 pom.xml：改源码不会让依赖下载这一层失效
 COPY backend/pom.xml ./
+# proto 的唯一来源在仓库根的 proto/；pom 里的 protobuf 插件从 ../proto（即 /proto）生成 Java 桩代码
+COPY proto /proto
 RUN mvn -B -ntp -q dependency:go-offline
 COPY backend/src ./src
 RUN mvn -B -ntp -q -DskipTests package \

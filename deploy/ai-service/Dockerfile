@@ -36,7 +36,7 @@ ENV MODEL_CACHE_DIR=/models \
     DATA_DIR=/app/data \
     AI_SERVICE_PORT=8001
 
-EXPOSE 8001
+EXPOSE 8001 50051
 HEALTHCHECK --interval=15s --timeout=8s --start-period=30s --retries=5 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health', timeout=6)"
 

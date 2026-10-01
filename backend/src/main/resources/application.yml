@@ -50,7 +50,12 @@ fra:
     stale-after: ${UPLOAD_STALE_AFTER:15m}
     sweep-interval: 60s
   ai:
+    # grpc（默认，S9）| http（第一期的 HTTP + SSE，保留作回退与对照）
+    transport: ${AI_TRANSPORT:grpc}
     base-url: ${AI_SERVICE_BASE_URL:http://127.0.0.1:8001}
+    grpc:
+      target: ${AI_SERVICE_GRPC_TARGET:127.0.0.1:50051}
+      chat-deadline: ${AI_GRPC_CHAT_DEADLINE:6m}
     connect-timeout: 3s
     request-timeout: 15s
     chat-idle-timeout: ${AI_CHAT_IDLE_TIMEOUT:120s}
