@@ -53,55 +53,71 @@ def sse(event: str, data: dict[str, Any]) -> str:
     return f"event: {event}\ndata: {json.dumps(data, ensure_ascii=False)}\n\n"
 
 
-async def _failed_stream(request_id: str, message: str) -> AsyncIterator[str]:
+def _failed_events(request_id: str, message: str) -> list[dict[str, Any]]:
     """Agent 构造失败（如缺 LLM 密钥、fund_data 连不上）：仍然按协议发 error → disclaimer → done。"""
-    yield sse("meta", {"request_id": request_id})
-    yield sse("error", {"code": "agent_unavailable", "message": message})
-    yield sse("disclaimer", {"text": DISCLAIMER})
-    yield sse("done", {"request_id": request_id, "status": "error"})
+    return [
+        {"event": "meta", "data": {"request_id": request_id}},
+        {"event": "error", "data": {"code": "agent_unavailable", "message": message}},
+        {"event": "disclaimer", "data": {"text": DISCLAIMER}},
+        {"event": "done", "data": {"request_id": request_id, "status": "error"}},
+    ]
 
 
-def _runner(request: Request) -> AgentRunner:
-    st = request.app.state
+def _runner(app: Any) -> AgentRunner:
+    st = app.state
     if st.agent_runner is None:
         st.agent_runner = st.agent_factory()
     return st.agent_runner
+
+
+def scope_of(req: ChatRequest) -> KbScope | None:
+    """请求里的检索范围；不合法抛 ValueError（HTTP 422 / gRPC INVALID_ARGUMENT）。"""
+    return req.kb_scope.to_scope() if req.kb_scope else None
+
+
+async def chat_events(
+    app: Any, req: ChatRequest, rid: str, scope: KbScope | None, transport: str = "http"
+) -> AsyncIterator[dict[str, Any]]:
+    """一次问答的事件流（``{"event", "data"}``），HTTP（SSE）与 gRPC 两种传输共用这一份。
+
+    客户端断开 / 取消时生成器被取消（HTTP：Starlette；gRPC：grpc.aio 取消处理协程），取消随后传给
+    LangGraph / LLM / MCP；这里记一条 ``chat_stream_cancelled``，S9 用它的时间戳量取消延迟。
+    """
+    try:
+        runner = _runner(app)
+    except Exception as e:  # noqa: BLE001 - 见 _failed_events
+        log.exception("agent construction failed request=%s", rid)
+        for ev in _failed_events(rid, f"{type(e).__name__}: {str(e)[:200]}"):
+            yield ev
+        return
+    history = [h.model_dump() for h in req.history]
+    t0 = time.perf_counter()
+    finished = False
+    try:
+        async for ev in runner.run(req.question, history, request_id=rid, scope=scope):
+            yield ev
+        finished = True
+    finally:
+        if not finished:
+            log.info(
+                "chat_stream_cancelled request=%s transport=%s elapsed_ms=%.0f",
+                rid,
+                transport,
+                (time.perf_counter() - t0) * 1000,
+            )
 
 
 @router.post("/chat/stream")
 async def chat_stream(req: ChatRequest, request: Request) -> StreamingResponse:
     rid = req.request_id or uuid.uuid4().hex[:16]
     try:
-        scope = req.kb_scope.to_scope() if req.kb_scope else None
+        scope = scope_of(req)
     except ValueError as e:
         raise HTTPException(status_code=422, detail=str(e)) from e
     headers = {"Cache-Control": "no-cache", "X-Accel-Buffering": "no", "Connection": "keep-alive"}
-    try:
-        runner = _runner(request)
-    except Exception as e:  # noqa: BLE001 - 见 _failed_stream
-        log.exception("agent construction failed request=%s", rid)
-        return StreamingResponse(
-            _failed_stream(rid, f"{type(e).__name__}: {str(e)[:200]}"),
-            media_type="text/event-stream",
-            headers=headers,
-        )
 
     async def gen() -> AsyncIterator[str]:
-        history = [h.model_dump() for h in req.history]
-        t0 = time.perf_counter()
-        finished = False
-        try:
-            async for ev in runner.run(req.question, history, request_id=rid, scope=scope):
-                yield sse(ev["event"], ev["data"])
-            finished = True
-        finally:
-            if (
-                not finished
-            ):  # 客户端断开：Starlette 取消了这个生成器，取消随后传给 LangGraph / LLM / MCP
-                log.info(
-                    "chat_stream_cancelled request=%s elapsed_ms=%.0f",
-                    rid,
-                    (time.perf_counter() - t0) * 1000,
-                )
+        async for ev in chat_events(request.app, req, rid, scope):
+            yield sse(ev["event"], ev["data"])
 
     return StreamingResponse(gen(), media_type="text/event-stream", headers=headers)

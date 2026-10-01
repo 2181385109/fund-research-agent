@@ -24,6 +24,7 @@ from fund_ai.api.health import router as health_router
 from fund_ai.api.retrieve import router as retrieve_router
 from fund_ai.config import Settings, get_settings
 from fund_ai.embedding.factory import build_embedder
+from fund_ai.grpc_server.service import start_grpc_server, stop_grpc_server
 from fund_ai.ingest.chunking import ChunkParams
 from fund_ai.ingest.pipeline import IngestPipeline
 from fund_ai.mcp_server.server import create_docs_mcp
@@ -116,6 +117,11 @@ def create_app(
         app.state.health_timeout = settings.health_timeout_seconds
         async with AsyncExitStack() as stack:
             await stack.enter_async_context(docs_mcp.session_manager.run())
+            app.state.grpc_port = None
+            if settings.ai_grpc_enabled:  # S9：grpc.aio 与 FastAPI 同进程、同事件循环
+                grpc_server = await start_grpc_server(app, settings)
+                if grpc_server is not None:
+                    stack.push_async_callback(stop_grpc_server, grpc_server)
             if checkers is not None:
                 app.state.health_checkers = list(checkers)
                 yield

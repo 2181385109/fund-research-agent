@@ -14,6 +14,7 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
@@ -47,15 +48,14 @@ class IngestRequest(BaseModel):
     callback: bool = False
 
 
-def _pipeline(request: Request) -> IngestPipeline:
-    factory = request.app.state.pipeline_factory
-    if request.app.state.pipeline is None:
-        request.app.state.pipeline = factory()
-    return request.app.state.pipeline
+def _pipeline(app: Any) -> IngestPipeline:
+    if app.state.pipeline is None:
+        app.state.pipeline = app.state.pipeline_factory()
+    return app.state.pipeline
 
 
-def _user_pipeline(request: Request) -> IngestPipeline:
-    st = request.app.state
+def _user_pipeline(app: Any) -> IngestPipeline:
+    st = app.state
     if st.user_pipeline is None:
         st.user_pipeline = st.user_pipeline_factory()
     return st.user_pipeline
@@ -132,14 +132,17 @@ async def _run_and_callback(request_app: Any, pipeline: IngestPipeline, path: Pa
     await request_app.state.callback_sender(payload)
 
 
-@router.post("/documents/ingest")
-async def ingest(req: IngestRequest, request: Request, background: BackgroundTasks):
-    path = resolve_allowed(req.file_path, request.app.state.ingest_roots)
+async def do_ingest(
+    app: Any, req: IngestRequest, schedule: Callable[..., None]
+) -> tuple[int, dict[str, Any]]:
+    """HTTP 与 gRPC 共用。返回 (HTTP 风格状态码, 响应体)：202 = 已接受（``schedule`` 负责在后台跑入库 + 回调），
+    200 = 已入库。失败抛 HTTPException（400 / 404 / 422 / 500），gRPC 侧按 proto 里的映射转成状态码。"""
+    path = resolve_allowed(req.file_path, app.state.ingest_roots)
     meta, private = _meta(req, path)
-    pipeline = _user_pipeline(request) if private else _pipeline(request)
+    pipeline = _user_pipeline(app) if private else _pipeline(app)
     if req.callback:
-        background.add_task(_run_and_callback, request.app, pipeline, path, meta)
-        return JSONResponse({"accepted": True, "doc_id": meta.doc_id}, status_code=202)
+        schedule(_run_and_callback, app, pipeline, path, meta)
+        return 202, {"accepted": True, "doc_id": meta.doc_id}
     try:
         result = await run_in_threadpool(pipeline.ingest, path, meta)
     except IngestConsistencyError as e:
@@ -148,16 +151,28 @@ async def ingest(req: IngestRequest, request: Request, background: BackgroundTas
         raise HTTPException(status_code=422, detail=str(e)) from e
     if private and result.chunks == 0:
         raise HTTPException(status_code=422, detail=EMPTY_DOC_MESSAGE)
-    return result.to_dict()
+    return 200, result.to_dict()
 
 
-@router.delete("/documents/{doc_id}")
-async def delete(doc_id: str, request: Request, kb_id: str | None = None) -> dict:
-    pipeline = _user_pipeline(request) if kb_id else _pipeline(request)
+async def do_delete(app: Any, doc_id: str, kb_id: str | None) -> dict[str, Any]:
+    pipeline = _user_pipeline(app) if kb_id else _pipeline(app)
     remaining = await run_in_threadpool(pipeline.delete, doc_id)
     return {"doc_id": doc_id, "remaining": remaining}
 
 
+@router.post("/documents/ingest")
+async def ingest(req: IngestRequest, request: Request, background: BackgroundTasks):
+    status, body = await do_ingest(request.app, req, background.add_task)
+    if status == 202:
+        return JSONResponse(body, status_code=202)
+    return body
+
+
+@router.delete("/documents/{doc_id}")
+async def delete(doc_id: str, request: Request, kb_id: str | None = None) -> dict:
+    return await do_delete(request.app, doc_id, kb_id)
+
+
 @router.get("/stats")
 async def stats(request: Request) -> dict:
-    return await run_in_threadpool(_pipeline(request).stats)
+    return await run_in_threadpool(_pipeline(request.app).stats)

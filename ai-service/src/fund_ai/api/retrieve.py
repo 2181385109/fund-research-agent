@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import asyncio
+from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
@@ -29,16 +30,20 @@ class RetrieveRequest(BaseModel):
     doc_types: list[str] | None = None
 
 
-def _service(request: Request) -> RetrievalService:
-    st = request.app.state
+class BadRetrieveRequest(ValueError):
+    """检索覆盖项不合法（HTTP 422 / gRPC INVALID_ARGUMENT）。"""
+
+
+def _service(app: Any) -> RetrievalService:
+    st = app.state
     if st.retrieval is None:
         st.retrieval = st.retrieval_factory()
     return st.retrieval
 
 
-@router.post("/retrieve")
-async def retrieve(req: RetrieveRequest, request: Request) -> dict:
-    svc = _service(request)
+async def run_retrieve(app: Any, req: RetrieveRequest) -> dict:
+    """HTTP 与 gRPC 共用；覆盖项不合法（未知模式、k < 1）抛 BadRetrieveRequest。"""
+    svc = _service(app)
     try:
         cfg = svc.defaults.with_overrides(
             mode=req.mode,
@@ -51,9 +56,17 @@ async def retrieve(req: RetrieveRequest, request: Request) -> dict:
             query_instruction=req.query_instruction,
         )
     except ValueError as e:
-        raise HTTPException(status_code=422, detail=str(e)) from e
+        raise BadRetrieveRequest(str(e)) from e
     loop = asyncio.get_running_loop()
     result = await loop.run_in_executor(
         None, lambda: svc.retrieve(req.query, cfg, req.fund_codes, req.doc_types)
     )
     return result.to_dict()
+
+
+@router.post("/retrieve")
+async def retrieve(req: RetrieveRequest, request: Request) -> dict:
+    try:
+        return await run_retrieve(request.app, req)
+    except BadRetrieveRequest as e:
+        raise HTTPException(status_code=422, detail=str(e)) from e

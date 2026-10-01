@@ -1,0 +1,298 @@
+// ai-service 的 gRPC 接口（S9）。与 HTTP 接口（docs/API.md）并存，语义一致：
+//   Chat            ⇔ POST /v1/chat/stream      （server streaming，一个 ChatEvent 对应一个 SSE 事件）
+//   Retrieve        ⇔ POST /v1/retrieve
+//   IngestDocument  ⇔ POST /v1/documents/ingest
+//   DeleteDocument  ⇔ DELETE /v1/documents/{doc_id}
+//
+// 兼容规则（CLAUDE.md §4）：字段号不重用；删除字段时用 reserved 保留字段号与名字。
+//
+// 约定：
+//  * 在 JSON 里「可能缺省」的字段一律用 optional（有存在性）；Java 侧把 ChatEvent 还原成 SSE 的 data 时靠这一点
+//    保持字段集合与 HTTP 完全一致。
+//  * 没有 int64（protobuf 的 JSON 表示会把 int64 写成字符串）。
+//  * 数值型耗时一律 double（毫秒）。
+//
+// 状态码映射（HTTP → gRPC）：400 / 422 → INVALID_ARGUMENT；404 → NOT_FOUND；500 → INTERNAL；
+// 依赖不可用 → UNAVAILABLE；客户端取消 → CANCELLED；超过 deadline → DEADLINE_EXCEEDED。
+// Chat 在开始流式输出之后发生的错误不是 gRPC 状态，而是 error → disclaimer → done(status=error) 事件
+// （与 SSE 一致：disclaimer 一定紧挨在 done 之前）；只有流开始之前的参数错误才返回 INVALID_ARGUMENT。
+
+syntax = "proto3";
+
+package fundagent.v1;
+
+import "google/protobuf/struct.proto";
+
+option java_multiple_files = true;
+option java_package = "com.fundagent.proto.v1";
+option java_outer_classname = "AiServiceProto";
+
+service AiService {
+  // Agent 问答。客户端取消 / 超时 → 服务端的 Agent 生成器被取消，取消沿 LangGraph → LLM / MCP 调用传播。
+  rpc Chat(ChatRequest) returns (stream ChatEvent);
+  rpc Retrieve(RetrieveRequest) returns (RetrieveResponse);
+  rpc IngestDocument(IngestDocumentRequest) returns (IngestDocumentResponse);
+  rpc DeleteDocument(DeleteDocumentRequest) returns (DeleteDocumentResponse);
+}
+
+// ---------------------------------------------------------------- Chat
+
+message ChatRequest {
+  string question = 1;  // 1–2000 字
+  repeated HistoryItem history = 2;  // 最多 40 条
+  optional string request_id = 3;  // 缺省服务端生成
+  // 检索范围（ADR-043，服务端注入）。不设置 = 只查公共库（默认拒绝私有）。
+  optional KbScope kb_scope = 4;
+}
+
+message HistoryItem {
+  string role = 1;  // "user" | "assistant"
+  string content = 2;
+}
+
+message KbScope {
+  bool include_public = 1;
+  string owner_id = 2;
+  repeated string private_kb_ids = 3;
+}
+
+// 事件名 = oneof 的字段名；顺序见 docs/API.md（meta → (tool_start → tool_end | token)* → citations → disclaimer → done）。
+message ChatEvent {
+  oneof event {
+    Meta meta = 1;
+    ToolStart tool_start = 2;
+    ToolEnd tool_end = 3;
+    Token token = 4;
+    Citations citations = 5;
+    Disclaimer disclaimer = 6;
+    Done done = 7;
+    Error error = 8;
+  }
+}
+
+message Meta {
+  string request_id = 1;
+  string model = 2;
+  int32 max_steps = 3;
+}
+
+message ToolStart {
+  optional string call_id = 1;
+  string name = 2;
+  google.protobuf.Struct args = 3;
+  int32 step = 4;
+}
+
+message ToolEnd {
+  optional string call_id = 1;
+  string name = 2;
+  string status = 3;  // "ok" | "error"
+  optional double duration_ms = 4;
+  optional string summary = 5;  // ok 时
+  repeated int32 citation_ids = 6;  // ok 时（出错时为空）
+  optional string error = 7;  // error 时
+  optional string error_kind = 8;  // "tool_error" | "unavailable"
+}
+
+message Token {
+  string text = 1;
+}
+
+message Citations {
+  repeated Citation items = 1;
+}
+
+// 出处：id 全请求内唯一；kind 与 detail 里设置的字段同名。
+// Java 侧还原成 JSON 时把 detail 展平到与 id、kind 同一层（与 HTTP 的 citations 事件一致）。
+message Citation {
+  int32 id = 1;
+  string kind = 2;  // "document" | "database" | "computation" | "api"
+  oneof detail {
+    DocumentCitation document = 3;
+    DatabaseCitation database = 4;
+    ComputationCitation computation = 5;
+    ApiCitation api = 6;
+  }
+}
+
+message DocumentCitation {
+  string fund_code = 1;
+  string fund_name = 2;
+  string doc_id = 3;
+  string doc_type = 4;
+  string doc_title = 5;
+  string report_period = 6;
+  int32 page_start = 7;
+  int32 page_end = 8;
+  string section = 9;
+  string snippet = 10;  // ≤ 400 字
+  optional string kb_id = 11;  // 私有库片段才有
+}
+
+message DatabaseCitation {
+  repeated string tables = 1;
+  string source = 2;
+  string as_of = 3;
+  string sql = 4;
+  int32 row_count = 5;
+}
+
+message ComputationCitation {
+  string tool = 1;
+  google.protobuf.Struct args = 2;
+  optional string share_code = 3;
+  optional string start_used = 4;
+  optional string end_used = 5;
+  string source = 6;
+  string as_of = 7;
+}
+
+message ApiCitation {
+  optional string share_code = 1;
+  string source = 2;
+  optional string nav_date = 3;
+  optional string fetched_at = 4;
+  bool stale = 5;
+}
+
+message Disclaimer {
+  string text = 1;  // 固定文案，服务端追加，没有关闭开关
+}
+
+message Error {
+  string code = 1;  // "agent_error" | "agent_unavailable"
+  string message = 2;
+}
+
+message Done {
+  string request_id = 1;
+  string status = 2;  // "ok" | "error"
+  optional string request_model = 3;
+  repeated string response_models = 4;
+  optional Usage usage = 5;
+  optional Timings timings_ms = 6;
+  optional int32 tool_rounds = 7;
+  optional bool max_steps_reached = 8;
+  repeated LlmCall llm_calls = 9;
+  repeated ToolRecord tools = 10;
+  repeated string compliance_flags = 11;
+  repeated int32 dropped_citations = 12;
+  optional int32 answer_chars = 13;
+  optional int32 preamble_dropped_chars = 14;
+  optional int32 preamble_leaked_chars = 15;
+}
+
+message Usage {
+  int32 input_tokens = 1;
+  int32 output_tokens = 2;
+  int32 total_tokens = 3;
+}
+
+message Timings {
+  double total = 1;
+  optional double first_token = 2;  // 没有 token 事件的路径上缺省
+  optional double llm = 3;
+  optional double tools = 4;
+}
+
+message LlmCall {
+  string request_model = 1;
+  string response_model = 2;
+  int32 input_tokens = 3;
+  int32 output_tokens = 4;
+  int32 total_tokens = 5;
+  double duration_ms = 6;
+  optional double first_token_ms = 7;
+  int32 tool_calls = 8;
+}
+
+message ToolRecord {
+  string name = 1;
+  string status = 2;
+  double duration_ms = 3;
+  int32 step = 4;
+}
+
+// ---------------------------------------------------------------- Retrieve
+
+message RetrieveRequest {
+  string query = 1;  // 1–2000 字
+  // 以下覆盖项缺省 = 用服务配置 RETRIEVAL_*
+  optional string mode = 2;  // vector | bm25 | hybrid | vector_rerank | hybrid_rerank
+  optional int32 top_n = 3;
+  optional int32 vector_k = 4;
+  optional int32 bm25_k = 5;
+  optional int32 rerank_candidates = 6;
+  optional bool entity_filter = 7;
+  optional bool use_ctx = 8;
+  optional bool query_instruction = 9;
+  repeated string fund_codes = 10;  // 空 = 不显式过滤（走实体识别）
+  repeated string doc_types = 11;
+}
+
+message RetrieveResponse {
+  string query = 1;
+  google.protobuf.Struct config = 2;
+  repeated string entity_fund_codes = 3;
+  repeated string filter_fund_codes = 4;
+  repeated Hit hits = 5;
+  map<string, double> timings_ms = 6;
+  map<string, int32> candidates = 7;
+  map<string, string> models = 8;
+}
+
+message Hit {
+  string chunk_id = 1;
+  string doc_id = 2;
+  string fund_code = 3;
+  string fund_name = 4;
+  string doc_type = 5;
+  string report_period = 6;
+  int32 page_start = 7;
+  int32 page_end = 8;
+  string section_path = 9;
+  bool is_table = 10;
+  string text = 11;
+  map<string, double> scores = 12;
+  map<string, int32> ranks = 13;
+  optional string kb_id = 14;
+  optional string doc_title = 15;
+}
+
+// ---------------------------------------------------------------- Ingest / Delete
+
+message IngestDocumentRequest {
+  string doc_id = 1;  // 1–150 字符，[A-Za-z0-9_.\-#]
+  string file_path = 2;  // 必须位于 ai-service 的 DATA_DIR 之下
+  string fund_code = 3;
+  string fund_name = 4;
+  optional string doc_type = 5;  // 缺省 user_upload
+  string report_period = 6;
+  string doc_title = 7;
+  // 私有库：两个必须同时给出
+  optional string kb_id = 8;
+  optional string owner_id = 9;
+  // true = 立即返回 accepted，入库在后台执行，完成后 HTTP 回调 backend（/internal/documents/callback）
+  bool callback = 10;
+}
+
+message IngestDocumentResponse {
+  string doc_id = 1;
+  bool accepted = 2;  // callback=true 时为 true，此时下面的统计字段不设置
+  optional int32 pages = 3;
+  optional int32 chunks = 4;
+  optional int32 table_chunks = 5;
+  map<string, int32> counts = 6;
+  map<string, double> timings_ms = 7;
+  optional int32 boilerplate_lines = 8;
+}
+
+message DeleteDocumentRequest {
+  string doc_id = 1;
+  optional string kb_id = 2;  // 私有库文档要给
+}
+
+message DeleteDocumentResponse {
+  string doc_id = 1;
+  map<string, int32> remaining = 2;  // 删除后各存储的剩余条数（正常应为 0）
+}

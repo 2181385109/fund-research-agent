@@ -20,6 +20,11 @@ class Settings(BaseSettings):
     )
 
     ai_service_port: int = 8001
+    # S9 gRPC：与 FastAPI 同进程（grpc.aio）。端口被占用时只记错误日志、HTTP 照常服务
+    # （本机同时起两个 ai-service 做评测时，第二个要用 AI_GRPC_ENABLED=false 或另一个端口）
+    ai_grpc_enabled: bool = True
+    ai_grpc_host: str = "127.0.0.1"
+    ai_grpc_port: int = 50051
 
     # infra
     redis_host: str = "127.0.0.1"
