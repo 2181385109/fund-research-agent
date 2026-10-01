@@ -1,5 +1,5 @@
 // SSE 解析：fetch + ReadableStream（不能用 EventSource：要带 Authorization 头，且是 POST）。
-// 规则见 WHATWG SSE：空行结束一个事件；以 ":" 开头的行是注释（backend 每 5 秒发 ": ping" 心跳），忽略；
+// 规则见 WHATWG SSE：空行结束一个事件；以 ":" 开头的行是注释（backend 每秒发 ": ping" 心跳），忽略；
 // "data:" 可以多行；"event:" 后的空格可有可无；CRLF / LF / CR 都当作换行。
 
 export interface RawSseEvent {

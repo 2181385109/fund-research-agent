@@ -1,0 +1,2 @@
+2026-10-02 00:40:59,740 INFO fund_ai.api.chat chat_stream_cancelled request=437788ae9bb64942 transport=http elapsed_ms=6430
+                    INFO     chat_stream_cancelled                   chat.py:103

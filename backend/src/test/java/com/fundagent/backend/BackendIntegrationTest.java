@@ -87,6 +87,9 @@ class BackendIntegrationTest {
 
     @DynamicPropertySource
     static void props(DynamicPropertyRegistry r) {
+        // 这里的假 ai-service 是 HTTP 的（JDK HttpServer）；默认传输自 S9 起是 grpc，所以显式切回 http。
+        // gRPC 客户端由 GrpcAiServiceClientTest（in-process 服务端）和全栈 e2e 覆盖
+        r.add("fra.ai.transport", () -> "http");
         r.add("fra.ai.base-url", () -> "http://127.0.0.1:" + fakeAi.getAddress().getPort());
         r.add("fra.security.jwt-secret", () -> "integration-test-jwt-secret-0123456789");
         r.add("fra.security.internal-secret", () -> INTERNAL_SECRET);

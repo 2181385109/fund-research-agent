@@ -219,7 +219,7 @@ ES 另有 `text_ctx`（`【基金简称｜文档名｜章节】` + 正文，BM25
 | `GET /api/conversations` | 我的会话（最近更新在前，最多 100 条） |
 | `GET /api/conversations/{id}/messages` | 全部消息。助手消息带 `citations`（出处 JSON 数组，原样来自 ai-service）、`disclaimer`（风险提示）、`status`（`OK`/`ERROR`/`CANCELLED`）；用户消息带 `kbIds`（本次实际使用的检索范围） |
 | `DELETE /api/conversations/{id}` | 删除（消息级联删除）；别人的会话 404 |
-| `POST /api/conversations/{id}/chat` `{"question","kbIds"?}` | **SSE**。事件与 `POST /v1/chat/stream` 的完全一致（`meta → (tool_start/tool_end/token)* → citations → disclaimer → done`，data 原文转发），另外每 5 秒（`CHAT_HEARTBEAT`）发一行注释心跳 `: ping`。`disclaimer` 一定紧挨在 `done` 之前：上游中途失败或提前断开时 backend 补发 `error → disclaimer → done(status=error)`（错误码 `upstream_unavailable` / `upstream_closed`） |
+| `POST /api/conversations/{id}/chat` `{"question","kbIds"?}` | **SSE**。事件与 `POST /v1/chat/stream` 的完全一致（`meta → (tool_start/tool_end/token)* → citations → disclaimer → done`，data 原文转发），另外每 1 秒（`CHAT_HEARTBEAT`，S9 起默认 1 秒，之前是 5 秒）发一行注释心跳 `: ping`。`disclaimer` 一定紧挨在 `done` 之前：上游中途失败或提前断开时 backend 补发 `error → disclaimer → done(status=error)`（错误码 `upstream_unavailable` / `upstream_closed`） |
 
 **检索范围（ADR-043）**：`kbIds` 缺省 = 公共库 + 我的全部私有库；给了就必须**每一个**都是我可访问的库，否则整个请求 **403**（不区分「不存在」和「是别人的」；此时不保存任何消息，也不会调用 ai-service）。
 只选私有库时 `include_public=false`。发给 ai-service 的 `kb_scope.owner_id` 恒为当前用户。

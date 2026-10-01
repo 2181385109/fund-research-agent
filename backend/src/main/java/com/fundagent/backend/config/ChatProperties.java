@@ -14,5 +14,5 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 @ConfigurationProperties(prefix = "fra.chat")
 public record ChatProperties(
         @DefaultValue("6") int historyRounds,
-        @DefaultValue("5s") Duration heartbeat,
+        @DefaultValue("1s") Duration heartbeat,
         @DefaultValue("5m") Duration emitterTimeout) {}

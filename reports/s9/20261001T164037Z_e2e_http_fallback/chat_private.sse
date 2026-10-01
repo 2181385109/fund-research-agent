@@ -1,0 +1,25 @@
+event:meta
+data:{"request_id": "c2a6822fb96544e5", "model": "deepseek-flash", "max_steps": 6}
+
+:ping
+
+event:tool_start
+data:{"call_id": "call_00_tQZi227mUCfMAOkZEpJV7070", "name": "search_fund_documents", "args": {"query": "青鸾项目 止盈阈值 复核周期"}, "step": 1}
+
+event:tool_end
+data:{"call_id": "call_00_tQZi227mUCfMAOkZEpJV7070", "name": "search_fund_documents", "duration_ms": 127.8, "status": "ok", "summary": "检索到 1 个片段", "citation_ids": [1]}
+
+:ping
+
+event:token
+data:{"text": "根据你上传的《星河研究院备忘录.pdf》：\n\n- **青鸾项目的止盈阈值：17.3%** [1]\n- **复核周期：每周三** [1]\n\n该备忘录还提到，青鸾项目负责人是研究员林深 [1]。"}
+
+event:citations
+data:{"items": [{"id": 1, "kind": "document", "kb_id": "105", "fund_code": "", "fund_name": "", "doc_id": "u37-k105-585c0abba957c846", "doc_type": "user_upload", "doc_title": "星河研究院备忘录.pdf", "report_period": "", "page_start": 1, "page_end": 1, "section": "", "snippet": "星河研究院 内部备忘录（虚构材料，仅用于系统演示）青鸾项目的止盈阈值定为17.3%，复核周期为每周三，负责人是研究员林深。\n赤霄项目的仓位上限为组合净值的8.6%，超过上限需要在两个交易日内完成再平衡。\n本备忘录的保密等级为内部，不得对外披露。"}]}
+
+event:disclaimer
+data:{"text": "以上内容基于公开披露信息整理，仅供学习研究，不构成投资建议。基金有风险，投资需谨慎。"}
+
+event:done
+data:{"request_id": "c2a6822fb96544e5", "status": "ok", "request_model": "deepseek-flash", "timings_ms": {"total": 2582.2, "first_token": 2580.6, "llm": 2449.9, "tools": 127.8}, "response_models": ["deepseek-flash"], "usage": {"input_tokens": 6267, "output_tokens": 104, "total_tokens": 6371}, "tool_rounds": 1, "llm_calls": [{"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 3051, "output_tokens": 49, "total_tokens": 3100, "duration_ms": 1014.3, "first_token_ms": null, "tool_calls": 1}, {"request_model": "deepseek-flash", "response_model": "deepseek-flash", "input_tokens": 3216, "output_tokens": 55, "total_tokens": 3271, "duration_ms": 1435.6, "first_token_ms": 1196.9, "tool_calls": 0}], "tools": [{"name": "search_fund_documents", "status": "ok", "duration_ms": 127.8, "step": 1}], "compliance_flags": [], "dropped_citations": [], "answer_chars": 95, "preamble_dropped_chars": 0, "preamble_leaked_chars": 0}
+

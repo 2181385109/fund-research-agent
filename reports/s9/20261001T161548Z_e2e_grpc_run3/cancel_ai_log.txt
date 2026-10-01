@@ -1,0 +1,2 @@
+2026-10-02 00:16:10,665 INFO fund_ai.api.chat chat_stream_cancelled request=81dd584d17324b5e transport=grpc elapsed_ms=6775
+                    INFO     chat_stream_cancelled                   chat.py:103

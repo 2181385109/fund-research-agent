@@ -61,7 +61,7 @@ fra:
     chat-idle-timeout: ${AI_CHAT_IDLE_TIMEOUT:120s}
   chat:
     history-rounds: ${CHAT_HISTORY_ROUNDS:6}
-    heartbeat: ${CHAT_HEARTBEAT:5s}
+    heartbeat: ${CHAT_HEARTBEAT:1s}
     emitter-timeout: 5m
 
 springdoc:

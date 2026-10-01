@@ -1,0 +1,4 @@
+2026-10-02T00:40:59.732+08:00  INFO [] 1 --- [fund-research-agent-backend] [  chat-stream-1] c.f.backend.chat.service.ChatService     : chat client gone request=437788ae9bb64942 reason=send failed, cancelling upstream
+2026-10-02T00:40:59.732+08:00  INFO [] 1 --- [fund-research-agent-backend] [  chat-stream-1] c.f.b.aiclient.HttpAiServiceClient       : chat upstream cancel requested request_id=437788ae9bb64942
+2026-10-02T00:40:59.732+08:00  INFO [] 1 --- [fund-research-agent-backend] [nio-8081-exec-8] c.f.backend.chat.service.ChatService     : chat client gone request=437788ae9bb64942 reason=emitter error: AsyncRequestNotUsableException, cancelling upstream
+2026-10-02T00:40:59.743+08:00  INFO [] 1 --- [fund-research-agent-backend] [nio-8081-exec-8] c.f.backend.chat.service.ChatService     : chat finished request=437788ae9bb64942 status=CANCELLED answer_chars=0

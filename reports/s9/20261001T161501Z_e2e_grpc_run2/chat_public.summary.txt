@@ -1,0 +1,11 @@
+事件顺序： meta → tool_start → tool_end → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → citations → disclaimer → done
+答案： 中欧医疗健康混合（003095）的基金托管人是**中国工商银行股份有限公司**。
+
+- 招募说明书（2026-09-21 更新）封面及释义部分均载明：基金托管人为中国工商银行股份有限公司 [1][4]。
+- 基金合同中「基金托管人简况」进一步列明：名称中国工商银行股份有限公司，住所北京市西城区复兴门内大街 55 号，成立时间 1984 年 1 月 1 日，注册资本人民币 35,640,625.71 万元 [2]。
+出处：
+  [1] kind=document 招募说明书（2026-09-21更新） kb_id=-
+  [2] kind=document 基金合同 kb_id=-
+  [4] kind=document 招募说明书（2026-09-21更新） kb_id=-
+风险提示： 以上内容基于公开披露信息整理，仅供学习研究，不构成投资建议。基金有风险，投资需谨慎。
+CHECK PASS

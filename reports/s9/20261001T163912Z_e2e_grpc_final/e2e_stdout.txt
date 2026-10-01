@@ -1,0 +1,183 @@
+
+==== 0. 服务就绪 ====
+backend: {"code":0,"message":"ok","data":{"status":"UP","components":{"mysql":{"status":"UP","latencyMs":0},"redis":{"status":"UP","latencyMs":1}}},"requestId":"734cca2292c247bf973c2d54cc6819dc"}
+
+==== 1. 注册两个用户（A 是主角，B 用来检查越权） ====
+  ✓ 用户 A 拿到 JWT（长度 161）
+  ✓ 不带令牌访问受保护接口 → 401
+
+==== 2. 对公共库提问（流式） ====
+会话 id: 1350
+event:meta
+data:{"request_id":"2527c6ff4c964397","model":"deepseek-flash","max_steps":6}
+
+:ping
+
+event:tool_start
+data:{"call_id":"call_00_I9rPGvKfOL9VHovTpnLr6057","name":"search_fund_documents","args":{"top_n":5,"query":"中欧医疗健康混合 基金托管人 托管银行","doc_types":["prospectus","contract"],"fund_codes":["003095"]},"step":1}
+
+:ping
+
+:ping
+
+:ping
+
+:ping
+
+:ping
+
+event:tool_end
+data:{"call_id":"call_00_I9rPGvKfOL9VHovTpnLr6057","name":"search_fund_documents","status":"ok","duration_ms":4316.5,"summary":"检索到 5 个片段","citation_ids":[1,2,3,4,5]}
+
+:ping
+
+event:token
+data:{"text":"中欧医疗健康混合（003095）的基金托管人是**中国工商银行股份有限公司**。\n\n- 招募说明书（2026-09-21 更新）封面及释义部分均载明：基金托管人为中国工商银行股份有限公司 [1][4]。\n- 基金合同「基金托管人简况」进一步列明：名称中国工商银行股份有限公司，住所北京市西城区复兴门内大街 55 号，成立时间"}
+
+event:token
+data:{"text":" "}
+
+event:token
+data:{"text":"198"}
+
+event:token
+data:{"text":"4"}
+
+event:token
+data:{"text":" "}
+
+event:token
+data:{"text":"年"}
+
+event:token
+data:{"text":" "}
+
+event:token
+data:{"text":"1"}
+
+event:token
+data:{"text":" "}
+
+event:token
+data:{"text":"月"}
+
+event:token
+data:{"text":" "}
+
+event:token
+data:{"text":"1"}
+
+event:token
+data:{"text":" "}
+
+event:token
+data:{"text":"日"}
+
+event:token
+data:{"text":"，"}
+
+event:token
+data:{"text":"
+…（SSE 原文完整保存在 reports/s9/20261001T163912Z_e2e_grpc_final/chat_public.sse）
+事件顺序： meta → tool_start → tool_end → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → citations → disclaimer → done
+答案： 中欧医疗健康混合（003095）的基金托管人是**中国工商银行股份有限公司**。
+
+- 招募说明书（2026-09-21 更新）封面及释义部分均载明：基金托管人为中国工商银行股份有限公司 [1][4]。
+- 基金合同「基金托管人简况」进一步列明：名称中国工商银行股份有限公司，住所北京市西城区复兴门内大街 55 号，成立时间 1984 年 1 月 1 日，基金托管资格批文为证监基字【1998】3 号 [2]。
+出处：
+  [1] kind=document 招募说明书（2026-09-21更新） kb_id=-
+  [2] kind=document 基金合同 kb_id=-
+  [4] kind=document 招募说明书（2026-09-21更新） kb_id=-
+风险提示： 以上内容基于公开披露信息整理，仅供学习研究，不构成投资建议。基金有风险，投资需谨慎。
+CHECK PASS
+  ✓ 公共库：有出处、风险提示紧挨 done
+
+==== 3. 建私有知识库并上传一份私有 PDF ====
+私有知识库 id: 104
+wrote reports\s9\20261001T163912Z_e2e_grpc_final\private_memo.pdf
+{"code":0,"message":"ok","data":{"id":5,"kbId":104,"filename":"星河研究院备忘录.pdf","sizeBytes":2724,"status":"PENDING","error":null,"pages":null,"chunks":null,"createdAt":null},"requestId":"90946b477a344fc6b0f43d0b73bb14b3"}
+  ✓ 上传返回 PENDING
+  ✓ 同一文件再传 → 409（sha256 去重）
+  ✓ 伪造的 PDF → 415
+
+==== 4. 等待入库 READY（首次会加载 embedding 模型，最多 3 分钟） ====
+  状态：PROCESSING
+  状态：READY
+{"code":0,"message":"ok","data":{"id":5,"kbId":104,"filename":"星河研究院备忘录.pdf","sizeBytes":2724,"status":"READY","error":null,"pages":1,"chunks":1,"createdAt":"2026-10-02T00:39:22.044"},"requestId":"b68d3914fc9f49849104c5ea56f3f34c"}
+  ✓ 文档 READY
+
+==== 5. 对私有库提问（回答必须引用这份私有文档） ====
+event:meta
+data:{"request_id":"5af624b8077e47c7","model":"deepseek-flash","max_steps":6}
+
+:ping
+
+event:tool_start
+data:{"call_id":"call_00_0BRkVIjIA82UqceVYrNs3877","name":"search_fund_documents","args":{"query":"青鸾项目 止盈阈值 复核周期"},"step":1}
+
+:ping
+
+event:tool_end
+data:{"call_id":"call_00_0BRkVIjIA82UqceVYrNs3877","name":"search_fund_documents","status":"ok","duration_ms":530.8,"summary":"检索到 1 个片段","citation_ids":[1]}
+
+:ping
+
+event:token
+data:{"text":"根据您上传的《星河研究院备忘录.pdf》：\n\n- **青鸾项目止盈阈值**：17.3% [1]\n- **复核周期**：每周三 [1]\n\n该备忘录还提到，青鸾项目负责人为研究员林深 [1]。"}
+
+event:citations
+data:{"items":[{"id":1,"kind":"document","fund_code":"","fund_name":"","doc_id":"u35-k104-6119a2d04ec31b74","doc_type":"user_upload","doc_title":"星河研究院备忘录.pdf","report_period":"","page_start":1,"page_end":1,"section":"","snippet":"星河研究院 内部备忘录（虚构材料，仅用于系统演示）青鸾项目的止盈阈值定为17.3%，复核周期为每周三，负责人是研究员林深。\n赤霄项目的仓位上限为组合净值的8.6%，超过上限需要在两个交易日内完成再平衡。\n本备忘录的保密等级为内部，不得对外披露。","kb_id":"104"}]}
+
+event:disclaimer
+data:{"text":"以上内容基于公开披露信息整理，仅供学习研究，不构成投资建议。基金有风险，投资需谨慎。"}
+
+event:done
+data:{"request_id":"5af624b8077e47c7","status":"ok","request_model":"deepseek-flash","response_models":["deepseek-flash"],"usage":{"input_tokens":6253,"output_tokens":104,"total_tokens":6357},"timings_ms":{"total":3745.5,"first_token":3737.1,"llm":3187.1,"tools":530.8},"tool_rounds":1,"llm_call
+…（SSE 原文完整保存在 reports/s9/20261001T163912Z_e2e_grpc_final/chat_private.sse）
+事件顺序： meta → tool_start → tool_end → token → citations → disclaimer → done
+答案： 根据您上传的《星河研究院备忘录.pdf》：
+
+- **青鸾项目止盈阈值**：17.3% [1]
+- **复核周期**：每周三 [1]
+
+该备忘录还提到，青鸾项目负责人为研究员林深 [1]。
+出处：
+  [1] kind=document 星河研究院备忘录.pdf kb_id=104
+风险提示： 以上内容基于公开披露信息整理，仅供学习研究，不构成投资建议。基金有风险，投资需谨慎。
+引用了私有文档《星河研究院备忘录.pdf》的出处条数：1
+CHECK PASS
+  ✓ 私有库：答案引用了私有文档（出处里有《星河研究院备忘录.pdf》）
+  ✓ 答案里出现文档中的数字 17.3%
+
+==== 6. 会话历史 ====
+#2705 USER      status=OK        内容='中欧医疗健康混合的基金托管人是谁？' 出处=0 风险提示=无
+#2706 ASSISTANT status=OK        内容='中欧医疗健康混合（003095）的基金托管人是**中国工商银行股份有限公司**。\n\n- 招募说明书（2026-09-21' 出处=3 风险提示=有
+#2707 USER      status=OK        内容='根据我上传的备忘录，青鸾项目的止盈阈值是多少？复核周期呢？' 出处=0 风险提示=无
+#2708 ASSISTANT status=OK        内容='根据您上传的《星河研究院备忘录.pdf》：\n\n- **青鸾项目止盈阈值**：17.3% [1]\n- **复核周期**：每' 出处=1 风险提示=有
+HISTORY OK
+  ✓ 历史里 2 问 2 答，答案的出处与风险提示都已落库
+
+==== 7. 越权：用户 B 带上用户 A 的 kb_id / 读 A 的会话与文档 ====
+B 带 A 的 kbId 提问 → HTTP 403 {"code":40300,"message":"无权访问所选的知识库","requestId":"bd77845092a14e0b8159d2a6a96568f5"}
+  ✓ B 带 A 的 kb_id → 403
+  ✓ B 读 A 的会话历史 → 404
+  ✓ B 读 A 的文档 → 404
+  ✓ B 往 A 的库上传 → 403
+  ✓ 被拒的请求没有到达 ai-service（chat_stream_started 日志条数 4 → 4）
+
+==== 8. 客户端中途断开 → 取消上游（PLAN S6 验收 4） ====
+curl 在约 4 秒后主动断开（已收到 382 字节）
+--- ai-service 日志（断开之后新增的相关行）---
+2026-10-02 00:39:37,835 INFO fund_ai.api.chat chat_stream_cancelled request=b184b691d38847b1 transport=grpc elapsed_ms=7025
+                    INFO     chat_stream_cancelled                   chat.py:103
+  ✓ ai-service 记录了 chat_stream_cancelled
+--- backend 日志 ---
+2026-10-02T00:39:37.815+08:00  INFO [] 1 --- [fund-research-agent-backend] [   chat-sched-1] c.f.backend.chat.service.ChatService     : chat client gone request=b184b691d38847b1 reason=heartbeat failed: AsyncRequestNotUsableException, cancelling upstream
+2026-10-02T00:39:37.815+08:00  INFO [] 1 --- [fund-research-agent-backend] [   chat-sched-1] c.f.b.aiclient.GrpcAiServiceClient       : chat upstream cancel requested request_id=b184b691d38847b1
+2026-10-02T00:39:37.816+08:00  INFO [] 1 --- [fund-research-agent-backend] [nio-8081-exec-9] c.f.backend.chat.service.ChatService     : chat client gone request=b184b691d38847b1 reason=emitter error: AsyncRequestNotUsableException, cancelling upstream
+2026-10-02T00:39:37.845+08:00  INFO [] 1 --- [fund-research-agent-backend] [nio-8081-exec-9] c.f.backend.chat.service.ChatService     : chat finished request=b184b691d38847b1 status=CANCELLED answer_chars=0
+  ✓ backend 记录了取消上游
+最后一条消息： ASSISTANT CANCELLED ''
+  ✓ 被取消的回答以 CANCELLED 保存
+
+E2E RESULT: PASS  （原文保存在 reports/s9/20261001T163912Z_e2e_grpc_final）

@@ -1,0 +1,4 @@
+2026-10-02T00:39:37.815+08:00  INFO [] 1 --- [fund-research-agent-backend] [   chat-sched-1] c.f.backend.chat.service.ChatService     : chat client gone request=b184b691d38847b1 reason=heartbeat failed: AsyncRequestNotUsableException, cancelling upstream
+2026-10-02T00:39:37.815+08:00  INFO [] 1 --- [fund-research-agent-backend] [   chat-sched-1] c.f.b.aiclient.GrpcAiServiceClient       : chat upstream cancel requested request_id=b184b691d38847b1
+2026-10-02T00:39:37.816+08:00  INFO [] 1 --- [fund-research-agent-backend] [nio-8081-exec-9] c.f.backend.chat.service.ChatService     : chat client gone request=b184b691d38847b1 reason=emitter error: AsyncRequestNotUsableException, cancelling upstream
+2026-10-02T00:39:37.845+08:00  INFO [] 1 --- [fund-research-agent-backend] [nio-8081-exec-9] c.f.backend.chat.service.ChatService     : chat finished request=b184b691d38847b1 status=CANCELLED answer_chars=0

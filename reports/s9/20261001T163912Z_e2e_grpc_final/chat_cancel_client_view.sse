@@ -1,0 +1,12 @@
+event:meta
+data:{"request_id":"b184b691d38847b1","model":"deepseek-flash","max_steps":6}
+
+:ping
+
+:ping
+
+:ping
+
+event:tool_start
+data:{"call_id":"call_00_lcshrk200zSP5kYDAS5s6949","name":"search_fund_documents","args":{"top_n":8,"query":"管理费率 托管费率 申购费率 赎回费率 销售服务费 费率结构","doc_types":["prospectus"],"fund_codes":["003095"]},"step":1}
+

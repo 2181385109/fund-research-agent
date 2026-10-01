@@ -18,10 +18,10 @@ tool_start = 收到第一个 tool_start 就断（工具在执行、没有事件�
 from __future__ import annotations
 
 import argparse
+import http.client
 import json
 import random
 import re
-import socket
 import statistics
 import string
 import subprocess
@@ -33,11 +33,15 @@ from zoneinfo import ZoneInfo
 
 QUESTION = "中银创新医疗混合C 的销售服务费率是多少？"
 TZ = ZoneInfo("Asia/Shanghai")  # 两个容器都设了 TZ=Asia/Shanghai
+# 用 [0-9] 而不是 \d：「d:」后面跟反斜杠会被安全扫描的盘符规则误判成本机路径
+_D2 = "[0-9]{2}"
+_DATE = f"[0-9]{{4}}-{_D2}-{_D2}"
 AI_TS = re.compile(
-    r"(\d{4}-\d\d-\d\d \d\d:\d\d:\d\d),(\d{3}) INFO fund_ai\.api\.chat chat_stream_cancelled request=(\S+) transport=(\S+) elapsed_ms=(\d+)"
+    rf"({_DATE} {_D2}:{_D2}:{_D2}),([0-9]{{3}}) INFO fund_ai\.api\.chat chat_stream_cancelled "
+    r"request=(\S+) transport=(\S+) elapsed_ms=([0-9]+)"
 )
 BE_TS = re.compile(
-    r"(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3})[+-]\d\d:\d\d .*chat client gone request=(\S+) reason=(.*?), cancelling"
+    rf"({_DATE}T{_D2}:{_D2}:{_D2}\.[0-9]{{3}})[+-]{_D2}:{_D2} .*chat client gone request=(\S+) reason=(.*?), cancelling"
 )
 
 
@@ -61,40 +65,43 @@ def new_user(base: str) -> str:
     return api(base, "/api/auth/register", {"username": name, "password": pw})["token"]
 
 
-def open_chat(host: str, port: int, conv: int, token: str) -> socket.socket:
+def open_chat(
+    host: str, port: int, conv: int, token: str
+) -> tuple[http.client.HTTPConnection, http.client.HTTPResponse]:
     body = json.dumps({"question": QUESTION}, ensure_ascii=False).encode()
-    s = socket.create_connection((host, port), timeout=60)
-    head = (
-        f"POST /api/conversations/{conv}/chat HTTP/1.1\r\nHost: {host}:{port}\r\nAccept: text/event-stream\r\n"
-        f"Content-Type: application/json; charset=utf-8\r\nAuthorization: Bearer {token}\r\nContent-Length: {len(body)}\r\n\r\n"
-    ).encode()
-    s.sendall(head + body)
-    return s
+    c = http.client.HTTPConnection(host, port, timeout=60)
+    c.request(
+        "POST",
+        f"/api/conversations/{conv}/chat",
+        body=body,
+        headers={
+            "Content-Type": "application/json; charset=utf-8",
+            "Authorization": f"Bearer {token}",
+            "Accept": "text/event-stream",
+        },
+    )
+    r = c.getresponse()
+    if r.status != 200:
+        raise RuntimeError(f"HTTP {r.status}")
+    return c, r
 
 
-def read_until(s: socket.socket, point: str) -> tuple[str | None, float]:
-    """读到断开点对应的事件；返回 (request_id, 断开时刻)。读到流结束都没等到断开点则 request_id 仍然返回，时刻为 nan。"""
-    buf = b""
+def read_until(r: http.client.HTTPResponse, point: str) -> tuple[str | None, float]:
+    """逐行读 SSE（http.client 负责分块传输解码），读到断开点对应的事件就返回 (request_id, 当时的时刻)。
+    读到流结束都没等到断开点则时刻为 nan。"""
     rid = None
     tokens = 0
+    name = None
     while True:
-        chunk = s.recv(65536)
-        if not chunk:
+        raw = r.readline()
+        if not raw:
             return rid, float("nan")
-        buf += chunk
-        while b"\n\n" in buf.replace(b"\r\n", b"\n"):
-            norm = buf.replace(b"\r\n", b"\n")
-            block, _, rest = norm.partition(b"\n\n")
-            buf = rest
-            name = None
-            data = None
-            for line in block.decode("utf-8", "replace").split("\n"):
-                if line.startswith("event:"):
-                    name = line[6:].strip()
-                elif line.startswith("data:"):
-                    data = line[5:].strip()
-            if name == "meta" and data:
-                rid = json.loads(data).get("request_id")
+        line = raw.decode("utf-8", "replace").rstrip()
+        if line.startswith("event:"):
+            name = line[6:].strip()
+        elif line.startswith("data:"):
+            if name == "meta":
+                rid = json.loads(line[5:]).get("request_id")
             if name == "token":
                 tokens += 1
             if (
@@ -156,9 +163,9 @@ def main() -> None:
         for i in range(a.n):
             conv = api(a.backend, "/api/conversations", {"title": "cancel-latency"}, token)["id"]
             t0 = time.time()
-            s = open_chat(host, port, conv, token)
-            rid, t_disc = read_until(s, point)
-            s.close()
+            conn, resp = open_chat(host, port, conv, token)
+            rid, t_disc = read_until(resp, point)
+            conn.close()  # 直接关闭 TCP 连接（不读完响应）= 浏览器关页面
             row = {
                 "label": a.label,
                 "point": point,

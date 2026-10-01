@@ -1,0 +1,6 @@
+event:meta
+data:{"request_id":"81dd584d17324b5e","model":"deepseek-flash","max_steps":6}
+
+event:tool_start
+data:{"call_id":"call_00_Ii70DKCMAAYvhymj20v30805","name":"search_fund_documents","args":{"top_n":8,"query":"管理费率 托管费率 申购费率 赎回费率 销售服务费 费率结构","doc_types":["prospectus"],"fund_codes":["003095"]},"step":1}
+

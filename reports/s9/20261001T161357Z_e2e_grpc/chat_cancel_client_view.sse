@@ -1,0 +1,6 @@
+event:meta
+data:{"request_id":"b2a1e0881c5f4720","model":"deepseek-flash","max_steps":6}
+
+event:tool_start
+data:{"call_id":"call_00_vHznxxMhdEYHoIZnZJ1d9631","name":"search_fund_documents","args":{"top_n":6,"query":"中欧医疗健康混合 基金费率结构 管理费 托管费 申购费 赎回费","doc_types":["prospectus","contract"],"fund_codes":["003095"]},"step":1}
+

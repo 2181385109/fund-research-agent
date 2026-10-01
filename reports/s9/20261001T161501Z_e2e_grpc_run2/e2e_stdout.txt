@@ -1,0 +1,164 @@
+
+==== 0. 服务就绪 ====
+backend: {"code":0,"message":"ok","data":{"status":"UP","components":{"mysql":{"status":"UP","latencyMs":0},"redis":{"status":"UP","latencyMs":0}}},"requestId":"21879a4ab2864c81930766c6f732021e"}
+
+==== 1. 注册两个用户（A 是主角，B 用来检查越权） ====
+  ✓ 用户 A 拿到 JWT（长度 161）
+  ✓ 不带令牌访问受保护接口 → 401
+
+==== 2. 对公共库提问（流式） ====
+会话 id: 1219
+event:meta
+data:{"request_id":"e123923c21d149e3","model":"deepseek-flash","max_steps":6}
+
+event:tool_start
+data:{"call_id":"call_00_CKb6c6oygaxO7Jol1M6X2321","name":"search_fund_documents","args":{"top_n":5,"query":"中欧医疗健康混合 基金托管人 托管银行","doc_types":["prospectus","contract"],"fund_codes":["003095"]},"step":1}
+
+:ping
+
+event:tool_end
+data:{"call_id":"call_00_CKb6c6oygaxO7Jol1M6X2321","name":"search_fund_documents","status":"ok","duration_ms":4217.7,"summary":"检索到 5 个片段","citation_ids":[1,2,3,4,5]}
+
+event:token
+data:{"text":"中欧医疗健康混合（003095）的基金托管人是**中国工商银行股份有限公司**。\n\n- 招募说明书（2026-09-21 更新）封面及释义部分均载明：基金托管人为中国工商银行股份有限公司 [1][4]。\n- 基金合同中「基金托管人简况」进一步列明：名称中国工商银行股份有限公司，住所北京市西城区复兴门内大街 55 号，成立"}
+
+event:token
+data:{"text":"时间"}
+
+event:token
+data:{"text":" "}
+
+event:token
+data:{"text":"198"}
+
+event:token
+data:{"text":"4"}
+
+event:token
+data:{"text":" "}
+
+event:token
+data:{"text":"年"}
+
+event:token
+data:{"text":" "}
+
+event:token
+data:{"text":"1"}
+
+event:token
+data:{"text":" "}
+
+event:token
+data:{"text":"月"}
+
+event:token
+data:{"text":" "}
+
+event:token
+data:{"text":"1"}
+
+event:token
+data:{"text":" "}
+
+event:token
+data:{"text":"日"}
+
+event:token
+data:{"text":"，"}
+
+event:token
+data:{"text":"注册资
+…（SSE 原文完整保存在 reports/s9/20261001T161501Z_e2e_grpc_run2/chat_public.sse）
+事件顺序： meta → tool_start → tool_end → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → token → citations → disclaimer → done
+答案： 中欧医疗健康混合（003095）的基金托管人是**中国工商银行股份有限公司**。
+
+- 招募说明书（2026-09-21 更新）封面及释义部分均载明：基金托管人为中国工商银行股份有限公司 [1][4]。
+- 基金合同中「基金托管人简况」进一步列明：名称中国工商银行股份有限公司，住所北京市西城区复兴门内大街 55 号，成立时间 1984 年 1 月 1 日，注册资本人民币 35,640,625.71 万元 [2]。
+出处：
+  [1] kind=document 招募说明书（2026-09-21更新） kb_id=-
+  [2] kind=document 基金合同 kb_id=-
+  [4] kind=document 招募说明书（2026-09-21更新） kb_id=-
+风险提示： 以上内容基于公开披露信息整理，仅供学习研究，不构成投资建议。基金有风险，投资需谨慎。
+CHECK PASS
+  ✓ 公共库：有出处、风险提示紧挨 done
+
+==== 3. 建私有知识库并上传一份私有 PDF ====
+私有知识库 id: 102
+wrote reports\s9\20261001T161501Z_e2e_grpc_run2\private_memo.pdf
+{"code":0,"message":"ok","data":{"id":3,"kbId":102,"filename":"星河研究院备忘录.pdf","sizeBytes":2724,"status":"PENDING","error":null,"pages":null,"chunks":null,"createdAt":null},"requestId":"8e4d18084bff4e409b5d0c4a06522a13"}
+  ✓ 上传返回 PENDING
+  ✓ 同一文件再传 → 409（sha256 去重）
+  ✓ 伪造的 PDF → 415
+
+==== 4. 等待入库 READY（首次会加载 embedding 模型，最多 3 分钟） ====
+  状态：PROCESSING
+  状态：READY
+{"code":0,"message":"ok","data":{"id":3,"kbId":102,"filename":"星河研究院备忘录.pdf","sizeBytes":2724,"status":"READY","error":null,"pages":1,"chunks":1,"createdAt":"2026-10-02T00:15:10.723"},"requestId":"d5382c56de364efb8e537cff45ae326c"}
+  ✓ 文档 READY
+
+==== 5. 对私有库提问（回答必须引用这份私有文档） ====
+event:meta
+data:{"request_id":"d486bd5d9f934d6f","model":"deepseek-flash","max_steps":6}
+
+event:tool_start
+data:{"call_id":"call_00_gLL1rh5mXG8kCQWJsmX03187","name":"search_fund_documents","args":{"query":"青鸾项目 止盈阈值 复核周期"},"step":1}
+
+event:tool_end
+data:{"call_id":"call_00_gLL1rh5mXG8kCQWJsmX03187","name":"search_fund_documents","status":"ok","duration_ms":122.3,"summary":"检索到 1 个片段","citation_ids":[1]}
+
+event:token
+data:{"text":"根据您上传的《星河研究院备忘录.pdf》：\n\n- **止盈阈值**：17.3% [1]\n- **复核周期**：每周三 [1]\n\n该备忘录还提到，青鸾项目负责人为研究员林深 [1]。"}
+
+event:citations
+data:{"items":[{"id":1,"kind":"document","fund_code":"","fund_name":"","doc_id":"u24-k102-39014922b95f0e2f","doc_type":"user_upload","doc_title":"星河研究院备忘录.pdf","report_period":"","page_start":1,"page_end":1,"section":"","snippet":"星河研究院 内部备忘录（虚构材料，仅用于系统演示）青鸾项目的止盈阈值定为17.3%，复核周期为每周三，负责人是研究员林深。\n赤霄项目的仓位上限为组合净值的8.6%，超过上限需要在两个交易日内完成再平衡。\n本备忘录的保密等级为内部，不得对外披露。","kb_id":"102"}]}
+
+event:disclaimer
+data:{"text":"以上内容基于公开披露信息整理，仅供学习研究，不构成投资建议。基金有风险，投资需谨慎。"}
+
+event:done
+data:{"request_id":"d486bd5d9f934d6f","status":"ok","request_model":"deepseek-flash","response_models":["deepseek-flash"],"usage":{"input_tokens":6243,"output_tokens":101,"total_tokens":6344},"timings_ms":{"total":3266.0,"first_token":3263.7,"llm":3138.8,"tools":122.3},"tool_rounds":1,"llm_calls":[{"request_model":"deepseek-fl
+…（SSE 原文完整保存在 reports/s9/20261001T161501Z_e2e_grpc_run2/chat_private.sse）
+事件顺序： meta → tool_start → tool_end → token → citations → disclaimer → done
+答案： 根据您上传的《星河研究院备忘录.pdf》：
+
+- **止盈阈值**：17.3% [1]
+- **复核周期**：每周三 [1]
+
+该备忘录还提到，青鸾项目负责人为研究员林深 [1]。
+出处：
+  [1] kind=document 星河研究院备忘录.pdf kb_id=102
+风险提示： 以上内容基于公开披露信息整理，仅供学习研究，不构成投资建议。基金有风险，投资需谨慎。
+引用了私有文档《星河研究院备忘录.pdf》的出处条数：1
+CHECK PASS
+  ✓ 私有库：答案引用了私有文档（出处里有《星河研究院备忘录.pdf》）
+  ✓ 答案里出现文档中的数字 17.3%
+
+==== 6. 会话历史 ====
+#2439 USER      status=OK        内容='中欧医疗健康混合的基金托管人是谁？' 出处=0 风险提示=无
+#2440 ASSISTANT status=OK        内容='中欧医疗健康混合（003095）的基金托管人是**中国工商银行股份有限公司**。\n\n- 招募说明书（2026-09-21' 出处=3 风险提示=有
+#2441 USER      status=OK        内容='根据我上传的备忘录，青鸾项目的止盈阈值是多少？复核周期呢？' 出处=0 风险提示=无
+#2442 ASSISTANT status=OK        内容='根据您上传的《星河研究院备忘录.pdf》：\n\n- **止盈阈值**：17.3% [1]\n- **复核周期**：每周三 [' 出处=1 风险提示=有
+HISTORY OK
+  ✓ 历史里 2 问 2 答，答案的出处与风险提示都已落库
+
+==== 7. 越权：用户 B 带上用户 A 的 kb_id / 读 A 的会话与文档 ====
+B 带 A 的 kbId 提问 → HTTP 403 {"code":40300,"message":"无权访问所选的知识库","requestId":"ae303aa2814e4ca4a66cb4a56f16f663"}
+  ✓ B 带 A 的 kb_id → 403
+  ✓ B 读 A 的会话历史 → 404
+  ✓ B 读 A 的文档 → 404
+  ✓ B 往 A 的库上传 → 403
+  ✓ 被拒的请求没有到达 ai-service（chat_stream_started 日志条数 0
+0 → 0
+0）
+
+==== 8. 客户端中途断开 → 取消上游（PLAN S6 验收 4） ====
+curl 在约 4 秒后主动断开（已收到 334 字节）
+--- ai-service 日志（断开之后新增的相关行）---
+  ✗ ai-service 记录了 chat_stream_cancelled
+--- backend 日志 ---
+  ✗ backend 记录了取消上游
+最后一条消息： ASSISTANT CANCELLED ''
+  ✓ 被取消的回答以 CANCELLED 保存
+
+E2E RESULT: FAIL  （见上面标 ✗ 的检查；原文保存在 reports/s9/20261001T161501Z_e2e_grpc_run2）

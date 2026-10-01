@@ -1,0 +1,3 @@
+events_per_request=300 n=100 (warmup 20 discarded)
+sync client: t_total median=39.67 ms  mean=40.42 ms
+aio client:  t_total median=40.09 ms  mean=40.10 ms
