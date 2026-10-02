@@ -147,4 +147,30 @@ EVENTS = [
             ]
         },
     },
+    # S10 语义缓存：meta / done 的 cache_hit 等字段（命中与未命中两种）
+    {
+        "event": "meta",
+        "data": {"request_id": "r", "model": "m", "max_steps": 6, "cache_hit": True},
+    },
+    {
+        "event": "meta",
+        "data": {"request_id": "r", "model": "m", "max_steps": 6, "cache_hit": False},
+    },
+    {
+        "event": "done",
+        "data": {
+            "request_id": "r",
+            "status": "ok",
+            "request_model": "m",
+            "usage": {"input_tokens": 0, "output_tokens": 0, "total_tokens": 0},
+            "timings_ms": {"total": 12.5, "first_token": 12.0, "llm": 0.0, "tools": 0.0},
+            "cache_hit": True,
+            "cache_similarity": 0.931234,
+            "cache_lookup_ms": 9.5,
+        },
+    },
+    {
+        "event": "done",
+        "data": {"request_id": "r", "status": "ok", "cache_hit": False},
+    },
 ]

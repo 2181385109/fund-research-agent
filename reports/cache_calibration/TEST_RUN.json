@@ -1,0 +1,9 @@
+{
+  "run": "20261002T051218Z_test",
+  "dataset_sha256": "ebca9f77ac47b8e4717d25155b06f6e6d9162e081f1bea3cc5af4b9c7fab5a8f",
+  "thresholds": {
+    "A": 0.995,
+    "B": 0.8
+  },
+  "note": "test 只跑一次；这个文件存在就表示已经用掉了"
+}

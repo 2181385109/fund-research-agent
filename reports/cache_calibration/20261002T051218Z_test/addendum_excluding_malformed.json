@@ -1,0 +1,86 @@
+{
+  "note": "事后诊断：排除畸形问题对后的重新计数；官方数字见 summary.json（含全部对）",
+  "run": "20261002T051218Z_test",
+  "n_all": 264,
+  "n_kept": 257,
+  "excluded_ids": [
+    "cp-0188",
+    "cp-0199",
+    "cp-0222",
+    "cp-0303",
+    "cp-0315",
+    "cp-0330",
+    "cp-0332"
+  ],
+  "configs": {
+    "A": {
+      "threshold": 0.995,
+      "guard": false,
+      "n_pos": 89,
+      "n_hard_neg": 128,
+      "n_unrelated": 40,
+      "tp": 0,
+      "fn": 89,
+      "fp_hard": 0,
+      "fp_unrelated": 0,
+      "recall": 0.0,
+      "recall_ci95": [
+        0.0,
+        0.04137800296418846
+      ],
+      "precision_vs_hard": null,
+      "false_hit_rate_hard": 0.0,
+      "false_hit_rate_hard_ci95": [
+        0.0,
+        0.02913799589810803
+      ],
+      "false_hit_rate_all_neg": 0.0
+    },
+    "B": {
+      "threshold": 0.8,
+      "guard": true,
+      "n_pos": 89,
+      "n_hard_neg": 128,
+      "n_unrelated": 40,
+      "tp": 77,
+      "fn": 12,
+      "fp_hard": 3,
+      "fp_unrelated": 0,
+      "recall": 0.8651685393258427,
+      "recall_ci95": [
+        0.7789591241958206,
+        0.9211580646505587
+      ],
+      "precision_vs_hard": 0.9625,
+      "false_hit_rate_hard": 0.0234375,
+      "false_hit_rate_hard_ci95": [
+        0.008002271440112167,
+        0.06664488090027204
+      ],
+      "false_hit_rate_all_neg": 0.017857142857142856
+    },
+    "B_dev": {
+      "threshold": 0.8,
+      "guard": true,
+      "n_pos": 89,
+      "n_hard_neg": 128,
+      "n_unrelated": 40,
+      "tp": 77,
+      "fn": 12,
+      "fp_hard": 3,
+      "fp_unrelated": 0,
+      "recall": 0.8651685393258427,
+      "recall_ci95": [
+        0.7789591241958206,
+        0.9211580646505587
+      ],
+      "precision_vs_hard": 0.9625,
+      "false_hit_rate_hard": 0.0234375,
+      "false_hit_rate_hard_ci95": [
+        0.008002271440112167,
+        0.06664488090027204
+      ],
+      "false_hit_rate_all_neg": 0.017857142857142856
+    }
+  }
+}

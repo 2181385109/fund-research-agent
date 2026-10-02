@@ -1,0 +1,80 @@
+{
+  "note": "事后诊断：排除畸形问题对后的重新计数；官方数字见 summary.json（含全部对）",
+  "run": "20261002T051202Z_dev",
+  "n_all": 208,
+  "n_kept": 207,
+  "excluded_ids": [
+    "cp-0071"
+  ],
+  "configs": {
+    "A": {
+      "threshold": 0.995,
+      "guard": false,
+      "n_pos": 72,
+      "n_hard_neg": 103,
+      "n_unrelated": 32,
+      "tp": 0,
+      "fn": 72,
+      "fp_hard": 0,
+      "fp_unrelated": 0,
+      "recall": 0.0,
+      "recall_ci95": [
+        0.0,
+        0.05065293981139638
+      ],
+      "precision_vs_hard": null,
+      "false_hit_rate_hard": 0.0,
+      "false_hit_rate_hard_ci95": [
+        0.0,
+        0.03595603210734395
+      ],
+      "false_hit_rate_all_neg": 0.0
+    },
+    "B": {
+      "threshold": 0.8,
+      "guard": true,
+      "n_pos": 72,
+      "n_hard_neg": 103,
+      "n_unrelated": 32,
+      "tp": 64,
+      "fn": 8,
+      "fp_hard": 0,
+      "fp_unrelated": 0,
+      "recall": 0.8888888888888888,
+      "recall_ci95": [
+        0.795768557414096,
+        0.9426124893992622
+      ],
+      "precision_vs_hard": 1.0,
+      "false_hit_rate_hard": 0.0,
+      "false_hit_rate_hard_ci95": [
+        0.0,
+        0.03595603210734395
+      ],
+      "false_hit_rate_all_neg": 0.0
+    },
+    "B_dev": {
+      "threshold": 0.8,
+      "guard": true,
+      "n_pos": 72,
+      "n_hard_neg": 103,
+      "n_unrelated": 32,
+      "tp": 64,
+      "fn": 8,
+      "fp_hard": 0,
+      "fp_unrelated": 0,
+      "recall": 0.8888888888888888,
+      "recall_ci95": [
+        0.795768557414096,
+        0.9426124893992622
+      ],
+      "precision_vs_hard": 1.0,
+      "false_hit_rate_hard": 0.0,
+      "false_hit_rate_hard_ci95": [
+        0.0,
+        0.03595603210734395
+      ],
+      "false_hit_rate_all_neg": 0.0
+    }
+  }
+}

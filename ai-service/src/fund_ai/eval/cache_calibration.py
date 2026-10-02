@@ -20,10 +20,18 @@
 - test 只跑一次：``test`` 子命令读取 dev 的 t*_A 与 t*_B，在 test 上同时报告两种配置，并写下 ``TEST_RUN.json`` 标记；
   标记存在时拒绝再跑（要重跑必须显式 ``--allow-rerun``，且结果会标注为重跑，不得替换第一次的数字）。
 
+**已知的数据集缺陷（test 跑完之后才发现，没有重跑）**：基金简称以数字结尾的「天弘中证医药100」遇到以年份开头的槽位时，
+``build_cache_pairs.py`` 的「代码后补空格」规则把简称末尾的 ``100`` 和年份前三位 ``202`` 误当成 6 位基金代码，生成了
+「天弘中证医药100202 6年」这样的畸形问题（共 8 对：dev 1、test 7）。
+数据集 v1 保持原样（sha256 不变，test 结果与它一一对应），
+官方数字就是含这 7 对的第一次运行；``addendum`` 子命令在**同一次运行的逐对相似度**上排除畸形对重新计数，作为事后诊断
+（不重新嵌入、不改阈值、不改守卫），明确标注「事后」。
+
 命令（在 ``ai-service/`` 下）::
 
     python -m fund_ai.eval.cache_calibration dev
     python -m fund_ai.eval.cache_calibration test --dev-run ../reports/cache_calibration/<dev 目录>
+    python -m fund_ai.eval.cache_calibration addendum --run ../reports/cache_calibration/<目录>
 """
 
 from __future__ import annotations
@@ -34,6 +42,7 @@ import json
 import math
 import os
 import platform
+import re
 import subprocess
 import sys
 import time
@@ -458,6 +467,62 @@ def run_test(dev_run: Path, allow_rerun: bool) -> Path:
     return run_dir
 
 
+def is_malformed(question: str) -> bool:
+    """畸形问题：「6 位数字 + 空格 + 数字」，且这 6 位不是基金池里的任何份额代码（见模块文档的已知缺陷）。"""
+    codes = {sc["code"] for f in _universe()["funds"] for sc in f["share_classes"]}
+    return any(m.group(1) not in codes for m in re.finditer(r"(?<!\d)(\d{6}) (?=\d)", question))
+
+
+def _universe() -> dict[str, Any]:
+    return yaml.safe_load((REPO_ROOT / "data" / "universe.yaml").read_text(encoding="utf-8"))
+
+
+def run_addendum(run_dir: Path) -> Path:
+    """事后诊断：在已有运行的逐对相似度上排除畸形对，按同一阈值重新计数（不重新嵌入）。"""
+    summary = json.loads((run_dir / "summary.json").read_text(encoding="utf-8"))
+    scored = [
+        json.loads(line)
+        for line in (run_dir / "pair_scores.jsonl").read_text(encoding="utf-8").splitlines()
+        if line
+    ]
+    kept = [r for r in scored if not (is_malformed(r["q1"]) or is_malformed(r["q2"]))]
+    dropped = [r["id"] for r in scored if r not in kept]
+    out: dict[str, Any] = {
+        "note": "事后诊断：排除畸形问题对后的重新计数；官方数字见 summary.json（含全部对）",
+        "run": run_dir.name,
+        "n_all": len(scored),
+        "n_kept": len(kept),
+        "excluded_ids": dropped,
+        "configs": {},
+    }
+    for name, cfg in summary["configs"].items():
+        out["configs"][name] = metrics_at(
+            kept, cfg["threshold"], cfg["guard"], cfg["guard_lexicon"]
+        )
+    (run_dir / "addendum_excluding_malformed.json").write_text(
+        json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n"
+    )
+    lines = [
+        f"# 事后诊断：排除畸形问题对 — {run_dir.name}",
+        "",
+        out["note"],
+        "",
+        f"- 排除 {len(dropped)} 对（{', '.join(dropped)}），剩余 {len(kept)} / {len(scored)} 对；阈值与守卫不变。",
+        "",
+        "| 配置 | 阈值 | recall | 难负例误命中 | 无关对误命中 |",
+        "|---|---|---|---|---|",
+    ]
+    for name, m in out["configs"].items():
+        lines.append(
+            f"| {name} | {m['threshold']} | {m['recall']:.3f}（{m['tp']} / {m['n_pos']}）"
+            f" | {m['fp_hard']} / {m['n_hard_neg']} | {m['fp_unrelated']} / {m['n_unrelated']} |"
+        )
+    (run_dir / "addendum_excluding_malformed.md").write_text(
+        "\n".join(lines) + "\n", encoding="utf-8", newline="\n"
+    )
+    return run_dir / "addendum_excluding_malformed.md"
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawTextHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -465,9 +530,14 @@ def main() -> None:
     t = sub.add_parser("test")
     t.add_argument("--dev-run", type=Path, required=True)
     t.add_argument("--allow-rerun", action="store_true")
+    a = sub.add_parser("addendum")
+    a.add_argument("--run", type=Path, required=True)
     args = ap.parse_args()
     t0 = time.time()
-    out = run_dev() if args.cmd == "dev" else run_test(args.dev_run, args.allow_rerun)
+    if args.cmd == "addendum":
+        out = run_addendum(args.run)
+    else:
+        out = run_dev() if args.cmd == "dev" else run_test(args.dev_run, args.allow_rerun)
     print(f"{args.cmd}: wrote {out}  ({time.time() - t0:.1f}s)")
 
 
