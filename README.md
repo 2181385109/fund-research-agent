@@ -49,7 +49,8 @@
 | S7 | 前端（Vue3）+ 四个 Dockerfile + 一键启动 | ✅ 完成（2026-09-29）：登录 / 知识库与文档 / 对话页（检索范围、四类出处、固定风险提示）；`docker compose --profile app up -d` 一键起全栈（见「一键启动全栈」）；证据见 PROGRESS |
 | S8 | 回答评测 + 第一期收尾 | ✅ 完成（2026-10-01）：test 124 题 × 2 种检索配置的回答评测、人工盲标 36 条（见下方「第一期指标」），tag `v0.1-phase1` |
 | S9 | gRPC 改造 | ✅ 完成（2026-10-02）：proto（`Chat` 流式 / `Retrieve` / `IngestDocument` / `DeleteDocument`）、ai-service 的 grpc.aio 与 FastAPI 同进程、backend `GrpcAiServiceClient`（复用 channel、deadline、取消传播；`AI_TRANSPORT=grpc|http` 可切回 http）；HTTP vs gRPC 延迟与取消延迟预实验见 [docs/perf/grpc_vs_http.md](docs/perf/grpc_vs_http.md)（预实验，不是压测基线），决策见 ADR-047 |
-| S10–S13 | 第二期：Redis → Kafka → 压测 → 优化 | 未开始 |
+| S10 | Redis：限流 + 配额 + 语义缓存 | ✅ 完成（2026-10-02）：Lua 令牌桶（用户 + 全局，429 + `Retry-After`，并发 200 抢容量 20 → 放行恰好 20）、每日配额（跨天、定时回写 MySQL）、语义缓存（Redis 向量索引，按检索范围 + 数据快照 + 模型隔离，不缓存最新净值 / 荐基 / 出错的回答，命中按同一事件协议回放并标 `cache_hit`，**默认关闭**）。**纯向量阈值分不开「只差一个关键要素」的问题**（零误命中点 0.995，recall 0），所以命中还要过关键要素守卫；test 上（只跑一次）recall 77 / 92 = 83.7%、难负例误命中 3 / 132 = 2.3%；命中 vs 未命中首字 57 ms vs 5.4 s（n = 10，真实 LLM）。报告 [docs/perf/semantic_cache.md](docs/perf/semantic_cache.md)，决策见 ADR-048 |
+| S11–S13 | 第二期：Kafka → 压测 → 优化 | 未开始 |
 
 详细计划见 [docs/PLAN.md](docs/PLAN.md)，逐阶段进度与验收证据见 [docs/PROGRESS.md](docs/PROGRESS.md)。
 

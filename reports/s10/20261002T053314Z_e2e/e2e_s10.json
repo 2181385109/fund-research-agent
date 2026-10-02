@@ -1,0 +1,130 @@
+{
+  "base": "http://127.0.0.1:8088",
+  "time_first_miss_s": 15.52,
+  "time_second_hit_s": 0.16,
+  "burst": {
+    "requests": 16,
+    "ok": 10,
+    "limited": 6
+  },
+  "usage_today": {
+    "date": "2026-10-02",
+    "calls": 14,
+    "tokens": 26559,
+    "callsLimit": 200,
+    "tokensLimit": 500000
+  },
+  "usage_daily_row": "14\t26559",
+  "checks": [
+    {
+      "check": "注册成功并拿到令牌",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "第一次：meta.cache_hit=false，done.cache_hit=false",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "第一次：调用了 LLM（usage.total_tokens > 0）",
+      "ok": true,
+      "detail": "19163 tokens，15.5 s"
+    },
+    {
+      "check": "第一次：正常结束（status=ok，有正文与出处）",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "第二次：meta.cache_hit=true，done.cache_hit=true",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "第二次：没有调用 LLM（usage 全 0）",
+      "ok": true,
+      "detail": "0.16 s（含 backend / 反代）"
+    },
+    {
+      "check": "第二次：meta 在最前、disclaimer 紧挨 done",
+      "ok": true,
+      "detail": "meta → tool_start → tool_end … disclaimer → done"
+    },
+    {
+      "check": "第二次：风险提示文案固定",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "第二次：正文与出处和第一次一致",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "第二次：done.cache_similarity ≈ 1",
+      "ok": true,
+      "detail": "1.0"
+    },
+    {
+      "check": "同义改写命中",
+      "ok": true,
+      "detail": "similarity=0.951819"
+    },
+    {
+      "check": "同义改写的正文与第一次一致",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "只差一个要素（管理费 → 托管费）不命中",
+      "ok": true,
+      "detail": "tokens=7396"
+    },
+    {
+      "check": "相近问题得到的是新生成的回答（不同于管理费那条）",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "全部响应都是 200 或 429",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "check": "放行数在容量附近（容量 10，突发期间最多再补 1–2 个）",
+      "ok": true,
+      "detail": "放行 10"
+    },
+    {
+      "check": "被拒的都带 Retry-After（正整数秒）",
+      "ok": true,
+      "detail": "2"
+    },
+    {
+      "check": "429 的错误体是 JSON，code=42900，说明原因",
+      "ok": true,
+      "detail": "请求过于频繁，请 2 秒后重试"
+    },
+    {
+      "check": "calls = 放行的对话请求数（被 429 拒绝的不计）",
+      "ok": true,
+      "detail": "calls=14，期望 14"
+    },
+    {
+      "check": "tokens > 0（两次真实 LLM 调用的 token；缓存命中不计）",
+      "ok": true,
+      "detail": "tokens=26559"
+    },
+    {
+      "check": "上限与配置一致",
+      "ok": true,
+      "detail": "callsLimit=200 tokensLimit=500000"
+    },
+    {
+      "check": "usage_daily 有今天的行，与 Redis 计数一致",
+      "ok": true,
+      "detail": "14\t26559"
+    }
+  ]
+}

@@ -82,10 +82,11 @@ Agent 问答，`text/event-stream`。Agent 自己决定调用哪些工具（文�
 {"question": "003095 从 2025-12-31 到 2026-06-30 的收益率是多少？",
  "history": [{"role": "user", "content": "…"}, {"role": "assistant", "content": "…"}],
  "request_id": "可选，缺省服务端生成",
- "kb_scope": {"include_public": true, "owner_id": "7", "private_kb_ids": ["11", "12"]}}
+ "kb_scope": {"include_public": true, "owner_id": "7", "private_kb_ids": ["11", "12"],
+               "private_kb_versions": {"11": "2-1790000000000", "12": "0-0"}}}
 ```
 `kb_scope`（S6，ADR-043）是**服务端注入**的检索范围，由 backend 按当前用户算出，不是给终端用户或 LLM 的入口：缺省 = 只查公共库（默认拒绝私有）；
-私有库的过滤条件是 `kb_id ∈ private_kb_ids AND owner_id == owner_id`；`private_kb_ids` 非空但 `owner_id` 为空、或 id 含 `[A-Za-z0-9_.-]` 以外的字符返回 422。
+私有库的过滤条件是 `kb_id ∈ private_kb_ids AND owner_id == owner_id`；`private_kb_versions`（S10）是各私有库的内容版本串（库里 READY 文档数 + 最近更新毫秒时间戳，由 backend 算出），**只用于语义缓存隔离**，不影响检索范围；`private_kb_ids` 非空但 `owner_id` 为空、或 id 含 `[A-Za-z0-9_.-]` 以外的字符返回 422。
 范围随每次 `search_fund_documents` 调用以带签名的 HTTP 头 `X-Fund-Kb-Scope`（60 s 有效）传给文档 MCP，LLM 在 tool call 里写的 `kb_ids`/`owner_id` 等参数一律丢弃。
 `question` 1–2000 字；`history` 是最近几轮（最多 40 条，`role` 为 `user` / `assistant`），历史回答里的 `[n]` 会被去掉
 （编号只在一次请求内有效）。参数不合法返回 422。响应头带 `Cache-Control: no-cache`、`X-Accel-Buffering: no`。
@@ -104,7 +105,7 @@ meta → ( tool_start → tool_end | token … )* → citations → disclaimer �
 
 | 事件 | data |
 |---|---|
-| `meta` | `request_id`、`model`（请求的模型名）、`max_steps` |
+| `meta` | `request_id`、`model`（请求的模型名）、`max_steps`；语义缓存开启时另有 `cache_hit`（S10，命中 true / 未命中 false） |
 | `tool_start` | `call_id`、`name`、`args`、`step`（第几轮工具调用，从 1 起） |
 | `tool_end` | `call_id`、`name`、`status`（`ok` / `error`）、`duration_ms`；ok 时另有 `summary`（一句话结果）、`citation_ids`（这次工具结果登记的出处编号）；error 时另有 `error`（工具的错误原文）、`error_kind`（`tool_error` 工具拒绝或执行失败 / `unavailable` 超时或服务不可用） |
 | `token` | `text`（回答的一个片段）。回答里的 `[n]` 都是有效编号（无效的已在流中被丢弃） |
@@ -137,6 +138,7 @@ meta → ( tool_start → tool_end | token … )* → citations → disclaimer �
  "compliance_flags": [], "dropped_citations": [], "answer_chars": 0,
  "preamble_dropped_chars": 0, "preamble_leaked_chars": 0}
 ```
+- **语义缓存（S10，`SEMANTIC_CACHE_ENABLED=true` 时）**：`meta` 与 `done` 都带 `cache_hit`；命中时按**同一事件顺序**回放（`meta → (tool_start → tool_end)* → token* → citations → disclaimer → done`），`done` 另带 `cache_similarity`（与缓存里那条提问的余弦相似度）和 `cache_lookup_ms`（嵌入 + 检索耗时），`usage` 全为 0（没有调用 LLM），`llm_calls` / `tools` 为空，`timings_ms` 是命中路径的真实耗时；`disclaimer` 仍由服务端追加（文案取当前常量，不取缓存）。带对话历史的提问、荐基类、用过 `get_latest_nav`、出错的回答都不缓存，详见 ADR-048。没开缓存时这些字段都不出现。
 - `usage` 是各次 LLM 调用之和；`timings_ms.first_token` 是从请求开始到第一个 `token` 事件（Agent 构造失败等路径上没有）。
 - `compliance_flags`：输出守卫命中的违规表述（如「稳赚」「建议买入」）；第一期只标记、记日志，**不改写回答**。
   否定 / 疑问语境（「无法建议买入」「是否适合加仓」）不算命中。
@@ -171,6 +173,7 @@ mcp-tools（`:8101/mcp`）的四个工具见 `mcp-tools/README.md`。
 | `DeleteDocument` | `DELETE /v1/documents/{doc_id}` | 私有库文档带 `kb_id` |
 
 - **字段名与 HTTP 的 JSON 完全一致**（snake_case）。「可能缺省」的字段在 proto 里是 `optional`，Java 侧把 `ChatEvent` 还原成 SSE 的 `data` 时靠存在性保持字段集合一致；差别只有一处：**数组字段在 gRPC 路径上总是输出**（空数组也输出，如出错路径上的 `tool_end.citation_ids`、`done.compliance_flags`），HTTP 里这些可能缺省。`citations.items[]` 用 `oneof detail`（`document` / `database` / `computation` / `api`）建模，Java 侧还原时展平到与 `id`、`kind` 同一层，所以前端看到的 JSON 与 HTTP 相同。
+- **S10 新增字段**（向后兼容，字段号不重用）：`KbScope.private_kb_versions`（`map<string,string>`，4）、`Meta.cache_hit`（4）、`Done.cache_hit` / `cache_similarity` / `cache_lookup_ms`（16–18，均 `optional`）。
 - **状态码映射**：HTTP 400 / 422 → `INVALID_ARGUMENT`（含 `question` 为空或超长、`history` 非法、`kb_scope` 不合法、路径不在 `DATA_DIR` 下、检索模式未知）；404 → `NOT_FOUND`（入库文件不存在）；500 及其他 → `INTERNAL`；客户端取消 → `CANCELLED`；超过 deadline → `DEADLINE_EXCEEDED`；后端不可达 → `UNAVAILABLE`（客户端侧产生）。`Chat` 在**开始流式输出之后**发生的错误不是 gRPC 状态，而是 `error → disclaimer → done(status=error)` 事件（与 SSE 一致），所以客户端总能拿到风险提示。
 - **取消与 deadline**：客户端取消（`ClientCall.cancel`）或超过 deadline 时 grpc.aio 取消服务端处理协程，取消沿 LangGraph → LLM / MCP 调用传播（与 HTTP 断开连接时相同），ai-service 记一条 `chat_stream_cancelled request=… transport=grpc|http elapsed_ms=…`。取消是即时的，不依赖心跳。
 - backend 用哪种传输由 `AI_TRANSPORT`（`grpc` 默认 | `http`）决定，gRPC 目标地址 `AI_SERVICE_GRPC_TARGET`，单次对话流的 deadline `AI_GRPC_CHAT_DEADLINE`（默认 6 分钟）。
@@ -188,7 +191,7 @@ ES 另有 `text_ctx`（`【基金简称｜文档名｜章节】` + 正文，BM25
 
 统一响应体 `{"code": 0, "message": "ok", "data": …, "requestId": "…"}`；`code` 前三位与 HTTP 状态一致：
 `40000` 参数不合法（400）、`40100` 未登录 / 令牌无效或过期 / 用户名或密码错（401）、`40300` 无权访问（403）、`40400` 资源不存在（404）、
-`40900` 冲突（409）、`41300` 文件过大（413）、`41500` 不支持的文件类型（415）、`50000` 内部错误、`50200` 上游 ai-service 不可用（502）、`50300` 依赖不可用 / 服务繁忙（503）。
+`40900` 冲突（409）、`41300` 文件过大（413）、`41500` 不支持的文件类型（415）、`42900` 限流或超每日配额（429，S10）、`50000` 内部错误、`50200` 上游 ai-service 不可用（502）、`50300` 依赖不可用 / 服务繁忙（503）。
 **所有错误响应都是 JSON**（含 SSE 接口在开始流式输出之前的错误，即使请求带着 `Accept: text/event-stream`）。
 除注册、登录、`/api/health` 外，`/api/**` 都要 `Authorization: Bearer <JWT>`；`/internal/**` 要 `X-Internal-Secret`（用户 JWT 不能当内部凭据）。
 交互式文档：`/swagger-ui.html`。
@@ -220,6 +223,23 @@ ES 另有 `text_ctx`（`【基金简称｜文档名｜章节】` + 正文，BM25
 | `GET /api/conversations/{id}/messages` | 全部消息。助手消息带 `citations`（出处 JSON 数组，原样来自 ai-service）、`disclaimer`（风险提示）、`status`（`OK`/`ERROR`/`CANCELLED`）；用户消息带 `kbIds`（本次实际使用的检索范围） |
 | `DELETE /api/conversations/{id}` | 删除（消息级联删除）；别人的会话 404 |
 | `POST /api/conversations/{id}/chat` `{"question","kbIds"?}` | **SSE**。事件与 `POST /v1/chat/stream` 的完全一致（`meta → (tool_start/tool_end/token)* → citations → disclaimer → done`，data 原文转发），另外每 1 秒（`CHAT_HEARTBEAT`，S9 起默认 1 秒，之前是 5 秒）发一行注释心跳 `: ping`。`disclaimer` 一定紧挨在 `done` 之前：上游中途失败或提前断开时 backend 补发 `error → disclaimer → done(status=error)`（错误码 `upstream_unavailable` / `upstream_closed`） |
+
+### 限流与每日配额（S10，ADR-048）
+`POST /api/conversations/{id}/chat` 受两层保护，超限返回 **429**，响应头 **`Retry-After`**（秒，向上取整）+ JSON 错误体（`code=42900`，`message` 说明原因和等待时间）：
+
+| 原因 | `message` 开头 | 说明 |
+|---|---|---|
+| 用户令牌桶 | `请求过于频繁` | 每个用户一个桶：容量 `RATELIMIT_USER_CAPACITY`（允许的瞬时突发），补充速率 `RATELIMIT_USER_REFILL_PER_SEC` |
+| 全局令牌桶 | `服务繁忙` | 所有用户共用一个桶：`RATELIMIT_GLOBAL_CAPACITY` / `RATELIMIT_GLOBAL_REFILL_PER_SEC` |
+| 每日调用次数 | `今日调用次数已用完` | `QUOTA_DAILY_CALLS`（0 = 不限）；「一天」按 `QUOTA_ZONE` 的自然日，`Retry-After` = 距当地零点的秒数 |
+| 每日 token | `今日 token 额度已用完` | `QUOTA_DAILY_TOKENS`；**软上限**：开始前检查已用量，最后一次请求可以越过它 |
+
+检查顺序：令牌桶（最先，之后没有任何数据库访问）→ 会话归属 / 检索范围校验（越权先 403）→ 每日配额。被拒的请求不保存任何消息、不调用 ai-service。
+缓存命中也算一次调用，但不耗 token。Redis 不可用时**放行**并记 warn（保护措施不应该变成故障点）。每日用量定时（`QUOTA_FLUSH_INTERVAL`）回写 MySQL `usage_daily`。
+
+| 接口 | 说明 |
+|---|---|
+| `GET /api/usage/today` | 当前用户今天的 `{date, calls, tokens, callsLimit, tokensLimit}`（上限 0 = 不限） |
 
 **检索范围（ADR-043）**：`kbIds` 缺省 = 公共库 + 我的全部私有库；给了就必须**每一个**都是我可访问的库，否则整个请求 **403**（不区分「不存在」和「是别人的」；此时不保存任何消息，也不会调用 ai-service）。
 只选私有库时 `include_public=false`。发给 ai-service 的 `kb_scope.owner_id` 恒为当前用户。

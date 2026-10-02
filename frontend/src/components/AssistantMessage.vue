@@ -29,7 +29,8 @@ const timing = computed(() => {
   if (!d?.timings_ms?.total) return ''
   const parts = [`用时 ${(d.timings_ms.total / 1000).toFixed(1)} s`]
   if (d.timings_ms.first_token) parts.push(`首字 ${(d.timings_ms.first_token / 1000).toFixed(1)} s`)
-  if (d.usage?.total_tokens) parts.push(`${d.usage.total_tokens} tokens`)
+  if (d.cache_hit) parts.push('命中缓存（未调用模型）')
+  else if (d.usage?.total_tokens) parts.push(`${d.usage.total_tokens} tokens`)
   if (props.answer.model) parts.push(props.answer.model)
   return parts.join(' · ')
 })

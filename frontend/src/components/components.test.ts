@@ -52,6 +52,28 @@ describe('AssistantMessage 风险提示', () => {
   })
 })
 
+describe('AssistantMessage 缓存命中标记', () => {
+  const done = (extra: object) => ({
+    ...newLiveAnswer(),
+    text: '答案',
+    phase: 'ok' as const,
+    done: { status: 'ok' as const, timings_ms: { total: 12, first_token: 10 }, usage: { total_tokens: 0 }, ...extra },
+  })
+
+  it('done.cache_hit=true 时标「命中缓存」，不显示 token 数', () => {
+    const w = mount(AssistantMessage, { props: { answer: done({ cache_hit: true }) } })
+    expect(w.text()).toContain('命中缓存')
+  })
+
+  it('未命中 / 没开缓存时不标', () => {
+    const miss = mount(AssistantMessage, { props: { answer: done({ cache_hit: false, usage: { total_tokens: 321 } }) } })
+    expect(miss.text()).not.toContain('命中缓存')
+    expect(miss.text()).toContain('321 tokens')
+    const off = mount(AssistantMessage, { props: { answer: done({}) } })
+    expect(off.text()).not.toContain('命中缓存')
+  })
+})
+
 describe('CitationList 四类出处', () => {
   it('四种 kind 各有图标和类型标签', () => {
     const w = mount(CitationList, { props: { citations } })

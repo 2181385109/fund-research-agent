@@ -767,3 +767,60 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 
 ### 给统筹的问题
 - 无阻塞。可选：`docs/PLAN.md` §7 表标记 B9 完成；工具执行期取消延迟的成因（疑似 docker 用户态端口代理）是否值得在 S12 压测环境里顺带复验。
+
+
+## S10 Redis：限流 + 配额 + 语义缓存 — 2026-10-02（B10）
+- commit 范围：`f6a44ce`..本节所在提交；CI：待推送后确认（见文末「CI」行）
+- 证据目录：`reports/cache_calibration/`（校准：dev 四次运行、**test 唯一一次** `20261002T051218Z_test`、`TEST_RUN.json` 标记、事后诊断 `addendum_*`）、`reports/semantic_cache/`（`20261002T052808Z` 缓存开销 micro、`20261002T052836Z` 命中 / 未命中延迟 e2e）、`reports/s10/`（全栈 e2e：`20261002T053314Z_e2e` 22 / 22 通过；更早的 `…053124Z_e2e` 21 / 22，唯一失败项是脚本查 MySQL 的辅助函数缺陷，已修，保留）；报告 `docs/perf/semantic_cache.md`；决策 ADR-048；局限 `docs/LIMITATIONS.md`「语义缓存与限流（S10）」。
+
+### 完成项
+- **backend 限流 / 配额**（`backend/.../ratelimit/`、`lua/*.lua`、`V3__s10_usage_daily.sql`）：Lua 令牌桶（用户 + 全局两个维度，一次脚本原子检查并同时扣减，被拒不写状态，时间取 Redis `TIME`），超限 **429 + `Retry-After`**（JSON `code=42900`，说明原因与等待时间）；每日配额（次数 + token，Redis hash 按配置时区自然日分键，`UsageFlushJob` 定时幂等回写 MySQL `usage_daily`，Redis 丢数据时从 MySQL 补种）；Redis 故障时放行；`GET /api/usage/today`。检查顺序：令牌桶（最先）→ 会话归属 / 检索范围校验 → 每日配额。
+- **ai-service 语义缓存**（`fund_ai/cache/`）：放在 `chat_events()`（HTTP 与 gRPC 共用）；Redis 8 向量索引（FLAT、余弦、TTL 24 h），命名空间 = 检索范围（公共库 MANIFEST 哈希、私有库 id + 内容版本）+ `DATA_AS_OF` + 模型 / 提示词指纹 + 嵌入模型；不缓存：`get_latest_nav`、荐基类、出错、带历史的追问、相对时间提问、合规标记命中等；命中按同一事件协议回放，`meta` / `done` 带 `cache_hit`，风险提示由服务端常量重新追加；任何缓存故障都当未命中；**默认关闭**。
+- **关键要素守卫**（`fund_ai/cache/guard.py`，PLAN 没有要求，是 dev 实测逼出来的，见 ADR-048）：基金 / 数字与时间 / 术语概念签名一致才算命中。
+- **阈值校准集** `eval/datasets/cache_pairs_v1.jsonl`（472 对：同义改写 / 金融难负例 / 无关对，dev 208 + test 264，按意图划分）+ 校准脚本 `fund_ai/eval/cache_calibration.py`（选阈值规则先写进代码；test 只能跑一次）；构建脚本 `scripts/build_cache_pairs.py`；说明 `eval/datasets/CACHE_PAIRS.md`。
+- **其他**：proto 向后兼容地加了 `KbScope.private_kb_versions`、`Meta.cache_hit`、`Done.cache_hit / cache_similarity / cache_lookup_ms`（Python 桩代码已重新生成，跨语言金样例补了这四种事件）；backend 把私有库内容版本随检索范围发给 ai-service；前端 429 的错误信息（服务端文案已含原因与等待时间）与「命中缓存」标记；`.env.example`、compose、API.md 同步；`scripts/bench_cache_latency.py`、`scripts/e2e_s10.py`。
+
+### 验收逐条（PLAN §5 S10）
+1. **限流并发测试（Testcontainers，放行数恰好等于容量）** — ✅（CI 的 Testcontainers 路径待 CI 确认；本机用一次性 Redis 跑过）— `TokenBucketLimiterRedisTest`：200 个线程同时抢容量 20 的用户桶 → **放行恰好 20、拒绝 180**；150 个请求分摊到 15 个用户抢容量 30 的全局桶 → **放行恰好 30**；另有「用户 A 耗尽不影响用户 B」「被全局桶拒绝不扣用户令牌」「Retry-After 反映等待时间」「按时间补充且不超过容量」。补充速率设为 0.0001 个/秒，测试期间补不出令牌，所以放行数是确定值。测试用 `TestRedis`：默认 Testcontainers（CI），本机无可用 Docker 时用 `FRA_TEST_REDIS` 指向一次性 `redis:8.10.2`（不设置则真的起容器、起不来就失败，不跳过）。全栈 e2e 另有一次真实并发：16 个并发请求 → 放行 10（容量 10）、429 共 6，`Retry-After: 2`（`reports/s10/20261002T053314Z_e2e/e2e_s10.json`）。
+2. **配额跨天** — ✅ — `QuotaServiceTest`（真实 Redis + 真实 MySQL，可拨动时钟）：`quotaResetsAtMidnightAndEachDayKeepsItsOwnCounter`（超限后拨到次日 00:00:01 → 用量归零、新的一天重新有额度，前一天的计数不被覆盖）、`eachDayIsFlushedToItsOwnRow`（两天回写成两行）、`tokensAreChargedToTheDayTheRequestStartedOn`（对话跨零点结束，token 记在开始那天）、`callsAboveTheDailyLimit…`（超限 429 的 `Retry-After` = 距当地零点 3600 s）、`concurrentCallsNeverExceedTheDailyLimit`（100 并发抢 25 个名额 → 恰好 25）、`redisDataLossIsRecoveredFromMysql…`、`aFailedFlushPutsTheEntryBackForTheNextRound`。e2e：回写后 `usage_daily` 的 `14 / 26559` 与 Redis 计数一致。
+3. **缓存误命中率报告** — ✅ — `docs/perf/semantic_cache.md` §3：test（**只跑一次**）B 配置难负例误命中 **3 / 132 = 2.3%**（Wilson 95% 区间 0.8%–6.5%），recall 77 / 92 = 83.7%（74.8%–89.9%），无关对 0 / 40；纯相似度（A）零误命中点 0.995、recall 0 / 92。dev 与全部阈值的 precision / recall 见同一文件 §2 与 `reports/cache_calibration/*/report.md`。
+4. **命中与未命中的延迟实测** — ✅ — `docs/perf/semantic_cache.md` §4–§5：真实 DeepSeek、n = 10 个问题：首字中位数 **56.8 ms（命中）vs 5409.7 ms（未命中）**，总耗时 58.1 vs 5776.4 ms，命中 0 token；缓存自身开销（n = 200）嵌入 8.4 ms + 检索 0.6–1.5 ms。
+5. **时效性排除规则有单测** — ✅ — `ai-service/tests/test_semantic_cache.py`：`test_answers_that_used_get_latest_nav_are_not_cached`（策略）、`test_an_api_citation_alone_also_blocks_caching`、`test_answers_using_get_latest_nav_are_not_stored`（经 `chat_events` 端到端：同一个净值问题问两次都跑 Agent、缓存里 0 条）；荐基类、出错、带历史的追问、相对时间词、合规标记命中各有单测。
+6. **CI 全绿** — 见文末「CI」行。
+
+### 实测数字
+| 指标 | 值 | n / 分母 | 结果文件 |
+|---|---|---|---|
+| 纯相似度的零误命中阈值（dev）与此处 recall | 0.995；0 / 72 | 72 | `reports/cache_calibration/20261002T051202Z_dev/summary.json` |
+| B（相似度 0.80 + 守卫）dev：recall / 难负例误命中 | 64 / 72；0 / 104 | 72 / 104 | 同上 |
+| **B test（一次）recall** | **77 / 92 = 83.7%**（74.8%–89.9%） | 92 | `reports/cache_calibration/20261002T051218Z_test/summary.json` |
+| **B test 难负例误命中率** | **3 / 132 = 2.3%**（0.8%–6.5%） | 132 | 同上 |
+| B test 无关对误命中 | 0 / 40 | 40 | 同上 |
+| 同上，事后排除 8 对畸形问题 | recall 77 / 89；误命中 3 / 128 | 89 / 128 | `…051218Z_test/addendum_excluding_malformed.json` |
+| 命中 / 未命中首字（中位数） | 56.8 ms / 5409.7 ms | 10 / 10 | `reports/semantic_cache/20261002T052836Z/e2e.json` |
+| 命中 / 未命中总耗时（中位数） | 58.1 ms / 5776.4 ms | 10 / 10 | 同上 |
+| 同义改写命中 / 相近问题（只差一个要素）被守卫拦下 | 10 / 10；10 / 10 | 10 / 10 | 同上 |
+| 缓存开销：嵌入 / 检索（1 万条）/ 守卫（中位数） | 8.37 / 1.46 / 0.04 ms | 200 | `reports/semantic_cache/20261002T052808Z/micro.json` |
+| 全栈 e2e | 22 / 22 项通过 | 22 | `reports/s10/20261002T053314Z_e2e/e2e_s10.json` |
+| 单测 | ai-service 305（+101）、backend 147（+26，含对真实 Redis / MySQL 的测试）、frontend 32（+2）、scripts 29 | — | — |
+
+### 与计划的偏差（附理由和 ADR 编号）
+- **新增「关键要素守卫」**（ADR-048）：PLAN 只要求「在不同阈值下报 precision / recall，据此选阈值」。dev 实测纯相似度选不出可用的阈值（零误命中点 recall 为 0），所以命中条件改为相似度 + 守卫。选阈值的规则（含补充的规则 B）在看到 test 之前就写进了代码，补充发生在 dev 第一次扫描之后、实现守卫之前，文件头与 ADR 如实记录。
+- **语义缓存默认关闭**（PLAN 没写默认值）：test 上 2.3% 的条件误命中率在金融场景里不该悄悄生效；评测脚本调的是同一个 `/v1/chat/stream`，开着缓存会让重复题命中旧回答。需要时 `SEMANTIC_CACHE_ENABLED=true`。
+- 缓存命名空间在 PLAN 的 `kb_id + kb_version + DATA_AS_OF` 之外加了模型 / 提示词指纹和嵌入模型；`kb_version` 的定义：公共库取 `MANIFEST.json` 哈希，私有库取 READY 文档数 + 最近更新时间（只有 backend 知道，随检索范围传来，proto 向后兼容地加了字段）。
+- 校准集放在 `eval/datasets/cache_pairs_v1.jsonl`，**没有改已冻结的 `MANIFEST.json`**（它登记 fund_qa / agent_tasks 两个冻结集；改它要经统筹和用户批准），另写 `CACHE_PAIRS.md`。
+
+### 已知问题 / 技术债
+- **数据集畸形问题 8 对**（test 跑完之后才发现，没有重跑）：见 `CACHE_PAIRS.md`；官方数字含它们，事后排除后的数字另列。v2 需要修掉并重新校准。
+- **守卫的已知漏洞**（test 上看到、没有改，改了就污染 test）：「2025年年底」写法没覆盖、词典里没有「股票 vs 港股通标的股票」「仓位变化 vs 市场展望」等维度（3 次误命中的来源）。LIMITATIONS S10-2、S10-4。
+- 本机没有可供 Testcontainers 使用的 Docker：S10 的 Redis / MySQL 测试在本机是靠 `FRA_TEST_REDIS` / `FRA_TEST_MYSQL` 指向一次性容器跑的，Testcontainers 路径在 CI 首次运行（以 CI 结果为准）。`BackendIntegrationTest` 仍只在 CI 跑。
+- 命中延迟的 55–60 ms 里缓存查询只占约 10 ms，其余是容器端口映射与 HTTP；单机、n = 10，不是压测数字。没有测关闭缓存时同一批问题的延迟作对照。
+- 没做：单飞（同一个未命中问题并发时只跑一次）、令牌桶对注册 / 登录 / 上传的保护、`HNSW` 索引、缓存命中率的运行时指标接口（只有日志和 `SemanticCache.stats` 计数）。
+
+### 需要用户做的事
+- **请决定语义缓存是否在本机 / 演示环境里打开**：默认关闭，打开方式 `.env` 里 `SEMANTIC_CACHE_ENABLED=true`（本机 `.env` 我已加了这一行，用于实测；若想恢复默认请删掉它）。是否默认打开需要权衡 2.3% 的条件误命中率（`docs/perf/semantic_cache.md` §3）。
+- 本机 fra 栈的 backend / ai-service / frontend 已按本阶段代码重建并在运行；ticket-qa 容器按统筹补充继续保持停止。
+
+### 给统筹的问题
+- 无阻塞。可选：①`docs/PLAN.md` §7 表标记 B10 完成；②校准集 v2（修畸形问题、扩充真实说法、可能引入人工审核）是否排进后续；③S12 压测场景 D（语义缓存命中）需要 `SEMANTIC_CACHE_ENABLED=true` 且请求要避开「带历史」的路径（同一会话第二问起不走缓存）；④是否要把令牌桶推广到注册 / 登录 / 上传接口。
+- **CI**：待填。

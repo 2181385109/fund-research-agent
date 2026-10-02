@@ -1,0 +1,105 @@
+{
+  "kind": "e2e",
+  "env": {
+    "git_commit": "558db3995e18f094bf5a0e4401161da1654f6fe5",
+    "git_dirty": true,
+    "data_as_of": "2026-09-28",
+    "embedding_model": "BAAI/bge-small-zh-v1.5",
+    "llm_model_requested": "deepseek-flash",
+    "semantic_cache_threshold": 0.8,
+    "machine": {
+      "platform": "Windows-11-10.0.26200-SP0",
+      "python": "3.12.3",
+      "cpu_count": 16
+    },
+    "command": "python scripts/bench_cache_latency.py e2e --base http://127.0.0.1:8001 --flush"
+  },
+  "n_cases": 10,
+  "repeat_text_identical": "10 / 10",
+  "result": {
+    "1_miss": {
+      "n": 10,
+      "hits": 0,
+      "ttft_ms": {
+        "n": 10,
+        "mean": 7487.33,
+        "p50": 5409.7,
+        "p95": 21606.2,
+        "min": 2311.9,
+        "max": 21606.2
+      },
+      "total_ms": {
+        "n": 10,
+        "mean": 7910.64,
+        "p50": 5776.4,
+        "p95": 22161.6,
+        "min": 2381.8,
+        "max": 22161.6
+      },
+      "total_tokens_sum": 126458
+    },
+    "2_repeat": {
+      "n": 10,
+      "hits": 10,
+      "ttft_ms": {
+        "n": 10,
+        "mean": 56.9,
+        "p50": 56.8,
+        "p95": 62.8,
+        "min": 54.8,
+        "max": 62.8
+      },
+      "total_ms": {
+        "n": 10,
+        "mean": 58.55,
+        "p50": 58.1,
+        "p95": 63.7,
+        "min": 56.0,
+        "max": 63.7
+      },
+      "total_tokens_sum": 0
+    },
+    "3_paraphrase": {
+      "n": 10,
+      "hits": 10,
+      "ttft_ms": {
+        "n": 10,
+        "mean": 55.07,
+        "p50": 54.4,
+        "p95": 63.4,
+        "min": 51.3,
+        "max": 63.4
+      },
+      "total_ms": {
+        "n": 10,
+        "mean": 56.79,
+        "p50": 57.5,
+        "p95": 64.3,
+        "min": 53.0,
+        "max": 64.3
+      },
+      "total_tokens_sum": 0
+    },
+    "4_near_miss": {
+      "n": 10,
+      "hits": 0,
+      "ttft_ms": {
+        "n": 10,
+        "mean": 5800.41,
+        "p50": 6149.2,
+        "p95": 9663.6,
+        "min": 2624.3,
+        "max": 9663.6
+      },
+      "total_ms": {
+        "n": 10,
+        "mean": 6254.96,
+        "p50": 6262.6,
+        "p95": 10495.1,
+        "min": 2641.7,
+        "max": 10495.1
+      },
+      "total_tokens_sum": 120916
+    }
+  }
+}

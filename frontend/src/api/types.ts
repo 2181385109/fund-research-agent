@@ -131,6 +131,9 @@ export interface DoneInfo {
   tool_rounds?: number
   max_steps_reached?: boolean
   compliance_flags?: string[]
+  /** 语义缓存开启时才有：true = 这次回答是从缓存回放的（没有调用 LLM） */
+  cache_hit?: boolean
+  cache_similarity?: number
 }
 
 export type ChatEvent =
