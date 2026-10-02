@@ -56,6 +56,21 @@ _LOOKBACK = 8
 _SENTENCE_BREAKS = "。！？!?；;\n"
 
 
+# 提问侧：荐基 / 择时 / 买卖建议类请求（关键词启发式，宁可多判：S10 的语义缓存用它决定「这个提问不进缓存」，
+# 误判只是少一次缓存命中，漏判才有问题；它不用于拒答，拒答仍由 Agent 的提示词与评测里的 advice_request 题把关）
+_ADVICE_QUESTION = re.compile(
+    r"推荐|荐(?:个|只|几)|买哪|买什么|该买|该卖|值得(?:买|入手|申购|投资|购买|加仓|持有)"
+    r"|适合(?:买|入手|申购|投资|购买|定投|长期持有|我)"
+    r"|(?:能不能|可不可以|可以|该不该|要不要|是否应该|应不应该)(?:买|卖|入手|加仓|减仓|申购|赎回|抄底|止盈|止损|持有)"
+    r"|买入|卖出|加仓|减仓|建仓|清仓|抄底|止盈|止损|入场|上车|择时|买点|卖点"
+    r"|哪(?:只|个|支|款)(?:基金)?(?:更好|最好|好|值得|最值得|更值得|更适合|更强)"
+)
+
+
+def looks_like_advice_request(question: str) -> bool:
+    return _ADVICE_QUESTION.search(question) is not None
+
+
 @dataclass(frozen=True)
 class Violation:
     phrase: str

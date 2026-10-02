@@ -64,6 +64,18 @@ fra:
     heartbeat: ${CHAT_HEARTBEAT:1s}
     emitter-timeout: 5m
 
+  # S10：限流（令牌桶，用户 + 全局）与每日配额；Redis 故障时放行（ADR-048）
+  ratelimit:
+    enabled: ${RATELIMIT_ENABLED:true}
+    user-capacity: ${RATELIMIT_USER_CAPACITY:10}
+    user-refill-per-sec: ${RATELIMIT_USER_REFILL_PER_SEC:0.5}
+    global-capacity: ${RATELIMIT_GLOBAL_CAPACITY:100}
+    global-refill-per-sec: ${RATELIMIT_GLOBAL_REFILL_PER_SEC:10}
+    daily-calls: ${QUOTA_DAILY_CALLS:200}
+    daily-tokens: ${QUOTA_DAILY_TOKENS:500000}
+    zone: ${QUOTA_ZONE:Asia/Shanghai}
+    flush-interval: ${QUOTA_FLUSH_INTERVAL:30s}
+
 springdoc:
   api-docs:
     path: /v3/api-docs

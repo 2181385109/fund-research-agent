@@ -12,6 +12,7 @@ public enum ErrorCode {
     CONFLICT(40900, HttpStatus.CONFLICT, "资源冲突"),
     PAYLOAD_TOO_LARGE(41300, HttpStatus.PAYLOAD_TOO_LARGE, "文件过大"),
     UNSUPPORTED_MEDIA_TYPE(41500, HttpStatus.UNSUPPORTED_MEDIA_TYPE, "不支持的文件类型"),
+    TOO_MANY_REQUESTS(42900, HttpStatus.TOO_MANY_REQUESTS, "请求过于频繁"),
     INTERNAL_ERROR(50000, HttpStatus.INTERNAL_SERVER_ERROR, "服务内部错误"),
     BAD_GATEWAY(50200, HttpStatus.BAD_GATEWAY, "上游服务不可用"),
     DEPENDENCY_DOWN(50300, HttpStatus.SERVICE_UNAVAILABLE, "依赖服务不可用");

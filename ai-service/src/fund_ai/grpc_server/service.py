@@ -68,6 +68,7 @@ class AiServicer(pb_grpc.AiServiceServicer):
                         include_public=request.kb_scope.include_public,
                         owner_id=request.kb_scope.owner_id,
                         private_kb_ids=list(request.kb_scope.private_kb_ids),
+                        private_kb_versions=dict(request.kb_scope.private_kb_versions),
                     )
                     if request.HasField("kb_scope")
                     else None

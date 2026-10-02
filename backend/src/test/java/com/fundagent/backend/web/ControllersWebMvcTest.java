@@ -316,6 +316,22 @@ class ControllersWebMvcTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test
+    void rateLimitedChatIs429WithRetryAfterHeaderAndJsonBody() throws Exception {
+        when(chat.start(eq(USER), eq(3L), any(), any(), any(ChatSink.class)))
+                .thenThrow(new com.fundagent.backend.common.RateLimitedException(
+                        com.fundagent.backend.common.RateLimitedException.Reason.USER_RATE, 7));
+        mvc.perform(post("/api/conversations/3/chat")
+                        .with(asUser())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.TEXT_EVENT_STREAM)
+                        .content("{\"question\":\"问\"}"))
+                .andExpect(status().isTooManyRequests())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.header().string("Retry-After", "7"))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.code").value(42900));
+    }
+
     private static ChatSession session() {
         return new ChatSession() {
             @Override

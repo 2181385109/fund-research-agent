@@ -3,6 +3,7 @@ package com.fundagent.backend.aiclient;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 主后端调用 AI 服务的接口。第一期实现是 {@link HttpAiServiceClient}（HTTP + SSE），第二期（S9）再加 gRPC 实现，
@@ -22,9 +23,19 @@ public interface AiServiceClient {
      */
     ChatStream chat(ChatCommand cmd, ChatListener listener);
 
-    /** 检索范围（ADR-043），字段名与 ai-service 的 KbScopeIn 一致。 */
+    /**
+     * 检索范围（ADR-043），字段名与 ai-service 的 KbScopeIn 一致。
+     *
+     * @param privateKbVersions 私有库 id → 版本串（库里 READY 文档的数量与最近更新时间），语义缓存（S10）据此在
+     *                          文档增删后让旧缓存失效；不影响检索范围本身
+     */
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-    record KbScope(boolean includePublic, String ownerId, List<String> privateKbIds) {}
+    record KbScope(
+            boolean includePublic, String ownerId, List<String> privateKbIds, Map<String, String> privateKbVersions) {
+        public KbScope(boolean includePublic, String ownerId, List<String> privateKbIds) {
+            this(includePublic, ownerId, privateKbIds, Map.of());
+        }
+    }
 
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     record IngestCommand(String docId, String filePath, String kbId, String ownerId, String docTitle, boolean callback) {}

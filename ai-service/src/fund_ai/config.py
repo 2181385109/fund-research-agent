@@ -56,6 +56,18 @@ class Settings(BaseSettings):
     agent_preamble_holdback_chars: int = 160
     data_as_of: str = ""  # DATA_AS_OF，写进 system prompt；空则不写
 
+    # 语义缓存（S10，ADR-048）：默认关闭（本机评测 / CI 不受影响），compose 里默认开启。
+    # 阈值是在校准集 dev 部分上选定的（docs/perf/semantic_cache_calibration.md），不要凭感觉改。
+    semantic_cache_enabled: bool = False
+    semantic_cache_threshold: float = (
+        0.80  # 与关键要素守卫配合使用（配置 B）；只用相似度时要 0.995，等于不命中
+    )
+    semantic_cache_guard: bool = True  # 关键要素一致守卫（ADR-048）；关掉就只剩相似度阈值，不建议
+    semantic_cache_ttl_seconds: int = 86400
+    semantic_cache_max_answer_chars: int = 20000
+    # 公共库的版本串（进缓存命名空间）；留空 = 取 data/MANIFEST.json 的 sha256 前 12 位
+    kb_public_version: str = ""
+
     # 私有知识库（S6，ADR-043）：用户上传文档单独一套集合 / 索引，公共 fund_chunks 不动
     milvus_user_collection: str = "user_chunks"
     es_user_index: str = "user_chunks"

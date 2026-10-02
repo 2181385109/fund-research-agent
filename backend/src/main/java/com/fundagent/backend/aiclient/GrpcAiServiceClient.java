@@ -323,7 +323,8 @@ public class GrpcAiServiceClient implements AiServiceClient {
             b.setKbScope(com.fundagent.proto.v1.KbScope.newBuilder()
                     .setIncludePublic(cmd.kbScope().includePublic())
                     .setOwnerId(cmd.kbScope().ownerId() == null ? "" : cmd.kbScope().ownerId())
-                    .addAllPrivateKbIds(cmd.kbScope().privateKbIds() == null ? java.util.List.of() : cmd.kbScope().privateKbIds()));
+                    .addAllPrivateKbIds(cmd.kbScope().privateKbIds() == null ? java.util.List.of() : cmd.kbScope().privateKbIds())
+                    .putAllPrivateKbVersions(cmd.kbScope().privateKbVersions() == null ? java.util.Map.of() : cmd.kbScope().privateKbVersions()));
         }
         return b.build();
     }

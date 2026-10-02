@@ -19,6 +19,8 @@ import com.fundagent.backend.conversation.Message;
 import com.fundagent.backend.conversation.service.ConversationService;
 import com.fundagent.backend.kb.dto.KbDtos.ResolvedScope;
 import com.fundagent.backend.kb.service.KbService;
+import com.fundagent.backend.ratelimit.ChatAdmission;
+import com.fundagent.backend.ratelimit.ChatAdmission.Admitted;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -52,6 +54,7 @@ public class ChatService {
     private final ScheduledExecutorService scheduler;
     private final ChatProperties props;
     private final ObjectMapper mapper;
+    private final ChatAdmission admission;
 
     public ChatService(
             AiServiceClient ai,
@@ -59,23 +62,27 @@ public class ChatService {
             ConversationService conversations,
             ScheduledExecutorService chatScheduler,
             ChatProperties props,
-            ObjectMapper mapper) {
+            ObjectMapper mapper,
+            ChatAdmission admission) {
         this.ai = ai;
         this.kbs = kbs;
         this.conversations = conversations;
         this.scheduler = chatScheduler;
         this.props = props;
         this.mapper = mapper;
+        this.admission = admission;
     }
 
     public ChatSession start(long userId, long conversationId, String question, List<Long> kbIds, ChatSink sink) {
+        admission.checkRate(userId); // 令牌桶：超限 429，最便宜的检查放最前面（之后没有任何数据库访问）
         Conversation conv = conversations.requireOwned(userId, conversationId);
         ResolvedScope scope = kbs.resolveScope(userId, kbIds); // 越权在这里抛 403，之后什么都不发生
+        Admitted admitted = admission.acquireQuota(userId); // 每日配额：校验通过、确定要调用 AI 才占用
         String requestId = UUID.randomUUID().toString().replace("-", "").substring(0, 16);
         List<HistoryItem> history = conversations.recentHistory(conversationId, props.historyRounds());
         conversations.addUserMessage(conv, question, scope.kbIds(), requestId);
 
-        Session session = new Session(conversationId, requestId, sink);
+        Session session = new Session(conversationId, requestId, sink, admitted);
         ChatCommand cmd = new ChatCommand(question, history, requestId, scope.aiScope());
         try {
             session.attach(ai.chat(cmd, session));
@@ -91,6 +98,7 @@ public class ChatService {
         private final long conversationId;
         private final String requestId;
         private final ChatSink sink;
+        private final Admitted admitted;
         private final StringBuilder answer = new StringBuilder();
         private String citations;
         private String disclaimer;
@@ -101,10 +109,11 @@ public class ChatService {
         private boolean cancelRequested;
         volatile ScheduledFuture<?> heartbeat;
 
-        Session(long conversationId, String requestId, ChatSink sink) {
+        Session(long conversationId, String requestId, ChatSink sink, Admitted admitted) {
             this.conversationId = conversationId;
             this.requestId = requestId;
             this.sink = sink;
+            this.admitted = admitted;
         }
 
         synchronized void attach(ChatStream stream) {
@@ -164,6 +173,10 @@ public class ChatService {
                 case "error" -> sawError = true;
                 case "done" -> {
                     doneStatus = data != null && data.hasNonNull("status") ? data.get("status").asText() : "ok";
+                    // 配额按 done.usage.total_tokens 记（缓存命中的 usage 为 0）；对话被取消时没有 done，不记
+                    if (data != null && data.path("usage").hasNonNull("total_tokens")) {
+                        admission.recordTokens(admitted, data.path("usage").get("total_tokens").asLong());
+                    }
                 }
                 default -> {
                     // meta / tool_start / tool_end：只转发，不落库

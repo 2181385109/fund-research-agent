@@ -158,7 +158,7 @@ class GrpcAiServiceClientTest {
         };
         Recorder rec = new Recorder();
 
-        client().chat(cmd(new KbScope(false, "7", List.of("11", "12"))), rec);
+        client().chat(cmd(new KbScope(false, "7", List.of("11", "12"), java.util.Map.of("11", "2-1700000000000", "12", "0"))), rec);
 
         assertThat(rec.completed.await(5, TimeUnit.SECONDS)).isTrue();
         assertThat(rec.names()).containsExactly("meta", "token", "token", "disclaimer", "done");
@@ -175,6 +175,9 @@ class GrpcAiServiceClientTest {
         assertThat(req.getKbScope().getIncludePublic()).isFalse();
         assertThat(req.getKbScope().getOwnerId()).isEqualTo("7");
         assertThat(req.getKbScope().getPrivateKbIdsList()).containsExactly("11", "12");
+        assertThat(req.getKbScope().getPrivateKbVersionsMap())
+                .containsEntry("11", "2-1700000000000")
+                .containsEntry("12", "0");
     }
 
     @Test

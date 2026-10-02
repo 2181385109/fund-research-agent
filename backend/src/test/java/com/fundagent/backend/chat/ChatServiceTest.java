@@ -19,6 +19,8 @@ import com.fundagent.backend.aiclient.AiServiceClient.SseEvent;
 import com.fundagent.backend.chat.service.ChatService;
 import com.fundagent.backend.common.BizException;
 import com.fundagent.backend.common.ErrorCode;
+import com.fundagent.backend.common.RateLimitedException;
+import com.fundagent.backend.common.RateLimitedException.Reason;
 import com.fundagent.backend.config.ChatProperties;
 import com.fundagent.backend.config.UploadProperties;
 import com.fundagent.backend.conversation.Conversation;
@@ -29,6 +31,8 @@ import com.fundagent.backend.document.mapper.DocumentMapper;
 import com.fundagent.backend.kb.KnowledgeBase;
 import com.fundagent.backend.kb.mapper.KnowledgeBaseMapper;
 import com.fundagent.backend.kb.service.KbService;
+import com.fundagent.backend.ratelimit.ChatAdmission;
+import com.fundagent.backend.ratelimit.QuotaService;
 import com.fundagent.backend.testsupport.FakeAiServiceClient;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -55,6 +59,7 @@ class ChatServiceTest {
     private final ConversationService conversations = mock(ConversationService.class);
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private final RecordingSink sink = new RecordingSink();
+    private final ChatAdmission admission = mock(ChatAdmission.class);
     private KbService kbs;
     private ChatService service;
     private Conversation conv;
@@ -114,7 +119,7 @@ class ChatServiceTest {
     private ChatService newService(Duration heartbeat) {
         return new ChatService(
                 ai, kbs, conversations, scheduler,
-                new ChatProperties(6, heartbeat, Duration.ofMinutes(5)), new ObjectMapper());
+                new ChatProperties(6, heartbeat, Duration.ofMinutes(5)), new ObjectMapper(), admission);
     }
 
     @AfterEach
@@ -312,5 +317,48 @@ class ChatServiceTest {
         sink.failHeartbeat = true; // 结束之后心跳不应再触发任何取消
         Thread.sleep(100);
         assertThat(ai.cancelled).isFalse();
+    }
+
+    // ------------------------------------------------------------------ 限流 / 配额（S10）
+
+    @Test
+    void rateLimitedRequestIsRejectedBeforeAnyDatabaseOrAiCall() {
+        org.mockito.Mockito.doThrow(new RateLimitedException(Reason.USER_RATE, 3)).when(admission).checkRate(ALICE);
+        assertThatThrownBy(() -> start(null))
+                .isInstanceOfSatisfying(RateLimitedException.class, e -> {
+                    assertThat(e.errorCode()).isEqualTo(ErrorCode.TOO_MANY_REQUESTS);
+                    assertThat(e.retryAfterSeconds()).isEqualTo(3);
+                });
+        assertThat(ai.chats).isEmpty();
+        verify(conversations, never()).requireOwned(anyLong(), anyLong());
+        verify(conversations, never()).addUserMessage(any(), anyString(), any(), anyString());
+        verify(admission, never()).acquireQuota(anyLong());
+    }
+
+    @Test
+    void quotaIsOnlyConsumedAfterTheRequestPassesValidation() {
+        assertThatThrownBy(() -> start(List.of(22L))).isInstanceOf(BizException.class); // 越权
+        verify(admission, never()).acquireQuota(anyLong());
+    }
+
+    @Test
+    void outOfQuotaRequestSavesNothingAndCallsNoAi() {
+        when(admission.acquireQuota(ALICE)).thenThrow(new RateLimitedException(Reason.DAILY_CALLS, 3600));
+        assertThatThrownBy(() -> start(null)).isInstanceOf(RateLimitedException.class);
+        assertThat(ai.chats).isEmpty();
+        verify(conversations, never()).addUserMessage(any(), anyString(), any(), anyString());
+    }
+
+    @Test
+    void tokensFromDoneUsageAreChargedToTheTicketThatWasAdmitted() throws Exception {
+        var admitted = new ChatAdmission.Admitted(new QuotaService.Ticket(ALICE, java.time.LocalDate.of(2026, 10, 2)));
+        when(admission.acquireQuota(ALICE)).thenReturn(admitted);
+        start(null);
+        emit("meta", "{\"request_id\":\"r\"}");
+        emit("token", "{\"text\":\"答\"}");
+        emit("disclaimer", "{\"text\":\"d\"}");
+        emit("done", "{\"request_id\":\"r\",\"status\":\"ok\",\"usage\":{\"input_tokens\":900,\"output_tokens\":100,\"total_tokens\":1000}}");
+        ai.listener.onComplete();
+        verify(admission).recordTokens(admitted, 1000L);
     }
 }

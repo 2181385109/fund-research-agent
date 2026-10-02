@@ -14,8 +14,10 @@ import com.fundagent.backend.kb.KnowledgeBase;
 import com.fundagent.backend.kb.dto.KbDtos.ResolvedScope;
 import com.fundagent.backend.kb.mapper.KnowledgeBaseMapper;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,11 +129,15 @@ public class KbService {
         }
         boolean includePublic = effective.contains(KnowledgeBase.PUBLIC_KB_ID);
         List<String> privateIds = new ArrayList<>();
+        Map<String, String> versions = new LinkedHashMap<>();
         for (Long id : effective) {
             if (id != KnowledgeBase.PUBLIC_KB_ID) {
                 privateIds.add(Long.toString(id));
+                String v = documents.contentVersion(id);
+                versions.put(Long.toString(id), v == null ? "0" : v);
             }
         }
-        return new ResolvedScope(List.copyOf(effective), new KbScope(includePublic, Long.toString(userId), privateIds));
+        return new ResolvedScope(
+                List.copyOf(effective), new KbScope(includePublic, Long.toString(userId), privateIds, versions));
     }
 }

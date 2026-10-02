@@ -54,6 +54,8 @@ message KbScope {
   bool include_public = 1;
   string owner_id = 2;
   repeated string private_kb_ids = 3;
+  // 私有库 id → 版本串（库内 READY 文档的数量与最近更新时间）。只用于语义缓存隔离（S10），不影响检索范围。
+  map<string, string> private_kb_versions = 4;
 }
 
 // 事件名 = oneof 的字段名；顺序见 docs/API.md（meta → (tool_start → tool_end | token)* → citations → disclaimer → done）。
@@ -74,6 +76,7 @@ message Meta {
   string request_id = 1;
   string model = 2;
   int32 max_steps = 3;
+  optional bool cache_hit = 4;  // 语义缓存开启时才有：命中 true / 未命中 false（S10）
 }
 
 message ToolStart {
@@ -180,6 +183,9 @@ message Done {
   optional int32 answer_chars = 13;
   optional int32 preamble_dropped_chars = 14;
   optional int32 preamble_leaked_chars = 15;
+  optional bool cache_hit = 16;  // 语义缓存开启时才有（S10）
+  optional double cache_similarity = 17;  // 命中时：与缓存中那条提问的余弦相似度
+  optional double cache_lookup_ms = 18;  // 命中时：嵌入 + 向量检索耗时
 }
 
 message Usage {

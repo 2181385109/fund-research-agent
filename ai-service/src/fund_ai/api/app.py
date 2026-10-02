@@ -22,6 +22,8 @@ from fund_ai.api.documents import router as documents_router
 from fund_ai.api.health import HealthChecker, build_checkers, build_redis_client
 from fund_ai.api.health import router as health_router
 from fund_ai.api.retrieve import router as retrieve_router
+from fund_ai.cache.factory import build_semantic_cache
+from fund_ai.cache.semantic import SemanticCache
 from fund_ai.config import Settings, get_settings
 from fund_ai.embedding.factory import build_embedder
 from fund_ai.grpc_server.service import start_grpc_server, stop_grpc_server
@@ -100,6 +102,7 @@ def create_app(
     user_pipeline_factory: Callable[[], IngestPipeline] | None = None,
     callback_sender: Callable[[dict], Awaitable[Any]] | None = None,
     scope_codec: ScopeCodec | None = None,
+    semantic_cache_factory: Callable[[], SemanticCache] | None = None,
 ) -> FastAPI:
     """``checkers`` / ``pipeline_factory`` 为 None 时按配置构造真实依赖；测试时传入 fake。"""
     settings = settings or get_settings()
@@ -147,6 +150,14 @@ def create_app(
     app.state.retrieval_factory = retrieval_factory or (lambda: _build_retrieval(settings))
     app.state.agent_runner = None
     app.state.agent_factory = agent_factory or (lambda: build_agent_runner(settings, codec))
+    # S10 语义缓存：默认关闭；开启后首次问答时才构造（加载嵌入模型、连 Redis）
+    app.state.semantic_cache_enabled = settings.semantic_cache_enabled or (
+        semantic_cache_factory is not None
+    )
+    app.state.semantic_cache = None
+    app.state.semantic_cache_factory = semantic_cache_factory or (
+        lambda: build_semantic_cache(settings)
+    )
     app.state.user_pipeline = None
     app.state.user_pipeline_factory = user_pipeline_factory or (
         lambda: build_user_pipeline(settings)

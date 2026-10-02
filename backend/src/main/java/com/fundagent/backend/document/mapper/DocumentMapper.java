@@ -27,4 +27,12 @@ public interface DocumentMapper extends BaseMapper<Document> {
     @Select("SELECT * FROM documents WHERE status IN ('PENDING', 'PROCESSING') "
             + "AND updated_at < (NOW(3) - INTERVAL #{seconds} SECOND)")
     List<Document> findStale(@Param("seconds") int seconds);
+
+    /**
+     * 一个库的「内容版本」：READY 文档的数量 + 其中最近一次更新的毫秒时间戳。增删文档、重新入库都会改变它；
+     * 语义缓存拿它隔离不同版本的私有库（S10）。
+     */
+    @Select("SELECT CONCAT(COUNT(*), '-', COALESCE(CAST(UNIX_TIMESTAMP(MAX(updated_at)) * 1000 AS UNSIGNED), 0)) "
+            + "FROM documents WHERE kb_id = #{kbId} AND status = 'READY'")
+    String contentVersion(@Param("kbId") long kbId);
 }
