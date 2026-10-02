@@ -770,7 +770,7 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 
 
 ## S10 Redis：限流 + 配额 + 语义缓存 — 2026-10-02（B10）
-- commit 范围：`f6a44ce`..本节所在提交；CI：待推送后确认（见文末「CI」行）
+- commit 范围：`f6a44ce`..本节所在提交；CI：功能提交 `5370a4a` 的 run [36970011637](https://github.com/2181385109/fund-research-agent/actions/runs/36970011637) **8 个 job 全绿**（含 CI 里用 Testcontainers 跑的 Redis / MySQL 测试，见文末「CI」行）
 - 证据目录：`reports/cache_calibration/`（校准：dev 四次运行、**test 唯一一次** `20261002T051218Z_test`、`TEST_RUN.json` 标记、事后诊断 `addendum_*`）、`reports/semantic_cache/`（`20261002T052808Z` 缓存开销 micro、`20261002T052836Z` 命中 / 未命中延迟 e2e）、`reports/s10/`（全栈 e2e：`20261002T053314Z_e2e` 22 / 22 通过；更早的 `…053124Z_e2e` 21 / 22，唯一失败项是脚本查 MySQL 的辅助函数缺陷，已修，保留）；报告 `docs/perf/semantic_cache.md`；决策 ADR-048；局限 `docs/LIMITATIONS.md`「语义缓存与限流（S10）」。
 
 ### 完成项
@@ -786,7 +786,7 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 3. **缓存误命中率报告** — ✅ — `docs/perf/semantic_cache.md` §3：test（**只跑一次**）B 配置难负例误命中 **3 / 132 = 2.3%**（Wilson 95% 区间 0.8%–6.5%），recall 77 / 92 = 83.7%（74.8%–89.9%），无关对 0 / 40；纯相似度（A）零误命中点 0.995、recall 0 / 92。dev 与全部阈值的 precision / recall 见同一文件 §2 与 `reports/cache_calibration/*/report.md`。
 4. **命中与未命中的延迟实测** — ✅ — `docs/perf/semantic_cache.md` §4–§5：真实 DeepSeek、n = 10 个问题：首字中位数 **56.8 ms（命中）vs 5409.7 ms（未命中）**，总耗时 58.1 vs 5776.4 ms，命中 0 token；缓存自身开销（n = 200）嵌入 8.4 ms + 检索 0.6–1.5 ms。
 5. **时效性排除规则有单测** — ✅ — `ai-service/tests/test_semantic_cache.py`：`test_answers_that_used_get_latest_nav_are_not_cached`（策略）、`test_an_api_citation_alone_also_blocks_caching`、`test_answers_using_get_latest_nav_are_not_stored`（经 `chat_events` 端到端：同一个净值问题问两次都跑 Agent、缓存里 0 条）；荐基类、出错、带历史的追问、相对时间词、合规标记命中各有单测。
-6. **CI 全绿** — 见文末「CI」行。
+6. **CI 全绿** — ✅ — run 36970011637，8 个 job success（backend `mvn verify` 含对真实 Redis / MySQL 的 Testcontainers 测试与 `BackendIntegrationTest`、frontend、python × 4、proto、scripts + 安全扫描）。
 
 ### 实测数字
 | 指标 | 值 | n / 分母 | 结果文件 |
@@ -823,4 +823,4 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 
 ### 给统筹的问题
 - 无阻塞。可选：①`docs/PLAN.md` §7 表标记 B10 完成；②校准集 v2（修畸形问题、扩充真实说法、可能引入人工审核）是否排进后续；③S12 压测场景 D（语义缓存命中）需要 `SEMANTIC_CACHE_ENABLED=true` 且请求要避开「带历史」的路径（同一会话第二问起不走缓存）；④是否要把令牌桶推广到注册 / 登录 / 上传接口。
-- **CI**：待填。
+- **CI**：`5370a4a` 的 run [36970011637](https://github.com/2181385109/fund-research-agent/actions/runs/36970011637) 8 个 job 全绿。此前推送的 `e7ed3e0`（run 36969786471）里 `scripts + security scan` 红了一次：`scripts/e2e_s10.py` 里有一处 WSL 路径字面量被「本机路径」规则命中；`5370a4a` 改成由 `ROOT` 推算，并按已推送的第一版在 `LOCAL_PATH_EXEMPT` 里豁免（先例：S9 的 `cancel_latency.py`）。另：上一个提交 `f6a44ce`（统筹只改文档）的 CI 曾因 `HttpAiServiceClientTest.chatGivesUpWhenTheUpstreamGoesSilent`（时间敏感的老测试）偶发失败一次，本阶段的 run 里都过了，已写进 HANDOFF。
