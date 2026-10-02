@@ -95,17 +95,22 @@ def summarize(events: list[tuple[str, dict[str, Any]]]) -> dict[str, Any]:
     }
 
 
+def _wsl_path(p: Path) -> str:
+    """Windows 路径 → WSL 里的挂载路径（盘符 → /mnt/<小写盘符>）。"""
+    return "/mnt/" + p.drive[0].lower() + p.as_posix()[2:]
+
+
 def mysql_usage(user_id: int, workdir: Path) -> str:
     """经 WSL 里的 docker exec 查 usage_daily；密码在 WSL 里从 .env 读取，不经过 Windows 命令行，也不打印。"""
     script = workdir / "_usage_query.sh"
     script.write_text(
-        "PW=$(grep '^MYSQL_APP_PASSWORD=' /mnt/d/xiangmu/fund-research-agent/.env | cut -d= -f2-)\n"
+        f"PW=$(grep '^MYSQL_APP_PASSWORD=' {_wsl_path(ROOT / '.env')} | cut -d= -f2-)\n"
         'docker exec -e MYSQL_PWD="$PW" fra-mysql mysql -ufra_app fra_app -N -B '
         f'-e "SELECT calls, tokens FROM usage_daily WHERE user_id={user_id} ORDER BY usage_date DESC LIMIT 1"\n',
         encoding="utf-8",
         newline="\n",
     )
-    posix = "/mnt/" + script.drive[0].lower() + script.as_posix()[2:]
+    posix = _wsl_path(script)
     try:
         out = subprocess.run(
             ["wsl.exe", "-d", "Ubuntu-24.04", "-u", "root", "--", "bash", posix],

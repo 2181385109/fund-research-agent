@@ -54,6 +54,7 @@ LOCAL_PATH_EXEMPT: dict[str, str] = {
     "scripts/security_scan.py": "规则定义本身",
     "scripts/tests/": "扫描器单测里的违规样例",
     "scripts/cancel_latency.py": "S9 取消延迟脚本：早期提交的日志正则被盘符规则误判（现版本已改写）",
+    "scripts/e2e_s10.py": "S10 e2e 脚本：已推送的第一版有一处 WSL 路径字面量（现版本由 ROOT 推算）",
     "ai-service/src/fundagent/": "protoc 生成的桩代码：描述符转义串偶然含「字母冒号反斜杠」，误命中盘符规则",
     # 下面两个测试文件的历史提交里有过「Windows 路径」样例（路径穿越 / 文件名净化的测试输入，不是本机路径）；
     # 那两次提交已经推送，不改写历史，所以按文件豁免（现在的版本已经不含这些样例）
