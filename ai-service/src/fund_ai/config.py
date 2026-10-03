@@ -95,6 +95,25 @@ class Settings(BaseSettings):
     chunk_min_chars: int = 150  # 正文块最小字符数，不足的与相邻正文块合并（0 = 不合并）
     data_dir: Path = REPO_ROOT / "data"
 
+    # 批量入库（S11，ADR-049）：Kafka 消费者组。默认关闭（本机评测 / CI 不受影响），compose 里默认开启。
+    kafka_consumer_enabled: bool = False
+    kafka_bootstrap_servers: str = "127.0.0.1:9094"
+    kafka_group_id: str = "fra-ingest"
+    kafka_topic_requested: str = "doc.ingest.requested"
+    kafka_topic_result: str = "doc.ingest.result"
+    kafka_topic_dlq: str = "doc.ingest.dlq"
+    # 空 = 主机名-进程号；写进锁的 token、日志和结果消息，用来在证据里区分消费者实例
+    kafka_consumer_id: str = ""
+    kafka_session_timeout_ms: int = 10_000  # 实例被 kill 后，最迟这么久之后分区才会被重新分配
+    kafka_max_poll_interval_ms: int = 600_000  # 单份文档处理的上限（超过会被踢出消费者组）
+    redis_key_prefix: str = "fra:"  # 与 backend 一致；锁键 = {prefix}lock:ingest:{doc_id}
+    ingest_lock_ttl_ms: int = (
+        30_000  # 锁的 TTL；watchdog 每 ttl/3 续期，持有者崩溃后最迟 TTL 过后锁自动释放
+    )
+    ingest_lock_wait_seconds: float = 180.0  # 拿不到锁（别的实例在处理同一份文档）时最多等多久
+    ingest_max_attempts: int = 3  # 可重试错误的总尝试次数（含第一次），用尽后进 DLQ
+    ingest_retry_backoff_seconds: float = 2.0  # 第 n 次失败后等 n × 这个值再试
+
     # 重排（S4）：cross_encoder（本地 BAAI/bge-reranker-base）| noop（不重排，测试 / CI）
     reranker_provider: str = "cross_encoder"
     reranker_model: str = "BAAI/bge-reranker-base"

@@ -89,6 +89,10 @@ class IngestPipeline:
             boilerplate_lines=len(doc.boilerplate),
         )
 
+    def counts(self, doc_id: str) -> dict[str, int]:
+        """各存储中该 doc_id 的条数（S11 批量入库用它核对「已 READY」的文档确实还在库里）。"""
+        return {s.name: s.count(doc_id) for s in self.stores}
+
     def delete(self, doc_id: str) -> dict[str, int]:
         """删除并返回删除后各存储中该 doc_id 的条数（应全为 0）。"""
         for s in self.stores:

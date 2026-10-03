@@ -24,6 +24,8 @@ dependencies = [
     # S9 gRPC。生成的桩代码（src/fundagent/）会校验运行时版本不低于生成时的版本，所以下限与 dev 里的 grpcio-tools 对齐
     "grpcio>=1.84,<2",
     "protobuf>=7.36,<8",
+    # S11 批量入库的 Kafka 消费者组 / 生产者（纯 Python 客户端）
+    "aiokafka>=0.12,<1",
 ]
 
 [project.optional-dependencies]

@@ -18,6 +18,7 @@ from fund_ai.agent.factory import build_agent_runner
 from fund_ai.agent.runner import AgentRunner
 from fund_ai.api.callback import send_callback
 from fund_ai.api.chat import router as chat_router
+from fund_ai.api.documents import _pipeline as _public_pipeline
 from fund_ai.api.documents import router as documents_router
 from fund_ai.api.health import HealthChecker, build_checkers, build_redis_client
 from fund_ai.api.health import router as health_router
@@ -30,6 +31,7 @@ from fund_ai.grpc_server.service import start_grpc_server, stop_grpc_server
 from fund_ai.ingest.chunking import ChunkParams
 from fund_ai.ingest.pipeline import IngestPipeline
 from fund_ai.mcp_server.server import create_docs_mcp
+from fund_ai.messaging.worker import IngestWorker, build_executor, build_handler
 from fund_ai.retrieval.scope import ScopeCodec
 from fund_ai.retrieval.service import RetrievalService
 from fund_ai.stores.es_store import EsChunkStore
@@ -93,6 +95,27 @@ def _retrieval(app: FastAPI) -> RetrievalService:
     return st.retrieval
 
 
+async def _start_ingest_worker(stack: AsyncExitStack, app: FastAPI, settings: Settings) -> None:
+    """启动 S11 的入库消费者（后台任务）；退出时请求停止，宽限期内没停下就取消。"""
+    redis_client = build_redis_client(settings)
+    stack.push_async_callback(redis_client.aclose)
+    executor = build_executor(settings, lambda: _public_pipeline(app), app.state.ingest_lock)
+    worker = IngestWorker(settings, build_handler(settings, redis_client, executor))
+    stop = asyncio.Event()
+    task = asyncio.create_task(worker.run(stop), name="ingest-worker")
+    app.state.ingest_worker = worker
+
+    async def shutdown() -> None:
+        stop.set()
+        try:
+            await asyncio.wait_for(asyncio.shield(task), timeout=15)
+        except (TimeoutError, asyncio.CancelledError):
+            task.cancel()
+            await asyncio.gather(task, return_exceptions=True)
+
+    stack.push_async_callback(shutdown)
+
+
 def create_app(
     settings: Settings | None = None,
     checkers: Sequence[HealthChecker] | None = None,
@@ -125,6 +148,10 @@ def create_app(
                 grpc_server = await start_grpc_server(app, settings)
                 if grpc_server is not None:
                     stack.push_async_callback(stop_grpc_server, grpc_server)
+            if (
+                settings.kafka_consumer_enabled
+            ):  # S11：批量入库的 Kafka 消费者，与 HTTP / gRPC 同进程
+                await _start_ingest_worker(stack, app, settings)
             if checkers is not None:
                 app.state.health_checkers = list(checkers)
                 yield
