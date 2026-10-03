@@ -59,7 +59,7 @@ class IngestWorker:
 
     async def _session(self, stop: asyncio.Event) -> None:
         from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
-        from aiokafka.errors import CommitFailedError
+        from aiokafka.errors import KafkaError
 
         s = self.settings
         producer = AIOKafkaProducer(
@@ -97,7 +97,7 @@ class IngestWorker:
                             await self._process(producer, m, stop)
                             try:
                                 await consumer.commit({tp: m.offset + 1})
-                            except CommitFailedError as e:
+                            except KafkaError as e:
                                 # 处理期间发生了再均衡：这条消息会被新的分区所有者重新收到，由幂等逻辑吸收
                                 log.warning(
                                     "commit failed partition=%d offset=%d err=%r（消息将被重新投递）",
@@ -200,6 +200,17 @@ def build_executor(
     return PipelineExecutor(pipeline_provider, REPO_ROOT, [settings.data_dir], gate)
 
 
+def _configure_logging() -> None:
+    log_ = logging.getLogger("fund_ai")
+    if log_.handlers:
+        return
+    handler = logging.StreamHandler(sys.stderr)
+    handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(name)s %(message)s"))
+    log_.addHandler(handler)
+    log_.setLevel(logging.INFO)
+    log_.propagate = False  # 其他库（如 mcp）可能给根 logger 装了 handler，不让同一行日志出现两遍
+
+
 def _load_factory(spec: str) -> Callable[[Settings], Any]:
     mod, _, attr = spec.partition(":")
     return getattr(importlib.import_module(mod), attr)
@@ -209,11 +220,9 @@ async def _amain(args: argparse.Namespace) -> int:
     from fund_ai.api.health import build_redis_client
 
     settings = get_settings()
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s %(levelname)s %(name)s %(message)s",
-        stream=sys.stderr,
-    )
+    # 先于导入流水线工厂配置日志：fund_ai.api.app 导入时也会配置同一个 logger，它发现已有 handler 就不再加
+    # （两边都加会让每行日志重复，「每份文档恰一条 ingest.start」的计数就错了）
+    _configure_logging()
     factory = _load_factory(args.pipeline_factory)
     pipeline_holder: dict[str, Any] = {}
 

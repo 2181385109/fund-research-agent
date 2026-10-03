@@ -1,0 +1,41 @@
+[
+  {
+    "key": "e2e-s11-garbage-a05aa3",
+    "value": "this is not json {{{",
+    "headers": {
+      "error": "poison: 不是合法的 JSON：Expecting value: line 1 column 1 (char 0)",
+      "attempts": "0",
+      "source-topic": "doc.ingest.requested",
+      "source-partition": "1",
+      "source-offset": "62",
+      "consumer-id": "B",
+      "failed-at": "2026-10-03T04:08:37.958+00:00"
+    }
+  },
+  {
+    "key": "e2e-s11-badsha-a05aa3",
+    "value": "{\"schema\": 1, \"batch_id\": 999999, \"fund_code\": \"003095\", \"fund_name\": \"\\u4e2d\\u6b27\\u533b\\u7597\\u5065\\u5eb7\\u6df7\\u5408\", \"doc_type\": \"quarterly_report\", \"report_period\": \"2026Q2\", \"title\": \"t\", \"task",
+    "headers": {
+      "error": "PermanentIngestError: 文件 sha256 075e81ea868b… 与清单 ffffffffffff… 不一致",
+      "attempts": "1",
+      "source-topic": "doc.ingest.requested",
+      "source-partition": "1",
+      "source-offset": "63",
+      "consumer-id": "B",
+      "failed-at": "2026-10-03T04:08:37.965+00:00"
+    }
+  },
+  {
+    "key": "e2e-s11-missing-a05aa3",
+    "value": "{\"schema\": 1, \"batch_id\": 999999, \"fund_code\": \"003095\", \"fund_name\": \"\\u4e2d\\u6b27\\u533b\\u7597\\u5065\\u5eb7\\u6df7\\u5408\", \"doc_type\": \"quarterly_report\", \"report_period\": \"2026Q2\", \"title\": \"t\", \"task",
+    "headers": {
+      "error": "PermanentIngestError: 文件不存在：data/raw/pdf/does-not-exist.pdf",
+      "attempts": "1",
+      "source-topic": "doc.ingest.requested",
+      "source-partition": "0",
+      "source-offset": "51",
+      "consumer-id": "B",
+      "failed-at": "2026-10-03T04:08:37.970+00:00"
+    }
+  }
+]

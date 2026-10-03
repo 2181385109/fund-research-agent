@@ -50,7 +50,8 @@
 | S8 | 回答评测 + 第一期收尾 | ✅ 完成（2026-10-01）：test 124 题 × 2 种检索配置的回答评测、人工盲标 36 条（见下方「第一期指标」），tag `v0.1-phase1` |
 | S9 | gRPC 改造 | ✅ 完成（2026-10-02）：proto（`Chat` 流式 / `Retrieve` / `IngestDocument` / `DeleteDocument`）、ai-service 的 grpc.aio 与 FastAPI 同进程、backend `GrpcAiServiceClient`（复用 channel、deadline、取消传播；`AI_TRANSPORT=grpc|http` 可切回 http）；HTTP vs gRPC 延迟与取消延迟预实验见 [docs/perf/grpc_vs_http.md](docs/perf/grpc_vs_http.md)（预实验，不是压测基线），决策见 ADR-047 |
 | S10 | Redis：限流 + 配额 + 语义缓存 | ✅ 完成（2026-10-02）：Lua 令牌桶（用户 + 全局，429 + `Retry-After`，并发 200 抢容量 20 → 放行恰好 20）、每日配额（跨天、定时回写 MySQL）、语义缓存（Redis 向量索引，按检索范围 + 数据快照 + 模型隔离，不缓存最新净值 / 荐基 / 出错的回答，命中按同一事件协议回放并标 `cache_hit`，**默认关闭**）。**纯向量阈值分不开「只差一个关键要素」的问题**（零误命中点 0.995，recall 0），所以命中还要过关键要素守卫；test 上（只跑一次）recall 77 / 92 = 83.7%、难负例误命中 3 / 132 = 2.3%；命中 vs 未命中首字 57 ms vs 5.4 s（n = 10，真实 LLM）。报告 [docs/perf/semantic_cache.md](docs/perf/semantic_cache.md)，决策见 ADR-048 |
-| S11–S13 | 第二期：Kafka → 压测 → 优化 | 未开始 |
+| S11 | Kafka：季报批量入库 + 分布式锁 | ✅ 完成（2026-10-03）：`POST /api/ingest-batches` → 批次 / 任务 / outbox 同一事务 → relay（`FOR UPDATE SKIP LOCKED`）发 `doc.ingest.requested`；ai-service 消费者组手动提交 offset，`fra:lock:ingest:{doc_id}`（SET NX PX + token + Lua + watchdog）、sha256 未变且 READY 则跳过、重试 3 次或不可重试错误进 `doc.ingest.dlq`；结果 topic 幂等更新、进度接口。**2 个消费者实例 + 每份请求发两遍：20 份 2026Q2 季报只入库 20 次（另 20 次 SKIPPED），前后 664 块的 chunk_id 集合一致**；入库中途 kill -9，另一实例约 30 s 后接管并最终一致；毒消息进 DLQ。2026Q3 季报尚未发布，演示是对 2026Q2 的「整批重投」。证据 [reports/s11/](reports/s11/)，决策 ADR-049，局限见 [LIMITATIONS](docs/LIMITATIONS.md)「批量入库（S11）」 |
+| S12–S13 | 第二期：压测 → 优化 | 未开始 |
 
 详细计划见 [docs/PLAN.md](docs/PLAN.md)，逐阶段进度与验收证据见 [docs/PROGRESS.md](docs/PROGRESS.md)。
 
@@ -110,7 +111,7 @@
 # 1. 生成 .env（随机密码 + DeepSeek 密钥；密钥文件只有一行 key）
 python scripts/gen_env.py --llm-key-file <DeepSeek key 文件>
 
-# 2. 构建镜像并起全部服务：infra（MySQL / Redis / ES / Milvus）+ mcp-tools / ai-service / backend / frontend
+# 2. 构建镜像并起全部服务：infra（MySQL / Redis / ES / Milvus / Kafka）+ mcp-tools / ai-service / backend / frontend
 docker compose --profile app up -d --build
 docker compose --profile app ps          # 全部 healthy 后再继续
 

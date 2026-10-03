@@ -1,0 +1,212 @@
+[A] 2026-10-03 12:04:42,323 INFO fund_ai.messaging.worker worker started consumer=A group=fra-ingest topic=doc.ingest.requested
+[B] 2026-10-03 12:04:42,323 INFO fund_ai.messaging.worker worker started consumer=B group=fra-ingest topic=doc.ingest.requested
+[A] 2026-10-03 12:04:57,593 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=42 key=004851_quarterly_report_2026Q2
+[B] 2026-10-03 12:04:57,593 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=38 key=003095_quarterly_report_2026Q2
+[B] 2026-10-03 12:04:57,604 INFO fund_ai.messaging.handler ingest.start doc_id=003095_quarterly_report_2026Q2 consumer=B attempt=1 task_id=81 batch_id=8
+[A] 2026-10-03 12:04:57,604 INFO fund_ai.messaging.handler ingest.start doc_id=004851_quarterly_report_2026Q2 consumer=A attempt=1 task_id=84 batch_id=8
+[B] 2026-10-03 12:05:16,777 INFO fund_ai.messaging.handler ingest.done doc_id=003095_quarterly_report_2026Q2 consumer=B chunks=36 pages=13
+[A] 2026-10-03 12:05:16,777 INFO fund_ai.messaging.handler ingest.done doc_id=004851_quarterly_report_2026Q2 consumer=A chunks=32 pages=14
+[A] 2026-10-03 12:05:16,782 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=43 key=007718_quarterly_report_2026Q2
+[B] 2026-10-03 12:05:16,782 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=39 key=001717_quarterly_report_2026Q2
+[B] 2026-10-03 12:05:16,786 INFO fund_ai.messaging.handler ingest.start doc_id=001717_quarterly_report_2026Q2 consumer=B attempt=1 task_id=83 batch_id=8
+[A] 2026-10-03 12:05:16,786 INFO fund_ai.messaging.handler ingest.start doc_id=007718_quarterly_report_2026Q2 consumer=A attempt=1 task_id=86 batch_id=8
+[B] 2026-10-03 12:05:23,185 INFO fund_ai.messaging.handler ingest.done doc_id=001717_quarterly_report_2026Q2 consumer=B chunks=30 pages=13
+[B] 2026-10-03 12:05:23,189 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=40 key=110023_quarterly_report_2026Q2
+[B] 2026-10-03 12:05:23,193 INFO fund_ai.messaging.handler ingest.start doc_id=110023_quarterly_report_2026Q2 consumer=B attempt=1 task_id=85 batch_id=8
+[A] 2026-10-03 12:05:23,851 INFO fund_ai.messaging.handler ingest.done doc_id=007718_quarterly_report_2026Q2 consumer=A chunks=37 pages=13
+[A] 2026-10-03 12:05:23,856 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=44 key=001550_quarterly_report_2026Q2
+[A] 2026-10-03 12:05:23,863 INFO fund_ai.messaging.handler ingest.start doc_id=001550_quarterly_report_2026Q2 consumer=A attempt=1 task_id=88 batch_id=8
+[B] 2026-10-03 12:05:27,944 INFO fund_ai.messaging.handler ingest.done doc_id=110023_quarterly_report_2026Q2 consumer=B chunks=29 pages=13
+[B] 2026-10-03 12:05:27,954 INFO fund_ai.messaging.worker message received consumer=B partition=3 offset=12 key=002692_quarterly_report_2026Q2
+[B] 2026-10-03 12:05:27,959 INFO fund_ai.messaging.handler ingest.start doc_id=002692_quarterly_report_2026Q2 consumer=B attempt=1 task_id=91 batch_id=8
+[A] 2026-10-03 12:05:30,014 INFO fund_ai.messaging.handler ingest.done doc_id=001550_quarterly_report_2026Q2 consumer=A chunks=33 pages=13
+[A] 2026-10-03 12:05:30,032 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=45 key=160219_quarterly_report_2026Q2
+[A] 2026-10-03 12:05:30,037 INFO fund_ai.messaging.handler ingest.start doc_id=160219_quarterly_report_2026Q2 consumer=A attempt=1 task_id=89 batch_id=8
+[B] 2026-10-03 12:05:33,113 INFO fund_ai.messaging.handler ingest.done doc_id=002692_quarterly_report_2026Q2 consumer=B chunks=28 pages=18
+[B] 2026-10-03 12:05:33,121 INFO fund_ai.messaging.worker message received consumer=B partition=3 offset=13 key=040025_quarterly_report_2026Q2
+[B] 2026-10-03 12:05:33,126 INFO fund_ai.messaging.handler ingest.start doc_id=040025_quarterly_report_2026Q2 consumer=B attempt=1 task_id=95 batch_id=8
+[A] 2026-10-03 12:05:37,248 INFO fund_ai.messaging.handler ingest.done doc_id=160219_quarterly_report_2026Q2 consumer=A chunks=38 pages=19
+[A] 2026-10-03 12:05:37,255 INFO fund_ai.messaging.worker message received consumer=A partition=0 offset=31 key=006113_quarterly_report_2026Q2
+[A] 2026-10-03 12:05:37,261 INFO fund_ai.messaging.handler ingest.start doc_id=006113_quarterly_report_2026Q2 consumer=A attempt=1 task_id=82 batch_id=8
+[B] 2026-10-03 12:05:39,525 INFO fund_ai.messaging.handler ingest.done doc_id=040025_quarterly_report_2026Q2 consumer=B chunks=27 pages=11
+[B] 2026-10-03 12:05:39,534 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=41 key=001513_quarterly_report_2026Q2
+[B] 2026-10-03 12:05:39,539 INFO fund_ai.messaging.handler ingest.start doc_id=001513_quarterly_report_2026Q2 consumer=B attempt=1 task_id=92 batch_id=8
+[A] 2026-10-03 12:05:42,620 INFO fund_ai.messaging.handler ingest.done doc_id=006113_quarterly_report_2026Q2 consumer=A chunks=35 pages=16
+[A] 2026-10-03 12:05:42,629 INFO fund_ai.messaging.worker message received consumer=A partition=0 offset=32 key=000452_quarterly_report_2026Q2
+[A] 2026-10-03 12:05:42,634 INFO fund_ai.messaging.handler ingest.start doc_id=000452_quarterly_report_2026Q2 consumer=A attempt=1 task_id=87 batch_id=8
+[B] 2026-10-03 12:05:45,725 INFO fund_ai.messaging.handler ingest.done doc_id=001513_quarterly_report_2026Q2 consumer=B chunks=35 pages=15
+[B] 2026-10-03 12:05:45,731 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=42 key=014193_quarterly_report_2026Q2
+[B] 2026-10-03 12:05:45,737 INFO fund_ai.messaging.handler ingest.start doc_id=014193_quarterly_report_2026Q2 consumer=B attempt=1 task_id=97 batch_id=8
+[A] 2026-10-03 12:05:47,991 INFO fund_ai.messaging.handler ingest.done doc_id=000452_quarterly_report_2026Q2 consumer=A chunks=29 pages=12
+[A] 2026-10-03 12:05:48,002 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=46 key=008919_quarterly_report_2026Q2
+[A] 2026-10-03 12:05:48,006 INFO fund_ai.messaging.handler ingest.start doc_id=008919_quarterly_report_2026Q2 consumer=A attempt=1 task_id=94 batch_id=8
+[B] 2026-10-03 12:05:52,123 INFO fund_ai.messaging.handler ingest.done doc_id=014193_quarterly_report_2026Q2 consumer=B chunks=45 pages=20
+[B] 2026-10-03 12:05:52,126 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=43 key=008326_quarterly_report_2026Q2
+[B] 2026-10-03 12:05:52,129 INFO fund_ai.messaging.handler ingest.start doc_id=008326_quarterly_report_2026Q2 consumer=B attempt=1 task_id=98 batch_id=8
+[A] 2026-10-03 12:05:53,161 INFO fund_ai.messaging.handler ingest.done doc_id=008919_quarterly_report_2026Q2 consumer=A chunks=27 pages=12
+[A] 2026-10-03 12:05:53,168 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=47 key=012650_quarterly_report_2026Q2
+[A] 2026-10-03 12:05:53,174 INFO fund_ai.messaging.handler ingest.start doc_id=012650_quarterly_report_2026Q2 consumer=A attempt=1 task_id=96 batch_id=8
+[B] 2026-10-03 12:05:57,095 INFO fund_ai.messaging.handler ingest.done doc_id=008326_quarterly_report_2026Q2 consumer=B chunks=31 pages=13
+[B] 2026-10-03 12:05:57,102 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=44 key=003095_quarterly_report_2026Q2
+[B] 2026-10-03 12:05:57,336 INFO fund_ai.messaging.handler ingest.skip doc_id=003095_quarterly_report_2026Q2 consumer=B chunks=36（sha256 未变且已 READY，ready 由 B 于 2026-10-03T04:05:16.776+00:00 写入）
+[B] 2026-10-03 12:05:57,345 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=45 key=001717_quarterly_report_2026Q2
+[B] 2026-10-03 12:05:57,542 INFO fund_ai.messaging.handler ingest.skip doc_id=001717_quarterly_report_2026Q2 consumer=B chunks=30（sha256 未变且已 READY，ready 由 B 于 2026-10-03T04:05:23.184+00:00 写入）
+[B] 2026-10-03 12:05:57,551 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=46 key=110023_quarterly_report_2026Q2
+[B] 2026-10-03 12:05:57,747 INFO fund_ai.messaging.handler ingest.skip doc_id=110023_quarterly_report_2026Q2 consumer=B chunks=29（sha256 未变且已 READY，ready 由 B 于 2026-10-03T04:05:27.942+00:00 写入）
+[B] 2026-10-03 12:05:57,757 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=47 key=001513_quarterly_report_2026Q2
+[B] 2026-10-03 12:05:57,960 INFO fund_ai.messaging.handler ingest.skip doc_id=001513_quarterly_report_2026Q2 consumer=B chunks=35（sha256 未变且已 READY，ready 由 B 于 2026-10-03T04:05:45.717+00:00 写入）
+[B] 2026-10-03 12:05:57,966 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=48 key=014193_quarterly_report_2026Q2
+[B] 2026-10-03 12:05:58,170 INFO fund_ai.messaging.handler ingest.skip doc_id=014193_quarterly_report_2026Q2 consumer=B chunks=45（sha256 未变且已 READY，ready 由 B 于 2026-10-03T04:05:52.122+00:00 写入）
+[B] 2026-10-03 12:05:58,176 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=49 key=008326_quarterly_report_2026Q2
+[B] 2026-10-03 12:05:58,574 INFO fund_ai.messaging.handler ingest.skip doc_id=008326_quarterly_report_2026Q2 consumer=B chunks=31（sha256 未变且已 READY，ready 由 B 于 2026-10-03T04:05:57.093+00:00 写入）
+[B] 2026-10-03 12:05:58,578 INFO fund_ai.messaging.worker message received consumer=B partition=3 offset=14 key=002692_quarterly_report_2026Q2
+[B] 2026-10-03 12:05:58,991 INFO fund_ai.messaging.handler ingest.skip doc_id=002692_quarterly_report_2026Q2 consumer=B chunks=28（sha256 未变且已 READY，ready 由 B 于 2026-10-03T04:05:33.111+00:00 写入）
+[B] 2026-10-03 12:05:58,996 INFO fund_ai.messaging.worker message received consumer=B partition=3 offset=15 key=040025_quarterly_report_2026Q2
+[A] 2026-10-03 12:05:59,357 INFO fund_ai.messaging.handler ingest.done doc_id=012650_quarterly_report_2026Q2 consumer=A chunks=36 pages=15
+[A] 2026-10-03 12:05:59,361 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=48 key=002236_quarterly_report_2026Q2
+[A] 2026-10-03 12:05:59,363 INFO fund_ai.messaging.handler ingest.start doc_id=002236_quarterly_report_2026Q2 consumer=A attempt=1 task_id=99 batch_id=8
+[B] 2026-10-03 12:05:59,399 INFO fund_ai.messaging.handler ingest.skip doc_id=040025_quarterly_report_2026Q2 consumer=B chunks=27（sha256 未变且已 READY，ready 由 B 于 2026-10-03T04:05:39.518+00:00 写入）
+[A] 2026-10-03 12:06:04,317 INFO fund_ai.messaging.handler ingest.done doc_id=002236_quarterly_report_2026Q2 consumer=A chunks=33 pages=13
+[A] 2026-10-03 12:06:04,320 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=49 key=004851_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:04,773 INFO fund_ai.messaging.handler ingest.skip doc_id=004851_quarterly_report_2026Q2 consumer=A chunks=32（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:05:16.776+00:00 写入）
+[A] 2026-10-03 12:06:04,776 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=50 key=007718_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:04,980 INFO fund_ai.messaging.handler ingest.skip doc_id=007718_quarterly_report_2026Q2 consumer=A chunks=37（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:05:23.850+00:00 写入）
+[A] 2026-10-03 12:06:04,983 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=51 key=001550_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:05,187 INFO fund_ai.messaging.handler ingest.skip doc_id=001550_quarterly_report_2026Q2 consumer=A chunks=33（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:05:30.012+00:00 写入）
+[A] 2026-10-03 12:06:05,190 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=52 key=160219_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:05,600 INFO fund_ai.messaging.handler ingest.skip doc_id=160219_quarterly_report_2026Q2 consumer=A chunks=38（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:05:37.246+00:00 写入）
+[A] 2026-10-03 12:06:05,605 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=53 key=008919_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:06,013 INFO fund_ai.messaging.handler ingest.skip doc_id=008919_quarterly_report_2026Q2 consumer=A chunks=27（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:05:53.159+00:00 写入）
+[A] 2026-10-03 12:06:06,017 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=54 key=012650_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:06,427 INFO fund_ai.messaging.handler ingest.skip doc_id=012650_quarterly_report_2026Q2 consumer=A chunks=36（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:05:59.356+00:00 写入）
+[A] 2026-10-03 12:06:06,431 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=55 key=002236_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:06,840 INFO fund_ai.messaging.handler ingest.skip doc_id=002236_quarterly_report_2026Q2 consumer=A chunks=33（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:06:04.316+00:00 写入）
+[A] 2026-10-03 12:06:06,844 INFO fund_ai.messaging.worker message received consumer=A partition=0 offset=33 key=161035_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:06,847 INFO fund_ai.messaging.handler ingest.start doc_id=161035_quarterly_report_2026Q2 consumer=A attempt=1 task_id=90 batch_id=8
+[A] 2026-10-03 12:06:11,759 INFO fund_ai.messaging.handler ingest.done doc_id=161035_quarterly_report_2026Q2 consumer=A chunks=37 pages=21
+[A] 2026-10-03 12:06:11,762 INFO fund_ai.messaging.worker message received consumer=A partition=0 offset=34 key=013840_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:11,765 INFO fund_ai.messaging.handler ingest.start doc_id=013840_quarterly_report_2026Q2 consumer=A attempt=1 task_id=93 batch_id=8
+[A] 2026-10-03 12:06:16,720 INFO fund_ai.messaging.handler ingest.done doc_id=013840_quarterly_report_2026Q2 consumer=A chunks=35 pages=14
+[A] 2026-10-03 12:06:16,725 INFO fund_ai.messaging.worker message received consumer=A partition=0 offset=35 key=011832_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:16,728 INFO fund_ai.messaging.handler ingest.start doc_id=011832_quarterly_report_2026Q2 consumer=A attempt=1 task_id=100 batch_id=8
+[A] 2026-10-03 12:06:20,854 INFO fund_ai.messaging.handler ingest.done doc_id=011832_quarterly_report_2026Q2 consumer=A chunks=31 pages=13
+[A] 2026-10-03 12:06:20,858 INFO fund_ai.messaging.worker message received consumer=A partition=0 offset=36 key=006113_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:21,310 INFO fund_ai.messaging.handler ingest.skip doc_id=006113_quarterly_report_2026Q2 consumer=A chunks=35（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:05:42.619+00:00 写入）
+[A] 2026-10-03 12:06:21,314 INFO fund_ai.messaging.worker message received consumer=A partition=0 offset=37 key=000452_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:21,724 INFO fund_ai.messaging.handler ingest.skip doc_id=000452_quarterly_report_2026Q2 consumer=A chunks=29（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:05:47.989+00:00 写入）
+[A] 2026-10-03 12:06:21,728 INFO fund_ai.messaging.worker message received consumer=A partition=0 offset=38 key=161035_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:22,138 INFO fund_ai.messaging.handler ingest.skip doc_id=161035_quarterly_report_2026Q2 consumer=A chunks=37（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:06:11.758+00:00 写入）
+[A] 2026-10-03 12:06:22,142 INFO fund_ai.messaging.worker message received consumer=A partition=0 offset=39 key=013840_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:22,344 INFO fund_ai.messaging.handler ingest.skip doc_id=013840_quarterly_report_2026Q2 consumer=A chunks=35（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:06:16.720+00:00 写入）
+[A] 2026-10-03 12:06:22,348 INFO fund_ai.messaging.worker message received consumer=A partition=0 offset=40 key=011832_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:22,758 INFO fund_ai.messaging.handler ingest.skip doc_id=011832_quarterly_report_2026Q2 consumer=A chunks=31（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:06:20.853+00:00 写入）
+[B] 2026-10-03 12:06:31,508 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=50 key=003095_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:31,510 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=56 key=004851_quarterly_report_2026Q2
+[B] 2026-10-03 12:06:31,853 INFO fund_ai.messaging.handler ingest.skip doc_id=003095_quarterly_report_2026Q2 consumer=B chunks=36（sha256 未变且已 READY，ready 由 B 于 2026-10-03T04:05:16.776+00:00 写入）
+[B] 2026-10-03 12:06:31,858 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=51 key=001717_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:31,859 INFO fund_ai.messaging.handler ingest.skip doc_id=004851_quarterly_report_2026Q2 consumer=A chunks=32（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:05:16.776+00:00 写入）
+[A] 2026-10-03 12:06:31,863 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=57 key=007718_quarterly_report_2026Q2
+[B] 2026-10-03 12:06:32,064 INFO fund_ai.messaging.handler ingest.skip doc_id=001717_quarterly_report_2026Q2 consumer=B chunks=30（sha256 未变且已 READY，ready 由 B 于 2026-10-03T04:05:23.184+00:00 写入）
+[A] 2026-10-03 12:06:32,064 INFO fund_ai.messaging.handler ingest.skip doc_id=007718_quarterly_report_2026Q2 consumer=A chunks=37（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:05:23.850+00:00 写入）
+[A] 2026-10-03 12:06:32,068 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=58 key=001550_quarterly_report_2026Q2
+[B] 2026-10-03 12:06:32,069 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=52 key=110023_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:32,473 INFO fund_ai.messaging.handler ingest.skip doc_id=001550_quarterly_report_2026Q2 consumer=A chunks=33（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:05:30.012+00:00 写入）
+[B] 2026-10-03 12:06:32,473 INFO fund_ai.messaging.handler ingest.skip doc_id=110023_quarterly_report_2026Q2 consumer=B chunks=29（sha256 未变且已 READY，ready 由 B 于 2026-10-03T04:05:27.942+00:00 写入）
+[A] 2026-10-03 12:06:32,477 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=59 key=160219_quarterly_report_2026Q2
+[B] 2026-10-03 12:06:32,477 INFO fund_ai.messaging.worker message received consumer=B partition=3 offset=16 key=002692_quarterly_report_2026Q2
+[B] 2026-10-03 12:06:32,886 INFO fund_ai.messaging.handler ingest.skip doc_id=002692_quarterly_report_2026Q2 consumer=B chunks=28（sha256 未变且已 READY，ready 由 B 于 2026-10-03T04:05:33.111+00:00 写入）
+[A] 2026-10-03 12:06:32,886 INFO fund_ai.messaging.handler ingest.skip doc_id=160219_quarterly_report_2026Q2 consumer=A chunks=38（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:05:37.246+00:00 写入）
+[A] 2026-10-03 12:06:32,890 INFO fund_ai.messaging.worker message received consumer=A partition=0 offset=41 key=006113_quarterly_report_2026Q2
+[B] 2026-10-03 12:06:32,890 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=53 key=001513_quarterly_report_2026Q2
+[B] 2026-10-03 12:06:33,300 INFO fund_ai.messaging.handler ingest.skip doc_id=001513_quarterly_report_2026Q2 consumer=B chunks=35（sha256 未变且已 READY，ready 由 B 于 2026-10-03T04:05:45.717+00:00 写入）
+[A] 2026-10-03 12:06:33,300 INFO fund_ai.messaging.handler ingest.skip doc_id=006113_quarterly_report_2026Q2 consumer=A chunks=35（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:05:42.619+00:00 写入）
+[A] 2026-10-03 12:06:33,304 INFO fund_ai.messaging.worker message received consumer=A partition=0 offset=42 key=000452_quarterly_report_2026Q2
+[B] 2026-10-03 12:06:33,304 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=54 key=014193_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:33,713 INFO fund_ai.messaging.handler ingest.skip doc_id=000452_quarterly_report_2026Q2 consumer=A chunks=29（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:05:47.989+00:00 写入）
+[B] 2026-10-03 12:06:33,713 INFO fund_ai.messaging.handler ingest.skip doc_id=014193_quarterly_report_2026Q2 consumer=B chunks=45（sha256 未变且已 READY，ready 由 B 于 2026-10-03T04:05:52.122+00:00 写入）
+[A] 2026-10-03 12:06:33,716 INFO fund_ai.messaging.worker message received consumer=A partition=0 offset=43 key=161035_quarterly_report_2026Q2
+[B] 2026-10-03 12:06:33,716 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=55 key=008326_quarterly_report_2026Q2
+[B] 2026-10-03 12:06:34,126 INFO fund_ai.messaging.handler ingest.skip doc_id=008326_quarterly_report_2026Q2 consumer=B chunks=31（sha256 未变且已 READY，ready 由 B 于 2026-10-03T04:05:57.093+00:00 写入）
+[A] 2026-10-03 12:06:34,127 INFO fund_ai.messaging.handler ingest.skip doc_id=161035_quarterly_report_2026Q2 consumer=A chunks=37（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:06:11.758+00:00 写入）
+[A] 2026-10-03 12:06:34,130 INFO fund_ai.messaging.worker message received consumer=A partition=0 offset=44 key=013840_quarterly_report_2026Q2
+[B] 2026-10-03 12:06:34,130 INFO fund_ai.messaging.worker message received consumer=B partition=3 offset=17 key=040025_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:34,333 INFO fund_ai.messaging.handler ingest.skip doc_id=013840_quarterly_report_2026Q2 consumer=A chunks=35（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:06:16.720+00:00 写入）
+[B] 2026-10-03 12:06:34,333 INFO fund_ai.messaging.handler ingest.skip doc_id=040025_quarterly_report_2026Q2 consumer=B chunks=27（sha256 未变且已 READY，ready 由 B 于 2026-10-03T04:05:39.518+00:00 写入）
+[A] 2026-10-03 12:06:34,337 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=60 key=008919_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:34,746 INFO fund_ai.messaging.handler ingest.skip doc_id=008919_quarterly_report_2026Q2 consumer=A chunks=27（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:05:53.159+00:00 写入）
+[A] 2026-10-03 12:06:34,750 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=61 key=012650_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:35,160 INFO fund_ai.messaging.handler ingest.skip doc_id=012650_quarterly_report_2026Q2 consumer=A chunks=36（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:05:59.356+00:00 写入）
+[A] 2026-10-03 12:06:35,162 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=62 key=002236_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:35,366 INFO fund_ai.messaging.handler ingest.skip doc_id=002236_quarterly_report_2026Q2 consumer=A chunks=33（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:06:04.316+00:00 写入）
+[A] 2026-10-03 12:06:35,370 INFO fund_ai.messaging.worker message received consumer=A partition=0 offset=45 key=011832_quarterly_report_2026Q2
+[A] 2026-10-03 12:06:35,780 INFO fund_ai.messaging.handler ingest.skip doc_id=011832_quarterly_report_2026Q2 consumer=A chunks=31（sha256 未变且已 READY，ready 由 A 于 2026-10-03T04:06:20.853+00:00 写入）
+[A] 2026-10-03 12:06:37,743 INFO fund_ai.messaging.worker message received consumer=A partition=0 offset=46 key=006113_quarterly_report_2026Q2
+[B] 2026-10-03 12:06:37,743 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=56 key=003095_quarterly_report_2026Q2
+[B] 2026-10-03 12:06:37,747 INFO fund_ai.messaging.handler ingest.start doc_id=003095_quarterly_report_2026Q2 consumer=B attempt=1 task_id=121 batch_id=11
+[A] 2026-10-03 12:06:37,747 INFO fund_ai.messaging.handler ingest.start doc_id=006113_quarterly_report_2026Q2 consumer=A attempt=1 task_id=122 batch_id=11
+[B] 2026-10-03 12:06:41,983 INFO fund_ai.messaging.handler ingest.done doc_id=003095_quarterly_report_2026Q2 consumer=B chunks=36 pages=13
+[B] 2026-10-03 12:06:41,987 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=57 key=001717_quarterly_report_2026Q2
+[B] 2026-10-03 12:06:41,989 INFO fund_ai.messaging.handler ingest.start doc_id=001717_quarterly_report_2026Q2 consumer=B attempt=1 task_id=123 batch_id=11
+[B] 2026-10-03 12:06:45,865 INFO fund_ai.messaging.handler ingest.done doc_id=001717_quarterly_report_2026Q2 consumer=B chunks=30 pages=13
+[B] 2026-10-03 12:06:45,870 INFO fund_ai.messaging.worker message received consumer=B partition=3 offset=18 key=002692_quarterly_report_2026Q2
+[B] 2026-10-03 12:06:45,873 INFO fund_ai.messaging.handler ingest.start doc_id=002692_quarterly_report_2026Q2 consumer=B attempt=1 task_id=131 batch_id=11
+[B] 2026-10-03 12:06:50,002 INFO fund_ai.messaging.handler ingest.done doc_id=002692_quarterly_report_2026Q2 consumer=B chunks=28 pages=18
+[B] 2026-10-03 12:06:50,005 INFO fund_ai.messaging.worker message received consumer=B partition=0 offset=46 key=006113_quarterly_report_2026Q2
+[B] 2026-10-03 12:07:07,705 INFO fund_ai.messaging.handler ingest.start doc_id=006113_quarterly_report_2026Q2 consumer=B attempt=1 task_id=122 batch_id=11
+[B] 2026-10-03 12:07:11,705 INFO fund_ai.messaging.handler ingest.done doc_id=006113_quarterly_report_2026Q2 consumer=B chunks=35 pages=16
+[B] 2026-10-03 12:07:11,707 INFO fund_ai.messaging.worker message received consumer=B partition=0 offset=47 key=000452_quarterly_report_2026Q2
+[B] 2026-10-03 12:07:11,711 INFO fund_ai.messaging.handler ingest.start doc_id=000452_quarterly_report_2026Q2 consumer=B attempt=1 task_id=127 batch_id=11
+[B] 2026-10-03 12:07:16,048 INFO fund_ai.messaging.handler ingest.done doc_id=000452_quarterly_report_2026Q2 consumer=B chunks=29 pages=12
+[B] 2026-10-03 12:07:16,051 INFO fund_ai.messaging.worker message received consumer=B partition=0 offset=48 key=161035_quarterly_report_2026Q2
+[B] 2026-10-03 12:07:16,055 INFO fund_ai.messaging.handler ingest.start doc_id=161035_quarterly_report_2026Q2 consumer=B attempt=1 task_id=130 batch_id=11
+[B] 2026-10-03 12:07:21,007 INFO fund_ai.messaging.handler ingest.done doc_id=161035_quarterly_report_2026Q2 consumer=B chunks=37 pages=21
+[B] 2026-10-03 12:07:21,010 INFO fund_ai.messaging.worker message received consumer=B partition=0 offset=49 key=013840_quarterly_report_2026Q2
+[B] 2026-10-03 12:07:21,014 INFO fund_ai.messaging.handler ingest.start doc_id=013840_quarterly_report_2026Q2 consumer=B attempt=1 task_id=133 batch_id=11
+[B] 2026-10-03 12:07:26,383 INFO fund_ai.messaging.handler ingest.done doc_id=013840_quarterly_report_2026Q2 consumer=B chunks=35 pages=14
+[B] 2026-10-03 12:07:26,386 INFO fund_ai.messaging.worker message received consumer=B partition=0 offset=50 key=011832_quarterly_report_2026Q2
+[B] 2026-10-03 12:07:26,389 INFO fund_ai.messaging.handler ingest.start doc_id=011832_quarterly_report_2026Q2 consumer=B attempt=1 task_id=140 batch_id=11
+[B] 2026-10-03 12:07:30,518 INFO fund_ai.messaging.handler ingest.done doc_id=011832_quarterly_report_2026Q2 consumer=B chunks=31 pages=13
+[B] 2026-10-03 12:07:30,521 INFO fund_ai.messaging.worker message received consumer=B partition=3 offset=18 key=002692_quarterly_report_2026Q2
+[B] 2026-10-03 12:07:30,767 INFO fund_ai.messaging.handler ingest.skip doc_id=002692_quarterly_report_2026Q2 consumer=B chunks=28（sha256 未变且已 READY，ready 由 B 于 2026-10-03T04:06:50.001+00:00 写入）
+[B] 2026-10-03 12:07:30,771 INFO fund_ai.messaging.worker message received consumer=B partition=3 offset=19 key=040025_quarterly_report_2026Q2
+[B] 2026-10-03 12:07:30,774 INFO fund_ai.messaging.handler ingest.start doc_id=040025_quarterly_report_2026Q2 consumer=B attempt=1 task_id=135 batch_id=11
+[B] 2026-10-03 12:07:35,690 INFO fund_ai.messaging.handler ingest.done doc_id=040025_quarterly_report_2026Q2 consumer=B chunks=27 pages=11
+[B] 2026-10-03 12:07:35,693 INFO fund_ai.messaging.worker message received consumer=B partition=2 offset=63 key=004851_quarterly_report_2026Q2
+[B] 2026-10-03 12:07:35,696 INFO fund_ai.messaging.handler ingest.start doc_id=004851_quarterly_report_2026Q2 consumer=B attempt=1 task_id=124 batch_id=11
+[B] 2026-10-03 12:07:40,857 INFO fund_ai.messaging.handler ingest.done doc_id=004851_quarterly_report_2026Q2 consumer=B chunks=32 pages=14
+[B] 2026-10-03 12:07:40,861 INFO fund_ai.messaging.worker message received consumer=B partition=2 offset=64 key=007718_quarterly_report_2026Q2
+[B] 2026-10-03 12:07:40,864 INFO fund_ai.messaging.handler ingest.start doc_id=007718_quarterly_report_2026Q2 consumer=B attempt=1 task_id=126 batch_id=11
+[B] 2026-10-03 12:07:45,814 INFO fund_ai.messaging.handler ingest.done doc_id=007718_quarterly_report_2026Q2 consumer=B chunks=37 pages=13
+[B] 2026-10-03 12:07:45,818 INFO fund_ai.messaging.worker message received consumer=B partition=2 offset=65 key=001550_quarterly_report_2026Q2
+[B] 2026-10-03 12:07:45,821 INFO fund_ai.messaging.handler ingest.start doc_id=001550_quarterly_report_2026Q2 consumer=B attempt=1 task_id=128 batch_id=11
+[B] 2026-10-03 12:07:49,948 INFO fund_ai.messaging.handler ingest.done doc_id=001550_quarterly_report_2026Q2 consumer=B chunks=33 pages=13
+[B] 2026-10-03 12:07:49,952 INFO fund_ai.messaging.worker message received consumer=B partition=2 offset=66 key=160219_quarterly_report_2026Q2
+[B] 2026-10-03 12:07:49,955 INFO fund_ai.messaging.handler ingest.start doc_id=160219_quarterly_report_2026Q2 consumer=B attempt=1 task_id=129 batch_id=11
+[B] 2026-10-03 12:07:55,117 INFO fund_ai.messaging.handler ingest.done doc_id=160219_quarterly_report_2026Q2 consumer=B chunks=38 pages=19
+[B] 2026-10-03 12:07:55,120 INFO fund_ai.messaging.worker message received consumer=B partition=2 offset=67 key=008919_quarterly_report_2026Q2
+[B] 2026-10-03 12:07:55,123 INFO fund_ai.messaging.handler ingest.start doc_id=008919_quarterly_report_2026Q2 consumer=B attempt=1 task_id=134 batch_id=11
+[B] 2026-10-03 12:07:59,463 INFO fund_ai.messaging.handler ingest.done doc_id=008919_quarterly_report_2026Q2 consumer=B chunks=27 pages=12
+[B] 2026-10-03 12:07:59,466 INFO fund_ai.messaging.worker message received consumer=B partition=2 offset=68 key=012650_quarterly_report_2026Q2
+[B] 2026-10-03 12:07:59,469 INFO fund_ai.messaging.handler ingest.start doc_id=012650_quarterly_report_2026Q2 consumer=B attempt=1 task_id=136 batch_id=11
+[B] 2026-10-03 12:08:04,628 INFO fund_ai.messaging.handler ingest.done doc_id=012650_quarterly_report_2026Q2 consumer=B chunks=36 pages=15
+[B] 2026-10-03 12:08:04,631 INFO fund_ai.messaging.worker message received consumer=B partition=2 offset=69 key=002236_quarterly_report_2026Q2
+[B] 2026-10-03 12:08:04,635 INFO fund_ai.messaging.handler ingest.start doc_id=002236_quarterly_report_2026Q2 consumer=B attempt=1 task_id=139 batch_id=11
+[B] 2026-10-03 12:08:09,588 INFO fund_ai.messaging.handler ingest.done doc_id=002236_quarterly_report_2026Q2 consumer=B chunks=33 pages=13
+[B] 2026-10-03 12:08:09,593 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=58 key=110023_quarterly_report_2026Q2
+[B] 2026-10-03 12:08:09,595 INFO fund_ai.messaging.handler ingest.start doc_id=110023_quarterly_report_2026Q2 consumer=B attempt=1 task_id=125 batch_id=11
+[B] 2026-10-03 12:08:13,724 INFO fund_ai.messaging.handler ingest.done doc_id=110023_quarterly_report_2026Q2 consumer=B chunks=29 pages=13
+[B] 2026-10-03 12:08:13,727 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=59 key=001513_quarterly_report_2026Q2
+[B] 2026-10-03 12:08:13,731 INFO fund_ai.messaging.handler ingest.start doc_id=001513_quarterly_report_2026Q2 consumer=B attempt=1 task_id=132 batch_id=11
+[B] 2026-10-03 12:08:19,112 INFO fund_ai.messaging.handler ingest.done doc_id=001513_quarterly_report_2026Q2 consumer=B chunks=35 pages=15
+[B] 2026-10-03 12:08:19,129 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=60 key=014193_quarterly_report_2026Q2
+[B] 2026-10-03 12:08:19,134 INFO fund_ai.messaging.handler ingest.start doc_id=014193_quarterly_report_2026Q2 consumer=B attempt=1 task_id=137 batch_id=11
+[B] 2026-10-03 12:08:25,510 INFO fund_ai.messaging.handler ingest.done doc_id=014193_quarterly_report_2026Q2 consumer=B chunks=45 pages=20
+[B] 2026-10-03 12:08:25,516 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=61 key=008326_quarterly_report_2026Q2
+[B] 2026-10-03 12:08:25,519 INFO fund_ai.messaging.handler ingest.start doc_id=008326_quarterly_report_2026Q2 consumer=B attempt=1 task_id=138 batch_id=11
+[B] 2026-10-03 12:08:30,473 INFO fund_ai.messaging.handler ingest.done doc_id=008326_quarterly_report_2026Q2 consumer=B chunks=31 pages=13
+[B] 2026-10-03 12:08:37,958 ERROR fund_ai.messaging.handler ingest.poison err=不是合法的 JSON：Expecting value: line 1 column 1 (char 0)
+[B] 2026-10-03 12:08:37,958 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=62 key=e2e-s11-garbage-a05aa3
+[B] 2026-10-03 12:08:37,962 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=63 key=e2e-s11-badsha-a05aa3
+[B] 2026-10-03 12:08:37,965 ERROR fund_ai.messaging.handler ingest.dead doc_id=e2e-s11-badsha-a05aa3 attempt=1 permanent err=文件 sha256 075e81ea868b… 与清单 ffffffffffff… 不一致
+[B] 2026-10-03 12:08:37,968 INFO fund_ai.messaging.worker message received consumer=B partition=0 offset=51 key=e2e-s11-missing-a05aa3
+[B] 2026-10-03 12:08:37,970 ERROR fund_ai.messaging.handler ingest.dead doc_id=e2e-s11-missing-a05aa3 attempt=1 permanent err=文件不存在：data/raw/pdf/does-not-exist.pdf

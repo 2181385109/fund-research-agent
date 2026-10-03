@@ -245,3 +245,27 @@ ES 另有 `text_ctx`（`【基金简称｜文档名｜章节】` + 正文，BM25
 只选私有库时 `include_public=false`。发给 ai-service 的 `kb_scope.owner_id` 恒为当前用户。
 **上下文**：最近 6 轮（`CHAT_HISTORY_ROUNDS`）「提问 + 成功回答」成对的消息；失败 / 被取消的回答及其提问不进入上下文。
 **断开即取消**：客户端断开（连接关闭、写失败、心跳写失败）时立即取消到 ai-service 的上游调用（HTTP：关闭连接；gRPC：`ClientCall.cancel`），ai-service 侧生成器被取消（日志 `chat_stream_cancelled`），已生成的部分以 `CANCELLED` 保存。backend 只有在往客户端写数据失败时才知道客户端断了（Tomcat 的限制），所以「客户端断开 → 上游取消」的延迟 ≈ 距离下一次写（下一个事件或下一次心跳）的时间；实测见 `docs/perf/grpc_vs_http.md`。
+
+### 季报批量入库（S11，ADR-049）
+某个报告期的季报发布后，一次性把基金池里所有基金的该期季报入库（数据来自 `data/MANIFEST.json`，backend 只读挂入）。
+**需要登录；项目没有角色体系，任何登录用户都能创建批次**（请求体不接受文件路径，只能从清单已登记的文件建批次）。
+
+| 接口 | 说明 |
+|---|---|
+| `POST /api/ingest-batches` | 请求体 `{"reportPeriod": "2026Q3"}`（也接受 `report_period`，格式 `YYYYQn`）。按清单里该报告期、`doc_type=quarterly_report`、可提取文字的文档建批次，每份文档一个任务，经 outbox 发到 Kafka。**202** = 新建，**200** = 该报告期已有进行中的批次、返回它（`created=false`，重复提交幂等）；清单里没有该报告期的文档 → 404；格式不对 → 400。返回 `{created, batch: <进度>}` |
+| `GET /api/ingest-batches/{id}` | 批次进度；`?tasks=true` 附带每个任务的明细 |
+| `GET /api/ingest-batches?limit=10` | 最近的批次（新的在前，最多 50） |
+
+**进度**（`batch`）：`batchId`、`reportPeriod`、`docType`、`status`（`RUNNING` / `COMPLETED` / `COMPLETED_WITH_FAILURES` / `EXPIRED`）、`total`、`succeeded`、`skipped`（sha256 没变且已入库，没有重复入库）、`failed`（重试用尽或不可重试，已进 DLQ）、`processing`（= `pending` 还在 outbox 里没发出 + `inFlight` 已发到 Kafka 等结果）、`createdAt`、`completedAt`、`failures[]`（失败任务的 `docId`、`attempts`、`error`，最多 50 条）。`total = succeeded + skipped + failed + processing`。
+任务状态：`PENDING` → `SENT` → `SUCCEEDED` | `SKIPPED` | `FAILED`；终态不可回退，重复 / 迟到的结果被忽略。同一报告期同一时刻只有一个进行中的批次；批次结束后可以再建一个（「整批重投」，未变化的文档全部 `SKIPPED`）；进行中的批次超过 `INGEST_BATCH_STALE_AFTER`（24h）没结束就标 `EXPIRED`，不再阻止新批次。
+
+#### Kafka 消息（backend ↔ ai-service）
+三个 topic 的 **key 都是 `doc_id`**（同一文档的消息在同一分区内保持顺序）；消息体 UTF-8 JSON、snake_case，带 `schema: 1`。字段定义在 `ai-service/src/fund_ai/messaging/protocol.py` 与 `backend/.../ingestbatch/IngestMessages.java`（改字段时两边一起改）。
+
+| topic（分区） | 方向 | 内容 |
+|---|---|---|
+| `doc.ingest.requested`（4） | backend（outbox relay）→ ai-service 消费者组 | `batch_id`、`task_id`、`doc_id`、`fund_code`、`fund_name`、`doc_type`、`report_period`、`title`、`file_path`（清单里的相对路径 `data/raw/pdf/….pdf`，ai-service 只接受 `DATA_DIR` 之下的文件）、`sha256`（清单里的，ai-service 会与文件实际哈希核对）、`requested_at` |
+| `doc.ingest.result`（2） | ai-service → backend | `batch_id`、`task_id`、`doc_id`、`status`（`SUCCEEDED` / `SKIPPED` / `FAILED`）、`sha256`、`chunks`、`attempts`、`error`、`consumer_id`、`finished_at` |
+| `doc.ingest.dlq`（1，保留 30 天） | ai-service → 运维 | **原消息的原始字节**（毒消息原样保存）；headers：`error`、`attempts`、`source-topic`、`source-partition`、`source-offset`、`consumer-id`、`failed-at` |
+
+处理规则（ai-service，详见 ADR-049）：校验文件 sha256 → 拿 `fra:lock:ingest:{doc_id}`（别的实例在处理同一份文档时等待）→ 状态为 READY 且 sha256 没变且存储条数与状态一致则 `SKIPPED` → 否则入库（先删后写、核对两边条数）→ 确认仍持有锁 → 写 READY → `SUCCEEDED`。可重试错误最多尝试 `INGEST_MAX_ATTEMPTS`（3）次；不可重试错误（文件不存在 / 路径越界 / sha256 不符 / 解析不出文字 / 消息畸形）立即判死：先写 DLQ、再发 `FAILED` 结果（捞得到 `task_id` 时）、最后提交 offset。

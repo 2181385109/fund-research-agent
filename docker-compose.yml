@@ -1,6 +1,6 @@
 # fund-research-agent 本地编排。默认只起 infra（mysql / redis / elasticsearch / milvus）；
 # 应用服务（backend、ai-service、mcp-tools、frontend）属于 profile "app"（S7）：docker compose --profile app up -d --build。
-# Kafka 在 S11 加入。
+# Kafka（kafka + 一次性的 kafka-init 建 topic）在 S11 加入，属于 infra。
 # 在 WSL2 里的 Docker Engine 上运行，启动命令见 docs/SETUP.md。
 # 端口、密码全部来自 .env（由 scripts/gen_env.py 生成）；mem_limit 按 PLAN §3。
 
@@ -127,6 +127,64 @@ services:
       retries: 3
       start_period: 90s
 
+  # S11：KRaft combined 单节点（broker + controller 同进程），堆 512m / mem_limit 1g（PLAN §3）。
+  # 两个 listener：容器网络用 kafka:9092；宿主机（本机跑的 worker、e2e 脚本）用 127.0.0.1:${KAFKA_PORT}。
+  # 自动建 topic 关闭，topic 由 kafka-init 显式创建（分区数是设计的一部分，见 ADR-049）。
+  kafka:
+    image: apache/kafka:3.9.1
+    container_name: fra-kafka
+    restart: unless-stopped
+    mem_limit: 1g
+    environment:
+      KAFKA_NODE_ID: "1"
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+      KAFKA_LISTENERS: INTERNAL://:9092,EXTERNAL://:9094,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://127.0.0.1:${KAFKA_PORT:-9094}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "1"
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: "1"
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: "0"
+      KAFKA_LOG_RETENTION_HOURS: "168"
+      KAFKA_HEAP_OPTS: "-Xms512m -Xmx512m"
+      TZ: Asia/Shanghai
+    ports:
+      - "${KAFKA_PORT:-9094}:9094"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server localhost:9092 >/dev/null 2>&1"]
+      interval: 15s
+      timeout: 15s
+      retries: 10
+      start_period: 40s
+
+  kafka-init:
+    image: apache/kafka:3.9.1
+    container_name: fra-kafka-init
+    restart: "no"
+    mem_limit: 256m
+    environment:
+      KAFKA_HEAP_OPTS: "-Xms64m -Xmx192m"
+    # 请求 topic 4 个分区：两个消费者实例能各分到分区；key=doc_id，同一文档的消息总在同一分区里（有序）
+    entrypoint: ["/bin/bash", "-c"]
+    command:
+      - |
+        set -e
+        T=/opt/kafka/bin/kafka-topics.sh
+        B=kafka:9092
+        $$T --bootstrap-server $$B --create --if-not-exists --topic doc.ingest.requested --partitions 4 --replication-factor 1
+        $$T --bootstrap-server $$B --create --if-not-exists --topic doc.ingest.result --partitions 2 --replication-factor 1
+        $$T --bootstrap-server $$B --create --if-not-exists --topic doc.ingest.dlq --partitions 1 --replication-factor 1 --config retention.ms=2592000000
+        $$T --bootstrap-server $$B --list
+    depends_on:
+      kafka:
+        condition: service_healthy
+
   # ------------------------------------------------------------------ 应用服务（profile "app"，S7）
   # 容器内互连一律用服务名和容器端口，宿主机端口（.env 的 *_PORT）只用于对外发布；
   # 每个服务只拿自己用得到的变量（least privilege：例如 ai-service 拿不到 MySQL root 密码）。
@@ -213,6 +271,16 @@ services:
       SEMANTIC_CACHE_TTL_SECONDS: ${SEMANTIC_CACHE_TTL_SECONDS:-86400}
       SEMANTIC_CACHE_MAX_ANSWER_CHARS: ${SEMANTIC_CACHE_MAX_ANSWER_CHARS:-20000}
       KB_PUBLIC_VERSION: ${KB_PUBLIC_VERSION:-}
+      # S11 批量入库的 Kafka 消费者（与 HTTP / gRPC 同进程）；锁与入库状态用同一个 Redis
+      KAFKA_CONSUMER_ENABLED: ${KAFKA_CONSUMER_ENABLED:-true}
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_GROUP_ID: ${KAFKA_GROUP_ID:-fra-ingest}
+      KAFKA_TOPIC_REQUESTED: ${KAFKA_TOPIC_REQUESTED:-doc.ingest.requested}
+      KAFKA_TOPIC_RESULT: ${KAFKA_TOPIC_RESULT:-doc.ingest.result}
+      KAFKA_TOPIC_DLQ: ${KAFKA_TOPIC_DLQ:-doc.ingest.dlq}
+      INGEST_LOCK_TTL_MS: ${INGEST_LOCK_TTL_MS:-30000}
+      INGEST_LOCK_WAIT_SECONDS: ${INGEST_LOCK_WAIT_SECONDS:-180}
+      INGEST_MAX_ATTEMPTS: ${INGEST_MAX_ATTEMPTS:-3}
       TZ: Asia/Shanghai
     ports:
       - "${AI_SERVICE_PORT:-8001}:8001"
@@ -238,6 +306,8 @@ services:
         condition: service_healthy
       mcp-tools:
         condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
 
   backend:
     profiles: ["app"]
@@ -280,16 +350,25 @@ services:
       QUOTA_DAILY_TOKENS: ${QUOTA_DAILY_TOKENS:-500000}
       QUOTA_ZONE: ${QUOTA_ZONE:-Asia/Shanghai}
       QUOTA_FLUSH_INTERVAL: ${QUOTA_FLUSH_INTERVAL:-30s}
+      # S11 季报批量入库：outbox relay → Kafka，消费结果 topic；清单只读挂入
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      INGEST_BATCH_ENABLED: ${INGEST_BATCH_ENABLED:-true}
+      INGEST_MANIFEST_PATH: /app/data/MANIFEST.json
+      KAFKA_TOPIC_REQUESTED: ${KAFKA_TOPIC_REQUESTED:-doc.ingest.requested}
+      KAFKA_TOPIC_RESULT: ${KAFKA_TOPIC_RESULT:-doc.ingest.result}
       TZ: Asia/Shanghai
     ports:
       - "${BACKEND_PORT:-8081}:8081"
     volumes:
       - uploads:/app/data/uploads
+      - ./data/MANIFEST.json:/app/data/MANIFEST.json:ro
     depends_on:
       mysql:
         condition: service_healthy
       redis:
         condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
 
   frontend:
     profiles: ["app"]
@@ -311,5 +390,6 @@ volumes:
   redis_data:
   es_data:
   milvus_data:
+  kafka_data:
   model_cache:
   uploads:

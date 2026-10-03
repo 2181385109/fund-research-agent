@@ -1,0 +1,197 @@
+{
+  "batchId": 6,
+  "reportPeriod": "2026Q2",
+  "docType": "quarterly_report",
+  "status": "COMPLETED",
+  "total": 20,
+  "succeeded": 0,
+  "skipped": 20,
+  "failed": 0,
+  "processing": 0,
+  "pending": 0,
+  "inFlight": 0,
+  "createdAt": "2026-10-03T12:02:23.859",
+  "completedAt": "2026-10-03T12:02:28.267",
+  "tasks": [
+    {
+      "taskId": 41,
+      "docId": "003095_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 36,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:02:24.673"
+    },
+    {
+      "taskId": 42,
+      "docId": "006113_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 35,
+      "attempts": 1,
+      "consumerId": "A",
+      "finishedAt": "2026-10-03T12:02:24.666"
+    },
+    {
+      "taskId": 43,
+      "docId": "001717_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 30,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:02:25.065"
+    },
+    {
+      "taskId": 44,
+      "docId": "004851_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 32,
+      "attempts": 1,
+      "consumerId": "A",
+      "finishedAt": "2026-10-03T12:02:25.07"
+    },
+    {
+      "taskId": 45,
+      "docId": "110023_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 29,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:02:26.066"
+    },
+    {
+      "taskId": 46,
+      "docId": "007718_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 37,
+      "attempts": 1,
+      "consumerId": "A",
+      "finishedAt": "2026-10-03T12:02:26.871"
+    },
+    {
+      "taskId": 47,
+      "docId": "000452_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 29,
+      "attempts": 1,
+      "consumerId": "A",
+      "finishedAt": "2026-10-03T12:02:25.48"
+    },
+    {
+      "taskId": 48,
+      "docId": "001550_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 33,
+      "attempts": 1,
+      "consumerId": "A",
+      "finishedAt": "2026-10-03T12:02:27.071"
+    },
+    {
+      "taskId": 49,
+      "docId": "160219_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 38,
+      "attempts": 1,
+      "consumerId": "A",
+      "finishedAt": "2026-10-03T12:02:27.27"
+    },
+    {
+      "taskId": 50,
+      "docId": "161035_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 37,
+      "attempts": 1,
+      "consumerId": "A",
+      "finishedAt": "2026-10-03T12:02:25.872"
+    },
+    {
+      "taskId": 51,
+      "docId": "002692_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 28,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:02:25.466"
+    },
+    {
+      "taskId": 52,
+      "docId": "001513_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 35,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:02:26.466"
+    },
+    {
+      "taskId": 53,
+      "docId": "013840_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 35,
+      "attempts": 1,
+      "consumerId": "A",
+      "finishedAt": "2026-10-03T12:02:26.071"
+    },
+    {
+      "taskId": 54,
+      "docId": "008919_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 27,
+      "attempts": 1,
+      "consumerId": "A",
+      "finishedAt": "2026-10-03T12:02:27.666"
+    },
+    {
+      "taskId": 55,
+      "docId": "040025_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 27,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:02:25.867"
+    },
+    {
+      "taskId": 56,
+      "docId": "012650_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 36,
+      "attempts": 1,
+      "consumerId": "A",
+      "finishedAt": "2026-10-03T12:02:28.066"
+    },
+    {
+      "taskId": 57,
+      "docId": "014193_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 45,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:02:26.866"
+    },
+    {
+      "taskId": 58,
+      "docId": "008326_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 31,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:02:27.066"
+    },
+    {
+      "taskId": 59,
+      "docId": "002236_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 33,
+      "attempts": 1,
+      "consumerId": "A",
+      "finishedAt": "2026-10-03T12:02:28.267"
+    },
+    {
+      "taskId": 60,
+      "docId": "011832_quarterly_report_2026Q2",
+      "status": "SKIPPED",
+      "chunks": 31,
+      "attempts": 1,
+      "consumerId": "A",
+      "finishedAt": "2026-10-03T12:02:26.471"
+    }
+  ]
+}

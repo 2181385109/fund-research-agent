@@ -1,0 +1,197 @@
+{
+  "batchId": 11,
+  "reportPeriod": "2026Q2",
+  "docType": "quarterly_report",
+  "status": "COMPLETED",
+  "total": 20,
+  "succeeded": 20,
+  "skipped": 0,
+  "failed": 0,
+  "processing": 0,
+  "pending": 0,
+  "inFlight": 0,
+  "createdAt": "2026-10-03T12:06:37.924",
+  "completedAt": "2026-10-03T12:08:30.434",
+  "tasks": [
+    {
+      "taskId": 121,
+      "docId": "003095_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 36,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:06:42.204"
+    },
+    {
+      "taskId": 122,
+      "docId": "006113_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 35,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:07:12.048"
+    },
+    {
+      "taskId": 123,
+      "docId": "001717_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 30,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:06:45.961"
+    },
+    {
+      "taskId": 124,
+      "docId": "004851_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 32,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:07:41.373"
+    },
+    {
+      "taskId": 125,
+      "docId": "110023_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 29,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:08:14.232"
+    },
+    {
+      "taskId": 126,
+      "docId": "007718_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 37,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:07:46.169"
+    },
+    {
+      "taskId": 127,
+      "docId": "000452_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 29,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:07:16.25"
+    },
+    {
+      "taskId": 128,
+      "docId": "001550_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 33,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:07:50.168"
+    },
+    {
+      "taskId": 129,
+      "docId": "160219_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 38,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:07:55.168"
+    },
+    {
+      "taskId": 130,
+      "docId": "161035_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 37,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:07:21.048"
+    },
+    {
+      "taskId": 131,
+      "docId": "002692_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 28,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:06:49.962"
+    },
+    {
+      "taskId": 132,
+      "docId": "001513_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 35,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:08:19.461"
+    },
+    {
+      "taskId": 133,
+      "docId": "013840_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 35,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:07:26.249"
+    },
+    {
+      "taskId": 134,
+      "docId": "008919_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 27,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:07:59.372"
+    },
+    {
+      "taskId": 135,
+      "docId": "040025_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 27,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:07:36.372"
+    },
+    {
+      "taskId": 136,
+      "docId": "012650_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 36,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:08:04.369"
+    },
+    {
+      "taskId": 137,
+      "docId": "014193_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 45,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:08:25.635"
+    },
+    {
+      "taskId": 138,
+      "docId": "008326_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 31,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:08:30.433"
+    },
+    {
+      "taskId": 139,
+      "docId": "002236_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 33,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:08:10.231"
+    },
+    {
+      "taskId": 140,
+      "docId": "011832_quarterly_report_2026Q2",
+      "status": "SUCCEEDED",
+      "chunks": 31,
+      "attempts": 1,
+      "consumerId": "B",
+      "finishedAt": "2026-10-03T12:07:30.25"
+    }
+  ]
+}

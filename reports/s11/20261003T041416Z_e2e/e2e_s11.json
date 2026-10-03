@@ -1,0 +1,41 @@
+{
+  "created_utc": "20261003T041416Z",
+  "command": "python scripts/e2e_s11.py --phase dlq",
+  "period": "2026Q2",
+  "docs": 20,
+  "passed": 6,
+  "total": 6,
+  "checks": [
+    {
+      "check": "三条毒消息都进了 doc.ingest.dlq（各一条）",
+      "ok": true,
+      "detail": "3 条"
+    },
+    {
+      "check": "无法解析的消息：原样进 DLQ，attempts=0，error 说明原因，带来源 topic / partition / offset",
+      "ok": true,
+      "detail": "{'error': 'poison: 不是合法的 JSON：Expecting value: line 1 column 1 (char 0)', 'attempts': '0', 'source-topic': 'doc.ingest.requested', 'source-partition': '2', 'source-offset': '98', 'consumer-id': 'A', 'failed-at': '2026-10-03T04:14:18.961+00:"
+    },
+    {
+      "check": "文件不存在：不可重试，attempts=1 直接进 DLQ",
+      "ok": true,
+      "detail": "{'error': 'PermanentIngestError: 文件不存在：data/raw/pdf/does-not-exist.pdf', 'attempts': '1', 'source-topic': 'doc.ingest.requested', 'source-partition': '2', 'source-offset': '99', 'consumer-id': 'A', 'failed-at': '2026-10-03T04:14:18.966+00:0"
+    },
+    {
+      "check": "sha256 与清单不符：不可重试，attempts=1 直接进 DLQ",
+      "ok": true,
+      "detail": "{'error': 'PermanentIngestError: 文件 sha256 075e81ea868b… 与清单 ffffffffffff… 不一致', 'attempts': '1', 'source-topic': 'doc.ingest.requested', 'source-partition': '3', 'source-offset': '28', 'consumer-id': 'B', 'failed-at': '2026-10-03T04:14:18."
+    },
+    {
+      "check": "可解析的两条同时回了 FAILED 结果（backend 据此更新任务）",
+      "ok": true,
+      "detail": "2 条"
+    },
+    {
+      "check": "毒消息没有卡住消费：之后的正常请求照常处理（文档已 READY → SKIPPED）",
+      "ok": true,
+      "detail": "结果 ['SKIPPED']"
+    }
+  ],
+  "state": {}
+}

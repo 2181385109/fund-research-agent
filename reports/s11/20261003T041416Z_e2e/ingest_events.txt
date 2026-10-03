@@ -1,0 +1,10 @@
+[A] 2026-10-03 12:14:18,958 INFO fund_ai.messaging.worker worker started consumer=A group=fra-ingest topic=doc.ingest.requested
+[B] 2026-10-03 12:14:18,958 INFO fund_ai.messaging.worker worker started consumer=B group=fra-ingest topic=doc.ingest.requested
+[A] 2026-10-03 12:14:18,961 ERROR fund_ai.messaging.handler ingest.poison err=不是合法的 JSON：Expecting value: line 1 column 1 (char 0)
+[A] 2026-10-03 12:14:18,961 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=98 key=e2e-s11-garbage-ae94e0
+[B] 2026-10-03 12:14:18,961 INFO fund_ai.messaging.worker message received consumer=B partition=3 offset=28 key=e2e-s11-badsha-ae94e0
+[B] 2026-10-03 12:14:18,963 ERROR fund_ai.messaging.handler ingest.dead doc_id=e2e-s11-badsha-ae94e0 attempt=1 permanent err=文件 sha256 075e81ea868b… 与清单 ffffffffffff… 不一致
+[A] 2026-10-03 12:14:18,965 INFO fund_ai.messaging.worker message received consumer=A partition=2 offset=99 key=e2e-s11-missing-ae94e0
+[A] 2026-10-03 12:14:18,966 ERROR fund_ai.messaging.handler ingest.dead doc_id=e2e-s11-missing-ae94e0 attempt=1 permanent err=文件不存在：data/raw/pdf/does-not-exist.pdf
+[B] 2026-10-03 12:14:23,060 INFO fund_ai.messaging.worker message received consumer=B partition=1 offset=91 key=003095_quarterly_report_2026Q2
+[B] 2026-10-03 12:14:34,736 INFO fund_ai.messaging.handler ingest.skip doc_id=003095_quarterly_report_2026Q2 consumer=B chunks=36（sha256 未变且已 READY，ready 由 B 于 2026-10-03T04:11:31.944+00:00 写入）

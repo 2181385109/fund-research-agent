@@ -1,0 +1,372 @@
+{
+  "final": {
+    "batchId": 12,
+    "reportPeriod": "2026Q2",
+    "docType": "quarterly_report",
+    "status": "COMPLETED",
+    "total": 20,
+    "succeeded": 20,
+    "skipped": 0,
+    "failed": 0,
+    "processing": 0,
+    "pending": 0,
+    "inFlight": 0,
+    "createdAt": "2026-10-03T12:09:45.471",
+    "completedAt": "2026-10-03T12:11:09.764",
+    "tasks": [
+      {
+        "taskId": 141,
+        "docId": "003095_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 36,
+        "attempts": 1,
+        "consumerId": "B",
+        "finishedAt": "2026-10-03T12:10:06.076"
+      },
+      {
+        "taskId": 142,
+        "docId": "006113_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 35,
+        "attempts": 1,
+        "consumerId": "A",
+        "finishedAt": "2026-10-03T12:10:19.289"
+      },
+      {
+        "taskId": 143,
+        "docId": "001717_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 30,
+        "attempts": 1,
+        "consumerId": "B",
+        "finishedAt": "2026-10-03T12:10:12.102"
+      },
+      {
+        "taskId": 144,
+        "docId": "004851_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 32,
+        "attempts": 1,
+        "consumerId": "A",
+        "finishedAt": "2026-10-03T12:10:06.083"
+      },
+      {
+        "taskId": 145,
+        "docId": "110023_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 29,
+        "attempts": 1,
+        "consumerId": "B",
+        "finishedAt": "2026-10-03T12:10:17.088"
+      },
+      {
+        "taskId": 146,
+        "docId": "007718_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 37,
+        "attempts": 1,
+        "consumerId": "A",
+        "finishedAt": "2026-10-03T12:10:12.886"
+      },
+      {
+        "taskId": 147,
+        "docId": "000452_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 29,
+        "attempts": 1,
+        "consumerId": "A",
+        "finishedAt": "2026-10-03T12:10:54.651"
+      },
+      {
+        "taskId": 148,
+        "docId": "001550_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 33,
+        "attempts": 1,
+        "consumerId": "A",
+        "finishedAt": "2026-10-03T12:10:26.263"
+      },
+      {
+        "taskId": 149,
+        "docId": "160219_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 38,
+        "attempts": 1,
+        "consumerId": "A",
+        "finishedAt": "2026-10-03T12:10:32.461"
+      },
+      {
+        "taskId": 150,
+        "docId": "161035_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 37,
+        "attempts": 1,
+        "consumerId": "A",
+        "finishedAt": "2026-10-03T12:11:00.563"
+      },
+      {
+        "taskId": 151,
+        "docId": "002692_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 28,
+        "attempts": 1,
+        "consumerId": "B",
+        "finishedAt": "2026-10-03T12:10:22.286"
+      },
+      {
+        "taskId": 152,
+        "docId": "001513_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 35,
+        "attempts": 1,
+        "consumerId": "B",
+        "finishedAt": "2026-10-03T12:10:34.465"
+      },
+      {
+        "taskId": 153,
+        "docId": "013840_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 35,
+        "attempts": 1,
+        "consumerId": "A",
+        "finishedAt": "2026-10-03T12:11:05.563"
+      },
+      {
+        "taskId": 154,
+        "docId": "008919_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 27,
+        "attempts": 1,
+        "consumerId": "A",
+        "finishedAt": "2026-10-03T12:10:37.665"
+      },
+      {
+        "taskId": 155,
+        "docId": "040025_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 27,
+        "attempts": 1,
+        "consumerId": "B",
+        "finishedAt": "2026-10-03T12:10:28.259"
+      },
+      {
+        "taskId": 156,
+        "docId": "012650_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 36,
+        "attempts": 1,
+        "consumerId": "A",
+        "finishedAt": "2026-10-03T12:10:42.661"
+      },
+      {
+        "taskId": 157,
+        "docId": "014193_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 45,
+        "attempts": 1,
+        "consumerId": "B",
+        "finishedAt": "2026-10-03T12:10:40.462"
+      },
+      {
+        "taskId": 158,
+        "docId": "008326_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 31,
+        "attempts": 1,
+        "consumerId": "B",
+        "finishedAt": "2026-10-03T12:10:46.663"
+      },
+      {
+        "taskId": 159,
+        "docId": "002236_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 33,
+        "attempts": 1,
+        "consumerId": "A",
+        "finishedAt": "2026-10-03T12:10:48.45"
+      },
+      {
+        "taskId": 160,
+        "docId": "011832_quarterly_report_2026Q2",
+        "status": "SUCCEEDED",
+        "chunks": 31,
+        "attempts": 1,
+        "consumerId": "A",
+        "finishedAt": "2026-10-03T12:11:09.763"
+      }
+    ]
+  },
+  "timeline": [
+    {
+      "t": "2026-10-03T04:09:48.170+00:00",
+      "status": "RUNNING",
+      "total": 20,
+      "succeeded": 0,
+      "skipped": 0,
+      "failed": 0,
+      "processing": 20
+    },
+    {
+      "t": "2026-10-03T04:10:06.219+00:00",
+      "status": "RUNNING",
+      "total": 20,
+      "succeeded": 2,
+      "skipped": 0,
+      "failed": 0,
+      "processing": 18
+    },
+    {
+      "t": "2026-10-03T04:10:15.275+00:00",
+      "status": "RUNNING",
+      "total": 20,
+      "succeeded": 4,
+      "skipped": 0,
+      "failed": 0,
+      "processing": 16
+    },
+    {
+      "t": "2026-10-03T04:10:18.283+00:00",
+      "status": "RUNNING",
+      "total": 20,
+      "succeeded": 5,
+      "skipped": 0,
+      "failed": 0,
+      "processing": 15
+    },
+    {
+      "t": "2026-10-03T04:10:21.292+00:00",
+      "status": "RUNNING",
+      "total": 20,
+      "succeeded": 6,
+      "skipped": 0,
+      "failed": 0,
+      "processing": 14
+    },
+    {
+      "t": "2026-10-03T04:10:24.298+00:00",
+      "status": "RUNNING",
+      "total": 20,
+      "succeeded": 7,
+      "skipped": 0,
+      "failed": 0,
+      "processing": 13
+    },
+    {
+      "t": "2026-10-03T04:10:27.310+00:00",
+      "status": "RUNNING",
+      "total": 20,
+      "succeeded": 8,
+      "skipped": 0,
+      "failed": 0,
+      "processing": 12
+    },
+    {
+      "t": "2026-10-03T04:10:30.326+00:00",
+      "status": "RUNNING",
+      "total": 20,
+      "succeeded": 9,
+      "skipped": 0,
+      "failed": 0,
+      "processing": 11
+    },
+    {
+      "t": "2026-10-03T04:10:33.339+00:00",
+      "status": "RUNNING",
+      "total": 20,
+      "succeeded": 10,
+      "skipped": 0,
+      "failed": 0,
+      "processing": 10
+    },
+    {
+      "t": "2026-10-03T04:10:36.347+00:00",
+      "status": "RUNNING",
+      "total": 20,
+      "succeeded": 11,
+      "skipped": 0,
+      "failed": 0,
+      "processing": 9
+    },
+    {
+      "t": "2026-10-03T04:10:39.358+00:00",
+      "status": "RUNNING",
+      "total": 20,
+      "succeeded": 12,
+      "skipped": 0,
+      "failed": 0,
+      "processing": 8
+    },
+    {
+      "t": "2026-10-03T04:10:42.370+00:00",
+      "status": "RUNNING",
+      "total": 20,
+      "succeeded": 13,
+      "skipped": 0,
+      "failed": 0,
+      "processing": 7
+    },
+    {
+      "t": "2026-10-03T04:10:45.379+00:00",
+      "status": "RUNNING",
+      "total": 20,
+      "succeeded": 14,
+      "skipped": 0,
+      "failed": 0,
+      "processing": 6
+    },
+    {
+      "t": "2026-10-03T04:10:48.385+00:00",
+      "status": "RUNNING",
+      "total": 20,
+      "succeeded": 15,
+      "skipped": 0,
+      "failed": 0,
+      "processing": 5
+    },
+    {
+      "t": "2026-10-03T04:10:51.394+00:00",
+      "status": "RUNNING",
+      "total": 20,
+      "succeeded": 16,
+      "skipped": 0,
+      "failed": 0,
+      "processing": 4
+    },
+    {
+      "t": "2026-10-03T04:10:57.408+00:00",
+      "status": "RUNNING",
+      "total": 20,
+      "succeeded": 17,
+      "skipped": 0,
+      "failed": 0,
+      "processing": 3
+    },
+    {
+      "t": "2026-10-03T04:11:00.414+00:00",
+      "status": "RUNNING",
+      "total": 20,
+      "succeeded": 18,
+      "skipped": 0,
+      "failed": 0,
+      "processing": 2
+    },
+    {
+      "t": "2026-10-03T04:11:06.430+00:00",
+      "status": "RUNNING",
+      "total": 20,
+      "succeeded": 19,
+      "skipped": 0,
+      "failed": 0,
+      "processing": 1
+    },
+    {
+      "t": "2026-10-03T04:11:12.442+00:00",
+      "status": "COMPLETED",
+      "total": 20,
+      "succeeded": 20,
+      "skipped": 0,
+      "failed": 0,
+      "processing": 0
+    }
+  ]
+}
