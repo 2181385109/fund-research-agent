@@ -23,6 +23,22 @@ spring:
       password: ${REDIS_PASSWORD:}
       timeout: ${HEALTH_TIMEOUT_SECONDS:2}s
       connect-timeout: ${HEALTH_TIMEOUT_SECONDS:2}s
+  kafka:
+    # S11：outbox relay 的生产者与结果 topic 的消费者；Kafka 暂时不可用不影响启动（消息留在 outbox 表里）
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:127.0.0.1:9094}
+    producer:
+      acks: all
+      properties:
+        enable.idempotence: true
+        # relay 在事务里发送：Kafka 不可用时要尽快失败而不是卡住（默认 max.block.ms=60s）
+        max.block.ms: 5000
+        request.timeout.ms: 5000
+        delivery.timeout.ms: 10000
+    consumer:
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+    listener:
+      missing-topics-fatal: false
   servlet:
     multipart:
       # 上传上限 20MB（PLAN S6）；UploadValidator 再按 fra.upload.max-size 校验一次
@@ -75,6 +91,19 @@ fra:
     daily-tokens: ${QUOTA_DAILY_TOKENS:500000}
     zone: ${QUOTA_ZONE:Asia/Shanghai}
     flush-interval: ${QUOTA_FLUSH_INTERVAL:30s}
+
+  # S11：季报批量入库（outbox + relay + 结果消费，ADR-049）
+  ingest-batch:
+    enabled: ${INGEST_BATCH_ENABLED:true}
+    manifest: ${INGEST_MANIFEST_PATH:../data/MANIFEST.json}
+    doc-type: quarterly_report
+    requested-topic: ${KAFKA_TOPIC_REQUESTED:doc.ingest.requested}
+    result-topic: ${KAFKA_TOPIC_RESULT:doc.ingest.result}
+    result-group: ${KAFKA_RESULT_GROUP:fra-backend-ingest-result}
+    relay-interval: ${INGEST_RELAY_INTERVAL:500ms}
+    relay-batch-size: 50
+    send-timeout: 15s
+    stale-after: ${INGEST_BATCH_STALE_AFTER:24h}
 
 springdoc:
   api-docs:

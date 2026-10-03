@@ -71,10 +71,21 @@ class BackendIntegrationTest {
     static final CountDownLatch slowStarted = new CountDownLatch(1);
     static final CountDownLatch slowDisconnected = new CountDownLatch(1);
     static Path uploadDir;
+    static Path manifestFile;
 
     static {
         try {
             uploadDir = Files.createTempDirectory("fra-it-uploads");
+            // S11：自造的两份季报清单（批量入库接口读它）
+            manifestFile = Files.createTempFile("fra-it-manifest", ".json");
+            Files.writeString(manifestFile, "{\"documents\":["
+                    + "{\"doc_id\":\"110022_quarterly_report_2026Q3\",\"fund_code\":\"110022\",\"fund_name\":\"甲基金\","
+                    + "\"doc_type\":\"quarterly_report\",\"report_period\":\"2026Q3\",\"title\":\"t\","
+                    + "\"local_path\":\"data/raw/pdf/a.pdf\",\"sha256\":\"" + "a".repeat(64) + "\",\"extract\":{\"ok\":true}},"
+                    + "{\"doc_id\":\"003095_quarterly_report_2026Q3\",\"fund_code\":\"003095\",\"fund_name\":\"乙基金\","
+                    + "\"doc_type\":\"quarterly_report\",\"report_period\":\"2026Q3\",\"title\":\"t\","
+                    + "\"local_path\":\"data/raw/pdf/b.pdf\",\"sha256\":\"" + "b".repeat(64) + "\",\"extract\":{\"ok\":true}}]}",
+                    StandardCharsets.UTF_8);
             fakeAi = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
             fakeAi.setExecutor(Executors.newCachedThreadPool());
             fakeAi.createContext("/v1/documents", BackendIntegrationTest::handleDocuments);
@@ -98,6 +109,9 @@ class BackendIntegrationTest {
         // 集成测试不需要 Redis（CI 里也没有）：指向一个不通的端口，证明启动和这些流程都不依赖它
         r.add("spring.data.redis.host", () -> "127.0.0.1");
         r.add("spring.data.redis.port", () -> "1");
+        // S11 同理：Kafka 指向不通的端口——启动、普通流程、批次的创建与查询都不依赖它（消息留在 outbox 表里）
+        r.add("spring.kafka.bootstrap-servers", () -> "127.0.0.1:1");
+        r.add("fra.ingest-batch.manifest", () -> manifestFile.toString());
     }
 
     @LocalServerPort
@@ -108,6 +122,9 @@ class BackendIntegrationTest {
 
     @Autowired
     DocumentService documentService;
+
+    @Autowired
+    com.fundagent.backend.ingestbatch.IngestBatchService ingestBatchService;
 
     final HttpClient http = HttpClient.newBuilder().version(HttpClient.Version.HTTP_1_1).build();
 
@@ -542,5 +559,46 @@ class BackendIntegrationTest {
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM messages WHERE conversation_id = ?", Integer.class, aliceConv)).isGreaterThan(0);
         assertThat(call("DELETE", "/api/conversations/" + aliceConv, alice, null).status()).isEqualTo(200);
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM messages WHERE conversation_id = ?", Integer.class, aliceConv)).isZero();
+    }
+
+    @Test
+    @Order(11)
+    void ingestBatchesWorkEndToEndOverHttpEvenWithKafkaDown() throws Exception {
+        String token = register("carol");
+        assertThat(call("POST", "/api/ingest-batches", null, "{\"reportPeriod\":\"2026Q3\"}").status()).isEqualTo(401);
+        assertThat(call("POST", "/api/ingest-batches", token, "{\"reportPeriod\":\"bad\"}").status()).isEqualTo(400);
+        assertThat(call("POST", "/api/ingest-batches", token, "{\"reportPeriod\":\"2030Q1\"}").status()).isEqualTo(404);
+
+        Resp created = call("POST", "/api/ingest-batches", token, "{\"report_period\":\"2026Q3\"}");
+        assertThat(created.status()).isEqualTo(202);
+        JsonNode batch = created.body().get("data").get("batch");
+        long batchId = batch.get("batchId").asLong();
+        assertThat(batch.get("total").asInt()).isEqualTo(2);
+        assertThat(batch.get("status").asText()).isEqualTo("RUNNING");
+
+        // 同一报告期重复提交：200，同一个批次
+        Resp again = call("POST", "/api/ingest-batches", token, "{\"reportPeriod\":\"2026Q3\"}");
+        assertThat(again.status()).isEqualTo(200);
+        assertThat(again.body().get("data").get("created").asBoolean()).isFalse();
+        assertThat(again.body().get("data").get("batch").get("batchId").asLong()).isEqualTo(batchId);
+        assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM outbox_event", Integer.class)).isEqualTo(2);
+
+        // Kafka 不通：消息仍在 outbox，进度里 processing = 2
+        Resp p1 = call("GET", "/api/ingest-batches/" + batchId, token, null);
+        assertThat(p1.status()).isEqualTo(200);
+        assertThat(p1.body().get("data").get("processing").asInt()).isEqualTo(2);
+
+        // 结果到达（这里直接调服务，等价于结果监听器收到消息）→ 批次完成
+        List<java.util.Map<String, Object>> tasks = jdbc.queryForList("SELECT id, doc_id FROM ingest_task WHERE batch_id = ?", batchId);
+        for (var t : tasks) {
+            ingestBatchService.applyResult(new com.fundagent.backend.ingestbatch.IngestMessages.Result(
+                    1, batchId, ((Number) t.get("id")).longValue(), (String) t.get("doc_id"), "SUCCEEDED",
+                    null, 9, 1, null, "it", null));
+        }
+        JsonNode done = call("GET", "/api/ingest-batches/" + batchId + "?tasks=true", token, null).body().get("data");
+        assertThat(done.get("status").asText()).isEqualTo("COMPLETED");
+        assertThat(done.get("succeeded").asInt()).isEqualTo(2);
+        assertThat(done.get("tasks")).hasSize(2);
+        assertThat(call("GET", "/api/ingest-batches/999999", token, null).status()).isEqualTo(404);
     }
 }

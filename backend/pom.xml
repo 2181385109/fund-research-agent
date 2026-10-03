@@ -109,6 +109,12 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- S11：outbox relay 的 KafkaTemplate、结果 topic 的 @KafkaListener（ADR-049） -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
         <!-- gRPC 客户端（GrpcAiServiceClient）。netty 用 shaded 版，避免与其他 netty 版本冲突 -->
         <dependency>
             <groupId>io.grpc</groupId>
@@ -150,6 +156,11 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>mysql</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>kafka</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
