@@ -1,0 +1,23 @@
+# loadtest/ 不是可安装的包；本文件只放 ruff 与 pytest 配置。
+# 依赖：mock_llm 需要 fastapi + uvicorn；locustfile.py 需要 locust；tests 需要 fastapi + httpx + pytest（不需要 locust）。
+# CI 安装 fastapi httpx pytest ruff；locust 只在本机压测时装（loadtest/.venv）。
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers"
+markers = [
+    "integration: 需要 docker compose 起的 infra",
+    "slow: 需要下载或加载本地模型",
+    "live: 调用真实 LLM 或访问外网",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.pycodestyle]
+# 中文按双宽计：formatter 仍按 100 排版，E501 放宽到 120（同各 Python 包）
+max-line-length = 120

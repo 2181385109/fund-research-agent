@@ -46,3 +46,11 @@ reports/**/*.parquet
 *.iml
 .DS_Store
 Thumbs.db
+
+# ---- S12 压测：mock LLM 的回放脚本由 loadtest/mock_llm/replay.py 确定性生成 ----
+loadtest/mock_llm/replay_v1.json
+loadtest/.venv/
+loadtest/.secrets/
+
+# JFR 录像（大文件，摘要入库）
+*.jfr
