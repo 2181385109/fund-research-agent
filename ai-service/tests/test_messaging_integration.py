@@ -256,7 +256,8 @@ async def _produce(names: dict, items: list[tuple[bytes | None, bytes]]) -> None
         await p.stop()
 
 
-async def _read_all(topic: str, expect: int, timeout: float = 30.0) -> list:
+async def _read_all(topic: str, expect: int, timeout: float = 30.0, until=None) -> list:
+    """读到 ``expect`` 条（或 ``until(已读消息列表)`` 为真）为止，最多等 timeout 秒。"""
     from aiokafka import AIOKafkaConsumer
 
     c = AIOKafkaConsumer(
@@ -270,7 +271,7 @@ async def _read_all(topic: str, expect: int, timeout: float = 30.0) -> list:
     out: list = []
     try:
         deadline = time.monotonic() + timeout
-        while len(out) < expect and time.monotonic() < deadline:
+        while not (until(out) if until else len(out) >= expect) and time.monotonic() < deadline:
             batch = await c.getmany(timeout_ms=500)
             for msgs in batch.values():
                 out.extend(msgs)
@@ -533,7 +534,19 @@ async def test_killed_consumer_is_taken_over_and_ends_consistent(redis, topics, 
         a.kill()
         a.wait(timeout=10)
 
-        results = await _read_all(topics["result"], expect=n_docs, timeout=120)
+        # 不能按条数等：被 kill 的实例可能已经发出了某份文档的结果、还没提交 offset，接管的实例会再发一条
+        # （SKIPPED）——条数会比文档数多，按条数收到的前 N 条未必覆盖所有文档
+        want = {f"doc-{i}" for i in range(n_docs)}
+
+        def all_done(msgs: list) -> bool:
+            ok = {
+                json.loads(m.value)["doc_id"]
+                for m in msgs
+                if json.loads(m.value)["status"] != "FAILED"
+            }
+            return want <= ok
+
+        results = await _read_all(topics["result"], expect=n_docs, timeout=120, until=all_done)
     finally:
         for p in (a, b):
             if p.poll() is None:
@@ -544,10 +557,18 @@ async def test_killed_consumer_is_taken_over_and_ends_consistent(redis, topics, 
 
     assert partial_before_kill, "kill 时该文档应处于写了一半的状态（否则测试没有测到接管）"
     events = [json.loads(m.value) for m in results]
-    succeeded = sorted(e["doc_id"] for e in events if e["status"] == "SUCCEEDED")
-    assert succeeded == sorted(f"doc-{i}" for i in range(n_docs)), (
-        events
-    )  # 每份文档恰好一次 SUCCEEDED
+    # 每份文档至少一个成功类结果；个别文档可能有两条（被 kill 的实例已发结果但没提交 offset → 接管者发 SKIPPED）
+    done = {
+        e["doc_id"]: [x["status"] for x in events if x["doc_id"] == e["doc_id"]] for e in events
+    }
+    assert set(done) == {f"doc-{i}" for i in range(n_docs)}, events
+    assert all(
+        set(v) <= {"SUCCEEDED", "SKIPPED"} and "SUCCEEDED" in v or v == ["SKIPPED"]
+        for v in done.values()
+    ), done
+    assert killed_doc is not None and "SUCCEEDED" in done[killed_doc], (
+        done
+    )  # 被 kill 的那份是接管者重做的
     assert not [e for e in events if e["status"] == "FAILED"]
     # 最终一致：每份文档的存储完整（5 块、没有 PARTIAL 标记）
     for i in range(n_docs):
