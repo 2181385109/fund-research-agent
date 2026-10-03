@@ -900,7 +900,7 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 
 
 ## S12 压测基线 + 瓶颈定位 — 2026-10-03（B12）
-- commit 范围：`ec24cab`..本节所在提交；CI：推送后核对，run 链接记在下一个提交（`docs(s12): 补 CI 链接`）与 `docs/HANDOFF.md`
+- commit 范围：`ec24cab`..本节所在提交；CI：功能 / 报告提交 `2a7ea84` 的 run [37111259811](https://github.com/2181385109/fund-research-agent/actions/runs/37111259811) **10 个 job 全绿**（含新增的 `loadtest` job）
 - 证据：**`docs/perf/baseline.md`**（全部数字由 `loadtest/report_tables.py` 从 `summary.json` 生成）、`reports/perf/`（正式运行 `…054246Z_A`、`…061237Z_B`、`…065405Z_C`、`…073839Z_D`、`…081348Z_E`；补测 / 探针 `…083432Z_C_knee128`、`…080725Z_A_oom_probe`；定位 `reports/perf/profiles/`；OOM 证据 `reports/perf/evidence/`）；决策 ADR-050；局限 `docs/LIMITATIONS.md`「压测（S12）」；复现 `loadtest/README.md`。**S12 没有改任何服务代码**（只新增 `loadtest/`、CI 的 `loadtest` job、`.gitignore`），所以 S4 / S8 的 test 结果不受影响。
 
 ### 完成项
