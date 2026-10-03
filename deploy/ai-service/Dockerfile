@@ -20,6 +20,8 @@ WORKDIR /app/ai-service
 # 1) CPU 版 torch 先装：否则 sentence-transformers 会拉带 CUDA 的默认轮子（数 GB）
 RUN pip install torch --index-url https://download.pytorch.org/whl/cpu
 
+# 国内网络访问 PyPI 很慢时可传 --build-arg PIP_INDEX_URL=https://mirrors.aliyun.com/pypi/simple/（默认不设，行为不变）
+ARG PIP_INDEX_URL
 # 2) 第三方依赖只取决于 pyproject.toml：改源码不会让这一层缓存失效
 COPY ai-service/pyproject.toml ./
 RUN python -c "import tomllib; p = tomllib.load(open('pyproject.toml', 'rb'))['project']; print('\n'.join(p['dependencies'] + p['optional-dependencies']['model']))" > /tmp/requirements.txt \

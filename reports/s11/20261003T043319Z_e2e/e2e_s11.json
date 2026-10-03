@@ -1,0 +1,26 @@
+{
+  "created_utc": "20261003T043319Z",
+  "command": "python scripts/e2e_s11.py --phase container",
+  "period": "2026Q2",
+  "docs": 20,
+  "passed": 3,
+  "total": 3,
+  "checks": [
+    {
+      "check": "容器消费者：清掉状态的 3 份入库成功，其余 SKIPPED",
+      "ok": true,
+      "detail": "{'status': 'COMPLETED', 'total': 20, 'succeeded': 3, 'skipped': 17, 'failed': 0}"
+    },
+    {
+      "check": "成功的任务由容器内的消费者处理（consumerId 是容器主机名-进程号）",
+      "ok": true,
+      "detail": "{'38dacf5e441e-1'}"
+    },
+    {
+      "check": "容器入库后 Milvus 条数、ES chunk_id 集合不变",
+      "ok": true,
+      "detail": "20 份文档，ES 共 664 块；不一致 0 份 []"
+    }
+  ],
+  "state": {}
+}

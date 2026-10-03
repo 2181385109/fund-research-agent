@@ -824,3 +824,76 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 ### 给统筹的问题
 - 无阻塞。可选：①`docs/PLAN.md` §7 表标记 B10 完成；②校准集 v2（修畸形问题、扩充真实说法、可能引入人工审核）是否排进后续；③S12 压测场景 D（语义缓存命中）需要 `SEMANTIC_CACHE_ENABLED=true` 且请求要避开「带历史」的路径（同一会话第二问起不走缓存）；④是否要把令牌桶推广到注册 / 登录 / 上传接口。
 - **CI**：`5370a4a` 的 run [36970011637](https://github.com/2181385109/fund-research-agent/actions/runs/36970011637) 8 个 job 全绿。此前推送的 `e7ed3e0`（run 36969786471）里 `scripts + security scan` 红了一次：`scripts/e2e_s10.py` 里有一处 WSL 路径字面量被「本机路径」规则命中；`5370a4a` 改成由 `ROOT` 推算，并按已推送的第一版在 `LOCAL_PATH_EXEMPT` 里豁免（先例：S9 的 `cancel_latency.py`）。另：上一个提交 `f6a44ce`（统筹只改文档）的 CI 曾因 `HttpAiServiceClientTest.chatGivesUpWhenTheUpstreamGoesSilent`（时间敏感的老测试）偶发失败一次，本阶段的 run 里都过了，已写进 HANDOFF。
+
+
+## S11 Kafka：季报批量入库 + 分布式锁 — 2026-10-03（B11）
+- commit 范围：`43668ec`..本节所在提交；CI：功能提交 `27525b9` 的 run [37096301794](https://github.com/2181385109/fund-research-agent/actions/runs/37096301794) **9 个 job 全绿**（含新增的 `messaging` job 与 backend 里用 Testcontainers 跑的 Kafka / MySQL 测试）。此前的 `909b996`（run [37096053012](https://github.com/2181385109/fund-research-agent/actions/runs/37096053012)）里 `messaging` job 红了一次：kill 接管集成测试按「结果条数」收结果，而被 kill 的实例可能已经发出某份文档的结果、还没提交 offset，接管的实例会再发一条（SKIPPED），前 N 条未必覆盖所有文档——测试里的竞态，不是产品缺陷；已改成按「每份文档都有成功类结果」判定（`27525b9`），本机重复跑 2 次通过；同一次 run 的其余 8 个 job 当时就是绿的
+- 证据目录：`reports/s11/`（全部来自 `scripts/e2e_s11.py`）：**`20261003T040928Z_e2e`**（正式运行，25 / 25 项通过：dedupe + rerun + kill + dlq）、`20261003T041416Z_e2e`（单独重跑 dlq 阶段，6 / 6，用来验证后来补上的「毒消息之后正常请求照常处理」检查，见下）、`20261003T043319Z_e2e`（`--phase container`，3 / 3：ai-service **容器内**嵌入的消费者处理一个批次——清掉 3 份文档的状态后入库 3、跳过 17，consumerId 是容器主机名-进程号，前后 Milvus / ES 一致）；**保留的失败 / 作废运行**：`…040049Z_e2e_contaminated_by_prior_aborted_run`（19 / 24：前一次因日志重复的缺陷被我中止，它遗留的批次与消息污染了本次计数）、`…040439Z_e2e_skip_check_raced_24of25`（24 / 25：「重复请求都被跳过」的检查在重复消息还没处理完时就数了日志，是脚本里的竞态，已改成先等消费者组积压清零）。决策 ADR-049；局限 `docs/LIMITATIONS.md`「批量入库（S11）」；接口与消息格式 `docs/API.md`「季报批量入库」。
+
+### 完成项
+- **Kafka 进 compose**：`apache/kafka:3.9.1`（KRaft combined 单节点、堆 512m、`mem_limit` 1g，宿主机 9094、容器网络 `kafka:9092`）+ 一次性的 `kafka-init`（建 `doc.ingest.requested` 4 分区、`doc.ingest.result` 2 分区、`doc.ingest.dlq` 1 分区，关闭自动建 topic）。
+- **backend `ingestbatch/`**：`POST /api/ingest-batches {reportPeriod}`（也收 `report_period`）按 MANIFEST 建批次 / 任务 / outbox（同一事务）、`GET /api/ingest-batches/{id}[?tasks=true]`、`GET /api/ingest-batches`；`OutboxRelay`（轮询 + `FOR UPDATE SKIP LOCKED`，至少一次）；`IngestResultListener`（结果幂等更新，批次行加锁串行）；`V4__s11_ingest_batch.sql`（`ingest_batch` / `ingest_task` / `outbox_event`）。
+- **ai-service `messaging/`**：`RedisLock`（SET NX PX + token、Lua 比对释放 / 续期、watchdog、`verify()`）、`IngestStateStore`（READY 状态）、`IngestHandler`（sha256 校验 → 拿锁 → READY 跳过 → 入库 → 验锁 → 写 READY；可重试 / 不可重试分类）、`PipelineExecutor`、`IngestWorker`（aiokafka，处理完才手动提交 offset；嵌在 ai-service 里或 `python -m fund_ai.messaging.worker` 独立运行）。
+- **取证脚本** `scripts/e2e_s11.py`（见上）；CI 新增 `messaging` job（服务容器里的真实 Redis 8 + Kafka）。
+
+### 验收逐条（PLAN §5 S11）
+1. **锁的单测（错误 token 不能释放、过期、续期）** — ✅ — `ai-service/tests/test_messaging_integration.py`（真实 Redis 8）：`test_wrong_token_cannot_release`（错误 token 释放 / 续期都返回 False，锁仍属于原持有者）、`test_lock_expires_and_stale_holder_cannot_touch_new_owner`（TTL 过期后别人拿到锁，迟到的释放不能删它、`verify()` 抛 `LockLostError`）、`test_watchdog_keeps_a_long_task_alive_past_ttl`（TTL 400 ms、持有 1.5 s，期间别人始终拿不到）+ 对照 `test_without_watchdog_the_same_task_would_lose_the_lock`、`test_watchdog_detects_loss_and_stops`、`test_only_one_of_many_concurrent_acquirers_wins`（30 个并发抢，恰好 1 个）、`test_acquire_waits_until_the_holder_releases`。13 个集成测试本机 `FRA_TEST_REDIS` + compose 的 Kafka 跑过（45 s，全过），CI 的 `messaging` job 同样跑。
+2. **同一批次重复提交 + 2 个消费者实例，每份文档只处理一次（用 chunk 数和日志证明）** — ✅ — `reports/s11/20261003T040928Z_e2e/`：批次 12，`POST` 两次（202，再 200 `created=false` 同一批次）+ 把 20 条请求消息再发一遍；两个独立进程 A / B 同组消费。**两个实例日志里每个 doc_id 恰好一条 `ingest.start`（20 / 20；A 入库 12 份、B 入库 8 份），20 份文档都有 `ingest.skip`（重复请求被识别为已 READY）**；结果 topic 共 40 条 = SUCCEEDED 20 + SKIPPED 20 + FAILED 0；批次 COMPLETED `succeeded=20`，耗时 87 s。**chunk 数**：入库前后每份文档的 Milvus 条数与 ES `chunk_id` 集合完全一致（20 份文档、ES 共 664 块，不一致 0 份）。日志摘录见 `ingest_events.txt`，进度时间线见 `batch_dedupe_progress.json`。另有集成测试 `test_two_consumer_instances_process_duplicated_batch_once`（12 份 × 2 条，两个 worker 各处理 12 条，`FakeExecutor.ingested` 恰好 12 次）与 `test_real_redis_duplicates_processed_once_by_two_handlers`。「整批重投」：批次结束后再提交 → 202 新批次 14，**全部 SKIPPED（20 / 20），日志里没有新增 `ingest.start`**（`batch_rerun_progress.json`）。
+3. **消费者处理到一半被 kill 后，另一实例接管并最终一致** — ✅ — 同一目录：清掉入库状态后投新批次，等 A 持有 `006113_quarterly_report_2026Q2` 的锁（Redis 里 token 以 `A:` 开头）时 `kill -9`（Windows `TerminateProcess`）；A 的日志该文档只有 `ingest.start`（12:11:27,338）没有 `ingest.done`，B 在 **12:11:57,347**（≈ 30 s 后，锁 TTL 到期）`ingest.start`、12:12:02 `ingest.done`。批次最终 COMPLETED、20 份全部 SUCCEEDED、0 失败；Milvus 条数与 ES chunk_id 集合与入库前完全一致（含被 kill 时写了一半的那份）。另有可重复的集成测试 `test_killed_consumer_is_taken_over_and_ends_consistent`（独立进程 A / B + 假流水线：kill 时该文档处于 `PARTIAL` 状态、被 B 重做，最终 5 块、无半成品、READY 状态由 B 写入、锁已释放）。
+4. **毒消息进入 DLQ** — ✅ — e2e dlq 阶段（`dlq_dump.json`）：无法解析的字节（原样进 DLQ，`attempts=0`，`error=poison: 不是合法的 JSON…`，带 `source-topic / partition / offset`）、文件不存在（`attempts=1`，`PermanentIngestError`）、sha256 与清单不符（`attempts=1`）各一条进 `doc.ingest.dlq`；可解析的两条同时回了 `FAILED` 结果；之后紧跟的一条正常请求照常处理（SKIPPED，见 `20261003T041416Z_e2e`）。重试用尽路径：`test_retry_exhaustion_goes_to_dlq_after_n_attempts`（真实 Kafka：3 次尝试后进 DLQ，`attempts=3`，结果 `FAILED` 带 `ConnectionError`）、单测 `test_retries_exhausted_goes_to_dlq`。
+5. **贴批次进度接口原文** — ✅ — 见下「批次进度接口原文」。
+6. **CI 全绿** — ✅ — 见顶部「CI」行（9 个 job 全绿）。
+
+### 批次进度接口原文
+`GET /api/ingest-batches/12`（dedupe 批次结束后；`data` 内容，tasks 与 failures 省略，全文在 `reports/s11/20261003T040928Z_e2e/batch_dedupe_progress.json`）：
+
+```json
+{
+  "batchId": 12,
+  "reportPeriod": "2026Q2",
+  "docType": "quarterly_report",
+  "status": "COMPLETED",
+  "total": 20,
+  "succeeded": 20,
+  "skipped": 0,
+  "failed": 0,
+  "processing": 0,
+  "pending": 0,
+  "inFlight": 0,
+  "createdAt": "2026-10-03T12:09:45.471",
+  "completedAt": "2026-10-03T12:11:09.764",
+  "tasks": "[… 20 个任务明细省略，见结果文件 …]"
+}
+```
+
+### 实测数字
+| 指标 | 值 | n / 分母 | 结果文件 |
+|---|---|---|---|
+| 2 实例 + 重复请求：入库次数 / 跳过次数 | 20 / 20（每份文档各 1 次入库 + 1 次跳过） | 20 份文档、40 条请求 | `20261003T040928Z_e2e/e2e_s11.json` |
+| A / B 各入库的文档数 | 12 / 8 | 20 | 同上 |
+| 批次完成耗时（2 个实例，含重复请求） | 87 s | 1 次运行 | 同上 |
+| 重投前后 Milvus 条数 / ES chunk_id 集合不一致的文档 | 0 / 20（ES 共 664 块） | 20 | 同上 |
+| 整批重投：SKIPPED | 20 / 20，新增 `ingest.start` 0 | 20 | `batch_rerun_progress.json` |
+| kill → 另一实例开始处理被 kill 的文档 | ≈ 29.8 s（12:11:27,56 → 12:11:57,35；锁 TTL 30 s，session 超时 10 s） | 1 次 | `ingest_events.txt` |
+| 容器内消费者（compose 接线）：入库 / 跳过 | 3 / 17（清掉 3 份状态），前后不一致 0 / 20 | 20 | `20261003T043319Z_e2e/e2e_s11.json` |
+| 单元 / 集成测试 | ai-service 331（+26）+ 13 个 messaging 集成；backend 172（+25）+ `BackendIntegrationTest` 新增 1 个 | — | — |
+
+### 与计划的偏差（附理由和 ADR 编号）
+- **不可重试错误不走 N 次重试，直接进 DLQ**（ADR-049）：PLAN 写「重试 N 次后进入 DLQ」；文件不存在 / sha256 不符 / 消息畸形重试不会变好，重试只会拖慢。可重试错误严格按 N=3 次。
+- **请求体用 camelCase `reportPeriod`，同时接受 PLAN 里的 `report_period`**：backend 现有接口全是 camelCase（`kbIds`、`callsLimit`）；Kafka 消息保持 snake_case（与 Python 一致）。
+- **2026Q3 季报尚未发布**（PLAN 允许的情形）：用已有报告期 2026Q2 演示「整批重投」，限制写进 LIMITATIONS S11-1。
+- **READY 状态存在 Redis，不在 MySQL**（PLAN 没规定存放位置）：消费者在 Python 侧，不应依赖 backend 的库；丢失只会多入库一次（幂等）。跳过时还核对两个存储的条数。
+- **消费者默认嵌在 ai-service 里（compose 默认开）**，另提供独立 worker 进程（第二个实例 / 演示 / kill 测试用）：避免多开一个加载 embedding 模型的容器（内存预算）。
+
+### 已知问题 / 技术债
+- 见 LIMITATIONS S11：重投期间文档短暂不完整（先删后写）、接管延迟 ≈ 锁 TTL、无 fencing token、DLQ 无重投工具、任何登录用户可创建批次。
+- **e2e 的毒消息是直接写请求 topic 造的**（backend 只会生成合法请求），其 `batch_id=999999` 在 backend 里是未知批次，结果被忽略（日志有 warn）；真实的失败任务显示路径由 backend 单测 / 集成测试覆盖（`resultsAreAppliedIdempotently…`、`resultListenerAppliesResults…`）。
+- 正式 e2e 运行里「毒消息没有卡住消费」最初是一条恒为真的占位检查（我发现后改成真实检查：毒消息之后发一条正常请求，要求得到结果），为此单独重跑了 dlq 阶段（`…041416Z_e2e`，6 / 6）；正式运行目录里的那一项仍是占位检查，以 `…041416Z_e2e` 为准。
+- 本机 `.env` 里 `SEMANTIC_CACHE_ENABLED=true`（B10 遗留）会让 ai-service 的 3 个老测试失败（`test_chat_stream_when_agent_cannot_be_built…`、`test_chat_when_agent_cannot_be_built…`、`test_cache_disabled_means_no_cache_hit_field…`）：跑 pytest 前加 `SEMANTIC_CACHE_ENABLED=false`（CI 没有 `.env`，不受影响）。
+- 日志里每条 `ingest.*` 在 worker 日志文件里还会出现一遍 Rich 格式的重复行（`mcp` 库给根 logger 装了 handler；已设 `propagate=False`，但 worker 日志文件里其他库的输出仍是 Rich 格式）；证据文件 `ingest_events.txt` 只摘了带时间戳的那一行。
+
+### 需要用户做的事
+- 无阻塞。可选：2026Q3 季报发布后（预计 10 月下旬）需要先由数据管道把新季报下载并登记进 MANIFEST（S11 没做、MANIFEST 已冻结，需统筹与用户批准），再 `POST /api/ingest-batches {"reportPeriod":"2026Q3"}` 做一次真实的新一期入库。
+
+### 给统筹的问题
+- 无阻塞。可选：①`docs/PLAN.md` §7 表标记 B11 完成；②新季报入库的数据管道步骤（下载 PDF → MANIFEST）是否排进后续（MANIFEST 冻结规则需要放行）；③要不要给批次接口加管理员限制（目前任何登录用户可创建批次）；④DLQ 重投工具是否需要。
