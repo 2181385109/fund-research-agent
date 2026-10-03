@@ -1,0 +1,2 @@
+Method,Name,Error,Occurrences,First Seen,Last Seen
+HTTP,create_conversation,"ConnectionError(ProtocolError('Connection aborted.', ConnectionResetError(10054, '远程主机强迫关闭了一个现有的连接。', None, 10054, None)))",13,2026-10-03T07:51:22Z,2026-10-03T07:51:22Z

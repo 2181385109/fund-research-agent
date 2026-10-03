@@ -1,0 +1,2 @@
+Method,Name,Error,Occurrences,First Seen,Last Seen
+HTTP,retrieve,RuntimeError('ConnectionError'),7590,2026-10-03T08:10:38Z,2026-10-03T08:11:54Z

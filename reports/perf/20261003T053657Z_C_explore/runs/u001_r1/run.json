@@ -1,0 +1,196 @@
+{
+ "scenario": "C",
+ "users": 1,
+ "rep": 1,
+ "locust_exit_code": 0,
+ "t_launch": 1791005846.5704584,
+ "t_first_request": 1791005847.5974576,
+ "window": [
+  1791005852.5974576,
+  1791005882.5974576
+ ],
+ "drain_s": 4.0,
+ "n_total_requests_incl_warmup_and_drain": 8,
+ "stats": {
+  "window_s": 30.0,
+  "n": 6,
+  "n_ok": 6,
+  "n_err": 0,
+  "error_rate": 0.0,
+  "qps": 0.2,
+  "qps_ok": 0.2,
+  "lat_mean_ms": 4868.4,
+  "lat_p50_ms": 3525.3,
+  "lat_p95_ms": 9608.7,
+  "lat_p99_ms": 10893.8,
+  "ttft_n": 6,
+  "ttft_p50_ms": 3141.2,
+  "ttft_p95_ms": 8664.3,
+  "errors": {}
+ },
+ "docker": {
+  "fra-ai-service": {
+   "n": 14,
+   "cpu_mean_pct": 4.1,
+   "cpu_max_pct": 20.5,
+   "mem_max_mib": 1493.0
+  },
+  "fra-backend": {
+   "n": 14,
+   "cpu_mean_pct": 2.8,
+   "cpu_max_pct": 11.0,
+   "mem_max_mib": 428.9
+  },
+  "fra-elasticsearch": {
+   "n": 14,
+   "cpu_mean_pct": 0.6,
+   "cpu_max_pct": 3.0,
+   "mem_max_mib": 1681.4
+  },
+  "fra-frontend": {
+   "n": 14,
+   "cpu_mean_pct": 0.1,
+   "cpu_max_pct": 1.9,
+   "mem_max_mib": 19.6
+  },
+  "fra-kafka": {
+   "n": 14,
+   "cpu_mean_pct": 4.7,
+   "cpu_max_pct": 30.7,
+   "mem_max_mib": 655.6
+  },
+  "fra-mcp-tools": {
+   "n": 14,
+   "cpu_mean_pct": 2.6,
+   "cpu_max_pct": 19.3,
+   "mem_max_mib": 66.7
+  },
+  "fra-milvus": {
+   "n": 14,
+   "cpu_mean_pct": 4.4,
+   "cpu_max_pct": 5.6,
+   "mem_max_mib": 543.3
+  },
+  "fra-mock-llm": {
+   "n": 14,
+   "cpu_mean_pct": 4.5,
+   "cpu_max_pct": 19.3,
+   "mem_max_mib": 41.6
+  },
+  "fra-mysql": {
+   "n": 14,
+   "cpu_mean_pct": 1.1,
+   "cpu_max_pct": 1.7,
+   "mem_max_mib": 275.9
+  },
+  "fra-redis": {
+   "n": 14,
+   "cpu_mean_pct": 0.3,
+   "cpu_max_pct": 0.3,
+   "mem_max_mib": 48.9
+  },
+  "fra-test-mysql": {
+   "n": 14,
+   "cpu_mean_pct": 0.4,
+   "cpu_max_pct": 0.4,
+   "mem_max_mib": 486.9
+  },
+  "fra-test-redis": {
+   "n": 14,
+   "cpu_mean_pct": 0.1,
+   "cpu_max_pct": 0.1,
+   "mem_max_mib": 6.7
+  }
+ },
+ "host": {
+  "host_cpu_mean_pct": 22.8,
+  "host_cpu_max_pct": 27.5,
+  "locust_cpu_mean_pct": 0.0
+ },
+ "mock_llm": {
+  "requests": 22,
+  "active": 0,
+  "max_active": 1,
+  "tool_turns": 14,
+  "final_turns": 8,
+  "replayed": 22,
+  "fallback": 0,
+  "nav_requests": 1,
+  "started": 1791005846.2688186,
+  "uptime_s": 40.0
+ },
+ "cmd": [
+  "<repo>/loadtest/.venv/Scripts/python.exe",
+  "-m",
+  "locust",
+  "-f",
+  "<repo>/loadtest/locustfile.py",
+  "ScenarioC",
+  "--headless",
+  "-u",
+  "1",
+  "-r",
+  "1",
+  "-t",
+  "35s",
+  "--stop-timeout",
+  "90",
+  "--csv",
+  "<repo>/reports/perf/20261003T053657Z_C_explore/runs/u001_r1/locust",
+  "--only-summary"
+ ],
+ "segments": {
+  "server_total_ms": {
+   "n": 6,
+   "p50": 3313.85,
+   "p95": 9136.325
+  },
+  "server_first_token_ms": {
+   "n": 6,
+   "p50": 2960.3,
+   "p95": 8241.95
+  },
+  "server_llm_ms": {
+   "n": 6,
+   "p50": 3249.0,
+   "p95": 9025.225
+  },
+  "server_tools_ms": {
+   "n": 6,
+   "p50": 69.4,
+   "p95": 253.17499999999998
+  },
+  "conv_create_ms": {
+   "n": 6,
+   "p50": 50.75,
+   "p95": 52.9
+  },
+  "first_byte_ms": {
+   "n": 6,
+   "p50": 59.55,
+   "p95": 59.9
+  },
+  "tool_ms": {
+   "get_fund_db_schema": {
+    "n": 3,
+    "p50": 31.6,
+    "p95": 36.279999999999994
+   },
+   "run_fund_sql": {
+    "n": 4,
+    "p50": 38.5,
+    "p95": 40.095000000000006
+   },
+   "calc_fund_return": {
+    "n": 2,
+    "p50": 65.65,
+    "p95": 70.64500000000001
+   },
+   "get_latest_nav": {
+    "n": 1,
+    "p50": 299.4,
+    "p95": 299.4
+   }
+  }
+ }
+}

@@ -897,3 +897,57 @@ test 集：`fund_qa_v1` test 79 题，排除 unanswerable 7 题，**n = 72**（�
 
 ### 给统筹的问题
 - 无阻塞。可选：①`docs/PLAN.md` §7 表标记 B11 完成；②新季报入库的数据管道步骤（下载 PDF → MANIFEST）是否排进后续（MANIFEST 冻结规则需要放行）；③要不要给批次接口加管理员限制（目前任何登录用户可创建批次）；④DLQ 重投工具是否需要。
+
+
+## S12 压测基线 + 瓶颈定位 — 2026-10-03（B12）
+- commit 范围：`ec24cab`..本节所在提交；CI：推送后核对，run 链接记在下一个提交（`docs(s12): 补 CI 链接`）与 `docs/HANDOFF.md`
+- 证据：**`docs/perf/baseline.md`**（全部数字由 `loadtest/report_tables.py` 从 `summary.json` 生成）、`reports/perf/`（正式运行 `…054246Z_A`、`…061237Z_B`、`…065405Z_C`、`…073839Z_D`、`…081348Z_E`；补测 / 探针 `…083432Z_C_knee128`、`…080725Z_A_oom_probe`；定位 `reports/perf/profiles/`；OOM 证据 `reports/perf/evidence/`）；决策 ADR-050；局限 `docs/LIMITATIONS.md`「压测（S12）」；复现 `loadtest/README.md`。**S12 没有改任何服务代码**（只新增 `loadtest/`、CI 的 `loadtest` job、`.gitignore`），所以 S4 / S8 的 test 结果不受影响。
+
+### 完成项
+- **mock LLM + 净值 stub**（`loadtest/mock_llm/`）：OpenAI 兼容流式补全；**回放 S8 真实运行**（124 题的真实工具路线与参数、回答文本、首 token 延迟与输出速度），脚本里没有的问题走默认路线；延迟可用环境变量覆盖；`/f10/lsjz` 兼任 `get_latest_nav` 的上游 stub；14 个单测。
+- **压测栈**（`compose.loadtest.yml` + `stack.sh`）：不改默认 compose；LLM 与净值接口换 mock、关限流 / 配额 / Kafka 消费者、`PERF_CACHE` 控制语义缓存、`up real` 给场景 E。
+- **Locust 场景 A–E、编排与统计**（`locustfile.py`、`run_perf.py`、`perf_common.py`）：闭环负载；逐请求 JSONL（含 SSE 首字节 / 首 token / 总耗时 / `done` 里的服务端分段）；窗口统计；每档 3 次取中位数；docker stats、宿主机与 Locust 的 CPU 同步采样；结果文件带 git / sha256 / 机器 / 命令行，并清除本机绝对路径。
+- **定位工具**：py-spy 旁路容器（`profile_pyspy.sh`，不改被测镜像）、JFR（backend 带参数重建）、`stack_summary.py` 汇总（有单测）。
+- CI 新增 `loadtest` job（ruff + 33 个离线单测，不装 locust）。
+
+### 验收逐条（PLAN §5 S12）
+1. **mock LLM（OpenAI 兼容，流式，首 token 延迟和 tokens/s 可配，能按脚本返回 tool call）；`get_latest_nav` 在压测中用 stub，不压外部网站** — ✅ — 证据：`loadtest/mock_llm/server.py`（流式 / 非流式、tool call 回放、`MOCK_TTFT_MS` / `MOCK_TTFT_TOOL_MS` / `MOCK_TOKENS_PER_S`）、`loadtest/tests/test_mock_llm.py`（14 个）；C 场景 21 次运行里 mock 的净值 stub 共收到 6 个请求（`reports/perf/20261003T065405Z_C/runs/*/run.json` 的 `mock_llm.nav_requests`，mcp-tools 有 10 分钟缓存）；E 的问题池排除了净值类题，真实净值接口整个 S12 没有被访问。
+2. **Locust 场景 A 纯检索、B 文档问答全链路（mock LLM）、C SQL 类问答全链路、D 语义缓存命中、E（可选）真实 LLM（并发 ≤ 5，记录费用）** — ✅ — 证据：`loadtest/locustfile.py`；`reports/perf/…_A / _B / _C / _D / _E`；E：并发 1 / 3 / 5、246 个请求、输入 2 619 577 + 输出 111 894 token，费用上界 0.92 美元（高峰价，输入全按未命中计）— `reports/perf/20261003T081348Z_E/cost.json`。
+3. **指标：QPS、平均延迟、P50/P95/P99、错误率、TTFT；阶梯加压找拐点；每个点重复 3 次取中位数，记录环境** — ✅（有说明的例外见下）— 证据：`baseline.md` §2 的各表（QPS / 成功 QPS / 错误率 / 平均 / P50 / P95 / P99 / TTFT P50、P95 / 每次窗口内完成数 / 三次 QPS），每档 3 次（A、B、C、D、E 全部；补测的 C 128 并发 3 次；A 的 12 / 16 并发探针只 1 次，标明是探针）；环境：`summary.json` 的 `machine`、`stack`、`git`（`dirty=true`：运行时 `loadtest/` 还没提交，被测服务代码与 S11 完全一致）。
+4. **定位：py-spy 火焰图、JFR 或 arthas、`docker stats`、分段打点** — ✅（JFR，未用 arthas）— 证据：`reports/perf/profiles/pyspy_B4/ai_flame.svg` + `summary.md`；`pyspy_D64/`；`jfr_backend_C32/summary.md`；各运行的 `dockerstats.jsonl.gz` 与 `baseline.md` 的资源表；分段打点 = `done.timings_ms` + `/v1/retrieve` 的 `timings_ms`（`baseline.md` 的「服务端分段」表）。
+5. **`docs/perf/baseline.md` + 原始数据 + 火焰图；瓶颈结论有数据证据** — ✅ — 证据：`docs/perf/baseline.md` §4（每条结论列证据链）；原始数据 = `runs/*/requests.jsonl.gz` 等。
+
+### 实测数字（完整表见 `baseline.md` §2；mock LLM，除非标注）
+| 指标 | 值 | n / 分母 | 结果文件 |
+|---|---|---|---|
+| A 检索：1 并发 P50 / 吞吐封顶 | 3.72 s / 0.342 QPS（2 并发），其中重排占 3.52 / 3.56 s | 每次窗口完成 33–41，3 次 | `…054246Z_A/summary.json` |
+| B 文档问答：1 并发 P50；吞吐封顶；8 并发 P50 / P95 | 7.87 s；≈ 0.233 QPS（4–8 并发）；32.0 s / 58.2 s | 窗口完成 13–29，3 次 | `…061237Z_B/summary.json` |
+| B 16 并发 | **三次全部失败**（ai-service 被 OOM 杀死，容器上限 2560 MiB） | 窗口完成 13 / 848 / 365，错误率中位数 100% | `…061237Z_B/runs/u016_r*`、`evidence/ai_service_oom_during_B16.txt` |
+| A 探针 | 12 并发 13 / 13 成功；16 并发 0 / 7590 成功（RestartCount=4） | 各 1 次 | `…080725Z_A_oom_probe/summary.json` |
+| C 工具类问答：64 并发 | 9.97 QPS、P50 5.83 s、0 错误 | 窗口完成 598 / 593 / 599 | `…065405Z_C/summary.json` |
+| C 128 并发 | 97.9% 是 HTTP 503（准入上限 64 路对话流） | 窗口 49 495 / 50 566 | `…083432Z_C_knee128/summary.json` |
+| D 缓存命中：1 并发 P50；吞吐封顶 | 80 ms；≈ 43 QPS（16–64 并发） | 窗口完成 451–2632，3 次；命中率 21 953 / 21 953（问题池按构造只含能命中的 60 对） | `…073839Z_D/summary.json` |
+| E 真实 DeepSeek：1 / 3 / 5 并发 | QPS 0.111 / 0.289 / 0.311，P50 7.74 / 9.42 / 17.42 s，0 错误 | 窗口完成 9–29，3 次 | `…081348Z_E/summary.json` |
+| backend：JFR（C 32 并发） | JVM 用户态 CPU 均值 1.11%，栈顶最高 3.4% | 178 个执行样本，90 s 窗口 | `profiles/jfr_backend_C32/summary.md` |
+| ai-service：py-spy（B 4 并发） | 73.4% 样本在 `cross_encoder.score`（重排），`linear.forward` 自身 51.6% | 8558 个样本 | `profiles/pyspy_B4/summary.md` |
+| ai-service：py-spy（D 64 并发，被拖慢） | 66.2% 样本在 `embed_documents`（查询向量化） | 7949 个样本 | `profiles/pyspy_D64/summary.md` |
+
+### 与计划的偏差（附理由和 ADR 编号）
+- **JFR 而非 arthas**（PLAN 写「JFR 或 arthas」）：见 ADR-050。
+- **补测与探针不在 PLAN 里**：C 加测 128 并发（64 并发时 ai-service 已用满一个核，想找拐点；结果是撞上 backend 的 64 路准入上限）；A 加测 12 / 16 并发（确认 B 的 16 并发崩溃是不是检索本身造成）。两者都只是补充，没有替换任何正式运行，失败的运行全部保留（`baseline.md` §3）。
+- **B 的档位只到 16、C 到 64**：B 在 16 并发就把服务打崩了，再往上没有意义；C 在 128 并发撞准入上限。
+- **E 的问题池排除净值类题**（避免访问外部净值接口），且混合了文档与 SQL 路线，所以 E 的总体 QPS 不能直接和 B 比；`baseline.md` §2.5 按路线拆开对比。
+- 没有改任何服务代码；ADR-050。
+
+### 已知问题 / 技术债
+- **ai-service 在 16 个并发检索下被 OOM 杀死（本阶段发现的真实缺陷 / 容量崖）**：默认内存预算（2560m）下，8 并发内存峰值已顶到上限，12–16 并发之间崩溃；崩溃后重启的冷启动阶段再遇到并发会反复被杀。没有做保护（并发上限 / 排队），也没有细分内存构成。已写进 `LIMITATIONS`「压测（S12）」2，并列入 `baseline.md` §5 的 S13 候选。
+- 吞吐上限：有检索的问答（A / B / E）< 0.35 QPS，检索里重排占 98.9%——这是 S13 优化的主要对象。
+- D 的 64 并发 r1 有 13 个 `ConnectionError`（同一时刻，压测端到 backend），未查明原因，已保留。
+- D 的客户端 P50 与服务端 `done.total` 之间约 1 s（64 并发）没有归因。
+- 压测账号 `perf_u001…perf_u200` 和它们的会话留在 `fra_app` 库里，语义缓存预热的条目留在 Redis 里；没有清理。
+
+### 需要用户做的事
+- 无阻塞。可选：S13 优化项里如果包含「降低重排候选数 / 量化」这类可能影响检索质量的改动，需要在 S13 按规则征得用户同意（PLAN S13 的质量回归规则）。
+
+### 给统筹的问题
+- 无阻塞。需要统筹知情 / 决定：①B 的 16 并发 OOM 是 S13 之前就存在的容量崖，S13「至少 3 项优化」是否把「并发检索上限 / 内存」（保护型）与「重排提速」（性能型）都算进去，还是只算后者；②场景 E 花了真实 API 费用，上界约 0.92 美元（246 个请求）——PLAN 里 E 是可选项且要求记录费用，已记录；③`docs/PLAN.md` §7 表标记 B12 完成。

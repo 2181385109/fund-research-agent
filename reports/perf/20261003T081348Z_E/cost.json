@@ -1,0 +1,10 @@
+{
+ "requests": 246,
+ "requests_with_usage": 246,
+ "input_tokens": 2619577,
+ "output_tokens": 111894,
+ "response_models": ["deepseek-flash"],
+ "cost_usd_upper_bound_peak": 0.9201,
+ "cost_usd_upper_bound_off_peak": 0.4601,
+ "note": "统计范围：本目录下 runs/*/requests.jsonl.gz 的全部 246 个请求（含预热运行 u002_r0 和各次运行窗口外的请求，即这次场景 E 实际调用真实 DeepSeek 的全部请求）。所有输入 token 按缓存未命中计价，所以是费用上界；价格取 ai-service/src/fund_ai/eval/answer_score.py 的 PRICES（deepseek-flash，2026-09-30 读取，USD / 百万 token：高峰 输入 0.3 / 输出 1.2，非高峰减半）；token 数来自 done 事件的 usage。不含失败请求没有 usage 的部分（本次 0 个）。"
+}

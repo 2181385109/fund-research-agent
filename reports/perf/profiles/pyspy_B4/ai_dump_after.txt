@@ -1,0 +1,64 @@
+Process 1: /usr/local/bin/python3.12 /usr/local/bin/uvicorn fund_ai.api.app:app --host 0.0.0.0 --port 8001
+Python v3.12.14 (/usr/local/bin/python3.12)
+
+Thread 1 (idle): "MainThread"
+    run (asyncio/runners.py:118)
+    run (asyncio/runners.py:195)
+    run (uvicorn/server.py:86)
+    run (uvicorn/main.py:632)
+    main (uvicorn/main.py:499)
+    invoke (click/core.py:910)
+    invoke (click/core.py:1415)
+    main (click/core.py:1552)
+    __call__ (click/core.py:1631)
+    <module> (uvicorn:8)
+Thread 8 (idle): "Thread-1 (_poll_wrapper)"
+    run (threading.py:1012)
+    _bootstrap_inner (threading.py:1075)
+    _bootstrap (threading.py:1032)
+Thread 44 (idle): "uvloop_0"
+    _worker (concurrent/futures/thread.py:90)
+    run (threading.py:1012)
+    _bootstrap_inner (threading.py:1075)
+    _bootstrap (threading.py:1032)
+Thread 45 (idle): "uvloop_1"
+    _worker (concurrent/futures/thread.py:90)
+    run (threading.py:1012)
+    _bootstrap_inner (threading.py:1075)
+    _bootstrap (threading.py:1032)
+Thread 100 (idle): "tqdm_monitor"
+    wait (threading.py:359)
+    wait (threading.py:655)
+    run (tqdm/_monitor.py:69)
+    _bootstrap_inner (threading.py:1075)
+    _bootstrap (threading.py:1032)
+Thread 105 (idle): "tqdm_monitor"
+    wait (threading.py:359)
+    wait (threading.py:655)
+    run (tqdm/_monitor.py:69)
+    _bootstrap_inner (threading.py:1075)
+    _bootstrap (threading.py:1032)
+Thread 166 (idle): "AnyIO worker thread"
+    wait (threading.py:355)
+    get (queue.py:171)
+    run (anyio/_backends/_asyncio.py:1089)
+    _bootstrap_inner (threading.py:1075)
+    _bootstrap (threading.py:1032)
+Thread 174 (idle): "AnyIO worker thread"
+    wait (threading.py:355)
+    get (queue.py:171)
+    run (anyio/_backends/_asyncio.py:1089)
+    _bootstrap_inner (threading.py:1075)
+    _bootstrap (threading.py:1032)
+Thread 435 (idle): "AnyIO worker thread"
+    wait (threading.py:355)
+    get (queue.py:171)
+    run (anyio/_backends/_asyncio.py:1089)
+    _bootstrap_inner (threading.py:1075)
+    _bootstrap (threading.py:1032)
+Thread 475 (idle): "AnyIO worker thread"
+    wait (threading.py:355)
+    get (queue.py:171)
+    run (anyio/_backends/_asyncio.py:1089)
+    _bootstrap_inner (threading.py:1075)
+    _bootstrap (threading.py:1032)

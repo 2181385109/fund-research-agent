@@ -1,0 +1,3 @@
+Method,Name,Error,Occurrences,First Seen,Last Seen
+HTTP,chat,RuntimeError('http_500'),4,2026-10-03T06:51:02Z,2026-10-03T06:52:55Z
+HTTP,chat,RuntimeError('done_error:upstream_unavailable'),515,2026-10-03T06:51:02Z,2026-10-03T06:52:55Z

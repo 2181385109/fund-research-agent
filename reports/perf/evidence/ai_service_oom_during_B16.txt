@@ -1,0 +1,21 @@
+## dmesg (cgroup OOM kills; 时间戳是 WSL 开机后的秒数)
+[12529.241195] Memory cgroup out of memory: Killed process 28052 (uvicorn) total-vm:19321180kB, anon-rss:2581164kB, file-rss:238152kB, shmem-rss:0kB, UID:10001 pgtables:16020kB oom_score_adj:0
+[12594.207110] Memory cgroup out of memory: Killed process 16226 (uvicorn) total-vm:35075624kB, anon-rss:2558508kB, file-rss:1012332kB, shmem-rss:0kB, UID:10001 pgtables:20728kB oom_score_adj:0
+[12645.533366] Memory cgroup out of memory: Killed process 19835 (uvicorn) total-vm:35090900kB, anon-rss:2588984kB, file-rss:1005944kB, shmem-rss:0kB, UID:10001 pgtables:21404kB oom_score_adj:0
+[12764.563776] Memory cgroup out of memory: Killed process 22764 (uvicorn) total-vm:34932412kB, anon-rss:2417940kB, file-rss:1036240kB, shmem-rss:0kB, UID:10001 pgtables:26496kB oom_score_adj:0
+[12876.867529] Memory cgroup out of memory: Killed process 28955 (uvicorn) total-vm:35504124kB, anon-rss:2580156kB, file-rss:1020992kB, shmem-rss:0kB, UID:10001 pgtables:25180kB oom_score_adj:0
+[12946.346369] Memory cgroup out of memory: Killed process 2448 (uvicorn) total-vm:35351588kB, anon-rss:2536160kB, file-rss:1061372kB, shmem-rss:0kB, UID:10001 pgtables:26432kB oom_score_adj:0
+
+## docker events oom/die(137) fra-ai-service, 最近 5 小时
+
+## 当前
+RestartCount=0 MemoryLimit=2684354560
+date: 2026-10-03T15:55:16+08:00
+
+## 补充（A 场景 16 并发探针，reports/perf/20261003T080725Z_A_oom_probe）
+A 场景只含检索（直连 ai-service /v1/retrieve，没有 backend、没有 LLM）：12 并发窗口内 13 个请求全部成功；16 并发 7606 个请求全部失败（ConnectionError，第 15.6 s 起），ai-service 在这次探针里被 OOM 杀死并重启 4 次（RestartCount=4）。
+[17542.173797] Memory cgroup out of memory: Killed process 17885 (uvicorn) total-vm:17717572kB, anon-rss:2383680kB, file-rss:690736kB, shmem-rss:0kB, UID:10001 pgtables:14584kB oom_score_adj
+[17573.328434] Memory cgroup out of memory: Killed process 27747 (uvicorn) total-vm:17682512kB, anon-rss:2456436kB, file-rss:407024kB, shmem-rss:0kB, UID:10001 pgtables:14416kB oom_score_adj
+[17614.569457] Memory cgroup out of memory: Killed process 31825 (uvicorn) total-vm:17490560kB, anon-rss:2355640kB, file-rss:477100kB, shmem-rss:0kB, UID:10001 pgtables:14304kB oom_score_adj
+[17642.911334] Memory cgroup out of memory: Killed process 4574 (uvicorn) total-vm:17535184kB, anon-rss:2230128kB, file-rss:413012kB, shmem-rss:0kB, UID:10001 pgtables:13976kB oom_score_adj:
+RestartCount=4 MemoryLimit=2684354560

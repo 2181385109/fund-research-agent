@@ -1,0 +1,435 @@
+{
+ "kind": "perf",
+ "scenario": "E",
+ "tag": "",
+ "stack": "REAL DeepSeek (deepseek-flash); 净值接口为 mock stub; ratelimit off; cache off",
+ "git": {
+  "commit": "978d0996c479437de8508a5e3f5773ce2e32733b",
+  "dirty": true
+ },
+ "data_as_of": "2026-09-28",
+ "manifest_sha256": "b5df59cb954c170e44071fb38603f57eff401863656912e410a96a721d49e127",
+ "datasets_sha256": {
+  "fund_qa_v1.jsonl": "77fb06a9686ea195ef8813d192bc90ffceb05ffe0b1122864777dc026997e48d",
+  "cache_pairs_v1.jsonl": "ebca9f77ac47b8e4717d25155b06f6e6d9162e081f1bea3cc5af4b9c7fab5a8f"
+ },
+ "replay_source": "a0eebf8c8cfef87cfa1867af060c13b2eb6e21b98ed60b98a949b6aec25ab808",
+ "d_pool": null,
+ "params": {
+  "levels": [
+   1,
+   3,
+   5
+  ],
+  "reps": 3,
+  "warmup_s": 20,
+  "duration_s": 90,
+  "stop_timeout_s": 120,
+  "closed_loop_think_time_s": 0
+ },
+ "models": {
+  "llm_request_model": "见 requests.jsonl 的 response_models"
+ },
+ "machine": {
+  "os": "Windows-11-10.0.26200-SP0",
+  "cpu_logical": 16,
+  "ram_gb": 16.4,
+  "wsl_docker": "16 | Mem:            9943        5822        1491           3        2834        4121"
+ },
+ "command": "run_perf.py --scenario E --users 1,3,5 --reps 3 --warmup 20 --duration 90 --prewarm-s 40 --stop-timeout 120 --stack REAL DeepSeek (deepseek-flash); 净值接口为 mock stub; ratelimit off; cache off",
+ "levels": [
+  {
+   "users": 1,
+   "reps": 3,
+   "qps": {
+    "median": 0.111,
+    "values": [
+     0.111,
+     0.1,
+     0.111
+    ]
+   },
+   "qps_ok": {
+    "median": 0.111,
+    "values": [
+     0.111,
+     0.1,
+     0.111
+    ]
+   },
+   "error_rate": {
+    "median": 0.0,
+    "values": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lat_mean_ms": {
+    "median": 8957.8,
+    "values": [
+     9081.3,
+     8934.8,
+     8957.8
+    ]
+   },
+   "lat_p50_ms": {
+    "median": 7739.6,
+    "values": [
+     8235.4,
+     7739.6,
+     7632.7
+    ]
+   },
+   "lat_p95_ms": {
+    "median": 14561.9,
+    "values": [
+     14561.9,
+     14997.9,
+     14307.5
+    ]
+   },
+   "lat_p99_ms": {
+    "median": 14594.6,
+    "values": [
+     14594.6,
+     15319.7,
+     14456.1
+    ]
+   },
+   "ttft_p50_ms": {
+    "median": 7229.9,
+    "values": [
+     7552.2,
+     7187.8,
+     7229.9
+    ]
+   },
+   "ttft_p95_ms": {
+    "median": 12809.6,
+    "values": [
+     12623.0,
+     12809.6,
+     12823.8
+    ]
+   },
+   "n_per_rep": [
+    10,
+    9,
+    10
+   ],
+   "errors_per_rep": [
+    {},
+    {},
+    {}
+   ],
+   "docker": {
+    "fra-backend": {
+     "cpu_mean_pct_median": 2.0,
+     "cpu_max_pct": 34.3,
+     "mem_max_mib": 437.2
+    },
+    "fra-ai-service": {
+     "cpu_mean_pct_median": 378.6,
+     "cpu_max_pct": 783.5,
+     "mem_max_mib": 1401.9
+    },
+    "fra-mcp-tools": {
+     "cpu_mean_pct_median": 2.3,
+     "cpu_max_pct": 31.2,
+     "mem_max_mib": 68.2
+    },
+    "fra-mock-llm": {
+     "cpu_mean_pct_median": 4.6,
+     "cpu_max_pct": 32.9,
+     "mem_max_mib": 52.3
+    },
+    "fra-mysql": {
+     "cpu_mean_pct_median": 1.6,
+     "cpu_max_pct": 6.4,
+     "mem_max_mib": 428.2
+    },
+    "fra-redis": {
+     "cpu_mean_pct_median": 0.5,
+     "cpu_max_pct": 3.7,
+     "mem_max_mib": 41.9
+    },
+    "fra-milvus": {
+     "cpu_mean_pct_median": 5.2,
+     "cpu_max_pct": 9.4,
+     "mem_max_mib": 455.8
+    },
+    "fra-elasticsearch": {
+     "cpu_mean_pct_median": 0.7,
+     "cpu_max_pct": 4.9,
+     "mem_max_mib": 1613.8
+    }
+   },
+   "host_cpu_mean_pct_median": 40.5,
+   "locust_cpu_mean_pct_median": 0.6,
+   "mock_max_active": 0
+  },
+  {
+   "users": 3,
+   "reps": 3,
+   "qps": {
+    "median": 0.289,
+    "values": [
+     0.289,
+     0.267,
+     0.3
+    ]
+   },
+   "qps_ok": {
+    "median": 0.289,
+    "values": [
+     0.289,
+     0.267,
+     0.3
+    ]
+   },
+   "error_rate": {
+    "median": 0.0,
+    "values": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lat_mean_ms": {
+    "median": 9848.2,
+    "values": [
+     9834.3,
+     10586.8,
+     9848.2
+    ]
+   },
+   "lat_p50_ms": {
+    "median": 9418.0,
+    "values": [
+     9145.5,
+     10073.2,
+     9418.0
+    ]
+   },
+   "lat_p95_ms": {
+    "median": 18709.7,
+    "values": [
+     18709.7,
+     20454.9,
+     17683.1
+    ]
+   },
+   "lat_p99_ms": {
+    "median": 18823.2,
+    "values": [
+     18823.2,
+     20692.8,
+     18697.7
+    ]
+   },
+   "ttft_p50_ms": {
+    "median": 9061.9,
+    "values": [
+     8837.5,
+     9695.2,
+     9061.9
+    ]
+   },
+   "ttft_p95_ms": {
+    "median": 16908.5,
+    "values": [
+     16908.5,
+     18399.4,
+     16671.2
+    ]
+   },
+   "n_per_rep": [
+    26,
+    24,
+    27
+   ],
+   "errors_per_rep": [
+    {},
+    {},
+    {}
+   ],
+   "docker": {
+    "fra-backend": {
+     "cpu_mean_pct_median": 5.6,
+     "cpu_max_pct": 32.2,
+     "mem_max_mib": 452.6
+    },
+    "fra-ai-service": {
+     "cpu_mean_pct_median": 1073.9,
+     "cpu_max_pct": 1500.7,
+     "mem_max_mib": 2037.8
+    },
+    "fra-mcp-tools": {
+     "cpu_mean_pct_median": 5.4,
+     "cpu_max_pct": 111.8,
+     "mem_max_mib": 71.9
+    },
+    "fra-mock-llm": {
+     "cpu_mean_pct_median": 7.8,
+     "cpu_max_pct": 50.1,
+     "mem_max_mib": 53.4
+    },
+    "fra-mysql": {
+     "cpu_mean_pct_median": 3.6,
+     "cpu_max_pct": 105.8,
+     "mem_max_mib": 429.6
+    },
+    "fra-redis": {
+     "cpu_mean_pct_median": 1.2,
+     "cpu_max_pct": 5.3,
+     "mem_max_mib": 45.8
+    },
+    "fra-milvus": {
+     "cpu_mean_pct_median": 8.1,
+     "cpu_max_pct": 16.4,
+     "mem_max_mib": 460.8
+    },
+    "fra-elasticsearch": {
+     "cpu_mean_pct_median": 1.8,
+     "cpu_max_pct": 28.9,
+     "mem_max_mib": 1614.8
+    }
+   },
+   "host_cpu_mean_pct_median": 80.2,
+   "locust_cpu_mean_pct_median": 1.7,
+   "mock_max_active": 0
+  },
+  {
+   "users": 5,
+   "reps": 3,
+   "qps": {
+    "median": 0.311,
+    "values": [
+     0.289,
+     0.322,
+     0.311
+    ]
+   },
+   "qps_ok": {
+    "median": 0.311,
+    "values": [
+     0.289,
+     0.322,
+     0.311
+    ]
+   },
+   "error_rate": {
+    "median": 0.0,
+    "values": [
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "lat_mean_ms": {
+    "median": 16874.8,
+    "values": [
+     19019.5,
+     16874.8,
+     16615.8
+    ]
+   },
+   "lat_p50_ms": {
+    "median": 17417.0,
+    "values": [
+     17654.6,
+     17417.0,
+     17281.2
+    ]
+   },
+   "lat_p95_ms": {
+    "median": 35509.2,
+    "values": [
+     35790.9,
+     35509.2,
+     34594.0
+    ]
+   },
+   "lat_p99_ms": {
+    "median": 38078.1,
+    "values": [
+     38078.1,
+     38103.1,
+     37129.9
+    ]
+   },
+   "ttft_p50_ms": {
+    "median": 16845.0,
+    "values": [
+     17201.2,
+     16845.0,
+     16709.8
+    ]
+   },
+   "ttft_p95_ms": {
+    "median": 33551.2,
+    "values": [
+     34581.2,
+     33551.2,
+     33123.4
+    ]
+   },
+   "n_per_rep": [
+    26,
+    29,
+    28
+   ],
+   "errors_per_rep": [
+    {},
+    {},
+    {}
+   ],
+   "docker": {
+    "fra-backend": {
+     "cpu_mean_pct_median": 4.7,
+     "cpu_max_pct": 33.4,
+     "mem_max_mib": 449.0
+    },
+    "fra-ai-service": {
+     "cpu_mean_pct_median": 1313.7,
+     "cpu_max_pct": 1621.8,
+     "mem_max_mib": 2415.6
+    },
+    "fra-mcp-tools": {
+     "cpu_mean_pct_median": 4.9,
+     "cpu_max_pct": 70.5,
+     "mem_max_mib": 74.5
+    },
+    "fra-mock-llm": {
+     "cpu_mean_pct_median": 11.0,
+     "cpu_max_pct": 72.0,
+     "mem_max_mib": 58.0
+    },
+    "fra-mysql": {
+     "cpu_mean_pct_median": 3.9,
+     "cpu_max_pct": 13.1,
+     "mem_max_mib": 434.3
+    },
+    "fra-redis": {
+     "cpu_mean_pct_median": 1.2,
+     "cpu_max_pct": 7.2,
+     "mem_max_mib": 45.5
+    },
+    "fra-milvus": {
+     "cpu_mean_pct_median": 10.1,
+     "cpu_max_pct": 23.5,
+     "mem_max_mib": 463.3
+    },
+    "fra-elasticsearch": {
+     "cpu_mean_pct_median": 1.9,
+     "cpu_max_pct": 9.5,
+     "mem_max_mib": 1609.7
+    }
+   },
+   "host_cpu_mean_pct_median": 94.4,
+   "locust_cpu_mean_pct_median": 1.8,
+   "mock_max_active": 0
+  }
+ ]
+}

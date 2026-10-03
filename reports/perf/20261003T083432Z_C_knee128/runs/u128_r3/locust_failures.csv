@@ -1,0 +1,2 @@
+Method,Name,Error,Occurrences,First Seen,Last Seen
+HTTP,chat,RuntimeError('http_503'),20588,2026-10-03T08:38:09Z,2026-10-03T08:39:23Z

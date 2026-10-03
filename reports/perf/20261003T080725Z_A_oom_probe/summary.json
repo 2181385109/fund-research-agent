@@ -1,0 +1,261 @@
+{
+ "kind": "perf",
+ "scenario": "A",
+ "tag": "oom_probe",
+ "stack": "mock-llm; cache off; 探针（1 次重复）：A 在 12、16 并发下 ai-service 是否被 OOM 杀死",
+ "git": {
+  "commit": "978d0996c479437de8508a5e3f5773ce2e32733b",
+  "dirty": true
+ },
+ "data_as_of": "2026-09-28",
+ "manifest_sha256": "b5df59cb954c170e44071fb38603f57eff401863656912e410a96a721d49e127",
+ "datasets_sha256": {
+  "fund_qa_v1.jsonl": "77fb06a9686ea195ef8813d192bc90ffceb05ffe0b1122864777dc026997e48d",
+  "cache_pairs_v1.jsonl": "ebca9f77ac47b8e4717d25155b06f6e6d9162e081f1bea3cc5af4b9c7fab5a8f"
+ },
+ "replay_source": "a0eebf8c8cfef87cfa1867af060c13b2eb6e21b98ed60b98a949b6aec25ab808",
+ "d_pool": null,
+ "params": {
+  "levels": [
+   12,
+   16
+  ],
+  "reps": 1,
+  "warmup_s": 10,
+  "duration_s": 90,
+  "stop_timeout_s": 150,
+  "closed_loop_think_time_s": 0
+ },
+ "models": {
+  "llm_request_model": "mock-llm"
+ },
+ "machine": {
+  "os": "Windows-11-10.0.26200-SP0",
+  "cpu_logical": 16,
+  "ram_gb": 16.4,
+  "wsl_docker": "16 | Mem:            9943        5087        2642           3        2477        4856"
+ },
+ "command": "run_perf.py --scenario A --users 12,16 --reps 1 --warmup 10 --duration 90 --prewarm-s 40 --stop-timeout 150 --tag oom_probe --stack mock-llm; cache off; 探针（1 次重复）：A 在 12、16 并发下 ai-service 是否被 OOM 杀死",
+ "levels": [
+  {
+   "users": 12,
+   "reps": 1,
+   "qps": {
+    "median": 0.144,
+    "values": [
+     0.144
+    ]
+   },
+   "qps_ok": {
+    "median": 0.144,
+    "values": [
+     0.144
+    ]
+   },
+   "error_rate": {
+    "median": 0.0,
+    "values": [
+     0.0
+    ]
+   },
+   "lat_mean_ms": {
+    "median": 64221.7,
+    "values": [
+     64221.7
+    ]
+   },
+   "lat_p50_ms": {
+    "median": 65138.6,
+    "values": [
+     65138.6
+    ]
+   },
+   "lat_p95_ms": {
+    "median": 79502.0,
+    "values": [
+     79502.0
+    ]
+   },
+   "lat_p99_ms": {
+    "median": 86762.6,
+    "values": [
+     86762.6
+    ]
+   },
+   "ttft_p50_ms": {
+    "median": null,
+    "values": [
+     null
+    ]
+   },
+   "ttft_p95_ms": {
+    "median": null,
+    "values": [
+     null
+    ]
+   },
+   "n_per_rep": [
+    13
+   ],
+   "errors_per_rep": [
+    {}
+   ],
+   "docker": {
+    "fra-backend": {
+     "cpu_mean_pct_median": 2.4,
+     "cpu_max_pct": 9.9,
+     "mem_max_mib": 372.2
+    },
+    "fra-ai-service": {
+     "cpu_mean_pct_median": 1100.6,
+     "cpu_max_pct": 1587.4,
+     "mem_max_mib": 2560.0
+    },
+    "fra-mcp-tools": {
+     "cpu_mean_pct_median": 3.7,
+     "cpu_max_pct": 46.5,
+     "mem_max_mib": 62.3
+    },
+    "fra-mock-llm": {
+     "cpu_mean_pct_median": 8.6,
+     "cpu_max_pct": 54.4,
+     "mem_max_mib": 55.8
+    },
+    "fra-mysql": {
+     "cpu_mean_pct_median": 3.0,
+     "cpu_max_pct": 9.7,
+     "mem_max_mib": 432.1
+    },
+    "fra-redis": {
+     "cpu_mean_pct_median": 1.2,
+     "cpu_max_pct": 6.4,
+     "mem_max_mib": 44.8
+    },
+    "fra-milvus": {
+     "cpu_mean_pct_median": 9.1,
+     "cpu_max_pct": 13.4,
+     "mem_max_mib": 469.2
+    },
+    "fra-elasticsearch": {
+     "cpu_mean_pct_median": 1.8,
+     "cpu_max_pct": 11.1,
+     "mem_max_mib": 1630.2
+    }
+   },
+   "host_cpu_mean_pct_median": 94.9,
+   "locust_cpu_mean_pct_median": 0.2,
+   "mock_max_active": 0
+  },
+  {
+   "users": 16,
+   "reps": 1,
+   "qps": {
+    "median": 84.333,
+    "values": [
+     84.333
+    ]
+   },
+   "qps_ok": {
+    "median": 0.0,
+    "values": [
+     0.0
+    ]
+   },
+   "error_rate": {
+    "median": 1.0,
+    "values": [
+     1.0
+    ]
+   },
+   "lat_mean_ms": {
+    "median": null,
+    "values": [
+     null
+    ]
+   },
+   "lat_p50_ms": {
+    "median": null,
+    "values": [
+     null
+    ]
+   },
+   "lat_p95_ms": {
+    "median": null,
+    "values": [
+     null
+    ]
+   },
+   "lat_p99_ms": {
+    "median": null,
+    "values": [
+     null
+    ]
+   },
+   "ttft_p50_ms": {
+    "median": null,
+    "values": [
+     null
+    ]
+   },
+   "ttft_p95_ms": {
+    "median": null,
+    "values": [
+     null
+    ]
+   },
+   "n_per_rep": [
+    7590
+   ],
+   "errors_per_rep": [
+    {
+     "ConnectionError": 7590
+    }
+   ],
+   "docker": {
+    "fra-backend": {
+     "cpu_mean_pct_median": 3.9,
+     "cpu_max_pct": 38.0,
+     "mem_max_mib": 375.1
+    },
+    "fra-ai-service": {
+     "cpu_mean_pct_median": 431.3,
+     "cpu_max_pct": 1058.3,
+     "mem_max_mib": 2560.0
+    },
+    "fra-mcp-tools": {
+     "cpu_mean_pct_median": 2.1,
+     "cpu_max_pct": 52.1,
+     "mem_max_mib": 65.9
+    },
+    "fra-mock-llm": {
+     "cpu_mean_pct_median": 6.8,
+     "cpu_max_pct": 45.8,
+     "mem_max_mib": 52.4
+    },
+    "fra-mysql": {
+     "cpu_mean_pct_median": 2.8,
+     "cpu_max_pct": 11.2,
+     "mem_max_mib": 422.9
+    },
+    "fra-redis": {
+     "cpu_mean_pct_median": 1.2,
+     "cpu_max_pct": 6.4,
+     "mem_max_mib": 41.2
+    },
+    "fra-milvus": {
+     "cpu_mean_pct_median": 8.0,
+     "cpu_max_pct": 18.8,
+     "mem_max_mib": 462.3
+    },
+    "fra-elasticsearch": {
+     "cpu_mean_pct_median": 2.9,
+     "cpu_max_pct": 41.5,
+     "mem_max_mib": 1618.9
+    }
+   },
+   "host_cpu_mean_pct_median": 66.2,
+   "locust_cpu_mean_pct_median": 10.8,
+   "mock_max_active": 0
+  }
+ ]
+}

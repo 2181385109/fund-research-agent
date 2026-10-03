@@ -1,0 +1,65 @@
+# S12 压测专用的 compose 覆盖文件：把 LLM 和净值接口换成 mock，放宽限流与配额，关掉无关的消费者。
+#
+# 用法（在 WSL 里，仓库根目录；重建只涉及这四个容器，不要 down -v）：
+#   docker compose -f docker-compose.yml -f loadtest/compose.loadtest.yml --profile app --profile loadtest \
+#       up -d --no-deps --force-recreate mock-llm mcp-tools ai-service backend
+# 恢复正常配置（真实 LLM、默认限流）：
+#   docker compose --profile app up -d --no-deps --force-recreate mcp-tools ai-service backend
+#   docker compose --profile loadtest rm -sf mock-llm   （--profile 要带上，否则找不到服务）
+#
+# PERF_CACHE=true 时打开语义缓存（场景 D）；其他场景必须关（默认）。
+# PERF_BACKEND_JAVA_OPTS 用来给 backend 加 JFR 参数（定位阶段）。
+services:
+  mock-llm:
+    profiles: ["loadtest"]
+    image: fra/ai-service:dev
+    container_name: fra-mock-llm
+    restart: "no"
+    mem_limit: 256m
+    # ai-service 镜像里已有 fastapi + uvicorn；mock 代码只读挂入，不另建镜像
+    command: ["python", "/mock/server.py"]
+    environment:
+      MOCK_PORT: "9100"
+      MOCK_REPLAY: /mock/replay_v1.json
+      MOCK_TTFT_MS: ${MOCK_TTFT_MS:-}
+      MOCK_TTFT_TOOL_MS: ${MOCK_TTFT_TOOL_MS:-}
+      MOCK_TOKENS_PER_S: ${MOCK_TOKENS_PER_S:-}
+      MOCK_NAV_MS: ${MOCK_NAV_MS:-250}
+    volumes:
+      - ./loadtest/mock_llm:/mock:ro
+    ports:
+      - "127.0.0.1:${MOCK_PORT:-9100}:9100"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:9100/health', timeout=3)"]
+      interval: 5s
+      timeout: 4s
+      retries: 10
+
+  mcp-tools:
+    environment:
+      NAV_API_BASE_URL: http://mock-llm:9100
+    depends_on:
+      mock-llm:
+        condition: service_healthy
+
+  ai-service:
+    environment:
+      # 场景 E（真实 LLM）由 stack.sh up real 传入 PERF_LLM_*；默认是 mock
+      LLM_BASE_URL: ${PERF_LLM_BASE_URL:-http://mock-llm:9100/v1}
+      LLM_API_KEY: ${PERF_LLM_API_KEY:-mock-key}
+      LLM_MODEL: ${PERF_LLM_MODEL:-mock-llm}
+      LLM_TIMEOUT_SECONDS: "60"
+      SEMANTIC_CACHE_ENABLED: ${PERF_CACHE:-false}
+      # 批量入库消费者空转时占着一份 embedding 模型的内存，压测里不需要
+      KAFKA_CONSUMER_ENABLED: "false"
+    depends_on:
+      mock-llm:
+        condition: service_healthy
+
+  backend:
+    environment:
+      # 令牌桶和配额的默认值会让并发压测立刻 429；压测环境整体关闭（报告里写明）
+      RATELIMIT_ENABLED: "false"
+      QUOTA_DAILY_CALLS: "0"
+      QUOTA_DAILY_TOKENS: "0"
+      JAVA_TOOL_OPTIONS: "-Dfile.encoding=UTF-8 ${PERF_BACKEND_JAVA_OPTS:-}"

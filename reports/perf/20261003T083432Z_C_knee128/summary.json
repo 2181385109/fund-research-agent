@@ -1,0 +1,177 @@
+{
+ "kind": "perf",
+ "scenario": "C",
+ "tag": "knee128",
+ "stack": "mock-llm; ratelimit off; quota off; kafka consumer off; cache off（补测：C 的拐点）",
+ "git": {
+  "commit": "978d0996c479437de8508a5e3f5773ce2e32733b",
+  "dirty": true
+ },
+ "data_as_of": "2026-09-28",
+ "manifest_sha256": "b5df59cb954c170e44071fb38603f57eff401863656912e410a96a721d49e127",
+ "datasets_sha256": {
+  "fund_qa_v1.jsonl": "77fb06a9686ea195ef8813d192bc90ffceb05ffe0b1122864777dc026997e48d",
+  "cache_pairs_v1.jsonl": "ebca9f77ac47b8e4717d25155b06f6e6d9162e081f1bea3cc5af4b9c7fab5a8f"
+ },
+ "replay_source": "a0eebf8c8cfef87cfa1867af060c13b2eb6e21b98ed60b98a949b6aec25ab808",
+ "d_pool": null,
+ "params": {
+  "levels": [
+   128
+  ],
+  "reps": 3,
+  "warmup_s": 15,
+  "duration_s": 60,
+  "stop_timeout_s": 120,
+  "closed_loop_think_time_s": 0
+ },
+ "models": {
+  "llm_request_model": "mock-llm"
+ },
+ "machine": {
+  "os": "Windows-11-10.0.26200-SP0",
+  "cpu_logical": 16,
+  "ram_gb": 16.4,
+  "wsl_docker": "16 | Mem:            9943        5350        1293           3        3546        4592"
+ },
+ "command": "run_perf.py --scenario C --users 128 --reps 3 --warmup 15 --duration 60 --prewarm-s 30 --stop-timeout 120 --tag knee128 --stack mock-llm; ratelimit off; quota off; kafka consumer off; cache off（补测：C 的拐点）",
+ "levels": [
+  {
+   "users": 128,
+   "reps": 3,
+   "qps": {
+    "median": 281.15,
+    "values": [
+     278.25,
+     283.367,
+     281.15
+    ]
+   },
+   "qps_ok": {
+    "median": 5.967,
+    "values": [
+     5.7,
+     5.967,
+     6.183
+    ]
+   },
+   "error_rate": {
+    "median": 0.979,
+    "values": [
+     0.9795,
+     0.9789,
+     0.978
+    ]
+   },
+   "lat_mean_ms": {
+    "median": 10895.0,
+    "values": [
+     10895.0,
+     10988.5,
+     10514.9
+    ]
+   },
+   "lat_p50_ms": {
+    "median": 11328.5,
+    "values": [
+     11328.5,
+     11413.1,
+     11137.4
+    ]
+   },
+   "lat_p95_ms": {
+    "median": 14230.7,
+    "values": [
+     13943.9,
+     15245.1,
+     14230.7
+    ]
+   },
+   "lat_p99_ms": {
+    "median": 26864.4,
+    "values": [
+     27299.5,
+     26864.4,
+     24580.7
+    ]
+   },
+   "ttft_p50_ms": {
+    "median": 9133.8,
+    "values": [
+     9193.5,
+     9133.8,
+     8889.8
+    ]
+   },
+   "ttft_p95_ms": {
+    "median": 11749.5,
+    "values": [
+     11314.3,
+     12819.3,
+     11749.5
+    ]
+   },
+   "n_per_rep": [
+    16695,
+    17002,
+    16869
+   ],
+   "errors_per_rep": [
+    {
+     "http_503": 16353
+    },
+    {
+     "http_503": 16644
+    },
+    {
+     "http_503": 16498
+    }
+   ],
+   "docker": {
+    "fra-backend": {
+     "cpu_mean_pct_median": 107.2,
+     "cpu_max_pct": 255.9,
+     "mem_max_mib": 576.0
+    },
+    "fra-ai-service": {
+     "cpu_mean_pct_median": 106.6,
+     "cpu_max_pct": 147.7,
+     "mem_max_mib": 237.2
+    },
+    "fra-mcp-tools": {
+     "cpu_mean_pct_median": 36.3,
+     "cpu_max_pct": 114.3,
+     "mem_max_mib": 96.0
+    },
+    "fra-mock-llm": {
+     "cpu_mean_pct_median": 15.0,
+     "cpu_max_pct": 51.4,
+     "mem_max_mib": 56.4
+    },
+    "fra-mysql": {
+     "cpu_mean_pct_median": 83.8,
+     "cpu_max_pct": 97.1,
+     "mem_max_mib": 449.2
+    },
+    "fra-redis": {
+     "cpu_mean_pct_median": 0.9,
+     "cpu_max_pct": 4.0,
+     "mem_max_mib": 45.6
+    },
+    "fra-milvus": {
+     "cpu_mean_pct_median": 5.6,
+     "cpu_max_pct": 10.0,
+     "mem_max_mib": 458.6
+    },
+    "fra-elasticsearch": {
+     "cpu_mean_pct_median": 0.8,
+     "cpu_max_pct": 11.4,
+     "mem_max_mib": 1604.6
+    }
+   },
+   "host_cpu_mean_pct_median": 70.4,
+   "locust_cpu_mean_pct_median": 97.2,
+   "mock_max_active": 64
+  }
+ ]
+}

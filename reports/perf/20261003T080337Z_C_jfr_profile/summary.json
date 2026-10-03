@@ -1,0 +1,149 @@
+{
+ "kind": "perf",
+ "scenario": "C",
+ "tag": "jfr_profile",
+ "stack": "mock-llm; cache off; backend JFR(profile) on",
+ "git": {
+  "commit": "978d0996c479437de8508a5e3f5773ce2e32733b",
+  "dirty": true
+ },
+ "data_as_of": "2026-09-28",
+ "manifest_sha256": "b5df59cb954c170e44071fb38603f57eff401863656912e410a96a721d49e127",
+ "datasets_sha256": {
+  "fund_qa_v1.jsonl": "77fb06a9686ea195ef8813d192bc90ffceb05ffe0b1122864777dc026997e48d",
+  "cache_pairs_v1.jsonl": "ebca9f77ac47b8e4717d25155b06f6e6d9162e081f1bea3cc5af4b9c7fab5a8f"
+ },
+ "replay_source": "a0eebf8c8cfef87cfa1867af060c13b2eb6e21b98ed60b98a949b6aec25ab808",
+ "d_pool": null,
+ "params": {
+  "levels": [
+   32
+  ],
+  "reps": 1,
+  "warmup_s": 15,
+  "duration_s": 90,
+  "stop_timeout_s": 90,
+  "closed_loop_think_time_s": 0
+ },
+ "models": {
+  "llm_request_model": "mock-llm"
+ },
+ "machine": {
+  "os": "Windows-11-10.0.26200-SP0",
+  "cpu_logical": 16,
+  "ram_gb": 16.4,
+  "wsl_docker": "16 | Mem:            9943        5264        1625           4        3325        4678"
+ },
+ "command": "run_perf.py --scenario C --users 32 --reps 1 --warmup 15 --duration 90 --prewarm-s 30 --stop-timeout 90 --tag jfr_profile --stack mock-llm; cache off; backend JFR(profile) on",
+ "levels": [
+  {
+   "users": 32,
+   "reps": 1,
+   "qps": {
+    "median": 6.144,
+    "values": [
+     6.144
+    ]
+   },
+   "qps_ok": {
+    "median": 6.144,
+    "values": [
+     6.144
+    ]
+   },
+   "error_rate": {
+    "median": 0.0,
+    "values": [
+     0.0
+    ]
+   },
+   "lat_mean_ms": {
+    "median": 5215.3,
+    "values": [
+     5215.3
+    ]
+   },
+   "lat_p50_ms": {
+    "median": 4738.7,
+    "values": [
+     4738.7
+    ]
+   },
+   "lat_p95_ms": {
+    "median": 7985.4,
+    "values": [
+     7985.4
+    ]
+   },
+   "lat_p99_ms": {
+    "median": 19416.2,
+    "values": [
+     19416.2
+    ]
+   },
+   "ttft_p50_ms": {
+    "median": 4019.0,
+    "values": [
+     4019.0
+    ]
+   },
+   "ttft_p95_ms": {
+    "median": 6268.8,
+    "values": [
+     6268.8
+    ]
+   },
+   "n_per_rep": [
+    553
+   ],
+   "errors_per_rep": [
+    {}
+   ],
+   "docker": {
+    "fra-backend": {
+     "cpu_mean_pct_median": 23.2,
+     "cpu_max_pct": 48.8,
+     "mem_max_mib": 582.4
+    },
+    "fra-ai-service": {
+     "cpu_mean_pct_median": 72.5,
+     "cpu_max_pct": 112.0,
+     "mem_max_mib": 169.8
+    },
+    "fra-mcp-tools": {
+     "cpu_mean_pct_median": 23.9,
+     "cpu_max_pct": 46.0,
+     "mem_max_mib": 79.0
+    },
+    "fra-mock-llm": {
+     "cpu_mean_pct_median": 11.6,
+     "cpu_max_pct": 28.9,
+     "mem_max_mib": 59.1
+    },
+    "fra-mysql": {
+     "cpu_mean_pct_median": 7.9,
+     "cpu_max_pct": 11.9,
+     "mem_max_mib": 430.0
+    },
+    "fra-redis": {
+     "cpu_mean_pct_median": 0.4,
+     "cpu_max_pct": 2.7,
+     "mem_max_mib": 42.8
+    },
+    "fra-milvus": {
+     "cpu_mean_pct_median": 4.2,
+     "cpu_max_pct": 5.3,
+     "mem_max_mib": 478.5
+    },
+    "fra-elasticsearch": {
+     "cpu_mean_pct_median": 0.8,
+     "cpu_max_pct": 5.4,
+     "mem_max_mib": 1663.0
+    }
+   },
+   "host_cpu_mean_pct_median": 30.9,
+   "locust_cpu_mean_pct_median": 8.3,
+   "mock_max_active": 32
+  }
+ ]
+}
