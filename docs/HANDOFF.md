@@ -3,7 +3,7 @@
 写给下一个执行者对话（B13 = S13 优化 + 前后对比 + 第二期收尾，打 tag `v0.2-phase2`）。已写进 CLAUDE.md / PLAN / DECISIONS / API / LIMITATIONS 的内容只给指针。
 
 ## 1. 当前进度
-- 第一期（S0–S8）完成并打了 tag `v0.1-phase1`；第二期 **S9 gRPC、S10 Redis、S11 Kafka、S12 压测基线完成**。S12 提交 `ec24cab`（工具）、`2a7ea84`（报告 / 数据 / PROGRESS），CI run [37111259811](https://github.com/2181385109/fund-research-agent/actions/runs/37111259811) **10 个 job 全绿**（含新增的 `loadtest` job：mock 与统计函数的离线单测）。本文件所在的提交只改文档，推送后再确认一次 CI。
+- 第一期（S0–S8）完成并打了 tag `v0.1-phase1`；第二期 **S9 gRPC、S10 Redis、S11 Kafka、S12 压测基线完成**。S12 提交 `ec24cab`（工具）、`2a7ea84`（报告 / 数据 / PROGRESS），CI run [37111259811](https://github.com/2181385109/fund-research-agent/actions/runs/37111259811) **10 个 job 全绿**（含新增的 `loadtest` job：mock 与统计函数的离线单测）。文档提交 `844063c`（run [37111432626](https://github.com/2181385109/fund-research-agent/actions/runs/37111432626)）backend job 先后因两个**偶发的时间敏感老测试**红了两次（见 §4），重跑第 3 次 **10 个 job 全绿**；本文件所在的提交只改文档。
 - **S12 没有改任何服务代码**（只新增 `loadtest/`、CI job、`.gitignore`），所以 S4 / S8 的 test 结果不受影响；S13 才会动服务代码。
 - S12 的产出（证据在 `docs/perf/baseline.md`、`docs/PROGRESS.md`「S12」、`reports/perf/`、ADR-050、LIMITATIONS「压测（S12）」）：
   - **mock LLM + 净值 stub**（`loadtest/mock_llm/`）：回放 S8 的真实运行（真实工具路线与参数、回答文本、首 token 延迟、输出速度）；压测栈用 `loadtest/compose.loadtest.yml` + `loadtest/stack.sh` 切换（不改默认 compose）。
@@ -33,7 +33,7 @@
 - **ai-service 镜像里没有 `pgrep`**；找进程用 `/proc/*/cmdline`。`docker stats --no-stream` 的 CPU% 是 ~1 s 窗口的值；`docker events` 的 `--format` 取属性容易写错，直接看 `dmesg | grep "Memory cgroup out of memory"` 和 `docker inspect … RestartCount`。
 - **`loadtest` 的 Locust 虚拟用户数要小于账号数**，每个用户固定一个账号（`make_users.py -n` 要 ≥ 最大并发）；backend 同时对话流上限 64，> 64 并发会得到 503（这是设计，不是故障）。
 - **Monitor 重复通知**：同时挂几个监视器会收到重复事件；用一个 `tail -F | grep` 就够。
-- 旧坑摘要（B11）：本机 `.env` 的 `SEMANTIC_CACHE_ENABLED=true` 会让 ai-service 3 个老测试失败（pytest 前加 `SEMANTIC_CACHE_ENABLED=false`）；注册用户名不能含 `-`；CI 里偶发失败的老测试 `HttpAiServiceClientTest.chatGivesUpWhenTheUpstreamGoesSilent`（先重跑）；同一会话的第二个问题起不走语义缓存；`scripts/build_cache_pairs.py` 的已知缺陷（8 对畸形问题）v1 保持原样。
+- 旧坑摘要（B11）：本机 `.env` 的 `SEMANTIC_CACHE_ENABLED=true` 会让 ai-service 3 个老测试失败（pytest 前加 `SEMANTIC_CACHE_ENABLED=false`）；注册用户名不能含 `-`；CI 里**两个偶发失败的老测试**（时间敏感，S12 的文档提交上都出现过，重跑可过；反复出现再查，不要放宽断言）：`HttpAiServiceClientTest.chatGivesUpWhenTheUpstreamGoesSilent`、`BackendIntegrationTest.clientDisconnectCancelsTheUpstreamRequestAndSavesThePartialAnswer`（等部分回答 10 s 超时）；同一会话的第二个问题起不走语义缓存；`scripts/build_cache_pairs.py` 的已知缺陷（8 对畸形问题）v1 保持原样。
 
 ## 5. 已冻结的产物
 | 产物 | 版本 / 值 | sha256 |
